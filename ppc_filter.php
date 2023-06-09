@@ -120,6 +120,7 @@
                                                             <th>CATATAN PO GREIGE</th>
                                                             <th>TARGET SELESAI</th>
                                                             <th>KETERANGAN</th>
+                                                            <th>ORIGINAL PD CODE</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody> 
@@ -333,7 +334,7 @@
                                                                     $d_cnp_close        = db2_fetch_assoc($q_cnp1);
 
                                                                     if($d_cnp_close['PROGRESSSTATUS'] == 3){ // 3 is Closed From Demands Steps AND Operation CNP1
-                                                                        if($d_cnp_close['OPERATIONCODE'] == 'CNP1'){
+                                                                        if($d_cnp_close['OPERATIONCODE'] == 'PPC4'){
                                                                             if($rowdb2['PROGRESSSTATUS'] == 6){
                                                                                 $kode_dept          = '-';
                                                                                 $status_terakhir    = '-';
@@ -412,6 +413,18 @@
                                                             <td></td> <!-- CATATAN PO GREIGE -->
                                                             <td></td> <!-- TARGET SELESAI -->
                                                             <td><?= $rowdb2['KETERANGAN']; ?></td> <!-- KETERANGAN -->
+                                                            <td>
+                                                                <?php
+                                                                    $q_orig_pd_code     = db2_exec($conn1, "SELECT 
+                                                                                                                a.VALUESTRING AS OriginalPDCode
+                                                                                                            FROM 
+                                                                                                                PRODUCTIONDEMAND p 
+                                                                                                            LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'OriginalPDCode'
+                                                                                                            WHERE p.CODE = '$rowdb2[DEMAND]'");
+                                                                    $d_orig_pd_code     = db2_fetch_assoc($q_orig_pd_code);
+                                                                    echo $d_orig_pd_code['OriginalPDCode'];
+                                                                ?>
+                                                            </td> <!-- ORIGINAL PD CODE -->
                                                         </tr>
                                                         <?php } ?>
                                                     </tbody>
