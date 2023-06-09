@@ -183,7 +183,7 @@
                                                                 <?php endif; ?>
                                                                 <td align="center"><?= $rowdb2['OPERATIONCODE']; ?></td>
                                                                 <td><?= $rowdb2['LONGDESCRIPTION']; ?></td>
-                                                                <td <?php if($rowdb2['STATUS_OPERATION'] == 'Closed'){ echo 'bgcolor="#EAA06D"'; }elseif($rowdb2['STATUS_OPERATION'] == 'Progress'){ echo "bgcolor='#41CC11'"; }else{ echo "bgcolor='#ECECEC'"; } ?>><?= $rowdb2['STATUS_OPERATION']; ?></td>
+                                                                <td <?php if($rowdb2['STATUS_OPERATION'] == 'Closed'){ echo 'bgcolor="#EC635A"'; }elseif($rowdb2['STATUS_OPERATION'] == 'Progress'){ echo "bgcolor='#41CC11'"; }else{ echo "bgcolor='#ECECEC'"; } ?>><?= $rowdb2['STATUS_OPERATION']; ?></td>
                                                                 <td><?= $rowdb2['PRODUCTIONORDERCODE']; ?></td>
                                                                 <td><?= $rowdb2['PRODUCTIONDEMANDCODE']; ?></td>
                                                             </tr>
