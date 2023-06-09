@@ -172,10 +172,11 @@
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['ORDERLINE']))."',"
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS']))."',"
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN']))."',"
-                                                                                        ."'".$_SERVER['REMOTE_ADDR']."')";
+                                                                                        ."'".$_SERVER['REMOTE_ADDR']."',"
+                                                                                        ."'".date('Y-m-d H:i:s')."')";
                                                             }
                                                             $value_itxviewmemo        = implode(',', $r_itxviewmemo);
-                                                            $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,KETERANGAN,IPADDRESS) VALUES $value_itxviewmemo");
+                                                            $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,KETERANGAN,IPADDRESS,CREATEDATETIME) VALUES $value_itxviewmemo");
 
                                                             // --------------------------------------------------------------------------------------------------------------- //
                                                             $prod_order_2  = $_POST['prod_order'];
