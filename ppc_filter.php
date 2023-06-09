@@ -416,13 +416,13 @@
                                                             <td>
                                                                 <?php
                                                                     $q_orig_pd_code     = db2_exec($conn1, "SELECT 
-                                                                                                                a.VALUESTRING AS OriginalPDCode
+                                                                                                                *, a.VALUESTRING AS ORIGINALPDCODE
                                                                                                             FROM 
                                                                                                                 PRODUCTIONDEMAND p 
                                                                                                             LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'OriginalPDCode'
                                                                                                             WHERE p.CODE = '$rowdb2[DEMAND]'");
                                                                     $d_orig_pd_code     = db2_fetch_assoc($q_orig_pd_code);
-                                                                    echo $d_orig_pd_code['OriginalPDCode'];
+                                                                    echo $d_orig_pd_code['ORIGINALPDCODE'];
                                                                 ?>
                                                             </td> <!-- ORIGINAL PD CODE -->
                                                         </tr>
