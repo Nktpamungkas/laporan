@@ -163,8 +163,8 @@
                     echo number_format($r_sumQty['SUM_QTY_SJ'], 2)
                 ?>
             </th>
-            <th colspan="4" align="center">SINGGIH</th>
-            <th colspan="4" align="center">PUTRI</th>
+            <th colspan="3" align="center">SINGGIH</th>
+            <th colspan="5" align="center">PUTRI</th>
         </tr>
         <tr>
             <th colspan="5" align="left">Total Tanggal 01 S/D <?php echo date('d', strtotime('-1 days', strtotime($_GET['tgl1']))); ?></th>
@@ -183,8 +183,8 @@
                     echo number_format($r_sumQty_2['SUM_QTY_SJ'], 2)
                 ?>
             </th>
-            <th colspan="4" align="center">STAFF</th>
-            <th colspan="4" align="center">PPC AST. MANAGER</th>
+            <th colspan="3" align="center">STAFF</th>
+            <th colspan="5" align="center">PPC AST. MANAGER</th>
         </tr>
         <tr>
             <th colspan="5" align="left">Total Tanggal 01 S/D <?= $_GET['tgl1']; ?></th>
@@ -203,14 +203,14 @@
                     echo number_format($r_sumQty_3['SUM_QTY_SJ'], 2)
                 ?>
             </th>
-            <th colspan="4" align="center"><?= date('d-M-Y', strtotime($_GET['tgl1'])); ?></th>
-            <th colspan="4" align="center"><?= date('d-M-Y', strtotime($_GET['tgl1'])); ?></th>
+            <th colspan="3" align="center"><?= date('d-M-Y', strtotime($_GET['tgl1'])); ?></th>
+            <th colspan="5" align="center"><?= date('d-M-Y', strtotime($_GET['tgl1'])); ?></th>
         </tr>
         <tr>
             <th colspan="5"><br></th>
             <th colspan="2"><br></th>
-            <th colspan="4"><br><br><br></th>
-            <th colspan="4"><br><br><br></th>
+            <th colspan="3"><br><br><br></th>
+            <th colspan="5"><br><br><br></th>
         </tr>
     </tfoot>
 </table>

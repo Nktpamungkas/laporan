@@ -47,7 +47,7 @@
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
                                                     <?php if (isset($_POST['submit'])) : ?>
-                                                        <a class="btn btn-mat btn-warning" href="ppc_pengiriman-excel.php?tgl1=<?= $_POST['tgl1']; ?>">CETAK EXCEL</a>
+                                                        <a class="btn btn-mat btn-warning" target="_blank" href="ppc_pengiriman-excel.php?tgl1=<?= $_POST['tgl1']; ?>">CETAK EXCEL</a>
                                                     <?php endif; ?>
                                                 </div>
                                             </div>
