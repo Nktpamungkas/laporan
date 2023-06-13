@@ -73,90 +73,20 @@
                                                             ini_set("error_reporting", 1);
                                                             session_start();
                                                             require_once "koneksi.php";
-                                                            $prod_order  = $_POST['prod_order'];
-                                                            $prod_demand = $_POST['prod_demand'];
-                                                            $no_order = $_POST['no_order'];
                                                             $tgl1     = $_POST['tgl1'];
                                                             $tgl2     = $_POST['tgl2'];
 
-                                                            if($prod_order){
-                                                                $where_prodorder    = "NO_KK  = '$prod_order'";
-                                                            }else{
-                                                                $where_prodorder    = "";
-                                                            }
-                                                            if($prod_demand){
-                                                                $where_proddemand    = "DEMAND = '$prod_demand'";
-                                                            }else{
-                                                                $where_proddemand    = "";
-                                                            }
-                                                            if($no_order){
-                                                                $where_order    = "NO_ORDER = '$no_order'";
-                                                            }else{
-                                                                $where_order    = "";
-                                                            }
                                                             if($tgl1 & $tgl2){
                                                                 $where_date     = "DELIVERY BETWEEN '$tgl1' AND '$tgl2'";
                                                             }else{
                                                                 $where_date     = "";
                                                             }
-                                                            // itxview_memopentingppc
-                                                            $itxviewmemo              = db2_exec($conn1, "SELECT * FROM itxview_memopentingppc WHERE $where_prodorder $where_proddemand $where_order $where_date");
-                                                            while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
-                                                                $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_ORDER']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_PO']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN_PRODUCT']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['WARNA']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_WARNA']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['DELIVERY']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['QTY_BAGIKAIN']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NETTO']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['DELAY']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_KK']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['DEMAND']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['ORDERLINE']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN']))."',"
-                                                                                        ."'".$_SERVER['REMOTE_ADDR']."',"
-                                                                                        ."'".date('Y-m-d H:i:s')."')";
-                                                            }
-                                                            $value_itxviewmemo        = implode(',', $r_itxviewmemo);
-                                                            $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,KETERANGAN,IPADDRESS,CREATEDATETIME) VALUES $value_itxviewmemo");
-
-                                                            // --------------------------------------------------------------------------------------------------------------- //
-                                                            $prod_order_2  = $_POST['prod_order'];
-                                                            $prod_demand_2 = $_POST['prod_demand'];
-                                                            $no_order_2 = $_POST['no_order'];
-                                                            $tgl1_2     = $_POST['tgl1'];
-                                                            $tgl2_2     = $_POST['tgl2'];
-
-                                                            if($prod_order_2){
-                                                                $where_prodorder2    = "NO_KK  = '$prod_order'";
-                                                            }else{
-                                                                $where_prodorder2    = "";
-                                                            }
-                                                            if($prod_demand_2){
-                                                                $where_proddemand2    = "DEMAND = '$prod_demand'";
-                                                            }else{
-                                                                $where_proddemand2    = "";
-                                                            }
-                                                            if($no_order_2){
-                                                                $where_order2    = "NO_ORDER = '$no_order_2'";
-                                                            }else{
-                                                                $where_order2    = "";
-                                                            }
-                                                            if($tgl1_2 & $tgl2_2){
-                                                                $where_date2     = "DELIVERY BETWEEN '$tgl1_2' AND '$tgl2_2'";
-                                                            }else{
-                                                                $where_date2     = "";
-                                                            }
-                                                            $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
-                                                            $stmt   = mysqli_query($con_nowprd,$sqlDB2);
-                                                            while ($rowdb2 = mysqli_fetch_array($stmt)) {
+                                                            $sqlDB2 = "";
+                                                            $stmt   = db2_exec($conn1,$sqlDB2);
+                                                            while ($rowdb2 = db2_fetch_assoc($stmt)) {
                                                         ?>
                                                         <tr>
-                                                            <td><?= $rowdb2['ORDERDATE']; ?></td> <!-- TGL TERIMA ORDER -->
+                                                            <td></td> <!-- TGL TERIMA ORDER -->
                                                         </tr>
                                                         <?php } ?>
                                                     </tbody>
