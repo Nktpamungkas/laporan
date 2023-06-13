@@ -34,15 +34,18 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
+                                    <div class="card-header">
+                                        <h5>Filter by</h5>
+                                    </div>
                                     <div class="card-block">
                                         <form action="" method="post">
                                             <div class="row">
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
-                                                    <h4 class="sub-title">Dari Tanggal</h4>
+                                                    <h4 class="sub-title">Issue Date From</h4>
                                                     <input type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
-                                                    <h4 class="sub-title">Sampai Tanggal</h4>
+                                                    <h4 class="sub-title">Until Date</h4>
                                                     <input type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
