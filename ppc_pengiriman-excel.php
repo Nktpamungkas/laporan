@@ -105,7 +105,9 @@
                             i.ITEMDESCRIPTION,
                             i.ORDERLINE,
                             i.CODE,
-                            i2.WARNA";
+                            i2.WARNA
+                        ORDER BY 
+	                        i.PROVISIONALCODE ASC";
             $stmt   = db2_exec($conn1,$sqlDB2);
             $no = 1;
             while ($rowdb2 = db2_fetch_assoc($stmt)) {
