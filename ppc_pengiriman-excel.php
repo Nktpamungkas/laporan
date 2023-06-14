@@ -44,7 +44,7 @@
             }else{
                 $where_date     = "";
             }
-            $sqlDB2 = "SELECT 
+            $sqlDB2 = "SELECT DISTINCT
                             i.PROVISIONALCODE,
                             i.DEFINITIVEDOCUMENTDATE,
                             i.ORDERPARTNERBRANDCODE,
