@@ -149,7 +149,20 @@
     </tbody>
     <tfoot>
         <tr>
-            <th colspan="5" align="left">Total Tanggal <?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"d"); ?></th>
+            <th colspan="4" align="left">Total Tanggal <?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"d"); ?></th>
+            <th colspan="1" align="center">
+                <?php
+                    $q_sumRoll   = db2_exec($conn1, "SELECT 
+                                                            COUNT(i2.BASEPRIMARYQUANTITY) AS SUM_ROLL_SJ
+                                                        FROM 
+                                                            ITXVIEWLAPKIRIMPPC i 
+                                                        LEFT JOIN ITXVIEWALLOCATION0 i2 ON i2.CODE = i.CODE
+                                                        WHERE 
+                                                            i.GOODSISSUEDATE = '$_GET[tgl1]'");
+                    $r_sumRoll   = db2_fetch_assoc($q_sumRoll);
+                    echo number_format($r_sumRoll['SUM_ROLL_SJ'], 0)
+                ?>
+            </th>
             <th colspan="2" align="center">
                 <?php
                     $q_sumQty   = db2_exec($conn1, "SELECT 
@@ -167,7 +180,22 @@
             <th colspan="5" align="center">PUTRI</th>
         </tr>
         <tr>
-            <th colspan="5" align="left">Total Tanggal 01 S/D <?php echo date('d', strtotime('-1 days', strtotime($_GET['tgl1']))); ?></th>
+            <th colspan="4" align="left">Total Tanggal 01 S/D <?php echo date('d', strtotime('-1 days', strtotime($_GET['tgl1']))); ?></th>
+            <th colspan="1" align="center">
+                <?php
+                    $tanggal_awal               = date('Y-m', strtotime('-1 days', strtotime($_GET['tgl1']))).'-01';
+                    $tanggal_akhir_minus1Hari   = date('Y-m-d', strtotime('-1 days', strtotime($_GET['tgl1'])));
+                    $q_sumRoll_2   = db2_exec($conn1, "SELECT 
+                                                            COUNT(i2.BASEPRIMARYQUANTITY) AS SUM_ROLL_SJ
+                                                        FROM 
+                                                            ITXVIEWLAPKIRIMPPC i 
+                                                        LEFT JOIN ITXVIEWALLOCATION0 i2 ON i2.CODE = i.CODE
+                                                        WHERE 
+                                                            i.GOODSISSUEDATE BETWEEN '$tanggal_awal' AND '$tanggal_akhir_minus1Hari'");
+                    $r_sumRoll_2   = db2_fetch_assoc($q_sumRoll_2);
+                    echo number_format($r_sumRoll_2['SUM_ROLL_SJ'], 0)
+                ?>
+            </th>
             <th colspan="2" align="center">
                 <?php
                     $tanggal_awal               = date('Y-m', strtotime('-1 days', strtotime($_GET['tgl1']))).'-01';
@@ -187,7 +215,22 @@
             <th colspan="5" align="center">PPC AST. MANAGER</th>
         </tr>
         <tr>
-            <th colspan="5" align="left">Total Tanggal 01 S/D <?= $_GET['tgl1']; ?></th>
+            <th colspan="4" align="left">Total Tanggal 01 S/D <?= date('d', $_GET['tgl1']); ?></th>
+            <th colspan="1" align="center">
+                <?php
+                    $tanggal_awal   = date('Y-m', strtotime('-1 days', strtotime($_GET['tgl1']))).'-01';
+                    $tanggal_akhir  = date('Y-m-d', strtotime($_GET['tgl1']));
+                    $q_sumRoll_3   = db2_exec($conn1, "SELECT 
+                                                            COUNT(i2.BASEPRIMARYQUANTITY) AS SUM_ROLL_SJ
+                                                        FROM 
+                                                            ITXVIEWLAPKIRIMPPC i 
+                                                        LEFT JOIN ITXVIEWALLOCATION0 i2 ON i2.CODE = i.CODE
+                                                        WHERE 
+                                                            i.GOODSISSUEDATE BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+                    $r_sumRoll_3   = db2_fetch_assoc($q_sumRoll_3);
+                    echo number_format($r_sumRoll_3['SUM_ROLL_SJ'], 2)
+                ?>
+            </th>
             <th colspan="2" align="center">
                 <?php
                     $tanggal_awal   = date('Y-m', strtotime('-1 days', strtotime($_GET['tgl1']))).'-01';
