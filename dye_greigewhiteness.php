@@ -222,7 +222,11 @@
                                                                                                                 AND ORDERLINE = '$row_no_order[ORIGDLVSALORDERLINEORDERLINE]'");
                                                                     $row_noko           = db2_fetch_assoc($noko);
 
-                                                                    $re_proccess        = db2_exec($conn1, "SELECT COUNT(*) AS reprocess FROM PRODUCTIONDEMANDSTEP WHERE PRODUCTIONORDERCODE = '$row_no_order[ORIGDLVSALORDLINESALORDERCODE]'");
+                                                                    $re_proccess        = db2_exec($conn1, "SELECT CASE
+                                                                                                                        WHEN COUNT(*) = 1 THEN 'No'
+                                                                                                                        ELSE 'Yes'
+                                                                                                                    END AS REPROCESS 
+                                                                                                                FROM PRODUCTIONDEMANDSTEP WHERE PRODUCTIONORDERCODE = '$rowdb2[QUALITYDOCPRODUCTIONORDERCODE]' AND OPERATIONCODE LIKE '%DYE%'");
                                                                     $row_re_proccess    = db2_fetch_assoc($re_proccess);
                                                         ?>
                                                             <?php
@@ -246,7 +250,8 @@
                                                                 <td><?= $row_yellowness['VALUEQUANTITY']; ?></td>
                                                                 <td><?= $row_tint['VALUEQUANTITY']; ?></td>
                                                                 <td><?= $row_noko['LOTCODE']; ?></td>
-                                                                <td><?php if($row_re_proccess['reprocess'] > 1){ echo "Yes"; }else{ echo "No";} ?></td>
+                                                                <td><?= $row_re_proccess['REPROCESS']; ?>
+                                                                </td>
                                                             </tr>
                                                         <?php } ?>
                                                     </tbody>
