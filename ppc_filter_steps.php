@@ -56,19 +56,66 @@
                                 </div>
                                 <?php if (isset($_POST['submit']) OR isset($_GET['demand']) OR isset($_GET['prod_order'])) : ?>
                                     <div class="card">
+                                        <div class="card-header">
+                                            <?php
+                                                ini_set("error_reporting", 1);
+                                                session_start();
+                                                require_once "koneksi.php";
+
+                                                if($_GET['demand']){
+                                                    $demand     = $_GET['demand'];
+                                                }else{
+                                                    $demand     = $_POST['demand'];
+                                                }
+                                                
+                                                $q_demand   = db2_exec($conn1, "SELECT * FROM PRODUCTIONDEMAND WHERE CODE = '$demand'");
+                                                $d_demand   = db2_fetch_assoc($q_demand);
+
+                                                $sql_warna		= db2_exec($conn1, "SELECT DISTINCT TRIM(WARNA) AS WARNA FROM ITXVIEWCOLOR 
+                                                                                        WHERE ITEMTYPECODE = '$d_demand[ITEMTYPEAFICODE]' 
+                                                                                        AND SUBCODE01 = '$d_demand[SUBCODE01]' 
+                                                                                        AND SUBCODE02 = '$d_demand[SUBCODE02]'
+                                                                                        AND SUBCODE03 = '$d_demand[SUBCODE03]' 
+                                                                                        AND SUBCODE04 = '$d_demand[SUBCODE04]'
+                                                                                        AND SUBCODE05 = '$d_demand[SUBCODE05]' 
+                                                                                        AND SUBCODE06 = '$d_demand[SUBCODE06]'
+                                                                                        AND SUBCODE07 = '$d_demand[SUBCODE07]' 
+                                                                                        AND SUBCODE08 = '$d_demand[SUBCODE08]'
+                                                                                        AND SUBCODE09 = '$d_demand[SUBCODE09]' 
+                                                                                        AND SUBCODE10 = '$d_demand[SUBCODE10]'");
+                                                $dt_warna		= db2_fetch_assoc($sql_warna);
+                                            ?>
+                                            <table border="0" style='font-family:"Microsoft Sans Serif"'>
+                                                <tr>
+                                                    <td>Kode Product/Kode Warna </td>
+                                                    <td>&nbsp;&nbsp;&nbsp; : &nbsp;</td>
+                                                    <td><?= TRIM($d_demand['SUBCODE02']).TRIM($d_demand['SUBCODE03']).'-'.TRIM($d_demand['SUBCODE05']); ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Warna</td>
+                                                    <td>&nbsp;&nbsp;&nbsp; : &nbsp;</td>
+                                                    <td><?= $dt_warna['WARNA']; ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>No Order</td>
+                                                    <td>&nbsp;&nbsp;&nbsp; : &nbsp;</td>
+                                                    <td><?= $d_demand['ORIGDLVSALORDLINESALORDERCODE']; ?></td>
+                                                </tr>
+                                            </table>
+                                        </div>
                                         <div class="card-block">
                                             <div class="table-responsive dt-responsive">
-                                                <table border='1'>
+                                                <table border='1' style='font-family:"Microsoft Sans Serif"' width="100%">
                                                     <thead>
-                                                        <tr align="center">
+                                                        <tr text-align="center">
                                                             <th width="100px">STEP NUMBER</th>
                                                             <th width="300px">TANGGAL IN</th>
                                                             <th width="300px">TANGGAL OUT</th>
                                                             <th width="100px">OPERATION</th>
                                                             <th width="500px">LONGDESCRIPTION</th>
                                                             <th width="100px">STATUS</th>
-                                                            <th width="100px">PRODUCTION ORDER</th>
-                                                            <th width="100px">PRODUCTION DEMAND</th>
+                                                            <th width="100px">PROD. ORDER</th>
+                                                            <th width="100px">PROD. DEMAND</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody> 
