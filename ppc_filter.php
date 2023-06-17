@@ -291,7 +291,7 @@
                                                                     $d_netto_yd = db2_fetch_assoc($sql_netto_yd);
                                                                     echo number_format($d_netto_yd['BASESECONDARYQUANTITY'],0);
                                                                 ?>
-                                                            </td> <!-- NETTO KG-->
+                                                            </td> <!-- NETTO YD-->
                                                             <td><?= $rowdb2['DELAY']; ?></td> <!-- DELAY -->
                                                             <?php 
                                                                 // mendeteksi statusnya close
