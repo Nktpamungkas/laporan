@@ -53,12 +53,12 @@
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Create date </h4>
-                                                    <input type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
+                                                    <input type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30"><br><br>
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
                                                     <?php if (isset($_POST['submit'])) : ?>
-                                                        <!-- <a class="btn btn-mat btn-success" href="ppc_memopenting-excel.php?no_order=<?= $_POST['no_order']; ?>&tgl1=<?= $_POST['tgl1']; ?>&tgl2=<?= $_POST['tgl2']; ?>">CETAK EXCEL</a> -->
+                                                        <a class="btn btn-mat btn-success" href="ppc_memopenting-excel.php?no_order=<?= $_POST['no_order']; ?>&tgl1=<?= $_POST['tgl1']; ?>&tgl2=<?= $_POST['tgl2']; ?>">CETAK EXCEL</a>
                                                     <?php endif; ?>
                                                 </div>
                                             </div>
@@ -111,10 +111,11 @@
                                                             session_start();
                                                             require_once "koneksi.php";
                                                             $tgl1     = $_POST['tgl1'];
+                                                            $tgl2     = $_POST['tgl2'];
 
                                                             // itxview_terimaorder
-                                                            $itxviewmemo                = db2_exec($conn1, "SELECT * FROM itxview_memopentingppc 
-                                                                                                            WHERE SUBSTR(CREATIONDATETIME_SALESORDER, 1,10) = '$tgl1'");
+                                                            $itxviewmemo                = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC 
+                                                                                                            WHERE SUBSTR(CREATIONDATETIME_SALESORDER, 1,10) BETWEEN '$tgl1' AND '$tgl2'");
                                                             while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
                                                                 $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
@@ -140,7 +141,8 @@
 
                                                             // --------------------------------------------------------------------------------------------------------------- //
                                                             $tgl1_2     = $_POST['tgl1'];
-                                                            $sqlDB2 = "SELECT DISTINCT * FROM itxview_terimaorder WHERE SUBSTR(CREATIONDATETIME_SALESORDER, 1,10) = '$tgl1_2' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
+                                                            $tgl2_2     = $_POST['tgl2'];
+                                                            $sqlDB2 = "SELECT DISTINCT * FROM itxview_terimaorder WHERE SUBSTR(CREATIONDATETIME_SALESORDER, 1,10) BETWEEN '$tgl1_2' AND '$tgl2_2' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
                                                             $stmt   = mysqli_query($con_nowprd,$sqlDB2);
                                                             while ($rowdb2 = mysqli_fetch_array($stmt)) {
                                                         ?>
