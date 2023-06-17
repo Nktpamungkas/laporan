@@ -51,6 +51,10 @@
                                                     <h4 class="sub-title">Create date bon order</h4>
                                                     <input type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
                                                 </div>
+                                                <div class="col-sm-12 col-xl-2 m-b-30">
+                                                    <h4 class="sub-title">Create date </h4>
+                                                    <input type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
+                                                </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30"><br><br>
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
                                                     <?php if (isset($_POST['submit'])) : ?>
@@ -254,6 +258,7 @@
                                                             </td><!-- HITUNG WAKTU (CREATE BO s/d TGL KIRIM) -->
                                                             <td><?= $rowdb2['NO_KK']; ?></td><!-- NO KK -->
                                                             <td><a target="_BLANK" href="http://10.0.0.10/laporan/ppc_filter_steps.php?demand=<?= $rowdb2['DEMAND']; ?>&prod_order=<?= $rowdb2['NO_KK']; ?>">`<?= $rowdb2['DEMAND']; ?></a></td> <!-- DEMAND -->
+                                                            <td><?= $rowdb2['NO_ORDER']; ?></td> <!-- NO. ORDER -->
                                                             <td><?= $rowdb2['KETERANGAN_PRODUCT']; ?></td> <!-- KETERANGAN PRODUCT -->
                                                             <td>
                                                                 <?php 
@@ -323,6 +328,12 @@
                                                                 ?>
                                                             </td> <!-- QTY PACKING -->
                                                             <td><?= number_format($rowdb2['NETTO'],0); ?></td> <!-- NETTO KG-->
+                                                            <td>
+                                                                <?php 
+                                                                    $sql_netto_yd = db2_exec($conn1, "SELECT * FROM ITXVIEW_NETTO WHERE CODE = '$rowdb2[DEMAND]'");
+                                                                    $d_netto_yd = db2_fetch_assoc($sql_netto_yd);
+                                                                    echo number_format($d_netto_yd['BASESECONDARYQUANTITY'],0);
+                                                                ?>
                                                             </td> <!-- NETTO YD-->
                                                             <td><?= $rowdb2['DELAY']; ?></td> <!-- DELAY -->
                                                             <?php 
