@@ -41,24 +41,23 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Filter Data</h5>
-                                        
+                                        <h5>Filter Data CREATIONDATE in SALESORDER</h5>
                                     </div>
                                     <div class="card-block">
                                         <form action="" method="post">
                                             <div class="row">
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
-                                                    <h4 class="sub-title">Create date bon order</h4>
+                                                    <h4 class="sub-title">Date From</h4>
                                                     <input type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
-                                                    <h4 class="sub-title">Create date </h4>
+                                                    <h4 class="sub-title">Date to</h4>
                                                     <input type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30"><br><br>
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
                                                     <?php if (isset($_POST['submit'])) : ?>
-                                                        <a class="btn btn-mat btn-success" href="ppc_memopenting-excel.php?no_order=<?= $_POST['no_order']; ?>&tgl1=<?= $_POST['tgl1']; ?>&tgl2=<?= $_POST['tgl2']; ?>">CETAK EXCEL</a>
+                                                        <!-- <a class="btn btn-mat btn-success" href="mkt_terima_order-excel.php?no_order=<?= $_POST['no_order']; ?>&tgl1=<?= $_POST['tgl1']; ?>&tgl2=<?= $_POST['tgl2']; ?>">CETAK EXCEL</a> -->
                                                     <?php endif; ?>
                                                 </div>
                                             </div>
@@ -69,7 +68,7 @@
                                     <div class="card">
                                         <div class="card-block">
                                             <div class="dt-responsive table-responsive">
-                                                <table id="lang-dt" class="table table-striped table-bordered nowrap">
+                                                <table id="excel-LA" class="table table-striped table-bordered nowrap">
                                                     <thead>
                                                         <tr>
                                                             <th>CREATE BO</th>
@@ -482,5 +481,60 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="files\bower_components\jquery\js\jquery.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\jquery-ui\js\jquery-ui.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\popper.js\js\popper.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\bootstrap\js\bootstrap.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\jquery-slimscroll\js\jquery.slimscroll.js"></script>
+    <script type="text/javascript" src="files\bower_components\modernizr\js\modernizr.js"></script>
+    <script type="text/javascript" src="files\bower_components\modernizr\js\css-scrollbars.js"></script>
+    <script src="files\bower_components\datatables.net\js\jquery.dataTables.min.js"></script>
+    <script src="files\bower_components\datatables.net-buttons\js\dataTables.buttons.min.js"></script>
+    <script src="files\assets\pages\data-table\js\jszip.min.js"></script>
+    <script src="files\assets\pages\data-table\js\pdfmake.min.js"></script>
+    <script src="files\assets\pages\data-table\js\vfs_fonts.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\dataTables.buttons.min.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\buttons.flash.min.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\jszip.min.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\vfs_fonts.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\buttons.colVis.min.js"></script>
+    <script src="files\bower_components\datatables.net-buttons\js\buttons.print.min.js"></script>
+    <script src="files\bower_components\datatables.net-buttons\js\buttons.html5.min.js"></script>
+    <script src="files\bower_components\datatables.net-bs4\js\dataTables.bootstrap4.min.js"></script>
+    <script src="files\bower_components\datatables.net-responsive\js\dataTables.responsive.min.js"></script>
+    <script src="files\bower_components\datatables.net-responsive-bs4\js\responsive.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\i18next\js\i18next.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\i18next-xhr-backend\js\i18nextXHRBackend.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\i18next-browser-languagedetector\js\i18nextBrowserLanguageDetector.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\jquery-i18next\js\jquery-i18next.min.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\extension-btns-custom.js"></script>
+    <script src="files\assets\js\pcoded.min.js"></script>
+    <script src="files\assets\js\menu\menu-hori-fixed.js"></script>
+    <script src="files\assets\js\jquery.mCustomScrollbar.concat.min.js"></script>
+    <script type="text/javascript" src="files\assets\js\script.js"></script>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-23581568-13');
+    </script>
+    <script>
+        $('#excel-LA').DataTable({
+            dom: 'Bfrtip',
+            buttons: [{
+                extend: 'excelHtml5',
+                customize: function(xlsx) {
+                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                    $('row c[r^="F"]', sheet).each(function() {
+                        if ($('is t', this).text().replace(/[^\d]/g, '') * 1 >= 500000) {
+                            $(this).attr('s', '20');
+                        }
+                    });
+                }
+            }]
+        });
+    </script>
 </body>
 <?php require_once 'footer.php'; ?>
