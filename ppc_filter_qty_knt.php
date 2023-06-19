@@ -9,7 +9,7 @@
     <meta name="keywords" content="Admin , Responsive, Landing, Bootstrap, App, Template, Mobile, iOS, Android, apple, creative app">
     <meta name="author" content="#">
     <link rel="icon" href="files\assets\images\favicon.ico" type="image/x-icon">
-         <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800" rel="stylesheet"> --> -->
+         <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800" rel="stylesheet"> --> 
     <link rel="stylesheet" type="text/css" href="files\bower_components\bootstrap\css\bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\themify-icons\themify-icons.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\icofont\css\icofont.css">
