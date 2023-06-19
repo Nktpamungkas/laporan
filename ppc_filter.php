@@ -346,6 +346,11 @@
                                                                             $status_operation   = 'KK Oke | Segera Closed Production Order!';
                                                                         }
                                                                     }else{
+                                                                        if($row_status_close['PROGRESSSTATUS'] == 2){
+                                                                            $groupstep_option       = "= '$groupstepnumber'";
+                                                                        }else{
+                                                                            $groupstep_option       = "> '$groupstepnumber'";
+                                                                        }
                                                                         $q_not_cnp1             = db2_exec($conn1, "SELECT 
                                                                                                                         STEPNUMBER,
                                                                                                                         TRIM(OPERATIONCODE) AS OPERATIONCODE,
@@ -362,7 +367,7 @@
                                                                                                                     WHERE 
                                                                                                                         PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' AND 
                                                                                                                         -- PRODUCTIONDEMANDCODE = '$rowdb2[DEMAND]' AND 
-                                                                                                                        STEPNUMBER > $d_cnp_close[STEPNUMBER]
+                                                                                                                        STEPNUMBER $groupstep_option
                                                                                                                     ORDER BY 
                                                                                                                         STEPNUMBER ASC LIMIT 1");
                                                                         $d_not_cnp_close        = db2_fetch_assoc($q_not_cnp1);
