@@ -56,7 +56,7 @@
                                             <div class="row">
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Bon Order</h4>
-                                                    <input type="text" name="no_order" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['no_order']; } ?>">
+                                                    <input type="text" name="no_order" class="form-control" onkeyup="this.value = this.value.toUpperCase()" value="<?php if (isset($_POST['submit'])){ echo $_POST['no_order']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Production Demand</h4>
