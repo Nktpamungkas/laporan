@@ -54,6 +54,10 @@
                                                     <h4 class="sub-title">Date to</h4>
                                                     <input type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
                                                 </div>
+                                                <div class="col-sm-12 col-xl-2 m-b-30">
+                                                    <h4 class="sub-title">Bon Order</h4>
+                                                    <input type="text" name="no_order" class="form-control" onkeyup="this.value = this.value.toUpperCase()" value="<?php if (isset($_POST['submit'])){ echo $_POST['no_order']; } ?>">
+                                                </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30"><br><br>
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
                                                     <?php if (isset($_POST['submit'])) : ?>
@@ -109,12 +113,22 @@
                                                             ini_set("error_reporting", 1);
                                                             session_start();
                                                             require_once "koneksi.php";
+                                                            $no_order = $_POST['no_order'];
                                                             $tgl1     = $_POST['tgl1'];
                                                             $tgl2     = $_POST['tgl2'];
 
+                                                            if($no_order){
+                                                                $where_order    = "NO_ORDER = '$no_order'";
+                                                            }else{
+                                                                $where_order    = "";
+                                                            }
+                                                            if($tgl1 & $tgl2){
+                                                                $where_date     = "SUBSTR(CREATIONDATETIME_SALESORDER, 1,10) BETWEEN '$tgl1' AND '$tgl2'";
+                                                            }else{
+                                                                $where_date     = "";
+                                                            }
                                                             // itxview_terimaorder
-                                                            $itxviewmemo                = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC 
-                                                                                                            WHERE SUBSTR(CREATIONDATETIME_SALESORDER, 1,10) BETWEEN '$tgl1' AND '$tgl2'");
+                                                            $itxviewmemo                = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_order $where_date");
                                                             while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
                                                                 $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
@@ -139,9 +153,21 @@
                                                             $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_terimaorder(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,CREATIONDATETIME_SALESORDER,IPADDRESS,CREATEDATETIME) VALUES $value_itxviewmemo");
 
                                                             // --------------------------------------------------------------------------------------------------------------- //
+                                                            $no_order_2 = $_POST['no_order'];
                                                             $tgl1_2     = $_POST['tgl1'];
                                                             $tgl2_2     = $_POST['tgl2'];
-                                                            $sqlDB2 = "SELECT DISTINCT * FROM itxview_terimaorder WHERE SUBSTR(CREATIONDATETIME_SALESORDER, 1,10) BETWEEN '$tgl1_2' AND '$tgl2_2' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
+
+                                                            if($no_order_2){
+                                                                $where_order2    = "NO_ORDER = '$no_order_2'";
+                                                            }else{
+                                                                $where_order2    = "";
+                                                            }
+                                                            if($tgl1_2 & $tgl2_2){
+                                                                $where_date2     = "SUBSTR(CREATIONDATETIME_SALESORDER, 1,10) BETWEEN '$tgl1_2' AND '$tgl2_2'";
+                                                            }else{
+                                                                $where_date2     = "";
+                                                            }
+                                                            $sqlDB2 = "SELECT DISTINCT * FROM itxview_terimaorder WHERE $where_order2 $where_date2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
                                                             $stmt   = mysqli_query($con_nowprd,$sqlDB2);
                                                             while ($rowdb2 = mysqli_fetch_array($stmt)) {
                                                         ?>
