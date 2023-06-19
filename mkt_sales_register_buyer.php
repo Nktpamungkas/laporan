@@ -109,7 +109,7 @@
                                                             <th>TOTAL BRUTO</th>
                                                             <th>TOTAL NETTO</th>
                                                             <!-- <th>TOTAL BRUTO</th> -->
-                                                            <!-- <th>TOTAL NETTO</th>                                                             -->
+                                                            <!-- <th>TOTAL NETTO</th>                                                            
                                                    </thead>
                                                     <tbody> 
                                                         <?php 
@@ -211,15 +211,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                <!-- <?php elseif(isset($_POST['reset'])) : ?>
-                                    <?php
-                                        ini_set("error_reporting", 1);
-                                        session_start();
-                                        require_once "koneksi.php";
-                                        mysqli_query($con_nowprd, "DELETE FROM itxview_memopentingppc");
-                                        header("Location: ppc_filter.php");
-                                    ?>
-                                <?php endif; ?> -->
+                                <?php //endif; ?>
                                 </div>
                             </div>
                         </div>
