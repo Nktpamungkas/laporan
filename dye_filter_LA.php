@@ -70,6 +70,7 @@
                                                                         <th width='100px'>PROD ORDER</th>
                                                                         <th width='100px'>LOTCODE</th>
                                                                         <th width='100px'>DYC</th>
+                                                                        <th width='100px'>CONSUMTION</th>
                                                                         <th width='100px'>TARGET</th>
                                                                         <th width='100px'>ACTUAL</th>
                                                                     </tr>
@@ -127,6 +128,14 @@
                                                                         <td><?= $row_la['ID_NO']; ?></td>
                                                                         <td></td>
                                                                         <td><?= $row_la['PRODUCT_CODE']; ?></td>
+                                                                        <td>
+                                                                            <?php
+                                                                                $prod_order     = sprintf("%08d", substr($_POST['bon_resep'], 1, 9));
+                                                                                $q_consumtion   = db2_exec($conn1, "SELECT * FROM ITXVIEWRESEP WHERE SUBCODE = '$row_la[PRODUCT_CODE]' AND PRODUCTIONORDERCODE = '$prod_order'");
+                                                                                $d_consumtion   = db2_fetch_assoc($q_consumtion);
+                                                                                echo $d_consumtion['CONSUMPTION'];
+                                                                            ?>
+                                                                        </td>
                                                                         <td><?= $row_la['TARGET_WT']; ?></td>
                                                                         <td><?= $row_la['ACTUAL_WT']; ?></td>
                                                                     </tr>
@@ -154,6 +163,7 @@
                                                                         <th width='100px'>PROD ORDER</th>
                                                                         <th width='100px'>LOTCODE</th>
                                                                         <th width='100px'>DYC</th>
+                                                                        <th width='100px'>CONSUMTION</th>
                                                                         <th width='100px'>TARGET</th>
                                                                         <th width='100px'>ACTUAL</th>
                                                                     </tr>
@@ -200,6 +210,14 @@
                                                                         <td><?= $row_CAMS['rs_productionordercode']; ?>-<?= $bonresep_line; ?></td>
                                                                         <td></td>
                                                                         <td><?= $row_CAMS['CODE']; ?></td>
+                                                                        <td>
+                                                                            <?php
+                                                                                $prod_order     = sprintf("%08d", substr($_POST['bon_resep'], 1, 9));
+                                                                                $q_consumtion   = db2_exec($conn1, "SELECT * FROM ITXVIEWRESEP WHERE SUBCODE = '$row_CAMS[CODE]' AND PRODUCTIONORDERCODE = '$prod_order'");
+                                                                                $d_consumtion   = db2_fetch_assoc($q_consumtion);
+                                                                                echo $d_consumtion['CONSUMPTION'];
+                                                                            ?>
+                                                                        </td>
                                                                         <td><?= $row_CAMS['ACUAN_QTY']; ?></td>
                                                                         <td><?php if($row_CAMS['AKTUAL_QTY'] != 0){ echo $row_CAMS['AKTUAL_QTY']; }else{ echo '';} ?></td>
                                                                     </tr>
