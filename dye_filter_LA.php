@@ -58,10 +58,13 @@
                                         <div class="col-6">
                                             <div class="card">
                                                 <div class="card-block">
+                                                    <h4>FROM MECHINE LOGIC ART : TICKET</h4>
+                                                        <h5>
+                                                            <a class="btn btn-sm btn-primary" href="dye_filter_LA_Excel.php?bon_resep=<?= $_POST['bon_resep']; ?>">EXCEL</a>
+                                                        </h5>
                                                     <div class="row">
-                                                        <center><h4>FROM MECHINE LOGIC ART : TICKET</h4></center>
                                                         <div class="table-responsive dt-responsive">
-                                                            <table id="excel-LA" class="table table-striped table-bordered nowrap">
+                                                            <table id="" class="table table-striped table-bordered nowrap">
                                                                 <thead>
                                                                     <tr align="center">
                                                                         <th width='5px' hidden>NO</th>
@@ -151,10 +154,13 @@
                                         <div class="col-6">
                                             <div class="card">
                                                 <div class="card-block">
+                                                    <h4>FROM MECHINE CAMS : TAICHEN_CAMS_LIVE</h4>
+                                                    <h5>
+                                                        <a class="btn btn-sm btn-primary" href="dye_filter_CAMS_Excel.php?bon_resep=<?= $_POST['bon_resep']; ?>">EXCEL</a>
+                                                    </h5>
                                                     <div class="row">
-                                                        <center><h4>FROM MECHINE CAMS : TAICHEN_CAMS_LIVE</h4></center>
                                                         <div class="table-responsive dt-responsive">
-                                                            <table id="excel-cams" class="table table-striped table-bordered nowrap">
+                                                            <table id="" class="table table-striped table-bordered nowrap">
                                                                 <thead>
                                                                     <tr align="center">
                                                                         <th width='5px' hidden>NO</th>
