@@ -82,7 +82,7 @@
                                                             <th>HITUNG WAKTU (TERIMA ORDER s/d BUKA KK)</th>
                                                             <th>TUNGGU GREIGE OUT</th>
                                                             <th>KK OKE</th>
-                                                            <th>HITUNG WAKTU (CREATE BO s/d KK OKE)</th>
+                                                            <th>HITUNG WAKTU (TERIMA ORDER s/d KK OKE)</th>
                                                             <th>TGL KIRIM</th>
                                                             <th>HITUNG WAKTU (CREATE BO s/d TGL KIRIM)</th>
                                                             <th>NO KK</th>
