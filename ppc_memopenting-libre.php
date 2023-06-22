@@ -272,7 +272,17 @@ header('Cache-Control: max-age=0');
                 <td></td><!-- ALUR PROSES -->
                 <td><a target="_BLANK" href="http://10.0.0.10/laporan/ppc_filter_steps.php?demand=<?= $rowdb2['DEMAND']; ?>&prod_order=<?= $rowdb2['NO_KK']; ?>">`<?= $rowdb2['DEMAND']; ?></a></td> <!-- DEMAND -->
                 <td>`<?= $rowdb2['NO_KK']; ?></td> <!-- NO KARTU KERJA -->
-                <td></td> <!-- CATATAN PO GREIGE -->
+                <td>
+                    <?php
+                        $sql_benang_booking_new		= db2_exec($conn1, "SELECT * FROM ITXVIEW_BOOKING_NEW WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]'
+                                                                                                AND ORDERLINE = '$rowdb2[ORDERLINE]'");
+                        $r_benang_booking_new		= db2_fetch_assoc($sql_benang_booking_new);
+                        $d_benang_booking_new		= $r_benang_booking_new['SALESORDERCODE'];
+
+                    ?>
+                    <!-- <a href="http://online.indotaichen.com/laporan/ppc_catatan_po_greige.php?" target="_blank">Detail</a> -->
+                    <?php if($d_benang_booking_new){ echo $d_benang_booking_new.'. Greige Ready'; } ?>
+                </td> <!-- CATATAN PO GREIGE -->
                 <td></td> <!-- TARGET SELESAI -->
                 <td><?= $rowdb2['KETERANGAN']; ?></td> <!-- KETERANGAN -->
             </tr>
