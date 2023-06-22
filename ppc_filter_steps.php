@@ -137,31 +137,31 @@
                                                             }
                                                             
                                                             if(!empty($demand) && empty($prod_order)){ 
-                                                                $sqlDB2 = "SELECT
-                                                                                p.PRODUCTIONORDERCODE,
-                                                                                p.GROUPSTEPNUMBER AS STEPNUMBER,
-                                                                                p.OPERATIONCODE,
-                                                                                o.LONGDESCRIPTION,
-                                                                                CASE
-                                                                                    WHEN p.PROGRESSSTATUS = 0 THEN 'Entered'
-                                                                                    WHEN p.PROGRESSSTATUS = 1 THEN 'Planned'
-                                                                                    WHEN p.PROGRESSSTATUS = 2 THEN 'Progress'
-                                                                                    WHEN p.PROGRESSSTATUS = 3 THEN 'Closed'
-                                                                                END AS STATUS_OPERATION,
-                                                                                iptip.MULAI,
-                                                                                iptop.SELESAI,
-                                                                                p.PRODUCTIONORDERCODE,
-                                                                                p.PRODUCTIONDEMANDCODE
-                                                                            FROM 
-                                                                                PRODUCTIONDEMANDSTEP p 
-                                                                            LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
-                                                                            -- LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.GROUPSTEPNUMBER
-                                                                            -- LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.GROUPSTEPNUMBER
-                                                                            LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
-                                                                            LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
-                                                                            WHERE
-                                                                                p.PRODUCTIONDEMANDCODE = '$demand'
-                                                                            ORDER BY p.STEPNUMBER ASC";
+                                                                    $sqlDB2 = "SELECT
+                                                                                    p.PRODUCTIONORDERCODE,
+                                                                                    p.GROUPSTEPNUMBER AS STEPNUMBER,
+                                                                                    p.OPERATIONCODE,
+                                                                                    o.LONGDESCRIPTION,
+                                                                                    CASE
+                                                                                        WHEN p.PROGRESSSTATUS = 0 THEN 'Entered'
+                                                                                        WHEN p.PROGRESSSTATUS = 1 THEN 'Planned'
+                                                                                        WHEN p.PROGRESSSTATUS = 2 THEN 'Progress'
+                                                                                        WHEN p.PROGRESSSTATUS = 3 THEN 'Closed'
+                                                                                    END AS STATUS_OPERATION,
+                                                                                    iptip.MULAI,
+                                                                                    iptop.SELESAI,
+                                                                                    p.PRODUCTIONORDERCODE,
+                                                                                    p.PRODUCTIONDEMANDCODE
+                                                                                FROM 
+                                                                                    PRODUCTIONDEMANDSTEP p 
+                                                                                LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
+                                                                                -- LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.GROUPSTEPNUMBER
+                                                                                -- LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.GROUPSTEPNUMBER
+                                                                                LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
+                                                                                LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
+                                                                                WHERE
+                                                                                    p.PRODUCTIONDEMANDCODE = '$demand'
+                                                                                ORDER BY p.STEPNUMBER ASC";
                                                             }elseif(empty($demand) && !empty($prod_order)){
                                                                 $sqlDB2 = "SELECT
                                                                                 p.PRODUCTIONORDERCODE,
