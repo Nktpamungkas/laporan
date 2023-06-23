@@ -72,10 +72,10 @@
                                                                                             FROM 
                                                                                                 ITXVIEW_RESERVATION_KK 
                                                                                             WHERE 
-                                                                                                ORDERCODE = '$_GET[demand]'");
+                                                                                                ORDERCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]'");
                                                     $dt_qtyorder    = db2_fetch_assoc($sql_qtyorder);
 
-                                                    $q_qtypacking   = db2_exec($conn1, "SELECT * FROM PRODUCTIONDEMAND WHERE CODE = '$_GET[demand]'");
+                                                    $q_qtypacking   = db2_exec($conn1, "SELECT * FROM PRODUCTIONDEMAND WHERE CODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]'");
                                                     $d_qtypacking   = db2_fetch_assoc($q_qtypacking);
                                                 ?>
                                                 <thead>
@@ -176,7 +176,7 @@
                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                     WHERE
-                                                                        p.PRODUCTIONORDERCODE  = '$_GET[prod_order]' AND p.PRODUCTIONDEMANDCODE = '$_GET[demand]' 
+                                                                        p.PRODUCTIONORDERCODE  = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' AND p.PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
                                                                     ORDER BY p.STEPNUMBER ASC";
                                                         $stmt = db2_exec($conn1,$sqlDB2);
                                                         while ($rowdb2 = db2_fetch_assoc($stmt)) {
@@ -193,6 +193,7 @@
                                                                                                         AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
                                                                                                         AND WORKCENTERCODE = '$rowdb2[WORKCENTERCODE]' 
                                                                                                         AND OPERATIONCODE = '$rowdb2[OPERATIONCODE]' 
+                                                                                                        AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
                                                                                                         ORDER BY LINE ASC");
                                                         ?>
                                                         <td style="text-align: left;">

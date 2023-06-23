@@ -59,11 +59,11 @@
                                             <div class="row">
                                                 <div class="col-sm-6 col-xl-6 m-b-30">
                                                     <h4 class="sub-title">Production Order:</h4>
-                                                    <input type="text" name="prod_order" class="form-control" required value="<?php if(isset($_POST['submit'])){ echo $_POST['prod_order']; }elseif(isset($_GET['prod_order'])){ echo $_GET['prod_order']; } ?>">
+                                                    <input type="text" name="prod_order" class="form-control" value="<?php if(isset($_POST['submit'])){ echo $_POST['prod_order']; }elseif(isset($_GET['prod_order'])){ echo $_GET['prod_order']; } ?>">
                                                 </div>
                                                 <div class="col-sm-6 col-xl-6 m-b-30">
                                                     <h4 class="sub-title">Production Demand:</h4>
-                                                    <input type="text" name="demand" class="form-control" required value="<?php if(isset($_POST['submit'])){ echo $_POST['demand']; }elseif(isset($_GET['demand'])){ echo $_GET['demand']; } ?>">
+                                                    <input type="text" name="demand" placeholder="Wajib di isi" class="form-control" required value="<?php if(isset($_POST['submit'])){ echo $_POST['demand']; }elseif(isset($_GET['demand'])){ echo $_GET['demand']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
@@ -105,7 +105,7 @@
                                                                                                 FROM 
                                                                                                     ITXVIEW_RESERVATION_KK 
                                                                                                 WHERE 
-                                                                                                    ORDERCODE = '$_POST[demand]'");
+                                                                                                    ORDERCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]'");
                                                         $dt_qtyorder    = db2_fetch_assoc($sql_qtyorder);
 
                                                         $q_qtypacking   = db2_exec($conn1, "SELECT * FROM PRODUCTIONDEMAND WHERE CODE = '$_POST[demand]'");
@@ -113,8 +113,8 @@
 
                                                         // itxview_detail_qa_data
                                                         $itxview_detail_qa_data     = db2_exec($conn1, "SELECT * FROM ITXVIEW_DETAIL_QA_DATA 
-                                                                                                        WHERE PRODUCTIONORDERCODE = '$_POST[prod_order]' 
-                                                                                                        AND PRODUCTIONDEMANDCODE = '$_POST[demand]' 
+                                                                                                        WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
+                                                                                                        AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
                                                                                                         ORDER BY LINE ASC");
                                                         while ($row_itxview_detail_qa_data     = db2_fetch_assoc($itxview_detail_qa_data)) {
                                                             $r_itxview_detail_qa_data[]        = "('".TRIM(addslashes($row_itxview_detail_qa_data['PRODUCTIONDEMANDCODE']))."',"
@@ -215,7 +215,8 @@
                                                         <?php 
                                                             ini_set("error_reporting", 1);
                                                             session_start();
-                                                            require_once "koneksi.php"; 
+                                                            require_once "koneksi.php";
+
                                                             $sqlDB2 = "SELECT
                                                                             p.WORKCENTERCODE,
                                                                             p.OPERATIONCODE,
@@ -231,7 +232,7 @@
                                                                         LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                         LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                         WHERE
-                                                                            p.PRODUCTIONORDERCODE  = '$_POST[prod_order]' AND p.PRODUCTIONDEMANDCODE = '$_POST[demand]' 
+                                                                            p.PRODUCTIONORDERCODE  = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' AND p.PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
                                                                         ORDER BY p.STEPNUMBER ASC";
                                                             $stmt = db2_exec($conn1,$sqlDB2);
                                                             while ($rowdb2 = db2_fetch_assoc($stmt)) {
@@ -248,6 +249,7 @@
                                                                                                             AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
                                                                                                             AND WORKCENTERCODE = '$rowdb2[WORKCENTERCODE]' 
                                                                                                             AND OPERATIONCODE = '$rowdb2[OPERATIONCODE]' 
+                                                                                                            AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
                                                                                                             ORDER BY LINE ASC");
                                                             ?>
                                                             <td style="text-align: left;">
