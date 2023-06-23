@@ -41,11 +41,11 @@
                                             <div class="row">
                                                 <div class="col-sm-6 col-xl-6 m-b-30">
                                                     <h4 class="sub-title">Production Order:</h4>
-                                                    <input type="text" name="prod_order" class="form-control" required value="<?php if(isset($_POST['submit'])){ echo $_POST['prod_order']; }elseif(isset($_GET['prod_order'])){ echo $_GET['prod_order']; } ?>">
+                                                    <input type="text" name="prod_order" class="form-control" value="<?php if(isset($_POST['submit'])){ echo $_POST['prod_order']; }elseif(isset($_GET['prod_order'])){ echo $_GET['prod_order']; } ?>">
                                                 </div>
                                                 <div class="col-sm-6 col-xl-6 m-b-30">
                                                     <h4 class="sub-title">Production Demand:</h4>
-                                                    <input type="text" name="demand" class="form-control" required value="<?php if(isset($_POST['submit'])){ echo $_POST['demand']; }elseif(isset($_GET['demand'])){ echo $_GET['demand']; } ?>">
+                                                    <input type="text" name="demand" class="form-control" placeholder="Wajib di isi" required value="<?php if(isset($_POST['submit'])){ echo $_POST['demand']; }elseif(isset($_GET['demand'])){ echo $_GET['demand']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
