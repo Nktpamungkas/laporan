@@ -81,7 +81,7 @@
                                             <div>
                                                 <center><h4>DETAIL DEMAND STEP</h4></center>
                                                 <center>
-                                                <table width="50%" border="0">
+                                                <table width="100%" border="0">
                                                     <?php
                                                         require_once "koneksi.php";
                                                         $q_ITXVIEWKK    = db2_exec($conn1, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$_POST[demand]'");
@@ -169,12 +169,18 @@
                                                             <th><?= $d_ITXVIEWKK['WARNA']; ?></th>
                                                         </tr>
                                                         <tr>
-                                                            <th>Deskripsi</th>
-                                                            <th>:</th>
-                                                            <th><?= $d_ITXVIEWKK['DESCRIPTION']; ?></th>
-                                                            <th>Quantity</th>
-                                                            <th>:</th>
-                                                            <th>
+                                                            <th style="vertical-align: text-top;">Deskripsi</th>
+                                                            <th style="vertical-align: text-top;">:</th>
+                                                            <th style="vertical-align: text-top;">
+                                                                <?= substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 0,40); ?><br>
+                                                                <?= substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 41,40); ?><br>
+                                                                <?= substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 81,40); ?><br>
+                                                                <?= substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 121,40); ?><br>
+                                                                <?= substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 161); ?>
+                                                            </th>
+                                                            <th style="vertical-align: text-top;">Quantity</th>
+                                                            <th style="vertical-align: text-top;">:</th>
+                                                            <th style="vertical-align: text-top;">
                                                                 <?= number_format($dt_qtyorder['QTY_ORDER'], 2).' '.$dt_qtyorder['USERPRIMARYUOMCODE']; ?>
                                                                 <?= number_format($dt_qtyorder['QTY_ORDER_YARD'], 2).' '.$dt_qtyorder['BASEPRIMARYUOMCODE']; ?>
                                                             </th>
@@ -237,7 +243,7 @@
                                                             <td style="vertical-align: text-top; text-align: center;"><?= $rowdb2['MULAI']; ?></td>
                                                             <td style="vertical-align: text-top; text-align: center;"><?= $rowdb2['SELESAI']; ?></td>
                                                             <?php
-                                                                $q_QA_DATA  = mysqli_query($con_nowprd, "SELECT * FROM ITXVIEW_DETAIL_QA_DATA 
+                                                                $q_QA_DATA  = mysqli_query($con_nowprd, "SELECT DISTINCT * FROM ITXVIEW_DETAIL_QA_DATA 
                                                                                                             WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
                                                                                                             AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
                                                                                                             AND WORKCENTERCODE = '$rowdb2[WORKCENTERCODE]' 
