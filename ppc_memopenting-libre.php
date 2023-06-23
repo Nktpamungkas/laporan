@@ -203,7 +203,20 @@ header('Cache-Control: max-age=0');
                                 $groupstep_option       = "= '$groupstepnumber'";
                             }else{
                                 $status = 'F';
+                                $q_deteksi_total_step    = db2_exec($conn1, "SELECT COUNT(*) AS TOTALSTEP FROM VIEWPRODUCTIONDEMANDSTEP 
+                                                                            WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'");
+                                $d_deteksi_total_step    = db2_fetch_assoc($q_deteksi_total_step);
+
+                                $q_deteksi_total_close  = db2_exec($conn1, "SELECT COUNT(*) AS TOTALCLOSE FROM VIEWPRODUCTIONDEMANDSTEP 
+                                                                            WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'
+                                                                            AND PROGRESSSTATUS = 3");
+                                $d_deteksi_total_close  = db2_fetch_assoc($q_deteksi_total_close);
+
+                                if($d_deteksi_total_step['TOTALSTEP'] ==  $d_deteksi_total_close['TOTALCLOSE']){
+                                $groupstep_option       = "= '$groupstepnumber'";
+                                }else{
                                 $groupstep_option       = "> '$groupstepnumber'";
+                                }
                             }
                             // $status = 'G';
                             $q_not_cnp1             = db2_exec($conn1, "SELECT 
