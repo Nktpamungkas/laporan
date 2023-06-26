@@ -1,3 +1,10 @@
+<?php 
+    ini_set("error_reporting", 1);
+    session_start();
+    require_once "koneksi.php";
+    mysqli_query($con_nowprd, "DELETE FROM ITXVIEWRESEP WHERE CREATEDATETIME BETWEEN NOW() - INTERVAL 3 DAY AND NOW() - INTERVAL 1 DAY");
+    mysqli_query($con_nowprd, "DELETE FROM ITXVIEWRESEP WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'"); 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,17 +61,51 @@
                                     </div>
                                 </div>
                                 <?php if (isset($_POST['submit'])) : ?>
+                                    <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.127') : ?> <!-- IP MBA ANTIE LABORAT -->
+                                    <?php else : ?>
+                                    <?php
+                                        // itxviewresep
+                                        $prod_order     = sprintf("%08d", substr($_POST['bon_resep'], 1, 9));
+                                        $itxviewresep              = db2_exec($conn1, "SELECT * FROM ITXVIEWRESEP WHERE PRODUCTIONORDERCODE = '$prod_order'");
+                                        while ($row_itxviewresep   = db2_fetch_assoc($itxviewresep)) {
+                                            $r_itxviewresep[]      = "('".TRIM(addslashes($row_itxviewresep['GROUPLINE']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['PRODRESERVATIONLINKGROUPCODE']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['SUBCODE01_RESERVATION']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['PICKUPQUANTITY']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['PRODUCTIONORDERCODE']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['SUFFIXCODE_RESERVATION']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['RECIPENUMBERID']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['SUFFIXCODE']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['GROUPNUMBER']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['CODE']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['SUBCODE']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['CONSUMPTION']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['COMMENTLINE']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['LONGDESCRIPTION']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['RECIPESUBCODE01']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['SUBCODE01']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['SUBCODE02']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['SUBCODE03']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['CONSUMPTIONTYPE']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['RECIPETYPE']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['PICKUPPERCENTAGE']))."',"
+                                                                    ."'".TRIM(addslashes($row_itxviewresep['RESIDUALBATHVOLUME']))."',"
+                                                                    ."'".$_SERVER['REMOTE_ADDR']."',"
+                                                                    ."'".date('Y-m-d H:i:s')."')";
+                                        }
+                                        $value_itxviewresep        = implode(',', $r_itxviewresep);
+                                        $insert_itxviewresep       = mysqli_query($con_nowprd, "INSERT INTO itxviewresep(GROUPLINE,PRODRESERVATIONLINKGROUPCODE,SUBCODE01_RESERVATION,PICKUPQUANTITY,PRODUCTIONORDERCODE,SUFFIXCODE_RESERVATION,RECIPENUMBERID,SUFFIXCODE,GROUPNUMBER,CODE,SUBCODE,CONSUMPTION,COMMENTLINE,LONGDESCRIPTION,RECIPESUBCODE01,SUBCODE01,SUBCODE02,SUBCODE03,CONSUMPTIONTYPE,RECIPETYPE,PICKUPPERCENTAGE,RESIDUALBATHVOLUME,IPADDRESS,CREATEDATETIME) VALUES $value_itxviewresep");
+                                        
+                                    ?>
+                                    <?php endif; ?>
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="card">
                                                 <div class="card-block">
                                                     <h4>FROM MECHINE LOGIC ART : TICKET</h4>
-                                                        <h5>
-                                                            <a class="btn btn-sm btn-primary" href="dye_filter_LA_Excel.php?bon_resep=<?= $_POST['bon_resep']; ?>">EXCEL</a>
-                                                        </h5>
                                                     <div class="row">
                                                         <div class="table-responsive dt-responsive">
-                                                            <table id="" class="table table-striped table-bordered nowrap">
+                                                            <table id="excel-LA" class="table table-striped table-bordered nowrap">
                                                                 <thead>
                                                                     <tr align="center">
                                                                         <th width='5px' hidden>NO</th>
@@ -73,7 +114,10 @@
                                                                         <th width='100px'>PROD ORDER</th>
                                                                         <th width='100px'>LOTCODE</th>
                                                                         <th width='100px'>DYC</th>
-                                                                        <th width='100px'>CONSUMTION</th>
+                                                                        <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.127') : ?> <!-- IP MBA ANTIE LABORAT -->
+                                                                        <?php else : ?>
+                                                                            <th width='100px'>CONSUMTION</th>
+                                                                        <?php endif; ?>
                                                                         <th width='100px'>TARGET</th>
                                                                         <th width='100px'>ACTUAL</th>
                                                                     </tr>
@@ -131,14 +175,17 @@
                                                                         <td><?= $row_la['ID_NO']; ?></td>
                                                                         <td></td>
                                                                         <td><?= $row_la['PRODUCT_CODE']; ?></td>
-                                                                        <td>
-                                                                            <?php
-                                                                                $prod_order     = sprintf("%08d", substr($_POST['bon_resep'], 1, 9));
-                                                                                $q_consumtion   = db2_exec($conn1, "SELECT * FROM ITXVIEWRESEP WHERE SUBCODE = '$row_la[PRODUCT_CODE]' AND PRODUCTIONORDERCODE = '$prod_order'");
-                                                                                $d_consumtion   = db2_fetch_assoc($q_consumtion);
-                                                                                echo $d_consumtion['CONSUMPTION'];
-                                                                            ?>
-                                                                        </td>
+                                                                        <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.127') : ?> <!-- IP MBA ANTIE LABORAT -->
+                                                                        <?php else : ?>
+                                                                            <td>
+                                                                                <?php
+                                                                                    $prod_order     = sprintf("%08d", substr($_POST['bon_resep'], 1, 9));
+                                                                                    $q_consumtion   = mysqli_query($con_nowprd, "SELECT * FROM ITXVIEWRESEP WHERE SUBCODE = '$row_la[PRODUCT_CODE]' AND PRODUCTIONORDERCODE = '$prod_order' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'");
+                                                                                    $d_consumtion   = mysqli_fetch_assoc($q_consumtion);
+                                                                                    echo $d_consumtion['CONSUMPTION'];
+                                                                                ?>
+                                                                            </td>
+                                                                        <?php endif; ?>
                                                                         <td><?= $row_la['TARGET_WT']; ?></td>
                                                                         <td><?= $row_la['ACTUAL_WT']; ?></td>
                                                                     </tr>
@@ -155,12 +202,9 @@
                                             <div class="card">
                                                 <div class="card-block">
                                                     <h4>FROM MECHINE CAMS : TAICHEN_CAMS_LIVE</h4>
-                                                    <h5>
-                                                        <a class="btn btn-sm btn-primary" href="dye_filter_CAMS_Excel.php?bon_resep=<?= $_POST['bon_resep']; ?>">EXCEL</a>
-                                                    </h5>
                                                     <div class="row">
                                                         <div class="table-responsive dt-responsive">
-                                                            <table id="" class="table table-striped table-bordered nowrap">
+                                                            <table id="excel-cams" class="table table-striped table-bordered nowrap">
                                                                 <thead>
                                                                     <tr align="center">
                                                                         <th width='5px' hidden>NO</th>
@@ -169,7 +213,10 @@
                                                                         <th width='100px'>PROD ORDER</th>
                                                                         <th width='100px'>LOTCODE</th>
                                                                         <th width='100px'>DYC</th>
-                                                                        <th width='100px'>CONSUMTION</th>
+                                                                        <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.127') : ?> <!-- IP MBA ANTIE LABORAT -->
+                                                                        <?php else : ?>
+                                                                            <th width='100px'>CONSUMTION</th>
+                                                                        <?php endif; ?>
                                                                         <th width='100px'>TARGET</th>
                                                                         <th width='100px'>ACTUAL</th>
                                                                     </tr>
@@ -199,6 +246,7 @@
                                                                                             rs_productionordercode LIKE '%$bonresep%' AND rs_reservationline > $bonresep_line AND rs_reservationline < $bonresep_line+100 AND NOT (rs_subcode02 = '' OR rs_subcode03 = '')";
                                                                         $stmt_CAMS = sqlsrv_query($conn_cams, $sql_CAMS);
                                                                         $no     = 1;
+
                                                                         while ($row_CAMS= sqlsrv_fetch_array($stmt_CAMS)) {
                                                                     ?>
                                                                     <tr>
@@ -216,14 +264,17 @@
                                                                         <td><?= $row_CAMS['rs_productionordercode']; ?>-<?= $bonresep_line; ?></td>
                                                                         <td></td>
                                                                         <td><?= $row_CAMS['CODE']; ?></td>
-                                                                        <td>
-                                                                            <?php
-                                                                                $prod_order     = sprintf("%08d", substr($_POST['bon_resep'], 1, 9));
-                                                                                $q_consumtion   = db2_exec($conn1, "SELECT * FROM ITXVIEWRESEP WHERE SUBCODE = '$row_CAMS[CODE]' AND PRODUCTIONORDERCODE = '$prod_order'");
-                                                                                $d_consumtion   = db2_fetch_assoc($q_consumtion);
-                                                                                echo $d_consumtion['CONSUMPTION'];
-                                                                            ?>
-                                                                        </td>
+                                                                        <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.127') : ?> <!-- IP MBA ANTIE LABORAT -->
+                                                                        <?php else : ?>
+                                                                            <td>
+                                                                                <?php
+                                                                                    $prod_order     = sprintf("%08d", substr($_POST['bon_resep'], 1, 9));
+                                                                                    $q_consumtion   = mysqli_query($con_nowprd, "SELECT * FROM ITXVIEWRESEP WHERE SUBCODE = '$row_CAMS[CODE]' AND PRODUCTIONORDERCODE = '$prod_order' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'");
+                                                                                    $d_consumtion   = mysqli_fetch_assoc($q_consumtion);
+                                                                                    echo $d_consumtion['CONSUMPTION'];
+                                                                                ?>
+                                                                            </td>
+                                                                        <?php endif; ?> 
                                                                         <td><?= $row_CAMS['ACUAN_QTY']; ?></td>
                                                                         <td><?php if($row_CAMS['AKTUAL_QTY'] != 0){ echo $row_CAMS['AKTUAL_QTY']; }else{ echo '';} ?></td>
                                                                     </tr>
