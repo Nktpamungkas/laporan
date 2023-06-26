@@ -172,16 +172,16 @@
                                                             <th style="vertical-align: text-top;">Deskripsi</th>
                                                             <th style="vertical-align: text-top;">:</th>
                                                             <th style="vertical-align: text-top;">
-                                                                <?= substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 0,40); ?><br>
-                                                                <?= substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 41,40); ?><br>
-                                                                <?= substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 81,40); ?><br>
-                                                                <?= substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 121,40); ?><br>
-                                                                <?= substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 161); ?>
+                                                                <?= substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 0,40); ?><?php if(substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 0,40)){ echo "<br>"; } ?>
+                                                                <?= substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 41,40); ?><?php if(substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 41,40)){ echo "<br>"; } ?>
+                                                                <?= substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 81,40); ?><?php if(substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 81,40)){ echo "<br>"; } ?>
+                                                                <?= substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 121,40); ?><?php if(substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 121,40)){ echo "<br>"; } ?>
+                                                                <?= substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 161); ?><?php if(substr($d_ITXVIEWKK['ITEMDESCRIPTION'], 161)){ echo "<br>"; } ?>
                                                             </th>
                                                             <th style="vertical-align: text-top;">Quantity</th>
                                                             <th style="vertical-align: text-top;">:</th>
                                                             <th style="vertical-align: text-top;">
-                                                                <?= number_format($dt_qtyorder['QTY_ORDER'], 2).' '.$dt_qtyorder['USERPRIMARYUOMCODE']; ?>
+                                                                <?= number_format($dt_qtyorder['QTY_ORDER'], 2).' '.$dt_qtyorder['USERPRIMARYUOMCODE']; ?> / 
                                                                 <?= number_format($dt_qtyorder['QTY_ORDER_YARD'], 2).' '.$dt_qtyorder['BASEPRIMARYUOMCODE']; ?>
                                                             </th>
                                                         </tr>
