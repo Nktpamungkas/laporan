@@ -38,6 +38,7 @@ header('Cache-Control: max-age=0');
             <th>CATATAN PO GREIGE</th>
             <th>TARGET SELESAI</th>
             <th>KETERANGAN</th>
+            <th>ORIGINAL PD CODE</th>
         </tr>
     </thead>
     <tbody>
@@ -310,6 +311,18 @@ header('Cache-Control: max-age=0');
                 </td> <!-- CATATAN PO GREIGE -->
                 <td></td> <!-- TARGET SELESAI -->
                 <td><?= $rowdb2['KETERANGAN']; ?></td> <!-- KETERANGAN -->
+                <td>
+                    <?php
+                        $q_orig_pd_code     = db2_exec($conn1, "SELECT 
+                                                                    *, a.VALUESTRING AS ORIGINALPDCODE
+                                                                FROM 
+                                                                    PRODUCTIONDEMAND p 
+                                                                LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'OriginalPDCode'
+                                                                WHERE p.CODE = '$rowdb2[DEMAND]'");
+                        $d_orig_pd_code     = db2_fetch_assoc($q_orig_pd_code);
+                        echo $d_orig_pd_code['ORIGINALPDCODE'];
+                    ?>
+                </td> <!-- ORIGINAL PD CODE -->
             </tr>
         <?php } ?>
     </tbody>
