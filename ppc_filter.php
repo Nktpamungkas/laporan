@@ -436,7 +436,7 @@
                                                                                                                     AND p.GROUPSTEPNUMBER $groupstep_option
                                                                                                                 ORDER BY p.GROUPSTEPNUMBER ASC LIMIT 1");
                                                                         $d_StatusTerakhir   = db2_fetch_assoc($q_StatusTerakhir);
-                                                                        $kode_dept          = $d_StatusTerakhir['DEPT'];
+                                                                        $kode_dept          = $d_StatusTerakhir['OPERATIONCODE'];
                                                                         $status_terakhir    = $d_StatusTerakhir['LONGDESCRIPTION'];
                                                                         $status_operation   = $d_StatusTerakhir['STATUS_OPERATION'];
                                                                     }
