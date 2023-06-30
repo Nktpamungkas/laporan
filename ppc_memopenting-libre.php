@@ -294,7 +294,30 @@ header('Cache-Control: max-age=0');
                 <td><?= $kode_dept; ?></td> <!-- KODE DEPT -->
                 <td><?= $status_terakhir; ?></td> <!-- STATUS TERAKHIR -->
                 <td><?= $status_operation; ?></td> <!-- PROGRESS STATUS -->
-                <td></td><!-- JAM -->
+                <td>
+                    <?php
+                        ini_set("error_reporting", 1);
+                        session_start();
+                        require_once "koneksi.php";
+                        $q_jam  = db2_exec($conn1, "SELECT
+                                                        iptip.MULAI,
+                                                        iptop.SELESAI
+                                                    FROM 
+                                                        PRODUCTIONDEMANDSTEP p 
+                                                    LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
+                                                    LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
+                                                    LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
+                                                    WHERE
+                                                        p.PRODUCTIONORDERCODE  = '$rowdb2[NO_KK]' AND p.PRODUCTIONDEMANDCODE = '$rowdb2[DEMAND]' AND p.STEPNUMBER = '$groupstepnumber'
+                                                    ORDER BY p.STEPNUMBER ASC");
+                        $d_jam  = db2_fetch_assoc($q_jam);
+                        if($d_jam['MULAI']){
+                            echo $d_jam['MULAI'].' - '.$d_jam['SELESAI'];
+                        }else{
+                            echo '-';
+                        }
+                    ?>
+                </td><!-- JAM -->
                 <td></td><!-- ALUR PROSES -->
                 <td><a target="_BLANK" href="http://10.0.0.10/laporan/ppc_filter_steps.php?demand=<?= $rowdb2['DEMAND']; ?>&prod_order=<?= $rowdb2['NO_KK']; ?>">`<?= $rowdb2['DEMAND']; ?></a></td> <!-- DEMAND -->
                 <td>`<?= $rowdb2['NO_KK']; ?></td> <!-- NO KARTU KERJA -->
