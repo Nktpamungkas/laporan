@@ -113,15 +113,15 @@
                                             <div class="table-responsive dt-responsive">
                                                 <table border='1' style='font-family:"Microsoft Sans Serif"' width="100%">
                                                     <thead>
-                                                        <tr text-align="center">
-                                                            <th width="100px">STEP NUMBER</th>
-                                                            <th width="300px">TANGGAL IN</th>
-                                                            <th width="300px">TANGGAL OUT</th>
-                                                            <th width="100px">OPERATION</th>
-                                                            <th width="500px">LONGDESCRIPTION</th>
-                                                            <th width="100px">STATUS</th>
-                                                            <th width="100px">PROD. ORDER</th>
-                                                            <th width="100px">PROD. DEMAND</th>
+                                                        <tr>
+                                                            <th width="100px" style="text-align: center;">STEP NUMBER</th>
+                                                            <th width="300px" style="text-align: center;">TANGGAL IN</th>
+                                                            <th width="300px" style="text-align: center;">TANGGAL OUT</th>
+                                                            <th width="100px" style="text-align: center;">OPERATION</th>
+                                                            <th width="500px" style="text-align: center;">LONGDESCRIPTION</th>
+                                                            <th width="100px" style="text-align: center;">STATUS</th>
+                                                            <th width="100px" style="text-align: center;">PROD. ORDER</th>
+                                                            <th width="100px" style="text-align: center;">PROD. DEMAND</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody> 
