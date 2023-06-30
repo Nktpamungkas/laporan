@@ -1,3 +1,10 @@
+<?php 
+    ini_set("error_reporting", 1);
+    session_start();
+    require_once "koneksi.php";
+    mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_ins3 WHERE CREATEDATETIME BETWEEN NOW() - INTERVAL 3 DAY AND NOW() - INTERVAL 1 DAY");
+    mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_ins3 WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'"); 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +30,6 @@
     <link rel="stylesheet" type="text/css" href="files\bower_components\datatables.net-responsive-bs4\css\responsive.bootstrap4.min.css">
 </head>
 <?php require_once 'header.php'; ?>
-
 <body>
     <div class="pcoded-content">
         <div class="pcoded-inner-content">
@@ -135,12 +141,29 @@
                                                             }else{
                                                                 $prod_order     = $_POST['prod_order'];
                                                             }
+                                                            // itxview_posisikk_tgl_in_prodorder_ins3
+                                                            $posisikk_ins3 = db2_exec($conn1, "SELECT * FROM ITXVIEW_POSISIKK_TGL_IN_PRODORDER_INS3 WHERE PRODUCTIONORDERCODE = '$prod_order'");
+                                                            $cekData    = db2_fetch_assoc($posisikk_ins3);
+                                                            if($cekData){
+                                                                while ($row_posisikk_ins3   = db2_fetch_assoc($posisikk_ins3)) {
+                                                                    $r_posisikk_ins3[]      = "('".TRIM(addslashes($row_posisikk_ins3['PRODUCTIONORDERCODE']))."',"
+                                                                                            ."'".TRIM(addslashes($row_posisikk_ins3['OPERATIONCODE']))."',"
+                                                                                            ."'".TRIM(addslashes($row_posisikk_ins3['PROPROGRESSPROGRESSNUMBER']))."',"
+                                                                                            ."'".TRIM(addslashes($row_posisikk_ins3['DEMANDSTEPSTEPNUMBER']))."',"
+                                                                                            ."'".TRIM(addslashes($row_posisikk_ins3['PROGRESSTEMPLATECODE']))."',"
+                                                                                            ."'".TRIM(addslashes($row_posisikk_ins3['MULAI']))."',"
+                                                                                            ."'".$_SERVER['REMOTE_ADDR']."',"
+                                                                                            ."'".date('Y-m-d H:i:s')."')";
+                                                                }
+                                                                $value_posisikk_ins3        = implode(',', $r_posisikk_ins3);
+                                                                $insert_posisikk_ins3       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_ins3(PRODUCTIONORDERCODE,OPERATIONCODE,PROPROGRESSPROGRESSNUMBER,DEMANDSTEPSTEPNUMBER,PROGRESSTEMPLATECODE,MULAI,IPADDRESS,CREATEDATETIME) VALUES $value_posisikk_ins3");
+                                                            }
                                                             
                                                             if(!empty($demand) && empty($prod_order)){ 
                                                                     $sqlDB2 = "SELECT
                                                                                     p.PRODUCTIONORDERCODE,
-                                                                                    p.GROUPSTEPNUMBER AS STEPNUMBER,
-                                                                                    p.OPERATIONCODE,
+                                                                                    p.STEPNUMBER AS STEPNUMBER,
+                                                                                    TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
                                                                                     o.LONGDESCRIPTION,
                                                                                     CASE
                                                                                         WHEN p.PROGRESSSTATUS = 0 THEN 'Entered'
@@ -165,8 +188,8 @@
                                                             }elseif(empty($demand) && !empty($prod_order)){
                                                                 $sqlDB2 = "SELECT
                                                                                 p.PRODUCTIONORDERCODE,
-                                                                                p.GROUPSTEPNUMBER AS STEPNUMBER,
-                                                                                p.OPERATIONCODE,
+                                                                                p.STEPNUMBER AS STEPNUMBER,
+                                                                                TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
                                                                                 o.LONGDESCRIPTION,
                                                                                 CASE
                                                                                     WHEN p.PROGRESSSTATUS = 0 THEN 'Entered'
@@ -191,8 +214,8 @@
                                                             }elseif(!empty($demand) && !empty($prod_order)){
                                                                 $sqlDB2 = "SELECT
                                                                                 p.PRODUCTIONORDERCODE,
-                                                                                p.GROUPSTEPNUMBER AS STEPNUMBER,
-                                                                                p.OPERATIONCODE,
+                                                                                p.STEPNUMBER AS STEPNUMBER,
+                                                                                TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
                                                                                 o.LONGDESCRIPTION,
                                                                                 CASE
                                                                                     WHEN p.PROGRESSSTATUS = 0 THEN 'Entered'
@@ -207,27 +230,55 @@
                                                                             FROM 
                                                                                 PRODUCTIONDEMANDSTEP p 
                                                                             LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
-                                                                            -- LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.GROUPSTEPNUMBER
-                                                                            -- LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.GROUPSTEPNUMBER
                                                                             LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                             LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                             WHERE
-                                                                                p.PRODUCTIONORDERCODE  = '$prod_order' AND p.PRODUCTIONDEMANDCODE = '$demand' 
+                                                                                p.PRODUCTIONORDERCODE  = '$prod_order' AND p.PRODUCTIONDEMANDCODE = '$demand'  
                                                                             ORDER BY p.STEPNUMBER ASC";
                                                             }
-                                                            
-                                                            $stmt = db2_exec($conn1,$sqlDB2);
+                                                            $stmt = db2_exec($conn1, $sqlDB2);
                                                             while ($rowdb2 = db2_fetch_assoc($stmt)) {
                                                         ?>
                                                             <tr>
                                                                 <td align="center"><?= $rowdb2['STEPNUMBER']; ?></td>
-                                                                <?php if($demand) : ?>
-                                                                    <td align="center"><?= $rowdb2['MULAI']; ?></td>
-                                                                    <td align="center"><?= $rowdb2['SELESAI']; ?></td>
-                                                                <?php else : ?>
-                                                                    <td align="center"><?= $rowdb2['MULAI']; ?></td>
-                                                                    <td align="center"><?= $rowdb2['SELESAI']; ?></td>
-                                                                <?php endif; ?>
+                                                                <td align="center">
+                                                                    <?php if($rowdb2['OPERATIONCODE'] == 'INS3') : ?>
+                                                                        <?php
+                                                                            $q_mulai_ins3   = mysqli_query($con_nowprd, "SELECT
+                                                                                                                                * 
+                                                                                                                            FROM
+                                                                                                                                `itxview_posisikk_tgl_in_prodorder_ins3` 
+                                                                                                                            WHERE
+                                                                                                                                productionordercode = '$prod_order'
+                                                                                                                                AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                            ORDER BY
+                                                                                                                                MULAI ASC LIMIT 1");
+                                                                            $d_mulai_ins3   = mysqli_fetch_assoc($q_mulai_ins3);
+                                                                            echo $d_mulai_ins3['MULAI'];
+                                                                        ?>
+                                                                    <?php else : ?>
+                                                                        <?= $rowdb2['MULAI']; ?>
+                                                                    <?php endif; ?>
+                                                                </td>
+                                                                <td align="center">
+                                                                    <?php if($rowdb2['OPERATIONCODE'] == 'INS3') : ?>
+                                                                        <?php
+                                                                            $q_mulai_ins3   = mysqli_query($con_nowprd, "SELECT
+                                                                                                                                * 
+                                                                                                                            FROM
+                                                                                                                                `itxview_posisikk_tgl_in_prodorder_ins3` 
+                                                                                                                            WHERE
+                                                                                                                                productionordercode = '$prod_order' 
+                                                                                                                                AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                            ORDER BY
+                                                                                                                                MULAI DESC LIMIT 1");
+                                                                            $d_mulai_ins3   = mysqli_fetch_assoc($q_mulai_ins3);
+                                                                            echo $d_mulai_ins3['MULAI'];
+                                                                        ?>
+                                                                    <?php else : ?>
+                                                                        <?= $rowdb2['SELESAI']; ?>
+                                                                    <?php endif; ?>
+                                                                </td>
                                                                 <td align="center"><?= $rowdb2['OPERATIONCODE']; ?></td>
                                                                 <td><?= $rowdb2['LONGDESCRIPTION']; ?></td>
                                                                 <td <?php if($rowdb2['STATUS_OPERATION'] == 'Closed'){ echo 'bgcolor="#E76057"'; }elseif($rowdb2['STATUS_OPERATION'] == 'Progress'){ echo "bgcolor='#41CC11'"; }else{ echo "bgcolor='#ECECEC'"; } ?>><?= $rowdb2['STATUS_OPERATION']; ?></td>
