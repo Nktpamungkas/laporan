@@ -1,5 +1,5 @@
 <?php 
-    ini_set("error_reporting", 1);
+    ini_set("error_reporting", 0);
     session_start();
     require_once "koneksi.php";
     mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_ins3 WHERE CREATEDATETIME BETWEEN NOW() - INTERVAL 3 DAY AND NOW() - INTERVAL 1 DAY");
@@ -64,7 +64,7 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <?php
-                                                ini_set("error_reporting", 1);
+                                                ini_set("error_reporting", 0);
                                                 session_start();
                                                 require_once "koneksi.php";
 
@@ -126,7 +126,7 @@
                                                     </thead>
                                                     <tbody> 
                                                         <?php 
-                                                            ini_set("error_reporting", 1);
+                                                            ini_set("error_reporting", 0);
                                                             session_start();
                                                             require_once "koneksi.php";
 
@@ -143,21 +143,18 @@
                                                             }
                                                             // itxview_posisikk_tgl_in_prodorder_ins3
                                                             $posisikk_ins3 = db2_exec($conn1, "SELECT * FROM ITXVIEW_POSISIKK_TGL_IN_PRODORDER_INS3 WHERE PRODUCTIONORDERCODE = '$prod_order'");
-                                                            $cekData    = db2_fetch_assoc($posisikk_ins3);
-                                                            if($cekData){
-                                                                while ($row_posisikk_ins3   = db2_fetch_assoc($posisikk_ins3)) {
-                                                                    $r_posisikk_ins3[]      = "('".TRIM(addslashes($row_posisikk_ins3['PRODUCTIONORDERCODE']))."',"
-                                                                                            ."'".TRIM(addslashes($row_posisikk_ins3['OPERATIONCODE']))."',"
-                                                                                            ."'".TRIM(addslashes($row_posisikk_ins3['PROPROGRESSPROGRESSNUMBER']))."',"
-                                                                                            ."'".TRIM(addslashes($row_posisikk_ins3['DEMANDSTEPSTEPNUMBER']))."',"
-                                                                                            ."'".TRIM(addslashes($row_posisikk_ins3['PROGRESSTEMPLATECODE']))."',"
-                                                                                            ."'".TRIM(addslashes($row_posisikk_ins3['MULAI']))."',"
-                                                                                            ."'".$_SERVER['REMOTE_ADDR']."',"
-                                                                                            ."'".date('Y-m-d H:i:s')."')";
-                                                                }
-                                                                $value_posisikk_ins3        = implode(',', $r_posisikk_ins3);
-                                                                $insert_posisikk_ins3       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_ins3(PRODUCTIONORDERCODE,OPERATIONCODE,PROPROGRESSPROGRESSNUMBER,DEMANDSTEPSTEPNUMBER,PROGRESSTEMPLATECODE,MULAI,IPADDRESS,CREATEDATETIME) VALUES $value_posisikk_ins3");
+                                                            while ($row_posisikk_ins3   = db2_fetch_assoc($posisikk_ins3)) {
+                                                                $r_posisikk_ins3[]      = "('".TRIM(addslashes($row_posisikk_ins3['PRODUCTIONORDERCODE']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_ins3['OPERATIONCODE']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_ins3['PROPROGRESSPROGRESSNUMBER']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_ins3['DEMANDSTEPSTEPNUMBER']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_ins3['PROGRESSTEMPLATECODE']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_ins3['MULAI']))."',"
+                                                                                        ."'".$_SERVER['REMOTE_ADDR']."',"
+                                                                                        ."'".date('Y-m-d H:i:s')."')";
                                                             }
+                                                            $value_posisikk_ins3        = implode(',', $r_posisikk_ins3);
+                                                            $insert_posisikk_ins3       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_ins3(PRODUCTIONORDERCODE,OPERATIONCODE,PROPROGRESSPROGRESSNUMBER,DEMANDSTEPSTEPNUMBER,PROGRESSTEMPLATECODE,MULAI,IPADDRESS,CREATEDATETIME) VALUES $value_posisikk_ins3");
                                                             
                                                             if(!empty($demand) && empty($prod_order)){ 
                                                                     $sqlDB2 = "SELECT
