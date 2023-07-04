@@ -308,8 +308,8 @@
                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                     WHERE
-                                                        p.PRODUCTIONORDERCODE  = '$rowdb2[NO_KK]' AND p.PRODUCTIONDEMANDCODE = '$rowdb2[DEMAND]' AND p.STEPNUMBER = '$groupstepnumber'
-                                                    ORDER BY p.STEPNUMBER ASC");
+                                                        p.PRODUCTIONORDERCODE  = '$rowdb2[NO_KK]' AND p.PRODUCTIONDEMANDCODE = '$rowdb2[DEMAND]' AND p.STEPNUMBER $groupstep_option
+                                                    ORDER BY p.STEPNUMBER ASC LIMIT 1");
                         $d_jam  = db2_fetch_assoc($q_jam);
                         if($d_jam['MULAI']){
                             echo $d_jam['MULAI'].' - '.$d_jam['SELESAI'];
