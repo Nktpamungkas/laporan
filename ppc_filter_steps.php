@@ -126,7 +126,7 @@
                                                     </thead>
                                                     <tbody> 
                                                         <?php 
-                                                            ini_set("error_reporting", 0);
+                                                            ini_set("error_reporting", 1);
                                                             session_start();
                                                             require_once "koneksi.php";
 
@@ -153,8 +153,10 @@
                                                                                         ."'".$_SERVER['REMOTE_ADDR']."',"
                                                                                         ."'".date('Y-m-d H:i:s')."')";
                                                             }
-                                                            $value_posisikk_ins3        = implode(',', $r_posisikk_ins3);
-                                                            $insert_posisikk_ins3       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_ins3(PRODUCTIONORDERCODE,OPERATIONCODE,PROPROGRESSPROGRESSNUMBER,DEMANDSTEPSTEPNUMBER,PROGRESSTEMPLATECODE,MULAI,IPADDRESS,CREATEDATETIME) VALUES $value_posisikk_ins3");
+                                                            if($r_posisikk_ins3){
+                                                                $value_posisikk_ins3        = implode(',', $r_posisikk_ins3);
+                                                                $insert_posisikk_ins3       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_ins3(PRODUCTIONORDERCODE,OPERATIONCODE,PROPROGRESSPROGRESSNUMBER,DEMANDSTEPSTEPNUMBER,PROGRESSTEMPLATECODE,MULAI,IPADDRESS,CREATEDATETIME) VALUES $value_posisikk_ins3");
+                                                            }
                                                             
                                                             if(!empty($demand) && empty($prod_order)){ 
                                                                     $sqlDB2 = "SELECT
