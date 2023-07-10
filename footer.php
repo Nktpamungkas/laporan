@@ -40,8 +40,13 @@
 <!-- Custom js -->
 <script src="files\assets\pages\data-table\js\data-table-custom.js"></script>
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<!-- <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script> -->
+<!-- sweet alert js -->
+<script type="text/javascript" src="files\bower_components\sweetalert\js\sweetalert.min.js"></script>
+<script type="text/javascript" src="files\assets\js\modal.js"></script>
+<!-- sweet alert modal.js intialize js -->
+<!-- modalEffects js nifty modal window effects -->
+<script type="text/javascript" src="files\assets\js\modalEffects.js"></script>
+<script type="text/javascript" src="files\assets\js\classie.js"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
 

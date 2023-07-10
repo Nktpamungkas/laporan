@@ -135,12 +135,18 @@
                                                             }else{
                                                                 $demand     = $_POST['demand'];
                                                             }
+
+                                                            $q_ITXVIEWKK    = db2_exec($conn1, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$demand'");
+                                                            $d_ITXVIEWKK    = db2_fetch_assoc($q_ITXVIEWKK);
                                                             
                                                             if($_GET['prod_order']){
                                                                 $prod_order     = $_GET['prod_order'];
-                                                            }else{
+                                                            }elseif($_POST['prod_order']) {
                                                                 $prod_order     = $_POST['prod_order'];
+                                                            }else{
+                                                                $prod_order     = $d_ITXVIEWKK['PRODUCTIONORDERCODE'];
                                                             }
+
                                                             // itxview_posisikk_tgl_in_prodorder_ins3
                                                             $posisikk_ins3 = db2_exec($conn1, "SELECT * FROM ITXVIEW_POSISIKK_TGL_IN_PRODORDER_INS3 WHERE PRODUCTIONORDERCODE = '$prod_order'");
                                                             while ($row_posisikk_ins3   = db2_fetch_assoc($posisikk_ins3)) {
