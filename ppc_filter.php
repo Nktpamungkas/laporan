@@ -360,7 +360,7 @@
                                                                             if($row_status_close['PROGRESSSTATUS'] == 2){
                                                                                 $status = 'E';
                                                                                 $groupstep_option       = "= '$groupstepnumber'";
-                                                                            }else{
+                                                                            }else{ //kalau status terakhirnya bukan PPC dan status terakhirnya CLOSED
                                                                                 $status = 'F';
                                                                                 $q_deteksi_total_step    = db2_exec($conn1, "SELECT COUNT(*) AS TOTALSTEP FROM VIEWPRODUCTIONDEMANDSTEP 
                                                                                                                             WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'");
@@ -399,9 +399,38 @@
                                                                                                                             GROUPSTEPNUMBER ASC LIMIT 1");
                                                                             $d_not_cnp_close        = db2_fetch_assoc($q_not_cnp1);
 
-                                                                            $kode_dept          = $d_not_cnp_close['OPERATIONCODE'];
-                                                                            $status_terakhir    = $d_not_cnp_close['LONGDESCRIPTION'];
-                                                                            $status_operation   = $d_not_cnp_close['STATUS_OPERATION'];
+                                                                            if($d_not_cnp_close){
+                                                                                $kode_dept          = $d_not_cnp_close['OPERATIONCODE'];
+                                                                                $status_terakhir    = $d_not_cnp_close['LONGDESCRIPTION'];
+                                                                                $status_operation   = $d_not_cnp_close['STATUS_OPERATION'];
+                                                                            }else{
+                                                                                $status = 'H';
+                                                                                $groupstep_option       = "= '$groupstepnumber'";
+                                                                                $q_not_cnp1             = db2_exec($conn1, "SELECT 
+                                                                                                                            GROUPSTEPNUMBER,
+                                                                                                                            TRIM(OPERATIONCODE) AS OPERATIONCODE,
+                                                                                                                            o.LONGDESCRIPTION AS LONGDESCRIPTION,
+                                                                                                                            PROGRESSSTATUS,
+                                                                                                                            CASE
+                                                                                                                                WHEN PROGRESSSTATUS = 0 THEN 'Entered'
+                                                                                                                                WHEN PROGRESSSTATUS = 1 THEN 'Planned'
+                                                                                                                                WHEN PROGRESSSTATUS = 2 THEN 'Progress'
+                                                                                                                                WHEN PROGRESSSTATUS = 3 THEN 'Closed'
+                                                                                                                            END AS STATUS_OPERATION
+                                                                                                                        FROM 
+                                                                                                                            VIEWPRODUCTIONDEMANDSTEP v
+                                                                                                                        LEFT JOIN OPERATION o ON o.CODE = v.OPERATIONCODE
+                                                                                                                        WHERE 
+                                                                                                                            PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' AND 
+                                                                                                                            GROUPSTEPNUMBER $groupstep_option
+                                                                                                                        ORDER BY 
+                                                                                                                            GROUPSTEPNUMBER ASC LIMIT 1");
+                                                                                $d_not_cnp_close        = db2_fetch_assoc($q_not_cnp1);
+                                                                                
+                                                                                $kode_dept          = $d_not_cnp_close['OPERATIONCODE'];
+                                                                                $status_terakhir    = $d_not_cnp_close['LONGDESCRIPTION'];
+                                                                                $status_operation   = $d_not_cnp_close['STATUS_OPERATION'];
+                                                                            }
                                                                         }
                                                                     }else{
                                                                         $status = 'H';
