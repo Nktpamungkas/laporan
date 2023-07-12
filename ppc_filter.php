@@ -129,7 +129,7 @@
                                                     </thead>
                                                     <tbody> 
                                                         <?php 
-                                                            ini_set("error_reporting", 1);
+                                                            ini_set("error_reporting", 0);
                                                             session_start();
                                                             require_once "koneksi.php";
                                                             $prod_order  = $_POST['prod_order'];

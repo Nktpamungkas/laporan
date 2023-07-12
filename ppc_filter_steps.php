@@ -164,6 +164,7 @@
                                                                 $insert_posisikk_ins3       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_ins3(PRODUCTIONORDERCODE,OPERATIONCODE,PROPROGRESSPROGRESSNUMBER,DEMANDSTEPSTEPNUMBER,PROGRESSTEMPLATECODE,MULAI,IPADDRESS,CREATEDATETIME) VALUES $value_posisikk_ins3");
                                                             }
                                                             
+                                                            
                                                             $sqlDB2 = "SELECT
                                                                             p.PRODUCTIONORDERCODE,
                                                                             p.STEPNUMBER AS STEPNUMBER,
@@ -236,7 +237,7 @@
                                                                 <td><?= $rowdb2['PRODUCTIONORDERCODE']; ?></td>
                                                                 <td><?= $rowdb2['PRODUCTIONDEMANDCODE']; ?></td>
                                                             </tr>
-                                                        <?php } ?>
+                                                        <?php } else?>
                                                     </tbody>
                                                 </table>
                                             </div>
