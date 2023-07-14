@@ -16,20 +16,25 @@
     <meta name="keywords" content="Admin , Responsive, Landing, Bootstrap, App, Template, Mobile, iOS, Android, apple, creative app">
     <meta name="author" content="#">
     <link rel="icon" href="files\assets\images\favicon.ico" type="image/x-icon">
-     <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800" rel="stylesheet"> -->
+    <link rel="stylesheet" type="text/css" href="files\bower_components\bootstrap\css\bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="files\assets\pages\prism\prism.css">
+    <link rel="stylesheet" type="text/css" href="files\assets\css\pcoded-horizontal.min.css">
+    <link rel="stylesheet" type="text/css" href="files\bower_components\datatables.net-bs4\css\dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="files\assets\pages\data-table\css\buttons.dataTables.min.css">
+    <link rel="icon" href="files\assets\images\favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="files\bower_components\bootstrap\css\bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\themify-icons\themify-icons.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\icofont\css\icofont.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\feather\css\feather.css">
-    <link rel="stylesheet" type="text/css" href="files\assets\pages\prism\prism.css">
+    <link rel="stylesheet" href="files\bower_components\select2\css\select2.min.css">
+    <link rel="stylesheet" type="text/css" href="files\bower_components\bootstrap-multiselect\css\bootstrap-multiselect.css">
+    <link rel="stylesheet" type="text/css" href="files\bower_components\multiselect\css\multi-select.css">
     <link rel="stylesheet" type="text/css" href="files\assets\css\style.css">
     <link rel="stylesheet" type="text/css" href="files\assets\css\jquery.mCustomScrollbar.css">
-    <link rel="stylesheet" type="text/css" href="files\assets\css\pcoded-horizontal.min.css">
-    <link rel="stylesheet" type="text/css" href="files\bower_components\datatables.net-bs4\css\dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" type="text/css" href="files\assets\pages\data-table\css\buttons.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="files\bower_components\datatables.net-responsive-bs4\css\responsive.bootstrap4.min.css">
-    <script src="TabCounter.js"></script>
+
 </head>
+
 <?php require_once 'header.php'; ?>
 
 <body>
@@ -53,9 +58,9 @@
                                     </div>
                                     <div class="card-block">
                                         <form action="" method="post">
-                                            <div class="row">
-                                                <div class="col-sm-12 col-xl-2 m-b-30">
-                                                    <h4 class="sub-title">Bon Order</h4>
+                                            <div class="row" >
+                                                <div class="col-sm-12 col-xl-1 m-b-30">
+                                                    <h4 style="font-size: 10px;" class="sub-title">Bon Order</h4>
                                                     <input type="text" name="no_order" class="form-control" onkeyup="this.value = this.value.toUpperCase()" value="<?php if (isset($_POST['submit'])){ echo $_POST['no_order']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
@@ -73,6 +78,18 @@
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Sampai Tanggal</h4>
                                                     <input type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
+                                                </div>
+                                                <div class="col-sm-12 col-xl-3 m-b-30">
+                                                    <h4 class="sub-title" style="color: red;">Status (In Development)</h4>
+                                                    <?php
+                                                        require_once "koneksi.php";
+                                                        $q_operation    = db2_exec($conn1, "SELECT * FROM OPERATION ORDER BY CODE ASC");
+                                                    ?>
+                                                    <select class="js-example-basic-single form-control input-xl">
+                                                        <?php while ($d_operation = db2_fetch_assoc($q_operation)) { ?>
+                                                            <option value="<?= $d_operation['CODE']; ?>"><?= $d_operation['CODE'].'- '.$d_operation['LONGDESCRIPTION']; ?></option>
+                                                        <?php } ?>
+                                                    </select>
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
@@ -531,4 +548,32 @@
         </div>
     </div>
 </body>
-<?php require_once 'footer.php'; ?>
+
+<script type="text/javascript" src="files\bower_components\jquery\js\jquery.min.js"></script>
+<script type="text/javascript" src="files\bower_components\jquery-ui\js\jquery-ui.min.js"></script>
+<script type="text/javascript" src="files\bower_components\popper.js\js\popper.min.js"></script>
+<script type="text/javascript" src="files\bower_components\bootstrap\js\bootstrap.min.js"></script>
+<script type="text/javascript" src="files\bower_components\jquery-slimscroll\js\jquery.slimscroll.js"></script>
+<script type="text/javascript" src="files\bower_components\modernizr\js\modernizr.js"></script>
+<script type="text/javascript" src="files\bower_components\modernizr\js\css-scrollbars.js"></script>
+<script type="text/javascript" src="files\bower_components\i18next\js\i18next.min.js"></script>
+<script type="text/javascript" src="files\bower_components\i18next-xhr-backend\js\i18nextXHRBackend.min.js"></script>
+<script type="text/javascript" src="files\bower_components\i18next-browser-languagedetector\js\i18nextBrowserLanguageDetector.min.js"></script>
+<script type="text/javascript" src="files\bower_components\jquery-i18next\js\jquery-i18next.min.js"></script>
+<script type="text/javascript" src="files\bower_components\select2\js\select2.full.min.js"></script>
+<script type="text/javascript" src="files\bower_components\bootstrap-multiselect\js\bootstrap-multiselect.js">
+
+
+</script>
+<script type="text/javascript" src="files\bower_components\multiselect\js\jquery.multi-select.js"></script>
+<script type="text/javascript" src="files\assets\js\jquery.quicksearch.js"></script>
+<script type="text/javascript" src="files\assets\pages\advance-elements\select2-custom.js"></script>
+<script src="files\assets\js\pcoded.min.js"></script>
+<script src="files\assets\js\jquery.mCustomScrollbar.concat.min.js"></script>
+<script type="text/javascript" src="files\assets\js\script.js"></script>
+<script src="files\assets\js\menu\menu-hori-fixed.js"></script>
+<script src="files\bower_components\datatables.net\js\jquery.dataTables.min.js"></script>
+<script src="files\bower_components\datatables.net-buttons\js\dataTables.buttons.min.js"></script>
+<script src="files\bower_components\datatables.net-responsive\js\dataTables.responsive.min.js"></script>
+<script src="files\bower_components\datatables.net-responsive-bs4\js\responsive.bootstrap4.min.js"></script>
+<script src="files\assets\pages\data-table\js\data-table-custom.js"></script>

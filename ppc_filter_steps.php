@@ -237,9 +237,43 @@
                                                                 <td><?= $rowdb2['PRODUCTIONORDERCODE']; ?></td>
                                                                 <td><?= $rowdb2['PRODUCTIONDEMANDCODE']; ?></td>
                                                             </tr>
-                                                        <?php } else?>
+                                                        <?php } ?>
                                                     </tbody>
                                                 </table>
+                                                <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132') : ?>
+                                                    <table border='1' style='font-family:"Microsoft Sans Serif"' width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="100px" style="text-align: center;">STEP NUMBER</th>
+                                                                <th width="300px" style="text-align: center;">TANGGAL IN</th>
+                                                                <th width="300px" style="text-align: center;">TANGGAL OUT</th>
+                                                                <th width="100px" style="text-align: center;">OPERATION</th>
+                                                                <th width="500px" style="text-align: center;">LONGDESCRIPTION</th>
+                                                                <th width="100px" style="text-align: center;">STATUS</th>
+                                                                <th width="100px" style="text-align: center;">PROD. ORDER</th>
+                                                                <th width="100px" style="text-align: center;">PROD. DEMAND</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody> 
+                                                            <?php 
+                                                                $sqlDB2 = "";
+                                                                $stmt = db2_exec($conn1, $sqlDB2);
+                                                                while ($rowdb2 = db2_fetch_assoc($stmt)) {
+                                                            ?>
+                                                                <tr>
+                                                                    <td align="center"></td>
+                                                                    <td align="center"></td>
+                                                                    <td align="center"></td>
+                                                                    <td align="center"></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            <?php } ?>
+                                                        </tbody>
+                                                    </table>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
