@@ -75,7 +75,7 @@
                                                     <input type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
-                                                    <h4 style="font-size: 12px; color: red;" class="sub-title">Status (In Development)</h4>
+                                                    <h4 style="font-size: 12px;" class="sub-title">Status Terakhir</h4>
                                                     <?php
                                                         require_once "koneksi.php";
                                                         $q_operation    = db2_exec($conn1, "SELECT * FROM OPERATION WHERE NOT LONGDESCRIPTION LIKE '%DO NOT USE%' ORDER BY CODE ASC");
@@ -97,8 +97,8 @@
                                                     <a class="btn btn-warning" href="ppc_filter.php">Reset</a>
                                                     <!-- <button type="submit" name="reset" class="btn btn-warning">Reset Data</button> -->
                                                     <?php if (isset($_POST['submit'])) : ?>
-                                                        <a class="btn btn-mat btn-success" href="ppc_memopenting-excel.php?no_order=<?= $_POST['no_order']; ?>&tgl1=<?= $_POST['tgl1']; ?>&tgl2=<?= $_POST['tgl2']; ?>">CETAK EXCEL</a>
-                                                        <a class="btn btn-mat btn-warning" href="ppc_memopenting-libre.php?no_order=<?= $_POST['no_order']; ?>&tgl1=<?= $_POST['tgl1']; ?>&tgl2=<?= $_POST['tgl2']; ?>">CETAK EXCEL (LIBRE)</a>
+                                                        <a class="btn btn-mat btn-success" href="ppc_memopenting-excel.php?no_order=<?= $_POST['no_order']; ?>&tgl1=<?= $_POST['tgl1']; ?>&tgl2=<?= $_POST['tgl2']; ?>&operation=<?= $_POST['operation']; ?>">CETAK EXCEL</a>
+                                                        <a class="btn btn-mat btn-warning" href="ppc_memopenting-libre.php?no_order=<?= $_POST['no_order']; ?>&tgl1=<?= $_POST['tgl1']; ?>&tgl2=<?= $_POST['tgl2']; ?>&operation=<?= $_POST['operation']; ?>">CETAK EXCEL (LIBRE)</a>
                                                     <?php endif; ?>
                                                     <!-- <p>Warning : Jika melakukan<b>Reset Data</b>, pastikan tidak ada yang menggunakan Memo Penting</p> -->
                                                 </div>
@@ -127,6 +127,7 @@
                                                             <th>BAGI KAIN TGL</th>
                                                             <th>ROLL</th>
                                                             <th>BRUTO/BAGI KAIN</th>
+                                                            <th title="Sumber data: &#013; 1. Production Order &#013; 2. Reservation &#013; 3. KFF/KGF User Primary Quantity">QTY SALINAN</th>
                                                             <th>QTY PACKING</th>
                                                             <th>NETTO(kg)</th>
                                                             <th>NETTO(yd)</th>
@@ -453,7 +454,8 @@
                                                                 }
                                                             }
                                                         ?>
-                                                        <?php if($cek_operation == "MUNCUL") : ?>
+                                                        <?php var_dump($cek_operation); ?>
+                                                        <?php if($cek_operation == "MUNCUL" OR $cek_operation == NULL) : ?>
                                                         <tr>
                                                             <td><?= $rowdb2['ORDERDATE']; ?></td> <!-- TGL TERIMA ORDER -->
                                                             <td><?= $rowdb2['PELANGGAN']; ?></td> <!-- PELANGGAN -->
@@ -520,6 +522,13 @@
                                                                 <?= $roll; ?>
                                                             </td> <!-- ROLL -->
                                                             <td><?= number_format($rowdb2['QTY_BAGIKAIN'],2); ?></td> <!-- BRUTO/BAGI KAIN -->
+                                                            <td>
+                                                                <?php 
+                                                                    $q_qtysalinan = db2_exec($conn1, "SELECT * FROM VIEWPRODUCTIONDEMANDSTEP WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'");
+                                                                    $d_qtysalinan = db2_fetch_assoc($q_qtysalinan);
+                                                                ?>
+                                                                <?= number_format($d_qtysalinan['INITIALUSERPRIMARYQUANTITY'],3) ?>
+                                                            </td> <!-- QTY SALINAN -->
                                                             <td>
                                                                 <?php
                                                                     $q_qtypacking = db2_exec($conn1, "SELECT * FROM ITXVIEW_QTYPACKING WHERE DEMANDCODE = '$rowdb2[DEMAND]'");
