@@ -128,7 +128,7 @@
                                                             <th>ROLL</th>
                                                             <th>BRUTO/BAGI KAIN</th>
                                                             <th title="Sumber data: &#013; 1. Production Order &#013; 2. Reservation &#013; 3. KFF/KGF User Primary Quantity">QTY SALINAN</th>
-                                                            <th>QTY PACKING</th>
+                                                            <th title="Sumber data: &#013; 1. Production Demand &#013; 2. Bagian group Entered quantity &#013; 3. User Primary Quantity">QTY PACKING</th>
                                                             <th>NETTO(kg)</th>
                                                             <th>NETTO(yd)</th>
                                                             <th>DELAY</th>
