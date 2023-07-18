@@ -294,19 +294,21 @@
                                                                             <?php if($cache_MULAI) : ?>
                                                                                 <span style="background-color: #A5CEA8;"><?= $cache_MULAI; ?></span>
                                                                             <?php else : ?>
-                                                                                <form action="" method="POST">
-                                                                                    <input type="hidden" name="productionorder" value="<?= $rowdb2['PRODUCTIONORDERCODE']; ?>">
-                                                                                    <input type="hidden" name="productiondemand" value="<?= $rowdb2['PRODUCTIONDEMANDCODE']; ?>">
-                                                                                    <input type="hidden" name="stepnumber" value="<?= $rowdb2['STEPNUMBER']; ?>">
-                                                                                    <input type="hidden" name="tanggal_out" value="<?= $rowdb2['SELESAI']; ?>">
-                                                                                    <input type="hidden" name="operation" value="<?= $rowdb2['OPERATIONCODE']; ?>">
-                                                                                    <input type="hidden" name="longdescription" value="<?= $rowdb2['LONGDESCRIPTION']; ?>">
-                                                                                    <input type="hidden" name="status" value="<?= $rowdb2['STATUS_OPERATION']; ?>">
-                                                                                    <input type="hidden" name="ipaddress" value="<?= $_SERVER['REMOTE_ADDR'] ?>">
-                                                                                    <input type="hidden" name="createdatetime" value="<?= date('Y-m-d H:i:s'); ?>">
-                                                                                    <input type="datetime-local" name="tanggal_proses_in" required>
-                                                                                    <button class="btn btn-primary btn-mini" name="simpanin_catch">Save</button>
-                                                                                </form>
+                                                                                <?php if($rowdb2['STATUS_OPERATION'] != 'Closed') : ?>
+                                                                                    <form action="" method="POST">
+                                                                                        <input type="hidden" name="productionorder" value="<?= $rowdb2['PRODUCTIONORDERCODE']; ?>">
+                                                                                        <input type="hidden" name="productiondemand" value="<?= $rowdb2['PRODUCTIONDEMANDCODE']; ?>">
+                                                                                        <input type="hidden" name="stepnumber" value="<?= $rowdb2['STEPNUMBER']; ?>">
+                                                                                        <input type="hidden" name="tanggal_out" value="<?= $rowdb2['SELESAI']; ?>">
+                                                                                        <input type="hidden" name="operation" value="<?= $rowdb2['OPERATIONCODE']; ?>">
+                                                                                        <input type="hidden" name="longdescription" value="<?= $rowdb2['LONGDESCRIPTION']; ?>">
+                                                                                        <input type="hidden" name="status" value="<?= $rowdb2['STATUS_OPERATION']; ?>">
+                                                                                        <input type="hidden" name="ipaddress" value="<?= $_SERVER['REMOTE_ADDR'] ?>">
+                                                                                        <input type="hidden" name="createdatetime" value="<?= date('Y-m-d H:i:s'); ?>">
+                                                                                        <input type="datetime-local" name="tanggal_proses_in" required>
+                                                                                        <button class="btn btn-primary btn-mini" name="simpanin_catch">Save</button>
+                                                                                    </form>
+                                                                                <?php endif; ?>
                                                                             <?php endif; ?>
                                                                         <?php endif; ?>
                                                                     <?php endif; ?>
@@ -341,19 +343,21 @@
                                                                             <?php if($cache_SELESAI) : ?>
                                                                                 <span style="background-color: #A5CEA8;"><?= $cache_SELESAI; ?></span>
                                                                             <?php else : ?>
-                                                                                <form action="" method="POST">
-                                                                                    <input type="hidden" name="productionorder" value="<?= $rowdb2['PRODUCTIONORDERCODE']; ?>">
-                                                                                    <input type="hidden" name="productiondemand" value="<?= $rowdb2['PRODUCTIONDEMANDCODE']; ?>">
-                                                                                    <input type="hidden" name="stepnumber" value="<?= $rowdb2['STEPNUMBER']; ?>">
-                                                                                    <input type="hidden" name="tanggal_out" value="<?= $rowdb2['SELESAI']; ?>">
-                                                                                    <input type="hidden" name="operation" value="<?= $rowdb2['OPERATIONCODE']; ?>">
-                                                                                    <input type="hidden" name="longdescription" value="<?= $rowdb2['LONGDESCRIPTION']; ?>">
-                                                                                    <input type="hidden" name="status" value="<?= $rowdb2['STATUS_OPERATION']; ?>">
-                                                                                    <input type="hidden" name="ipaddress" value="<?= $_SERVER['REMOTE_ADDR'] ?>">
-                                                                                    <input type="hidden" name="createdatetime" value="<?= date('Y-m-d H:i:s'); ?>">
-                                                                                    <input type="datetime-local" name="tanggal_proses_out" required>
-                                                                                    <button class="btn btn-primary btn-mini" name="simpanout_catch">Save</button>
-                                                                                </form>
+                                                                                <?php if($rowdb2['STATUS_OPERATION'] != 'Closed') : ?>
+                                                                                    <form action="" method="POST">
+                                                                                        <input type="hidden" name="productionorder" value="<?= $rowdb2['PRODUCTIONORDERCODE']; ?>">
+                                                                                        <input type="hidden" name="productiondemand" value="<?= $rowdb2['PRODUCTIONDEMANDCODE']; ?>">
+                                                                                        <input type="hidden" name="stepnumber" value="<?= $rowdb2['STEPNUMBER']; ?>">
+                                                                                        <input type="hidden" name="tanggal_out" value="<?= $rowdb2['SELESAI']; ?>">
+                                                                                        <input type="hidden" name="operation" value="<?= $rowdb2['OPERATIONCODE']; ?>">
+                                                                                        <input type="hidden" name="longdescription" value="<?= $rowdb2['LONGDESCRIPTION']; ?>">
+                                                                                        <input type="hidden" name="status" value="<?= $rowdb2['STATUS_OPERATION']; ?>">
+                                                                                        <input type="hidden" name="ipaddress" value="<?= $_SERVER['REMOTE_ADDR'] ?>">
+                                                                                        <input type="hidden" name="createdatetime" value="<?= date('Y-m-d H:i:s'); ?>">
+                                                                                        <input type="datetime-local" name="tanggal_proses_out" required>
+                                                                                        <button class="btn btn-primary btn-mini" name="simpanout_catch">Save</button>
+                                                                                    </form>
+                                                                                <?php endif; ?>
                                                                             <?php endif; ?>
                                                                         <?php endif; ?>
                                                                     <?php endif; ?>
