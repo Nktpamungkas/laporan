@@ -454,7 +454,6 @@
                                                                 }
                                                             }
                                                         ?>
-                                                        <?php var_dump($cek_operation); ?>
                                                         <?php if($cek_operation == "MUNCUL" OR $cek_operation == NULL) : ?>
                                                         <tr>
                                                             <td><?= $rowdb2['ORDERDATE']; ?></td> <!-- TGL TERIMA ORDER -->
