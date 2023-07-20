@@ -47,11 +47,11 @@
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
                                                     <h4 class="sub-title">Dari Tanggal</h4>
-                                                    <input type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
+                                                    <input disabled type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
                                                     <h4 class="sub-title">Sampai Tanggal</h4>
-                                                    <input type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
+                                                    <input disabled type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
@@ -79,8 +79,6 @@
                                                             <th>QTY PACKING (YARD/METER)</th>
                                                             <th>QTY KURANG (KG)</th>
                                                             <th>QTY KURANG (YARD/METER)</th>
-                                                            <th>NO DEMAND</th>
-                                                            <th>NO PROD ORDER</th>
                                                             <th>NO SURAT JALAN</th>
                                                             <th>FOC</th>
                                                             <th>TGL KIRIM</th>
@@ -98,137 +96,45 @@
                                                             session_start();
                                                             require_once "koneksi.php";
                                                             $no_order = $_POST['no_order'];
-                                                            $tgl1     = $_POST['tgl1'];
-                                                            $tgl2     = $_POST['tgl2'];
+                                                            // $tgl1     = $_POST['tgl1'];
+                                                            // $tgl2     = $_POST['tgl2'];
 
-                                                            if(!empty($no_order) && empty($tgl1) && empty($tgl2)) {
-                                                                $where      = "im.NO_ORDER = '$no_order'";
-                                                            }elseif(empty($no_order) && !empty($tgl1) && !empty($tgl2)){
-                                                                $where      = "im.REQUIREDDUEDATE BETWEEN '$tgl1' AND '$tgl2'";
-                                                            }elseif(!empty($no_order) && !empty($tgl1) && !empty($tgl2)){
-                                                                $where      = "im.NO_ORDER = '$no_order' AND im.REQUIREDDUEDATE BETWEEN '$tgl1' AND '$tgl2'";
+                                                            // if(!empty($no_order) && empty($tgl1) && empty($tgl2)) {
+                                                            if(!empty($no_order)) {
+                                                                $where      = "NO_ORDER = '$no_order'";
                                                             }
+                                                            // elseif(empty($no_order) && !empty($tgl1) && !empty($tgl2)){
+                                                            //     $where      = "im.REQUIREDDUEDATE BETWEEN '$tgl1' AND '$tgl2'";
+                                                            // }elseif(!empty($no_order) && !empty($tgl1) && !empty($tgl2)){
+                                                            //     $where      = "im.NO_ORDER = '$no_order' AND im.REQUIREDDUEDATE BETWEEN '$tgl1' AND '$tgl2'";
+                                                            // }
 
-                                                            $sqlDB2="SELECT DISTINCT
-                                                                            im.NO_ORDER,
-                                                                            im.NO_PO,
-                                                                            im.PELANGGAN,
-                                                                            im.KETERANGAN_PRODUCT,
-                                                                            im.WARNA,
-                                                                            s.USERPRIMARYQUANTITY AS QTY_BUTUH_KG,
-                                                                            s.USERPRIMARYUOMCODE AS UOM_BUTUH_KG,
-                                                                            s.USERSECONDARYQUANTITY AS QTY_BUTUH_SECOND,
-                                                                            s.USERSECONDARYUOMCODE AS UOM_BUTUH_SECOND,
-                                                                            D.QTY_PACKING_KG,
-                                                                            D.UOM_PACKING_KG,
-                                                                            D.QTY_PACKING_SECOND,
-                                                                            D.UOM_PACKING_SECOND,
-                                                                            im.DEMAND,
-                                                                            im.NO_KK,
-                                                                            s2.SALESDOCUMENTPROVISIONALCODE AS NO_SJ,
-                                                                            CASE
-                                                                                WHEN s3.PAYMENTMETHODCODE = 'FOC' THEN 'FOC'
-                                                                                ELSE NULL
-                                                                            END PAYMENTMETHODCODE,
-                                                                            s3.DEFINITIVEDOCUMENTDATE AS TGL_KIRIM_SJ,
-                                                                            E.QTY_KIRIM_KG,
-                                                                            E.UOM_KIRIM_KG,
-                                                                            E.QTY_KIRIM_SECOND,
-                                                                            E.UOM_KIRIM_SECOND,
-                                                                            F.QTY_BAGIKAIN_KG,
-                                                                            F.UOM_BAGIKAIN_KG,
-                                                                            F.QTY_BAGIKAIN_SECOND,
-                                                                            F.UOM_BAGIKAIN_SECOND
-                                                                        FROM 
-                                                                            itxview_memopentingppc im 
-                                                                        LEFT JOIN SALESORDERLINE s ON s.SALESORDERCODE = im.NO_ORDER AND s.ORDERLINE = im.ORDERLINE 
-                                                                        LEFT JOIN 
-                                                                            (SELECT  
-                                                                                PRODUCTIONDEMAND.CODE,
-                                                                                PRODUCTIONDEMAND.ORIGDLVSALORDLINESALORDERCODE,
-                                                                                PRODUCTIONDEMAND.ORIGDLVSALORDERLINEORDERLINE,
-                                                                                SUM(PRODUCTIONDEMAND.ENTEREDBASEPRIMARYQUANTITY) AS QTY_PACKING_KG,
-                                                                                PRODUCTIONDEMAND.BASEPRIMARYUOMCODE AS UOM_PACKING_KG,
-                                                                                SUM(PRODUCTIONDEMAND.ENTEREDBASESECONDARYQUANTITY) AS QTY_PACKING_SECOND,
-                                                                                PRODUCTIONDEMAND.BASESECONDARYUOMCODE AS UOM_PACKING_SECOND
-                                                                            FROM
-                                                                                PRODUCTIONDEMAND PRODUCTIONDEMAND
-                                                                            WHERE
-                                                                                PRODUCTIONDEMAND.ITEMTYPEAFICODE = 'KFF'
-                                                                            GROUP BY
-                                                                                PRODUCTIONDEMAND.CODE,
-                                                                                PRODUCTIONDEMAND.ORIGDLVSALORDLINESALORDERCODE,
-                                                                                PRODUCTIONDEMAND.ORIGDLVSALORDERLINEORDERLINE,
-                                                                                PRODUCTIONDEMAND.BASEPRIMARYUOMCODE,
-                                                                                PRODUCTIONDEMAND.BASESECONDARYUOMCODE) D ON D.ORIGDLVSALORDLINESALORDERCODE = im.NO_ORDER AND D.ORIGDLVSALORDERLINEORDERLINE = im.ORDERLINE AND D.CODE = im.DEMAND  
-                                                                        LEFT JOIN SALESDOCUMENTLINE s2 ON s2.DLVSALORDERLINESALESORDERCODE = s.SALESORDERCODE AND s2.DLVSALESORDERLINEORDERLINE = s.ORDERLINE AND s2.DOCUMENTTYPETYPE = 05
-                                                                        LEFT JOIN SALESDOCUMENT s3 ON s3.PROVISIONALCODE = s2.SALESDOCUMENTPROVISIONALCODE 
-                                                                        LEFT JOIN (SELECT
-                                                                                        SALESDOCUMENTLINE.DLVSALORDERLINESALESORDERCODE,
-                                                                                        SALESDOCUMENTLINE.DLVSALESORDERLINEORDERLINE,
-                                                                                        SALESDOCUMENTLINE.DOCUMENTTYPETYPE,
-                                                                                        SUM(SALESDOCUMENTLINE.SHIPPEDBASEPRIMARYQUANTITY) AS QTY_KIRIM_KG,
-                                                                                        SALESDOCUMENTLINE.BASEPRIMARYUOMCODE AS UOM_KIRIM_KG,
-                                                                                        SUM(SALESDOCUMENTLINE.SHIPPEDBASESECONDARYQUANTITY) AS QTY_KIRIM_SECOND,
-                                                                                        SALESDOCUMENTLINE.BASESECONDARYUOMCODE AS UOM_KIRIM_SECOND
-                                                                                    FROM
-                                                                                        SALESDOCUMENTLINE SALESDOCUMENTLINE
-                                                                                    WHERE
-                                                                                        SALESDOCUMENTLINE.PREVIOUSORIGINFROM = '1'
-                                                                                    GROUP BY 
-                                                                                        SALESDOCUMENTLINE.BASEPRIMARYUOMCODE, 
-                                                                                        SALESDOCUMENTLINE.BASESECONDARYUOMCODE, 
-                                                                                        SALESDOCUMENTLINE.DLVSALORDERLINESALESORDERCODE,
-                                                                                        SALESDOCUMENTLINE.DLVSALESORDERLINEORDERLINE,
-                                                                                        SALESDOCUMENTLINE.DOCUMENTTYPETYPE) E ON E.DLVSALORDERLINESALESORDERCODE = s.SALESORDERCODE 
-                                                                                                                            AND E.DLVSALESORDERLINEORDERLINE = s.ORDERLINE 
-                                                                                                                            AND E.DOCUMENTTYPETYPE = 05
-                                                                        LEFT JOIN 
-                                                                            (SELECT
-                                                                                PRODUCTIONRESERVATION.ORDERCODE,
-                                                                                SUM(PRODUCTIONRESERVATION.USEDBASEPRIMARYQUANTITY) AS QTY_BAGIKAIN_KG,
-                                                                                PRODUCTIONRESERVATION.BASEPRIMARYUOMCODE AS UOM_BAGIKAIN_KG,
-                                                                                SUM(PRODUCTIONRESERVATION.USEDBASESECONDARYQUANTITY) AS QTY_BAGIKAIN_SECOND,
-                                                                                PRODUCTIONRESERVATION.BASESECONDARYUOMCODE AS UOM_BAGIKAIN_SECOND
-                                                                            FROM
-                                                                                PRODUCTIONRESERVATION PRODUCTIONRESERVATION
-                                                                            WHERE
-                                                                                PRODUCTIONRESERVATION.ITEMTYPEAFICODE = 'KGF'
-                                                                            GROUP BY
-                                                                                PRODUCTIONRESERVATION.ORDERCODE,
-                                                                                PRODUCTIONRESERVATION.BASEPRIMARYUOMCODE,
-                                                                                PRODUCTIONRESERVATION.BASESECONDARYUOMCODE) F ON F.ORDERCODE = im.DEMAND 
-                                                                        WHERE 
-                                                                            $where";
-
-                                                            $stmt   = db2_exec($conn1,$sqlDB2, array('cursor'=>DB2_SCROLLABLE));
+                                                            $stmt   = db2_exec($conn1, "SELECT * FROM ITXVIEW_POSELESAI WHERE $where");
                                                             $NO     = 1;
                                                             while($rowdb2 = db2_fetch_assoc($stmt)){
                                                         ?>
                                                         <tr>
                                                             <td><?= $NO; ?></td>
                                                             <td><?= $rowdb2['NO_ORDER']; ?></td>
-                                                            <td><?= $rowdb2['NO_PO']; ?></td>
-                                                            <td><?= $rowdb2['PELANGGAN']; ?></td>
-                                                            <td><?= $rowdb2['KETERANGAN_PRODUCT']." "; ?></td>
+                                                            <td><?= $rowdb2['PO_NUMBER']; ?></td>
+                                                            <td><?= $rowdb2['LEGALNAME1']; ?></td>
+                                                            <td><?= $rowdb2['KODE_ITEM']." "; ?></td>
                                                             <td><?= $rowdb2['WARNA']; ?></td>
-                                                            <td><?= number_format($rowdb2['QTY_BUTUH_KG'],2)." ".$rowdb2['UOM_BUTUH_KG']; ?></td>
-                                                            <td><?= number_format($rowdb2['QTY_BUTUH_SECOND'],2)." ".$rowdb2['UOM_BUTUH_SECOND']; ?></td>
-                                                            <td><?= number_format($rowdb2['QTY_PACKING_KG'],2)." ".$rowdb2['UOM_PACKING_KG']; ?></td>
-                                                            <td><?= number_format($rowdb2['QTY_PACKING_SECOND'],2)." ".$rowdb2['UOM_PACKING_SECOND']; ?></td>
-                                                            <td><?= number_format($rowdb2['QTY_PACKING_KG']-$rowdb2['QTY_BUTUH_KG'],2)." ".$rowdb2['UOM_BUTUH_KG']; ?></td>
-                                                            <td><?= number_format($rowdb2['QTY_PACKING_SECOND']-$rowdb2['QTY_BUTUH_SECOND'],2)." ".$rowdb2['UOM_BUTUH_SECOND']; ?></td>
-                                                            <td><?= $rowdb2['DEMAND']; ?></td>
-                                                            <td><?= $rowdb2['NO_KK']; ?></td>
+                                                            <td><?= number_format($rowdb2['QTY_KEBUTUHAN_KG'],2); ?></td>
+                                                            <td><?= number_format($rowdb2['QTY_KEBUTUHAN_YD_MTR'],2); ?></td>
+                                                            <td><?= number_format($rowdb2['QTY_PACKING_KG'],2); ?></td>
+                                                            <td><?= number_format($rowdb2['QTY_PACKING_YD_MTR'],2); ?></td>
+                                                            <td><?= number_format($rowdb2['QTY_KURANG_KG'],2); ?></td>
+                                                            <td><?= number_format($rowdb2['QTY_KURANG_YD_MTR'],2); ?></td>
                                                             <td><?= $rowdb2['NO_SJ']; ?></td>
-                                                            <td><?= $rowdb2['PAYMENTMETHODCODE']; ?></td>
-                                                            <td><?= $rowdb2['TGL_KIRIM_SJ']; ?></td>
-                                                            <td><?= number_format($rowdb2['QTY_KIRIM_KG'],2)." ".$rowdb2['UOM_KIRIM_KG']; ?></td>
-                                                            <td><?= number_format($rowdb2['QTY_KIRIM_SECOND'],2)." ".$rowdb2['UOM_KIRIM_SECOND']; ?></td>
-                                                            <td><?= number_format($rowdb2['QTY_BAGIKAIN_KG'],2)." ".$rowdb2['UOM_BAGIKAIN_KG']; ?></td>
-                                                            <td><?= number_format($rowdb2['QTY_BAGIKAIN_SECOND'],2)." ".$rowdb2['UOM_BAGIKAIN_SECOND']; ?></td>
-                                                            <td><?php if($rowdb2['QTY_BAGIKAIN_KG']!=0){echo number_format(($rowdb2['QTY_BAGIKAIN_KG']-$rowdb2['QTY_PACKING_KG'])/$rowdb2['QTY_BAGIKAIN_KG']*100,2)." %";} else{ echo "0%";} ?></td>
-                                                            <td><?php if($rowdb2['QTY_BAGIKAIN_SECOND']!=0){echo number_format(($rowdb2['QTY_BAGIKAIN_SECOND']-$rowdb2['QTY_PACKING_SECOND'])/$rowdb2['QTY_BAGIKAIN_SECOND']*100,2)." %";} else{ echo "0%";} ?></td>
+                                                            <td><?= $rowdb2['FOC']; ?></td>
+                                                            <td><?= $rowdb2['TGL_KIRIM']; ?></td>
+                                                            <td><?= number_format($rowdb2['QTY_KIRIM_KG'],2); ?></td>
+                                                            <td><?= number_format($rowdb2['QTY_KIRIM_YD_MTR'],2); ?></td>
+                                                            <td><center><i>Maintenance..</i></center></td>
+                                                            <td><center><i>Maintenance..</i></center></td>
+                                                            <td><center><i>Maintenance..</i></center></td>
+                                                            <td><center><i>Maintenance..</i></center></td>
                                                         </tr>
                                                             <?php $NO++; } ?>
                                                     </tbody>
