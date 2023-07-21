@@ -1,3 +1,10 @@
+<?php 
+    ini_set("error_reporting", 1);
+    session_start();
+    require_once "koneksi.php";
+    $tgljam = date('Y-m-d H:i:s');
+    mysqli_query($con_nowprd, "INSERT INTO cache_accessto (IPADDRESS,CREATIONDATETIME,ACCESSTO) VALUES('$_SERVER[REMOTE_ADDR]', '$tgljam','PO SELESAI')");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,11 +54,11 @@
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
                                                     <h4 class="sub-title">Dari Tanggal</h4>
-                                                    <input disabled type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
+                                                    <input readonly type="date" name="tgl1" class="form-control" id="tgl1" value="">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
                                                     <h4 class="sub-title">Sampai Tanggal</h4>
-                                                    <input disabled type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
+                                                    <input readonly type="date" name="tgl2" class="form-control" id="tgl2" value="">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
@@ -118,7 +125,8 @@
                                                             <td><?= $rowdb2['NO_ORDER']; ?></td>
                                                             <td><?= $rowdb2['PO_NUMBER']; ?></td>
                                                             <td><?= $rowdb2['LEGALNAME1']; ?></td>
-                                                            <td><?= $rowdb2['KODE_ITEM']." "; ?></td>
+                                                            <!-- <td><?= $rowdb2['KODE_ITEM']." "; ?></td> -->
+                                                            <td><center><i>Maintenance..</i></center></td>
                                                             <td><?= $rowdb2['WARNA']; ?></td>
                                                             <td><?= number_format($rowdb2['QTY_KEBUTUHAN_KG'],2); ?></td>
                                                             <td><?= number_format($rowdb2['QTY_KEBUTUHAN_YD_MTR'],2); ?></td>
