@@ -185,8 +185,36 @@
                                                         <td style="vertical-align: text-top;"><?= $rowdb2['WORKCENTERCODE']; ?></td>
                                                         <td style="vertical-align: text-top;"><?= $rowdb2['OPERATIONCODE']; ?></td>
                                                         <td style="vertical-align: text-top;"><?= $rowdb2['LONGDESCRIPTION']; ?></td>
-                                                        <td style="vertical-align: text-top; text-align: center;"><?= $rowdb2['MULAI']; ?></td>
-                                                        <td style="vertical-align: text-top; text-align: center;"><?= $rowdb2['SELESAI']; ?></td>
+                                                        <td style="vertical-align: text-top; text-align: center;">
+                                                            <?php 
+                                                                $cek_cache  = mysqli_query($con_nowprd, "SELECT * FROM posisikk_cache_in 
+                                                                                                                WHERE productionorder= '$rowdb2[PRODUCTIONORDERCODE]' 
+                                                                                                                AND productiondemand = '$rowdb2[PRODUCTIONDEMANDCODE]' 
+                                                                                                                AND stepnumber = '$rowdb2[STEPNUMBER]'");
+                                                                $d_cache    = mysqli_fetch_assoc($cek_cache);
+                                                                $cache_MULAI    = $d_cache['tanggal_in'];
+                                                            ?>
+                                                            <?php if($rowdb2['MULAI']) : ?>
+                                                                <?= $rowdb2['MULAI']; ?>
+                                                            <?php else : ?>
+                                                                <span style="background-color: #A5CEA8;"><?= $cache_MULAI; ?></span>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                        <td style="vertical-align: text-top; text-align: center;">
+                                                            <?php 
+                                                                $cek_cache  = mysqli_query($con_nowprd, "SELECT * FROM posisikk_cache_out 
+                                                                                                                WHERE productionorder= '$rowdb2[PRODUCTIONORDERCODE]' 
+                                                                                                                AND productiondemand = '$rowdb2[PRODUCTIONDEMANDCODE]' 
+                                                                                                                AND stepnumber = '$rowdb2[STEPNUMBER]'");
+                                                                $d_cache    = mysqli_fetch_assoc($cek_cache);
+                                                                $cache_SELESAI    = $d_cache['tanggal_out'];
+                                                            ?>
+                                                            <?php if($rowdb2['SELESAI']) : ?>
+                                                                <?= $rowdb2['SELESAI']; ?>
+                                                            <?php else : ?>
+                                                                <span style="background-color: #A5CEA8;"><?= $cache_SELESAI; ?></span>
+                                                            <?php endif; ?>
+                                                        </td>
                                                         <?php
                                                             $q_QA_DATA  = mysqli_query($con_nowprd, "SELECT * FROM ITXVIEW_DETAIL_QA_DATA 
                                                                                                         WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
