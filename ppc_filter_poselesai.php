@@ -556,7 +556,7 @@
                                                                 //                                             isp.GOODSISSUEDATE,
                                                                 //                                             isp.PAYMENTMETHODCODE,
                                                                 //                                             isp.PRICEUNITOFMEASURECODE");
-                                                                $d_lain_suratjalan   = db2_fetch_assoc($q_lain_suratjalan);
+                                                                // $d_lain_suratjalan   = db2_fetch_assoc($q_lain_suratjalan);
                                                                 
                                                             ?>
                                                             <td><?= $d_suratjalan['SURAT_JALAN']; ?></td> <!-- NO SURAT JALAN -->
