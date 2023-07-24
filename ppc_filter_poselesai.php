@@ -561,8 +561,8 @@
                                                             ?>
                                                             <td><?= $d_suratjalan['SURAT_JALAN']; ?></td> <!-- NO SURAT JALAN -->
                                                             <td><?= $d_lain_suratjalan['TGL_KIRIM']; ?></td> <!-- TGL KIRIM -->
-                                                            <td><?= number_format($d_lain_suratjalan['QTY_KIRIM_KG'], 2); ?></td> <!-- QTY KIRIM KG -->
-                                                            <td><?= number_format($d_lain_suratjalan['QTY_KIRIM_YARD_MTR'], 2); ?></td> <!-- QTY KIRIM YARD/METER -->
+                                                            <td><?= //number_format($d_lain_suratjalan['QTY_KIRIM_KG'], 2); ?></td> <!-- QTY KIRIM KG -->
+                                                            <td><?= //number_format($d_lain_suratjalan['QTY_KIRIM_YARD_MTR'], 2); ?></td> <!-- QTY KIRIM YARD/METER -->
                                                             <td>
                                                                 <?= number_format($rowdb2['NETTO'], 2) - number_format($d_lain_suratjalan['QTY_KIRIM_KG'],2); ?>
                                                             </td> <!-- QTY KURANG KG -->
