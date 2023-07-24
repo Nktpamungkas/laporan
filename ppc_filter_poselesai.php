@@ -519,43 +519,43 @@
                                                             </td>
                                                             <?php endif; ?>
                                                             <?php
-                                                                $q_suratjalan   = db2_exec($conn1, "SELECT DISTINCT 
-                                                                                                            p.PRODUCTIONORDERCODE,
-                                                                                                            p.PRODUCTIONDEMANDCODE,
-                                                                                                            isp.CODE,
-                                                                                                            isp.PROVISIONALCODE AS SURAT_JALAN
-                                                                                                        FROM 
-                                                                                                            PRODUCTIONDEMANDSTEP p
-                                                                                                        LEFT JOIN PRODUCTIONDEMAND p2 ON p2.CODE = p.PRODUCTIONDEMANDCODE
-                                                                                                        LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON iasp.LOTCODE = p.PRODUCTIONORDERCODE 
-                                                                                                        RIGHT JOIN ITXVIEW_SURATJALAN_PPC isp ON isp.CODE = iasp.CODE 
-                                                                                                        WHERE
-                                                                                                            p.PRODUCTIONDEMANDCODE = '$rowdb2[DEMAND]'");
-                                                                $d_suratjalan   = db2_fetch_assoc($q_suratjalan);
+                                                                // $q_suratjalan   = db2_exec($conn1, "SELECT DISTINCT 
+                                                                //                                             p.PRODUCTIONORDERCODE,
+                                                                //                                             p.PRODUCTIONDEMANDCODE,
+                                                                //                                             isp.CODE,
+                                                                //                                             isp.PROVISIONALCODE AS SURAT_JALAN
+                                                                //                                         FROM 
+                                                                //                                             PRODUCTIONDEMANDSTEP p
+                                                                //                                         LEFT JOIN PRODUCTIONDEMAND p2 ON p2.CODE = p.PRODUCTIONDEMANDCODE
+                                                                //                                         LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON iasp.LOTCODE = p.PRODUCTIONORDERCODE 
+                                                                //                                         RIGHT JOIN ITXVIEW_SURATJALAN_PPC isp ON isp.CODE = iasp.CODE 
+                                                                //                                         WHERE
+                                                                //                                             p.PRODUCTIONDEMANDCODE = '$rowdb2[DEMAND]'");
+                                                                // $d_suratjalan   = db2_fetch_assoc($q_suratjalan);
 
-                                                                $q_lain_suratjalan   =   db2_exec($conn1, "SELECT 
-                                                                                                            isp.CODE,
-                                                                                                            isp.GOODSISSUEDATE AS TGL_KIRIM,
-                                                                                                            CASE
-                                                                                                                WHEN isp.PAYMENTMETHODCODE = 'FOC' THEN isp.PAYMENTMETHODCODE
-                                                                                                                ELSE ''
-                                                                                                            END AS FOC,
-                                                                                                            SUM(iasp.BASEPRIMARYQUANTITY) AS QTY_KIRIM_KG,
-                                                                                                            CASE
-                                                                                                                WHEN isp.PRICEUNITOFMEASURECODE = 'yd' THEN SUM(iasp.BASESECONDARYQUANTITY) 
-                                                                                                                WHEN isp.PRICEUNITOFMEASURECODE = 'kg' THEN SUM(iasp.BASESECONDARYQUANTITY)
-                                                                                                                WHEN isp.PRICEUNITOFMEASURECODE = 'm' THEN SUM(round(iasp.BASESECONDARYQUANTITY * 0.9144, 2))
-                                                                                                            END AS QTY_KIRIM_YARD_MTR
-                                                                                                        FROM 
-                                                                                                            ITXVIEW_SURATJALAN_PPC isp 
-                                                                                                        LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON iasp.CODE = isp.CODE 
-                                                                                                        WHERE 
-                                                                                                            isp.CODE = '$d_suratjalan[CODE]'
-                                                                                                        GROUP BY
-                                                                                                            isp.CODE,
-                                                                                                            isp.GOODSISSUEDATE,
-                                                                                                            isp.PAYMENTMETHODCODE,
-                                                                                                            isp.PRICEUNITOFMEASURECODE");
+                                                                // $q_lain_suratjalan   =   db2_exec($conn1, "SELECT 
+                                                                //                                             isp.CODE,
+                                                                //                                             isp.GOODSISSUEDATE AS TGL_KIRIM,
+                                                                //                                             CASE
+                                                                //                                                 WHEN isp.PAYMENTMETHODCODE = 'FOC' THEN isp.PAYMENTMETHODCODE
+                                                                //                                                 ELSE ''
+                                                                //                                             END AS FOC,
+                                                                //                                             SUM(iasp.BASEPRIMARYQUANTITY) AS QTY_KIRIM_KG,
+                                                                //                                             CASE
+                                                                //                                                 WHEN isp.PRICEUNITOFMEASURECODE = 'yd' THEN SUM(iasp.BASESECONDARYQUANTITY) 
+                                                                //                                                 WHEN isp.PRICEUNITOFMEASURECODE = 'kg' THEN SUM(iasp.BASESECONDARYQUANTITY)
+                                                                //                                                 WHEN isp.PRICEUNITOFMEASURECODE = 'm' THEN SUM(round(iasp.BASESECONDARYQUANTITY * 0.9144, 2))
+                                                                //                                             END AS QTY_KIRIM_YARD_MTR
+                                                                //                                         FROM 
+                                                                //                                             ITXVIEW_SURATJALAN_PPC isp 
+                                                                //                                         LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON iasp.CODE = isp.CODE 
+                                                                //                                         WHERE 
+                                                                //                                             isp.CODE = '$d_suratjalan[CODE]'
+                                                                //                                         GROUP BY
+                                                                //                                             isp.CODE,
+                                                                //                                             isp.GOODSISSUEDATE,
+                                                                //                                             isp.PAYMENTMETHODCODE,
+                                                                //                                             isp.PRICEUNITOFMEASURECODE");
                                                                 $d_lain_suratjalan   = db2_fetch_assoc($q_lain_suratjalan);
                                                                 
                                                             ?>
