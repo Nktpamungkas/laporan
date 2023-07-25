@@ -43,7 +43,7 @@
                                         <form action="" method="post">
                                             <div class="row">
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
-                                                    <h4 class="sub-title">BON RESEP </h4>
+                                                    <h4 class="sub-title">PRODUCTION ORDER </h4>
                                                     <input type="text" class="form-control" name="bon_resep" value="<?php if (isset($_POST['submit'])){ echo $_POST['bon_resep']; } ?>" required>
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
@@ -58,21 +58,21 @@
                                         <div class="card-block">
                                             <div class="row">
                                                 <div class="table-responsive dt-responsive">
-                                                    <table id="table" class="table table-striped table-bordered nowrap">
+                                                    <table border='1' style='font-family:"Microsoft Sans Serif"' width="100%">
                                                         <thead>
                                                             <tr>
-                                                                <th>GROUP LINE</th>
-                                                                <th>LINK GROUP</th>
-                                                                <th>IT</th>
-                                                                <th>ITEM CODE</th>
-                                                                <th width="">DESCRIPTION</th>
-                                                                <th>USER PRM QTY</th>
-                                                                <th>UoM</th>
-                                                                <th>USED USER PRM QTY</th>
-                                                                <th>PROGRESS STATUS</th>
-                                                                <th>WHS</th>
-                                                                <th>ISSUE DATE</th>
-                                                                <th>PROJECT</th>
+                                                                <th style="text-align: center;">GROUP LINE</th>
+                                                                <th style="text-align: center;">LINK GROUP</th>
+                                                                <th style="text-align: center;">IT</th>
+                                                                <th style="text-align: center;">ITEM CODE</th>
+                                                                <th style="text-align: center;">DESCRIPTION</th>
+                                                                <th style="text-align: center;">USER PRM QTY</th>
+                                                                <th style="text-align: center;">UoM</th>
+                                                                <th style="text-align: center;">USED USER PRM QTY</th>
+                                                                <th style="text-align: center;">PROGRESS STATUS</th>
+                                                                <th style="text-align: center;">WHS</th>
+                                                                <th style="text-align: center;">ISSUE DATE</th>
+                                                                <th style="text-align: center;">PROJECT</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -80,7 +80,9 @@
                                                                 ini_set("error_reporting", 1);
                                                                 require_once "koneksi.php";
                                                                 $sql_reservation = "SELECT 
+                                                                                        DISTINCT 
                                                                                         r.GROUPLINE,
+                                                                                        r.GROUPSTEPNUMBER,
                                                                                         r.PRODRESERVATIONLINKGROUPCODE,
                                                                                         r.ITEMTYPEAFICODE AS IT,
                                                                                         CASE
@@ -94,8 +96,8 @@
                                                                                             WHEN p.LONGDESCRIPTION IS NULL THEN r2.LONGDESCRIPTION 
                                                                                             ELSE p.LONGDESCRIPTION 
                                                                                         END AS LONGDESCRIPTION,
-                                                                                        r.USERPRIMARYQUANTITY,
-                                                                                        r.USERPRIMARYUOMCODE,
+                                                                                        SUM(r.USERPRIMARYQUANTITY) AS USERPRIMARYQUANTITY,
+                                                                                        TRIM(r.USERPRIMARYUOMCODE) AS USERPRIMARYUOMCODE,
                                                                                         r.USEDUSERPRIMARYQUANTITY,
                                                                                         CASE
                                                                                             WHEN r.PROGRESSSTATUS = 0 THEN 'Entered'
@@ -105,14 +107,36 @@
                                                                                         r.WAREHOUSECODE,
                                                                                         r.ISSUEDATE,
                                                                                         r.PROJECTCODE 
-                                                                                    FROM PRODUCTIONRESERVATION r
+                                                                                    FROM 
+                                                                                        PRODUCTIONRESERVATION r
                                                                                     LEFT JOIN PRODUCT p ON p.SUBCODE01 = r.SUBCODE01 
                                                                                                         AND p.SUBCODE02 = r.SUBCODE02 
                                                                                                         AND p.SUBCODE03 = r.SUBCODE03
                                                                                                         AND p.SUBCODE04 = r.SUBCODE04
                                                                                                         AND p.ITEMTYPECODE = r.ITEMTYPEAFICODE
                                                                                     LEFT JOIN RECIPE r2 ON r2.SUBCODE01 = r.SUBCODE01 AND r2.SUFFIXCODE = r.SUFFIXCODE
-                                                                                    WHERE r.PRODUCTIONORDERCODE LIKE '%$_POST[bon_resep]%' ORDER BY r.GROUPLINE ASC";
+                                                                                    WHERE r.PRODUCTIONORDERCODE = '$_POST[bon_resep]' AND (NOT r.ITEMTYPEAFICODE = 'KGF' OR r.ITEMTYPEAFICODE = 'KFF')
+                                                                                    GROUP BY
+                                                                                        r.GROUPLINE,
+                                                                                        r.GROUPSTEPNUMBER,
+                                                                                        r.PRODRESERVATIONLINKGROUPCODE,
+                                                                                        r.ITEMTYPEAFICODE,
+                                                                                        r.SUBCODE01,
+                                                                                        r.SUBCODE02,
+                                                                                        r.SUBCODE03,
+                                                                                        r.SUBCODE04,
+                                                                                        r.SUFFIXCODE,
+                                                                                        p.LONGDESCRIPTION,
+                                                                                        r2.LONGDESCRIPTION,
+                                                                                        r.USERPRIMARYUOMCODE,
+                                                                                        r.USEDUSERPRIMARYQUANTITY,
+                                                                                        r.PROGRESSSTATUS,
+                                                                                        r.WAREHOUSECODE,
+                                                                                        r.ISSUEDATE,
+                                                                                        r.PROJECTCODE 
+                                                                                    ORDER BY 
+                                                                                        r.GROUPLINE,
+                                                                                        r.GROUPSTEPNUMBER ASC";
                                                                 $stmt   = db2_exec($conn1, $sql_reservation);
                                                                 while ($row_reservation = db2_fetch_assoc($stmt)) {
                                                             ?>
@@ -123,7 +147,15 @@
                                                                 <td style="text-align: left;"><?= $row_reservation['ITEMCODE']; ?></td>
                                                                 <td style="text-align: left;"><?= $row_reservation['LONGDESCRIPTION']; ?></td>
                                                                 <td style="text-align: right;"><?= $row_reservation['USERPRIMARYQUANTITY']; ?></td>
-                                                                <td style="text-align: left;"><?= $row_reservation['USERPRIMARYUOMCODE']; ?></td>
+                                                                <td style="text-align: left;">
+                                                                    <?php 
+                                                                        if($row_reservation['USERPRIMARYUOMCODE'] == 'l'){
+                                                                            echo 'Liter';
+                                                                        }elseif($row_reservation['USERPRIMARYUOMCODE'] == 'g'){
+                                                                            echo 'Gram';
+                                                                        }
+                                                                    ?>
+                                                                </td>
                                                                 <td style="text-align: right;"><?= $row_reservation['USEDUSERPRIMARYQUANTITY']; ?></td>
                                                                 <td style="text-align: left;"><?= $row_reservation['PROGRESSSTATUS']; ?></td>
                                                                 <td style="text-align: left;"><?= $row_reservation['WAREHOUSECODE']; ?></td>

@@ -92,7 +92,19 @@
                                                         <?php } ?>
                                                     </select>
                                                 </div>
-                                                <div class="col-sm-12 col-xl-4 m-b-30">
+                                                <div class="col-sm-12 col-xl-2 m-b-30">
+                                                    <h4 style="font-size: 12px;" class="sub-title">Nomor PO</h4>
+                                                    <input type="text" name="no_po" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['no_po']; } ?>">
+                                                </div>
+                                                <div class="col-sm-12 col-xl-1 m-b-30">
+                                                    <h4 style="font-size: 12px;" class="sub-title">Article Group</h4>
+                                                    <input type="text" name="article_group" class="form-control" readonly value="<?php if (isset($_POST['submit'])){ echo $_POST['article_group']; } ?>">
+                                                </div>
+                                                <div class="col-sm-12 col-xl-1 m-b-30">
+                                                    <h4 style="font-size: 12px;" class="sub-title">Article Code</h4>
+                                                    <input type="text" name="article_code" class="form-control" readonly value="<?php if (isset($_POST['submit'])){ echo $_POST['article_code']; } ?>">
+                                                </div>
+                                                <div class="col-sm-12 col-xl-12 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
                                                     <a class="btn btn-warning" href="ppc_filter.php">Reset</a>
                                                     <!-- <button type="submit" name="reset" class="btn btn-warning">Reset Data</button> -->
@@ -137,10 +149,10 @@
                                                             <th>PROGRESS STATUS</th>
                                                             <th>NO DEMAND</th>
                                                             <th>NO KARTU KERJA</th>
+                                                            <th>ORIGINAL PD CODE</th>
                                                             <th>CATATAN PO GREIGE</th>
                                                             <th>TARGET SELESAI</th>
                                                             <th>KETERANGAN</th>
-                                                            <th>ORIGINAL PD CODE</th>
                                                             <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132') : ?>
                                                             <th>Only Nilo</th>
                                                             <?php endif; ?>
@@ -157,6 +169,9 @@
                                                             $tgl1           = $_POST['tgl1'];
                                                             $tgl2           = $_POST['tgl2'];
                                                             $operation      = $_POST['operation'];
+                                                            $no_po          = $_POST['no_po'];
+                                                            $article_group  = $_POST['article_group'];
+                                                            $article_code   = $_POST['article_code'];
 
                                                             if($prod_order){
                                                                 $where_prodorder        = "NO_KK  = '$prod_order'";
@@ -177,6 +192,16 @@
                                                                 $where_date             = "DELIVERY BETWEEN '$tgl1' AND '$tgl2'";
                                                             }else{
                                                                 $where_date             = "";
+                                                            }
+                                                            if($no_po){
+                                                                $where_no_po            = "NO_PO = '$no_po'";
+                                                            }else{
+                                                                $where_no_po            = "";
+                                                            }
+                                                            if($article_group & $article_code){
+                                                                $where_article          = "SUBCODE02 = '$article_group' AND SUBCODE03 = '$article_code'";
+                                                            }else{
+                                                                $where_article          = "";
                                                             }
 
                                                             if($operation){
@@ -209,7 +234,7 @@
                                                                 
                                                             }else{
                                                                 // ITXVIEW_MEMOPENTINGPPC
-                                                                $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date");
+                                                                $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article");
                                                                 while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
                                                                     $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
@@ -242,7 +267,10 @@
                                                             $no_order_2     = $_POST['no_order'];
                                                             $tgl1_2         = $_POST['tgl1'];
                                                             $tgl2_2         = $_POST['tgl2'];
-                                                            $operation_2      = $_POST['operation'];
+                                                            $operation_2    = $_POST['operation'];
+                                                            $no_po2         = $_POST['no_po'];
+                                                            $article_group2 = $_POST['article_group'];
+                                                            $article_code2  = $_POST['article_code'];
 
                                                             if($prod_order_2){
                                                                 $where_prodorder2    = "NO_KK  = '$prod_order'";
@@ -264,10 +292,20 @@
                                                             }else{
                                                                 $where_date2     = "";
                                                             }
+                                                            if($no_po2){
+                                                                $where_no_po2            = "NO_PO = '$no_po'";
+                                                            }else{
+                                                                $where_no_po2            = "";
+                                                            }
+                                                            if($article_group & $article_code){
+                                                                $where_article2          = "SUBCODE02 = '$article_group' AND SUBCODE03 = '$article_code'";
+                                                            }else{
+                                                                $where_article2          = "";
+                                                            }
                                                             if($operation_2){
                                                                 $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE OPERATIONCODE = '$operation_2' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
                                                             }else{
-                                                                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
+                                                                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 $where_no_po2 $where_article2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
                                                             }
                                                             $stmt   = mysqli_query($con_nowprd,$sqlDB2);
                                                             while ($rowdb2 = mysqli_fetch_array($stmt)) {
@@ -578,6 +616,7 @@
                                                             <td><?= $status_operation; ?></td> <!-- PROGRESS STATUS -->
                                                             <td><a target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $rowdb2['DEMAND']; ?>&prod_order=<?= $rowdb2['NO_KK']; ?>">`<?= $rowdb2['DEMAND']; ?></a></td> <!-- DEMAND -->
                                                             <td>`<?= $rowdb2['NO_KK']; ?></td> <!-- NO KARTU KERJA -->
+                                                            <td><?= $d_orig_pd_code['ORIGINALPDCODE']; ?></td> <!-- ORIGINAL PD CODE -->
                                                             <td>
                                                                 <?php
                                                                     $sql_benang_booking_new		= db2_exec($conn1, "SELECT * FROM ITXVIEW_BOOKING_NEW WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]'
@@ -591,7 +630,6 @@
                                                             </td> <!-- CATATAN PO GREIGE -->
                                                             <td></td> <!-- TARGET SELESAI -->
                                                             <td><?= $rowdb2['KETERANGAN']; ?></td> <!-- KETERANGAN -->
-                                                            <td><?= $d_orig_pd_code['ORIGINALPDCODE']; ?></td> <!-- ORIGINAL PD CODE -->
                                                             <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132') : ?>
                                                             <td>
                                                                 <?= $groupstep_option; ?>

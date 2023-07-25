@@ -35,7 +35,7 @@
                                                 '$ipaddress',
                                                 '$createdatetime')");
         if($simpan_cache_in){
-            header('Location: https://online.indotaichen.com/laporan/ppc_filter_steps2.php?demand='.TRIM($productiondemand).'&prod_order='.TRIM($productionorder).'');
+            header('Location: https://online.indotaichen.com/laporan/ppc_filter_steps.php?demand='.TRIM($productiondemand).'&prod_order='.TRIM($productionorder).'');
             exit;
         }else{
             echo("Error description: " . mysqli_error($simpan_cache_in));
@@ -70,7 +70,7 @@
                                                 '$ipaddress',
                                                 '$createdatetime')");
         if($simpan_cache_out){
-            header('Location: https://online.indotaichen.com/laporan/ppc_filter_steps2.php?demand='.TRIM($productiondemand).'&prod_order='.TRIM($productionorder).'');
+            header('Location: https://online.indotaichen.com/laporan/ppc_filter_steps.php?demand='.TRIM($productiondemand).'&prod_order='.TRIM($productionorder).'');
             exit;
         }else{
             echo("Error description: " . mysqli_error($simpan_cache_out));
