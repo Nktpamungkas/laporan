@@ -147,6 +147,7 @@
                                                             <th>KODE DEPT</th>
                                                             <th>STATUS TERAKHIR</th>
                                                             <th>PROGRESS STATUS</th>
+                                                            <th>LOT</th>
                                                             <th>NO DEMAND</th>
                                                             <th>NO KARTU KERJA</th>
                                                             <th>ORIGINAL PD CODE</th>
@@ -251,6 +252,7 @@
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['DELAY']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['NO_KK']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['DEMAND']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['LOT']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['ORDERLINE']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS_DEMAND']))."',"
@@ -259,7 +261,7 @@
                                                                                             ."'".date('Y-m-d H:i:s')."')";
                                                                 }
                                                                 $value_itxviewmemo        = implode(',', $r_itxviewmemo);
-                                                                $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,ARTICLE_GROUP,ARTICLE_CODE,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME) VALUES $value_itxviewmemo");
+                                                                $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,ARTICLE_GROUP,ARTICLE_CODE,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,LOT,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME) VALUES $value_itxviewmemo");
                                                                 
                                                             }
                                                             
@@ -616,6 +618,7 @@
                                                             <td><?= $kode_dept; ?></td> <!-- KODE DEPT -->
                                                             <td><?= $status_terakhir; ?></td> <!-- STATUS TERAKHIR -->
                                                             <td><?= $status_operation; ?></td> <!-- PROGRESS STATUS -->
+                                                            <td><?= $rowdb2['LOT']; ?></td> <!-- LOT -->
                                                             <td><a target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $rowdb2['DEMAND']; ?>&prod_order=<?= $rowdb2['NO_KK']; ?>">`<?= $rowdb2['DEMAND']; ?></a></td> <!-- DEMAND -->
                                                             <td>`<?= $rowdb2['NO_KK']; ?></td> <!-- NO KARTU KERJA -->
                                                             <td><?= $d_orig_pd_code['ORIGINALPDCODE']; ?></td> <!-- ORIGINAL PD CODE -->
