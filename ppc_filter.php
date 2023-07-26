@@ -98,11 +98,11 @@
                                                 </div>
                                                 <div class="col-sm-12 col-xl-1 m-b-30">
                                                     <h4 style="font-size: 12px;" class="sub-title">Article Group</h4>
-                                                    <input type="text" name="article_group" class="form-control" readonly value="<?php if (isset($_POST['submit'])){ echo $_POST['article_group']; } ?>">
+                                                    <input type="text" name="article_group" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['article_group']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-1 m-b-30">
                                                     <h4 style="font-size: 12px;" class="sub-title">Article Code</h4>
-                                                    <input type="text" name="article_code" class="form-control" readonly value="<?php if (isset($_POST['submit'])){ echo $_POST['article_code']; } ?>">
+                                                    <input type="text" name="article_code" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['article_code']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
@@ -240,6 +240,8 @@
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['NO_ORDER']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['NO_PO']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['SUBCODE02']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['SUBCODE03']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN_PRODUCT']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['WARNA']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['NO_WARNA']))."',"
@@ -257,7 +259,7 @@
                                                                                             ."'".date('Y-m-d H:i:s')."')";
                                                                 }
                                                                 $value_itxviewmemo        = implode(',', $r_itxviewmemo);
-                                                                $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME) VALUES $value_itxviewmemo");
+                                                                $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,ARTICLE_GROUP,ARTICLE_CODE,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME) VALUES $value_itxviewmemo");
                                                                 
                                                             }
                                                             
@@ -297,8 +299,8 @@
                                                             }else{
                                                                 $where_no_po2            = "";
                                                             }
-                                                            if($article_group & $article_code){
-                                                                $where_article2          = "SUBCODE02 = '$article_group' AND SUBCODE03 = '$article_code'";
+                                                            if($article_group2 & $article_code2){
+                                                                $where_article2          = "ARTICLE_GROUP = '$article_group2' AND ARTICLE_CODE = '$article_code2'";
                                                             }else{
                                                                 $where_article2          = "";
                                                             }
