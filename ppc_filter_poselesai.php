@@ -599,7 +599,7 @@
                                                             <td><?= $d_lain_suratjalan['FOC']; ?></td> <!-- FOC -->
                                                             <td>
                                                                 <?php 
-                                                                    if($rowdb2['QTY_BAGIKAIN_KG']!=0){
+                                                                    if($rowdb2['QTY_BAGIKAIN']!=0){
                                                                         echo number_format(($rowdb2['QTY_BAGIKAIN']-$d_qtypacking['QTY_PACKING'])/$rowdb2['QTY_BAGIKAIN']*100,2)." %";
                                                                     } else{ 
                                                                         echo "0%";
