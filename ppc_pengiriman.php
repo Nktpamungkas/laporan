@@ -40,7 +40,11 @@
                                     <div class="card-block">
                                         <form action="" method="post">
                                             <div class="row">
-                                                <div class="col-sm-12 col-xl-6 m-b-30">
+                                                <div class="col-sm-12 col-xl-2 m-b-30">
+                                                    <h4 class="sub-title">Bon Order</h4>
+                                                    <input type="text" name="no_order" class="form-control" onkeyup="this.value = this.value.toUpperCase()" value="<?php if (isset($_POST['submit'])){ echo $_POST['no_order']; } ?>">
+                                                </div>
+                                                <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Issue Date</h4>
                                                     <input type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
                                                 </div>
