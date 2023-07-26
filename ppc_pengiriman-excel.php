@@ -20,7 +20,8 @@
             <th>NO SJ</th>
             <th>WARNA</th>
             <th>ROLL</th>
-            <th>QUANTITY</th>
+            <th>QTY KG</th>
+            <th>QTY YARD</th>
             <th>BUYER</th>
             <th>CUSTOMER</th>
             <th>NO PO</th>
@@ -38,14 +39,21 @@
             session_start();
             require_once "koneksi.php";
             $tgl1     = $_GET['tgl1'];
+            $no_order = $_GET['no_order'];
 
             if($tgl1){
                 $where_date     = "i.GOODSISSUEDATE = '$tgl1'";
             }else{
                 $where_date     = "";
             }
+            if($no_order){
+                $where_no_order     = "i.DLVSALORDERLINESALESORDERCODE = '$no_order'";
+            }else{
+                $where_no_order     = "";
+            }
             $sqlDB2 = "SELECT DISTINCT
                             i.PROVISIONALCODE,
+                            i.SALESORDERCOUNTERCODE,
                             i.DEFINITIVEDOCUMENTDATE,
                             i.ORDERPARTNERBRANDCODE,
                             i.PO_NUMBER,
@@ -53,35 +61,37 @@
                             DAY(i.GOODSISSUEDATE) ||'-'|| MONTHNAME(i.GOODSISSUEDATE) ||'-'|| YEAR(i.GOODSISSUEDATE) AS GOODSISSUEDATE,
                             i.ORDPRNCUSTOMERSUPPLIERCODE,
                             i.PAYMENTMETHODCODE,
-                            i.EXTERNALITEMCODE,    
+                            i.PO_NUMBER,    
                             i.ITEMTYPEAFICODE,
-                            i.SUBCODE01,
-                            i.SUBCODE02,
-                            i.SUBCODE03,
-                            i.SUBCODE04,
-                            i.SUBCODE05,
-                            i.SUBCODE06,
-                            i.SUBCODE07,
-                            i.SUBCODE08,
                             i.DLVSALORDERLINESALESORDERCODE,
-                            i.DLVSALESORDERLINEORDERLINE,
-                            i.ITEMDESCRIPTION,
-                            i.ORDERLINE,
-                            LISTAGG(TRIM(i.LOTCODE), ', ') AS LOTCODE,
-                            LISTAGG(DBL.PRODUCTIONDEMANDCODE, ', ') AS PRODUCTIONDEMANDCODE,
-                            i.CODE,
-                            i2.WARNA
+                            CASE
+                                WHEN TRIM(i.SALESORDERCOUNTERCODE) = 'EXPORT' THEN 0 ELSE i.DLVSALESORDERLINEORDERLINE
+                            END AS DLVSALESORDERLINEORDERLINE,
+                            CASE
+                                WHEN TRIM(i.SALESORDERCOUNTERCODE) = 'EXPORT' THEN '' ELSE i.ITEMDESCRIPTION
+                            END AS ITEMDESCRIPTION,
+                            CASE
+                                WHEN TRIM(i.SALESORDERCOUNTERCODE) = 'EXPORT' THEN '' ELSE iasp.LOTCODE
+                            END AS LOTCODE,
+                            CASE
+                                WHEN TRIM(i.SALESORDERCOUNTERCODE) = 'EXPORT' THEN '' ELSE i2.WARNA
+                            END AS WARNA,
+                            i.LEGALNAME1,
+                            CASE
+                                WHEN TRIM(i.SALESORDERCOUNTERCODE) = 'EXPORT' THEN '0' ELSE i.CODE
+                            END AS CODE
                         FROM 
-                            ITXVIEWLAPKIRIMPPC i 
-                        LEFT JOIN ITXVIEW_DEMANDBYLOTCODE DBL ON DBL.PRODUCTIONORDERCODE = i.LOTCODE AND DBL.DLVSALESORDERLINEORDERLINE = i.DLVSALESORDERLINEORDERLINE
+                            ITXVIEW_SURATJALAN_PPC_FOR_POSELESAI i
+                        LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON iasp.CODE = i.CODE
                         LEFT JOIN ITXVIEWCOLOR i2 ON i2.ITEMTYPECODE =  i.ITEMTYPEAFICODE
                                                 AND i2.SUBCODE01 = i.SUBCODE01 AND i2.SUBCODE02 = i.SUBCODE02
                                                 AND i2.SUBCODE03 = i.SUBCODE03 AND i2.SUBCODE04 = i.SUBCODE04
                                                 AND i2.SUBCODE05 = i.SUBCODE05 AND i2.SUBCODE06 = i.SUBCODE06
                                                 AND i2.SUBCODE07 = i.SUBCODE07 AND i2.SUBCODE08 = i.SUBCODE08
+                                                AND i2.SUBCODE09 = i.SUBCODE09 AND i2.SUBCODE10 = i.SUBCODE10
                         WHERE 
-                            $where_date
-                        GROUP BY 
+                            $where_no_order $where_date AND i.DOCUMENTTYPETYPE = 05
+                        GROUP BY
                             i.PROVISIONALCODE,
                             i.DEFINITIVEDOCUMENTDATE,
                             i.ORDERPARTNERBRANDCODE,
@@ -90,24 +100,18 @@
                             i.GOODSISSUEDATE,
                             i.ORDPRNCUSTOMERSUPPLIERCODE,
                             i.PAYMENTMETHODCODE,
-                            i.EXTERNALITEMCODE,    
+                            i.PO_NUMBER,    
                             i.ITEMTYPEAFICODE,
-                            i.SUBCODE01,
-                            i.SUBCODE02,
-                            i.SUBCODE03,
-                            i.SUBCODE04,
-                            i.SUBCODE05,
-                            i.SUBCODE06,
-                            i.SUBCODE07,
-                            i.SUBCODE08,
                             i.DLVSALORDERLINESALESORDERCODE,
                             i.DLVSALESORDERLINEORDERLINE,
                             i.ITEMDESCRIPTION,
-                            i.ORDERLINE,
-                            i.CODE,
-                            i2.WARNA
+                            iasp.LOTCODE,
+                            i.SALESORDERCOUNTERCODE,
+                            i2.WARNA,
+                            i.LEGALNAME1,
+                            i.CODE
                         ORDER BY 
-	                        i.PROVISIONALCODE ASC";
+                            i.PROVISIONALCODE ASC";
             $stmt   = db2_exec($conn1,$sqlDB2);
             $no = 1;
             while ($rowdb2 = db2_fetch_assoc($stmt)) {
@@ -120,7 +124,8 @@
             <td>
                 <?php
                     $q_roll     = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
-                                                            SUM(BASEPRIMARYQUANTITY) AS QTY_SJ
+                                                            SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
+                                                            SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
                                                     FROM 
                                                         ITXVIEWALLOCATION0 
                                                     WHERE 
@@ -129,7 +134,8 @@
                     echo $d_roll['ROLL'];
                 ?>
             </td> 
-            <td><?= $d_roll['QTY_SJ'] ?></td> 
+            <td><?= $d_roll['QTY_SJ_KG'] ?></td> 
+            <td><?= $d_roll['QTY_SJ_YARD'] ?></td> 
             <td><?= $rowdb2['ORDERPARTNERBRANDCODE']; ?></td> 
             <td>
                 <?php
@@ -143,7 +149,19 @@
             <td><?= $rowdb2['DLVSALORDERLINESALESORDERCODE']; ?></td> 
             <td><?= $rowdb2['ITEMDESCRIPTION']; ?></td> 
             <td>`<?= $rowdb2['LOTCODE']; ?></td> 
-            <td>`<?= $rowdb2['PRODUCTIONDEMANDCODE']; ?></td> 
+            <td>
+                <?php
+                    $q_demand   = db2_exec($conn1, "SELECT 
+                                                        PRODUCTIONDEMANDCODE
+                                                    FROM 
+                                                        ITXVIEW_DEMANDBYLOTCODE 
+                                                    WHERE 
+                                                        PRODUCTIONORDERCODE = '$rowdb2[LOTCODE]'
+                                                        AND DLVSALESORDERLINEORDERLINE = '$rowdb2[DLVSALESORDERLINEORDERLINE]'");
+                    $d_demand   = db2_fetch_assoc($q_demand);
+                ?>
+                <?= $d_demand['PRODUCTIONDEMANDCODE']; ?>
+            </td> 
             <td><?php if($rowdb2['PAYMENTMETHODCODE'] == 'FOC'){ echo $rowdb2['PAYMENTMETHODCODE']; } ?></td> 
             <td><?= $rowdb2['ITEMTYPEAFICODE']; ?></td> 
         </tr>
