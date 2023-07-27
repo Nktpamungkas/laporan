@@ -82,6 +82,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>DATE MARKETING</th>
+                                                            <th>DATE PPC RECEIVED BO FROM RMP</th>
                                                             <th>TGL BUKA KARTU</th>
                                                             <th>PELANGGAN</th>
                                                             <th>NO. ORDER</th>
@@ -432,6 +433,7 @@
                                                         <?php if($cek_operation == "MUNCUL" OR $cek_operation == NULL) : ?>
                                                             <tr>
                                                                 <td><?= substr($d_salesorder['CREATIONDATETIME'], 0, 10); ?></td><!-- DATE MARKETING -->
+                                                                <td>In Progress From Mas Usman...</td><!-- DATE PPC RECEIVED BO FROM RMP -->
                                                                 <td><?= $rowdb2['ORDERDATE']; ?></td> <!-- TGL TERIMA ORDER -->
                                                                 <td><?= $rowdb2['PELANGGAN']; ?></td> <!-- PELANGGAN -->
                                                                 <td><?= $rowdb2['NO_ORDER'].'-'.$rowdb2['ORDERLINE']; ?></td> <!-- NO. ORDER -->
@@ -463,7 +465,44 @@
                                                                 <td><?= $rowdb2['NO_WARNA']; ?></td> <!-- NO WARNA -->
                                                                 <td><?= $rowdb2['DELIVERY']; ?></td> <!-- DELIVERY -->
                                                                 <td>In progress...</td> <!-- GREIGE SCHEDULE -->
-                                                                <td>In progress...</td> <!-- ACTUAL DATE GREIGE -->
+                                                                <td>
+                                                                    <?php
+                                                                        $q_element      = db2_exec($conn1, "SELECT DISTINCT
+                                                                                                                s2.TRANSACTIONDATE 
+                                                                                                            FROM 
+                                                                                                                STOCKTRANSACTION s 
+                                                                                                            LEFT JOIN STOCKTRANSACTION s2 ON s2.ITEMELEMENTCODE = s.ITEMELEMENTCODE AND s2.TEMPLATECODE = '204'
+                                                                                                            WHERE
+                                                                                                                s.TEMPLATECODE = '120' 
+                                                                                                                AND s.ORDERCODE = '$rowdb2[NO_KK]' -- PRODUCTION NUMBER
+                                                                                                                AND s.PROJECTCODE = '$rowdb2[NO_ORDER]'
+                                                                                                                AND SUBSTR(s.ITEMELEMENTCODE, 1,1) = '0'");
+                                                                        $d_elemet       = db2_fetch_assoc($q_element);
+                                                                        $q_elementCut   = db2_exec($conn1, "SELECT DISTINCT
+                                                                                                                s4.TRANSACTIONDATE 
+                                                                                                            FROM 
+                                                                                                                STOCKTRANSACTION s
+                                                                                                            LEFT JOIN STOCKTRANSACTION s2 ON s2.ITEMELEMENTCODE = s.ITEMELEMENTCODE AND s2.TEMPLATECODE  = '342'
+                                                                                                            LEFT JOIN STOCKTRANSACTION s3 ON s3.TRANSACTIONNUMBER = s2.CUTORGTRTRANSACTIONNUMBER 
+                                                                                                            LEFT JOIN STOCKTRANSACTION s4 ON s4.ITEMELEMENTCODE = s3.ITEMELEMENTCODE AND s4.TEMPLATECODE = '204'
+                                                                                                            WHERE
+                                                                                                                s.TEMPLATECODE = '120' 
+                                                                                                                AND s.ORDERCODE = '$rowdb2[NO_KK]' -- PRODUCTION NUMBER
+                                                                                                                AND s.PROJECTCODE = '$rowdb2[NO_ORDER]'
+                                                                                                                AND SUBSTR(s.ITEMELEMENTCODE, 1,1) = '8'");
+                                                                        $d_elemetCut       = db2_fetch_assoc($q_elementCut);
+                                                                        if($d_elemet['TRANSACTIONDATE'] == $d_elemetCut['TRANSACTIONDATE']){
+                                                                            if($d_elemet['TRANSACTIONDATE']){
+                                                                                echo $d_elemet['TRANSACTIONDATE'];
+                                                                            }else{
+                                                                                echo $d_elemetCut['TRANSACTIONDATE'];
+                                                                            }
+                                                                        }else{
+                                                                            echo $d_elemet['TRANSACTIONDATE'].'<br>';
+                                                                            echo $d_elemetCut['TRANSACTIONDATE'];
+                                                                        }
+                                                                    ?>
+                                                                </td> <!-- ACTUAL DATE GREIGE -->
                                                                 <td>
                                                                     <?php 
                                                                         $q_tglbagikain = db2_exec($conn1, "SELECT * FROM ITXVIEW_TGLBAGIKAIN WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'");
