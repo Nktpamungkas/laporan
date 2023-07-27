@@ -56,11 +56,18 @@
                                     <div class="card-block">
                                         <form action="" method="post">
                                             <div class="row">
-                                                <div class="col-sm-12 col-xl-12 m-b-30">
+                                                <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Bon Order</h4>
                                                     <input type="text" name="no_order" class="form-control" onkeyup="this.value = this.value.toUpperCase()" value="<?php if (isset($_POST['submit'])){ echo $_POST['no_order']; } ?>">
                                                 </div>
-                                                <div class="col-sm-12 col-xl-4 m-b-30">
+                                                <div class="col-sm-12 col-xl-2 m-b-30">
+                                                    <h4 class="sub-title" style="color: red;">Status PO Selesai *under maintenance</h4>
+                                                    <select class="form-control" name="status">
+                                                        <option value="0" Selected Value>All</option>
+                                                        <option value="1">Close</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-12 col-xl-12 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
                                                 </div>
                                             </div>
@@ -74,6 +81,7 @@
                                                 <table id="tbl-excel" class="table table-striped table-bordered nowrap">
                                                     <thead>
                                                         <tr>
+                                                            <th>DATE MARKETING</th>
                                                             <th>TGL BUKA KARTU</th>
                                                             <th>PELANGGAN</th>
                                                             <th>NO. ORDER</th>
@@ -84,6 +92,8 @@
                                                             <th>WARNA</th>
                                                             <th>NO WARNA</th>
                                                             <th>DELIVERY</th>
+                                                            <th>GREIGE SCHEDULE</th>
+                                                            <th>ACTUAL DATE GREIGE</th>
                                                             <th>BAGI KAIN TGL</th>
                                                             <th>ROLL</th>
                                                             <th>BRUTO/BAGI KAIN</th>
@@ -151,10 +161,11 @@
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS_DEMAND']))."',"
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN']))."',"
                                                                                         ."'".$_SERVER['REMOTE_ADDR']."',"
-                                                                                        ."'".date('Y-m-d H:i:s')."')";
+                                                                                        ."'".date('Y-m-d H:i:s')."',"
+                                                                                        ."'".'PO SELESAI'."')";
                                                             }
                                                             $value_itxviewmemo        = implode(',', $r_itxviewmemo);
-                                                            $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_poselesai(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,QTY_BAGIKAIN_YD_MTR,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME) VALUES $value_itxviewmemo");
+                                                            $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_poselesai(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,QTY_BAGIKAIN_YD_MTR,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
                                                                 
                                                             
                                                             // --------------------------------------------------------------------------------------------------------------- //
@@ -361,8 +372,13 @@
                                                                 }
                                                             }
                                                         ?>
+                                                        <?php
+                                                            $q_salesorder   = db2_exec($conn1, "SELECT * FROM SALESORDER WHERE CODE = '$rowdb2[NO_ORDER]'");
+                                                            $d_salesorder   = db2_fetch_assoc($q_salesorder);        
+                                                        ?>
                                                         <?php if($cek_operation == "MUNCUL" OR $cek_operation == NULL) : ?>
                                                         <tr>
+                                                            <td><?= substr($d_salesorder['CREATIONDATETIME'], 0, 10); ?></td><!-- DATE MARKETING -->
                                                             <td><?= $rowdb2['ORDERDATE']; ?></td> <!-- TGL TERIMA ORDER -->
                                                             <td><?= $rowdb2['PELANGGAN']; ?></td> <!-- PELANGGAN -->
                                                             <td><?= $rowdb2['NO_ORDER'].'-'.$rowdb2['ORDERLINE']; ?></td> <!-- NO. ORDER -->
@@ -393,6 +409,8 @@
                                                             <td><?= $rowdb2['WARNA']; ?></td> <!-- WARNA -->
                                                             <td><?= $rowdb2['NO_WARNA']; ?></td> <!-- NO WARNA -->
                                                             <td><?= $rowdb2['DELIVERY']; ?></td> <!-- DELIVERY -->
+                                                            <td>In progress...</td> <!-- GREIGE SCHEDULE -->
+                                                            <td>In progress...</td> <!-- ACTUAL DATE GREIGE -->
                                                             <td>
                                                                 <?php 
                                                                     $q_tglbagikain = db2_exec($conn1, "SELECT * FROM ITXVIEW_TGLBAGIKAIN WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'");
@@ -529,74 +547,66 @@
                                                                 </td>
                                                             <?php endif; ?>
                                                             <?php
-                                                                $q_suratjalan   = db2_exec($conn1, "SELECT DISTINCT 
+                                                                $q_suratjalan   = db2_exec($conn1, "SELECT 
+                                                                                                        PRODUCTIONORDERCODE,
+                                                                                                        PRODUCTIONDEMANDCODE,
+                                                                                                        SURAT_JALAN,
+                                                                                                        TGL_KIRIM,
+                                                                                                        SUM(QTY_KIRIM_KG_DETAIL) AS QTY_KIRIM_KG,
+                                                                                                        SUM(QTY_KIRIM_YARD_MTR_DETAIL) AS QTY_KIRIM_YARD_MTR,
+                                                                                                        FOC
+                                                                                                    FROM
+                                                                                                        (SELECT DISTINCT 
                                                                                                             p.PRODUCTIONORDERCODE,
                                                                                                             p.PRODUCTIONDEMANDCODE,
                                                                                                             isp.CODE,
-                                                                                                            isp.PROVISIONALCODE AS SURAT_JALAN
+                                                                                                            isp.PROVISIONALCODE AS SURAT_JALAN,
+                                                                                                            isp.GOODSISSUEDATE AS TGL_KIRIM,
+                                                                                                            iasp2.BASEPRIMARYQUANTITY AS QTY_KIRIM_KG_DETAIL,
+                                                                                                            CASE
+                                                                                                                WHEN isp.PAYMENTMETHODCODE = 'FOC' THEN isp.PAYMENTMETHODCODE
+                                                                                                                ELSE ''
+                                                                                                            END AS FOC,
+                                                                                                            CASE
+                                                                                                                WHEN isp.PRICEUNITOFMEASURECODE = 'yd' THEN (iasp2.BASESECONDARYQUANTITY) 
+                                                                                                                WHEN isp.PRICEUNITOFMEASURECODE = 'kg' THEN (iasp2.BASESECONDARYQUANTITY)
+                                                                                                                WHEN isp.PRICEUNITOFMEASURECODE = 'm' THEN (round(iasp2.BASESECONDARYQUANTITY * 0.9144, 2))
+                                                                                                            END AS QTY_KIRIM_YARD_MTR_DETAIL
                                                                                                         FROM 
                                                                                                             PRODUCTIONDEMANDSTEP p
                                                                                                         LEFT JOIN PRODUCTIONDEMAND p2 ON p2.CODE = p.PRODUCTIONDEMANDCODE
                                                                                                         LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON iasp.LOTCODE = p.PRODUCTIONORDERCODE 
                                                                                                         RIGHT JOIN ITXVIEW_SURATJALAN_PPC_FOR_POSELESAI isp ON isp.CODE = iasp.CODE 
-                                                                                                                                                            AND isp.DLVSALORDERLINESALESORDERCODE = '$rowdb2[NO_ORDER]' 
-                                                                                                                                                            AND isp.DLVSALESORDERLINEORDERLINE = '$rowdb2[ORDERLINE]'
+                                                                                                                                                            AND isp.DLVSALORDERLINESALESORDERCODE = p2.ORIGDLVSALORDLINESALORDERCODE  
+                                                                                                                                                            AND isp.DLVSALESORDERLINEORDERLINE = p2.ORIGDLVSALORDERLINEORDERLINE
+                                                                                                        LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp2 ON iasp2.CODE = isp.CODE 
                                                                                                         WHERE
-                                                                                                            p.PRODUCTIONDEMANDCODE = '$rowdb2[DEMAND]'");
+                                                                                                            p.PRODUCTIONDEMANDCODE = '$rowdb2[DEMAND]')
+                                                                                                    GROUP BY 
+                                                                                                        PRODUCTIONORDERCODE,
+                                                                                                        PRODUCTIONDEMANDCODE,
+                                                                                                        SURAT_JALAN,
+                                                                                                        TGL_KIRIM,
+                                                                                                        FOC");
                                                                 $d_suratjalan   = db2_fetch_assoc($q_suratjalan);
-
-                                                                $q_lain_suratjalan   =   db2_exec($conn1, "SELECT 
-                                                                                                            isp.CODE,
-                                                                                                            isp.GOODSISSUEDATE AS TGL_KIRIM,
-                                                                                                            CASE
-                                                                                                                WHEN isp.PAYMENTMETHODCODE = 'FOC' THEN isp.PAYMENTMETHODCODE
-                                                                                                                ELSE ''
-                                                                                                            END AS FOC,
-                                                                                                            SUM(iasp.BASEPRIMARYQUANTITY) AS QTY_KIRIM_KG_DETAIL,
-                                                                                                            CASE
-                                                                                                                WHEN isp.PRICEUNITOFMEASURECODE = 'yd' THEN SUM(iasp.BASESECONDARYQUANTITY) 
-                                                                                                                WHEN isp.PRICEUNITOFMEASURECODE = 'kg' THEN SUM(iasp.BASESECONDARYQUANTITY)
-                                                                                                                WHEN isp.PRICEUNITOFMEASURECODE = 'm' THEN SUM(round(iasp.BASESECONDARYQUANTITY * 0.9144, 2))
-                                                                                                            END AS QTY_KIRIM_YARD_MTR_DETAIL
-                                                                                                        FROM 
-                                                                                                            ITXVIEW_SURATJALAN_PPC_FOR_POSELESAI isp 
-                                                                                                        LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON iasp.CODE = isp.CODE 
-                                                                                                        WHERE 
-                                                                                                            isp.CODE = '$d_suratjalan[CODE]'
-                                                                                                        GROUP BY
-                                                                                                            isp.CODE,
-                                                                                                            isp.GOODSISSUEDATE,
-                                                                                                            isp.PAYMENTMETHODCODE,
-                                                                                                            isp.PRICEUNITOFMEASURECODE");
-                                                                $d_lain_suratjalan   = db2_fetch_assoc($q_lain_suratjalan);
-
-                                                                $q_qty_suratjalan   = db2_exec($conn1, "SELECT
-                                                                                                            SUM(USEDUSERPRIMARYQUANTITY) AS QTY_KIRIM_KG,
-                                                                                                            SUM(USEDUSERSECONDARYQUANTITY) AS QTY_KIRIM_YARD_MTR
-                                                                                                        FROM
-                                                                                                            SALESRELEASELINE
-                                                                                                        WHERE 
-                                                                                                            DLVSALORDERLINESALESORDERCODE  = '$rowdb2[NO_ORDER]' 
-                                                                                                            AND DLVSALESORDERLINEORDERLINE  = '$rowdb2[ORDERLINE]'");
-                                                                $d_qty_suratjalan   = db2_fetch_assoc($q_qty_suratjalan);
                                                             ?>
                                                             <td><?= $d_suratjalan['SURAT_JALAN']; ?></td> <!-- NO SURAT JALAN -->
-                                                            <td><?= $d_lain_suratjalan['TGL_KIRIM']; ?></td> <!-- TGL KIRIM -->
-                                                            <td><?= number_format($d_lain_suratjalan['QTY_KIRIM_KG_DETAIL'], 2); ?></td> <!-- QTY KIRIM KG -->
-                                                            <td><?= number_format($d_lain_suratjalan['QTY_KIRIM_YARD_MTR_DETAIL'], 2); ?></td> <!-- QTY KIRIM YARD/METER -->
+                                                            <td><?= $d_suratjalan['TGL_KIRIM']; ?></td> <!-- TGL KIRIM -->
+                                                            <td><?= number_format($d_suratjalan['QTY_KIRIM_KG'], 2); ?></td> <!-- QTY KIRIM KG -->
+                                                            <td><?= number_format($d_suratjalan['QTY_KIRIM_YARD_MTR'], 2); ?></td> <!-- QTY KIRIM YARD/METER -->
                                                             <td>
                                                                 <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?> 
                                                                 <?php else : ?>
-                                                                    <?= number_format($d_qty_suratjalan['QTY_KIRIM_KG'],2) - number_format($rowdb2['NETTO'], 2); ?>
+                                                                    <?= number_format($d_suratjalan['QTY_KIRIM_KG'],2) - number_format($rowdb2['NETTO'], 2); ?>
                                                                 <?php endif; ?>
                                                             </td> <!-- QTY KURANG KG -->
                                                             <td>
                                                                 <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?> 
                                                                 <?php else : ?>
-                                                                    <?= number_format($d_qty_suratjalan['QTY_KIRIM_YARD_MTR'], 2) - number_format($d_netto_yd['BASESECONDARYQUANTITY'],2); ?>
+                                                                    <?= number_format($d_suratjalan['QTY_KIRIM_YARD_MTR'], 2) - number_format($d_netto_yd['BASESECONDARYQUANTITY'],2); ?>
                                                                 <?php endif; ?>
                                                             </td> <!-- QTY KURANG YARD/METER -->
-                                                            <td><?= $d_lain_suratjalan['FOC']; ?></td> <!-- FOC -->
+                                                            <td><?= $d_suratjalan['FOC']; ?></td> <!-- FOC -->
                                                             <td>
                                                                 <?php 
                                                                     if($rowdb2['QTY_BAGIKAIN']!=0){

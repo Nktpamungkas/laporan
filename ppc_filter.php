@@ -228,10 +228,12 @@
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS_DEMAND']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN']))."',"
                                                                                             ."'".$_SERVER['REMOTE_ADDR']."',"
-                                                                                            ."'".date('Y-m-d H:i:s')."')";
+                                                                                            ."'".date('Y-m-d H:i:s')."',"
+                                                                                            ."'".'MEMO W OPR'."')";
+
                                                                 }
                                                                 $value_itxviewmemo        = implode(',', $r_itxviewmemo);
-                                                                $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(OPERATIONCODE,ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME) VALUES $value_itxviewmemo");
+                                                                $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(OPERATIONCODE,ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
                                                                 
                                                             }else{
                                                                 // ITXVIEW_MEMOPENTINGPPC
@@ -258,10 +260,12 @@
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS_DEMAND']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN']))."',"
                                                                                             ."'".$_SERVER['REMOTE_ADDR']."',"
-                                                                                            ."'".date('Y-m-d H:i:s')."')";
+                                                                                            ."'".date('Y-m-d H:i:s')."',"
+                                                                                            ."'".'MEMO'."')";
+
                                                                 }
                                                                 $value_itxviewmemo        = implode(',', $r_itxviewmemo);
-                                                                $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,ARTICLE_GROUP,ARTICLE_CODE,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,LOT,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME) VALUES $value_itxviewmemo");
+                                                                $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,ARTICLE_GROUP,ARTICLE_CODE,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,LOT,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
                                                                 
                                                             }
                                                             
