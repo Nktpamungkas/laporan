@@ -311,9 +311,9 @@
                                                                 $where_article2          = "";
                                                             }
                                                             if($operation_2){
-                                                                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE OPERATIONCODE = '$operation_2' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
+                                                                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE OPERATIONCODE = '$operation_2' AND ACCESS_TO = 'MEMO W OPR' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
                                                             }else{
-                                                                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 $where_no_po2 $where_article2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
+                                                                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 $where_no_po2 $where_article2 AND ACCESS_TO = 'MEMO' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
                                                             }
                                                             $stmt   = mysqli_query($con_nowprd,$sqlDB2);
                                                             while ($rowdb2 = mysqli_fetch_array($stmt)) {
