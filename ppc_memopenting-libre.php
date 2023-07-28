@@ -420,7 +420,7 @@ header('Cache-Control: max-age=0');
                         ?>
                     </td><!-- JAM -->
                     <td></td><!-- ALUR PROSES -->
-                    <td><?= $rowdb2['LOT']; ?></td> <!-- LOT -->
+                    <td>`<?= $rowdb2['LOT']; ?></td> <!-- LOT -->
                     <td><a target="_BLANK" href="http://10.0.0.10/laporan/ppc_filter_steps.php?demand=<?= $rowdb2['DEMAND']; ?>&prod_order=<?= $rowdb2['NO_KK']; ?>">`<?= $rowdb2['DEMAND']; ?></a></td> <!-- DEMAND -->
                     <td>`<?= $rowdb2['NO_KK']; ?></td> <!-- NO KARTU KERJA -->
                     <td>

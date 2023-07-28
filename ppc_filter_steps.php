@@ -178,6 +178,11 @@
                                                     <td>&nbsp;&nbsp;&nbsp; : &nbsp;</td>
                                                     <td><?= $d_demand['ORIGDLVSALORDLINESALORDERCODE']; ?></td>
                                                 </tr>
+                                                <tr>
+                                                    <td>LOT</td>
+                                                    <td>&nbsp;&nbsp;&nbsp; : &nbsp;</td>
+                                                    <td><?= $d_demand['DESCRIPTION']; ?></td>
+                                                </tr>
                                             </table>
                                         </div>
                                         <div class="card-block">
