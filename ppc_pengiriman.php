@@ -101,34 +101,41 @@
                                                             }else{
                                                                 $where_no_order     = "";
                                                             }
+                                                            $codeExport     = "TRIM(i.DEFINITIVECOUNTERCODE) = 'CESDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'CESPROV' OR
+                                                                                TRIM(i.DEFINITIVECOUNTERCODE) = 'DREDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'DREPROV' OR 
+                                                                                TRIM(i.DEFINITIVECOUNTERCODE) = 'DSEDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDDEF' OR
+                                                                                TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPDEF' OR
+                                                                                TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEDEF' OR 
+                                                                                TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'PSEPROV'";
                                                             $sqlDB2 = "SELECT DISTINCT
                                                                             i.PROVISIONALCODE,
-                                                                            i.SALESORDERCOUNTERCODE,
+                                                                            i.DEFINITIVECOUNTERCODE,
                                                                             i.DEFINITIVEDOCUMENTDATE,
                                                                             i.ORDERPARTNERBRANDCODE,
-                                                                            i.PO_NUMBER,
+                                                                            CASE
+                                                                                WHEN $codeExport THEN '' ELSE i.PO_NUMBER
+                                                                            END AS PO_NUMBER,
                                                                             i.PROJECTCODE,
                                                                             DAY(i.GOODSISSUEDATE) ||'-'|| MONTHNAME(i.GOODSISSUEDATE) ||'-'|| YEAR(i.GOODSISSUEDATE) AS GOODSISSUEDATE,
                                                                             i.ORDPRNCUSTOMERSUPPLIERCODE,
-                                                                            i.PAYMENTMETHODCODE,
-                                                                            i.PO_NUMBER,    
+                                                                            i.PAYMENTMETHODCODE,   
                                                                             i.ITEMTYPEAFICODE,
                                                                             i.DLVSALORDERLINESALESORDERCODE,
                                                                             CASE
-                                                                                WHEN TRIM(i.SALESORDERCOUNTERCODE) = 'EXPORT' THEN 0 ELSE i.DLVSALESORDERLINEORDERLINE
+                                                                                WHEN $codeExport THEN 0 ELSE i.DLVSALESORDERLINEORDERLINE
                                                                             END AS DLVSALESORDERLINEORDERLINE,
                                                                             CASE
-                                                                                WHEN TRIM(i.SALESORDERCOUNTERCODE) = 'EXPORT' THEN '' ELSE i.ITEMDESCRIPTION
+                                                                                WHEN $codeExport THEN '' ELSE i.ITEMDESCRIPTION
                                                                             END AS ITEMDESCRIPTION,
                                                                             CASE
-                                                                                WHEN TRIM(i.SALESORDERCOUNTERCODE) = 'EXPORT' THEN '' ELSE iasp.LOTCODE
+                                                                                WHEN $codeExport THEN '' ELSE iasp.LOTCODE
                                                                             END AS LOTCODE,
                                                                             CASE
-                                                                                WHEN TRIM(i.SALESORDERCOUNTERCODE) = 'EXPORT' THEN '' ELSE i2.WARNA
+                                                                                WHEN $codeExport THEN '' ELSE i2.WARNA
                                                                             END AS WARNA,
                                                                             i.LEGALNAME1,
                                                                             CASE
-                                                                                WHEN TRIM(i.SALESORDERCOUNTERCODE) = 'EXPORT' THEN '0' ELSE i.CODE
+                                                                                WHEN $codeExport THEN 'EXPORT' ELSE i.CODE
                                                                             END AS CODE
                                                                         FROM 
                                                                             ITXVIEW_SURATJALAN_PPC_FOR_POSELESAI i
@@ -140,7 +147,7 @@
                                                                                                 AND i2.SUBCODE07 = i.SUBCODE07 AND i2.SUBCODE08 = i.SUBCODE08
                                                                                                 AND i2.SUBCODE09 = i.SUBCODE09 AND i2.SUBCODE10 = i.SUBCODE10
                                                                         WHERE 
-                                                                            $where_no_order $where_date AND i.DOCUMENTTYPETYPE = 05
+                                                                            $where_no_order $where_date AND i.DOCUMENTTYPETYPE = 05 AND NOT i.CODE IS NULL
                                                                         GROUP BY
                                                                             i.PROVISIONALCODE,
                                                                             i.DEFINITIVEDOCUMENTDATE,
@@ -156,7 +163,7 @@
                                                                             i.DLVSALESORDERLINEORDERLINE,
                                                                             i.ITEMDESCRIPTION,
                                                                             iasp.LOTCODE,
-                                                                            i.SALESORDERCOUNTERCODE,
+                                                                            i.DEFINITIVECOUNTERCODE,
                                                                             i2.WARNA,
                                                                             i.LEGALNAME1,
                                                                             i.CODE
@@ -173,15 +180,40 @@
                                                             <td><?= $rowdb2['WARNA']; ?></td> 
                                                             <td>
                                                                 <?php
-                                                                    $q_roll     = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
-                                                                                                            SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
-	                                                                                                        SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
-                                                                                                    FROM 
-                                                                                                        ITXVIEWALLOCATION0 
-                                                                                                    WHERE 
-                                                                                                        CODE = '$rowdb2[CODE]'");
-                                                                    $d_roll     = db2_fetch_assoc($q_roll);
-                                                                    echo $d_roll['ROLL'];
+                                                                    if($rowdb2['CODE'] == 'EXPORT'){
+                                                                        $q_roll     = db2_exec($conn1, "SELECT 
+                                                                                                            SUM(ROLL) AS ROLL,
+                                                                                                            SUM(QTY_SJ_KG) AS QTY_SJ_KG,
+                                                                                                            SUM(QTY_SJ_YARD) AS QTY_SJ_YARD
+                                                                                                        FROM 
+                                                                                                            ITXVIEW_SURATJALAN_PPC_FOR_POSELESAI i
+                                                                                                        LEFT JOIN 
+                                                                                                            (SELECT ITXVIEWALLOCATION0.CODE,
+                                                                                                                    COUNT(CODE) AS ROLL,
+                                                                                                                    SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
+                                                                                                                    SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
+                                                                                                            FROM 
+                                                                                                                ITXVIEWALLOCATION0 ITXVIEWALLOCATION0
+                                                                                                            GROUP BY 
+                                                                                                                ITXVIEWALLOCATION0.CODE)ITXVIEWALLOCATION0 ON ITXVIEWALLOCATION0.CODE = i.CODE
+                                                                                                        WHERE 
+                                                                                                            i.DLVSALORDERLINESALESORDERCODE = '$rowdb2[DLVSALORDERLINESALESORDERCODE]'
+                                                                                                            AND i.DOCUMENTTYPETYPE = 05
+                                                                                                            AND NOT i.CODE IS NULL");
+                                                                        $d_roll     = db2_fetch_assoc($q_roll);
+                                                                        echo $d_roll['ROLL'];
+                                                                    }else{
+                                                                        $q_roll     = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
+                                                                                                                SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
+                                                                                                                SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
+                                                                                                        FROM 
+                                                                                                            ITXVIEWALLOCATION0 
+                                                                                                        WHERE 
+                                                                                                            CODE = '$rowdb2[CODE]'");
+                                                                        $d_roll     = db2_fetch_assoc($q_roll);
+                                                                        echo $d_roll['ROLL'];
+                                                                    }
+                                                                    
                                                                 ?>
                                                             </td> 
                                                             <td><?= $d_roll['QTY_SJ_KG'] ?></td> 

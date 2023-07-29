@@ -38,8 +38,8 @@
             ini_set("error_reporting", 1);
             session_start();
             require_once "koneksi.php";
-            $tgl1     = $_GET['tgl1'];
-            $no_order = $_GET['no_order'];
+            $tgl1     = $_POST['tgl1'];
+            $no_order = $_POST['no_order'];
 
             if($tgl1){
                 $where_date     = "i.GOODSISSUEDATE = '$tgl1'";
@@ -51,34 +51,41 @@
             }else{
                 $where_no_order     = "";
             }
+            $codeExport     = "TRIM(i.DEFINITIVECOUNTERCODE) = 'CESDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'CESPROV' OR
+                                TRIM(i.DEFINITIVECOUNTERCODE) = 'DREDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'DREPROV' OR 
+                                TRIM(i.DEFINITIVECOUNTERCODE) = 'DSEDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDDEF' OR
+                                TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPDEF' OR
+                                TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEDEF' OR 
+                                TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'PSEPROV'";
             $sqlDB2 = "SELECT DISTINCT
                             i.PROVISIONALCODE,
-                            i.SALESORDERCOUNTERCODE,
+                            i.DEFINITIVECOUNTERCODE,
                             i.DEFINITIVEDOCUMENTDATE,
                             i.ORDERPARTNERBRANDCODE,
-                            i.PO_NUMBER,
+                            CASE
+                                WHEN $codeExport THEN '' ELSE i.PO_NUMBER
+                            END AS PO_NUMBER,
                             i.PROJECTCODE,
                             DAY(i.GOODSISSUEDATE) ||'-'|| MONTHNAME(i.GOODSISSUEDATE) ||'-'|| YEAR(i.GOODSISSUEDATE) AS GOODSISSUEDATE,
                             i.ORDPRNCUSTOMERSUPPLIERCODE,
-                            i.PAYMENTMETHODCODE,
-                            i.PO_NUMBER,    
+                            i.PAYMENTMETHODCODE,   
                             i.ITEMTYPEAFICODE,
                             i.DLVSALORDERLINESALESORDERCODE,
                             CASE
-                                WHEN TRIM(i.SALESORDERCOUNTERCODE) = 'EXPORT' THEN 0 ELSE i.DLVSALESORDERLINEORDERLINE
+                                WHEN $codeExport THEN 0 ELSE i.DLVSALESORDERLINEORDERLINE
                             END AS DLVSALESORDERLINEORDERLINE,
                             CASE
-                                WHEN TRIM(i.SALESORDERCOUNTERCODE) = 'EXPORT' THEN '' ELSE i.ITEMDESCRIPTION
+                                WHEN $codeExport THEN '' ELSE i.ITEMDESCRIPTION
                             END AS ITEMDESCRIPTION,
                             CASE
-                                WHEN TRIM(i.SALESORDERCOUNTERCODE) = 'EXPORT' THEN '' ELSE iasp.LOTCODE
+                                WHEN $codeExport THEN '' ELSE iasp.LOTCODE
                             END AS LOTCODE,
                             CASE
-                                WHEN TRIM(i.SALESORDERCOUNTERCODE) = 'EXPORT' THEN '' ELSE i2.WARNA
+                                WHEN $codeExport THEN '' ELSE i2.WARNA
                             END AS WARNA,
                             i.LEGALNAME1,
                             CASE
-                                WHEN TRIM(i.SALESORDERCOUNTERCODE) = 'EXPORT' THEN '0' ELSE i.CODE
+                                WHEN $codeExport THEN 'EXPORT' ELSE i.CODE
                             END AS CODE
                         FROM 
                             ITXVIEW_SURATJALAN_PPC_FOR_POSELESAI i
@@ -90,7 +97,7 @@
                                                 AND i2.SUBCODE07 = i.SUBCODE07 AND i2.SUBCODE08 = i.SUBCODE08
                                                 AND i2.SUBCODE09 = i.SUBCODE09 AND i2.SUBCODE10 = i.SUBCODE10
                         WHERE 
-                            $where_no_order $where_date AND i.DOCUMENTTYPETYPE = 05
+                            $where_no_order $where_date AND i.DOCUMENTTYPETYPE = 05 AND NOT i.CODE IS NULL
                         GROUP BY
                             i.PROVISIONALCODE,
                             i.DEFINITIVEDOCUMENTDATE,
@@ -106,7 +113,7 @@
                             i.DLVSALESORDERLINEORDERLINE,
                             i.ITEMDESCRIPTION,
                             iasp.LOTCODE,
-                            i.SALESORDERCOUNTERCODE,
+                            i.DEFINITIVECOUNTERCODE,
                             i2.WARNA,
                             i.LEGALNAME1,
                             i.CODE
@@ -123,15 +130,40 @@
             <td><?= $rowdb2['WARNA']; ?></td> 
             <td>
                 <?php
-                    $q_roll     = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
-                                                            SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
-                                                            SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
-                                                    FROM 
-                                                        ITXVIEWALLOCATION0 
-                                                    WHERE 
-                                                        CODE = '$rowdb2[CODE]'");
-                    $d_roll     = db2_fetch_assoc($q_roll);
-                    echo $d_roll['ROLL'];
+                    if($rowdb2['CODE'] == 'EXPORT'){
+                        $q_roll     = db2_exec($conn1, "SELECT 
+                                                            SUM(ROLL) AS ROLL,
+                                                            SUM(QTY_SJ_KG) AS QTY_SJ_KG,
+                                                            SUM(QTY_SJ_YARD) AS QTY_SJ_YARD
+                                                        FROM 
+                                                            ITXVIEW_SURATJALAN_PPC_FOR_POSELESAI i
+                                                        LEFT JOIN 
+                                                            (SELECT ITXVIEWALLOCATION0.CODE,
+                                                                    COUNT(CODE) AS ROLL,
+                                                                    SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
+                                                                    SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
+                                                            FROM 
+                                                                ITXVIEWALLOCATION0 ITXVIEWALLOCATION0
+                                                            GROUP BY 
+                                                                ITXVIEWALLOCATION0.CODE)ITXVIEWALLOCATION0 ON ITXVIEWALLOCATION0.CODE = i.CODE
+                                                        WHERE 
+                                                            i.DLVSALORDERLINESALESORDERCODE = '$rowdb2[DLVSALORDERLINESALESORDERCODE]'
+                                                            AND i.DOCUMENTTYPETYPE = 05
+                                                            AND NOT i.CODE IS NULL");
+                        $d_roll     = db2_fetch_assoc($q_roll);
+                        echo $d_roll['ROLL'];
+                    }else{
+                        $q_roll     = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
+                                                                SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
+                                                                SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
+                                                        FROM 
+                                                            ITXVIEWALLOCATION0 
+                                                        WHERE 
+                                                            CODE = '$rowdb2[CODE]'");
+                        $d_roll     = db2_fetch_assoc($q_roll);
+                        echo $d_roll['ROLL'];
+                    }
+                    
                 ?>
             </td> 
             <td><?= $d_roll['QTY_SJ_KG'] ?></td> 
@@ -171,30 +203,10 @@
         <tr>
             <th colspan="4" align="left">Total Tanggal <?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"d"); ?></th>
             <th colspan="1" align="center">
-                <?php
-                    $q_sumRoll   = db2_exec($conn1, "SELECT 
-                                                            COUNT(i2.BASEPRIMARYQUANTITY) AS SUM_ROLL_SJ
-                                                        FROM 
-                                                            ITXVIEWLAPKIRIMPPC i 
-                                                        LEFT JOIN ITXVIEWALLOCATION0 i2 ON i2.CODE = i.CODE
-                                                        WHERE 
-                                                            i.GOODSISSUEDATE = '$_GET[tgl1]'");
-                    $r_sumRoll   = db2_fetch_assoc($q_sumRoll);
-                    echo number_format($r_sumRoll['SUM_ROLL_SJ'], 0)
-                ?>
+                
             </th>
             <th colspan="2" align="center">
-                <?php
-                    $q_sumQty   = db2_exec($conn1, "SELECT 
-                                                            SUM(i2.BASEPRIMARYQUANTITY) AS SUM_QTY_SJ
-                                                        FROM 
-                                                            ITXVIEWLAPKIRIMPPC i 
-                                                        LEFT JOIN ITXVIEWALLOCATION0 i2 ON i2.CODE = i.CODE
-                                                        WHERE 
-                                                            i.GOODSISSUEDATE = '$_GET[tgl1]'");
-                    $r_sumQty   = db2_fetch_assoc($q_sumQty);
-                    echo number_format($r_sumQty['SUM_QTY_SJ'], 2)
-                ?>
+                
             </th>
             <th colspan="3" align="center">SINGGIH</th>
             <th colspan="5" align="center">PUTRI</th>
@@ -202,34 +214,10 @@
         <tr>
             <th colspan="4" align="left">Total Tanggal 01 S/D <?php echo date('d', strtotime('-1 days', strtotime($_GET['tgl1']))); ?></th>
             <th colspan="1" align="center">
-                <?php
-                    $tanggal_awal               = date('Y-m', strtotime('-1 days', strtotime($_GET['tgl1']))).'-01';
-                    $tanggal_akhir_minus1Hari   = date('Y-m-d', strtotime('-1 days', strtotime($_GET['tgl1'])));
-                    $q_sumRoll_2   = db2_exec($conn1, "SELECT 
-                                                            COUNT(i2.BASEPRIMARYQUANTITY) AS SUM_ROLL_SJ
-                                                        FROM 
-                                                            ITXVIEWLAPKIRIMPPC i 
-                                                        LEFT JOIN ITXVIEWALLOCATION0 i2 ON i2.CODE = i.CODE
-                                                        WHERE 
-                                                            i.GOODSISSUEDATE BETWEEN '$tanggal_awal' AND '$tanggal_akhir_minus1Hari'");
-                    $r_sumRoll_2   = db2_fetch_assoc($q_sumRoll_2);
-                    echo number_format($r_sumRoll_2['SUM_ROLL_SJ'], 0)
-                ?>
+                
             </th>
             <th colspan="2" align="center">
-                <?php
-                    $tanggal_awal               = date('Y-m', strtotime('-1 days', strtotime($_GET['tgl1']))).'-01';
-                    $tanggal_akhir_minus1Hari   = date('Y-m-d', strtotime('-1 days', strtotime($_GET['tgl1'])));
-                    $q_sumQty_2   = db2_exec($conn1, "SELECT 
-                                                            SUM(i2.BASEPRIMARYQUANTITY) AS SUM_QTY_SJ
-                                                        FROM 
-                                                            ITXVIEWLAPKIRIMPPC i 
-                                                        LEFT JOIN ITXVIEWALLOCATION0 i2 ON i2.CODE = i.CODE
-                                                        WHERE 
-                                                            i.GOODSISSUEDATE BETWEEN '$tanggal_awal' AND '$tanggal_akhir_minus1Hari'");
-                    $r_sumQty_2   = db2_fetch_assoc($q_sumQty_2);
-                    echo number_format($r_sumQty_2['SUM_QTY_SJ'], 2)
-                ?>
+                
             </th>
             <th colspan="3" align="center">STAFF</th>
             <th colspan="5" align="center">PPC AST. MANAGER</th>
@@ -237,34 +225,10 @@
         <tr>
             <th colspan="4" align="left">Total Tanggal 01 S/D <?= date('d', $_GET['tgl1']); ?></th>
             <th colspan="1" align="center">
-                <?php
-                    $tanggal_awal   = date('Y-m', strtotime('-1 days', strtotime($_GET['tgl1']))).'-01';
-                    $tanggal_akhir  = date('Y-m-d', strtotime($_GET['tgl1']));
-                    $q_sumRoll_3   = db2_exec($conn1, "SELECT 
-                                                            COUNT(i2.BASEPRIMARYQUANTITY) AS SUM_ROLL_SJ
-                                                        FROM 
-                                                            ITXVIEWLAPKIRIMPPC i 
-                                                        LEFT JOIN ITXVIEWALLOCATION0 i2 ON i2.CODE = i.CODE
-                                                        WHERE 
-                                                            i.GOODSISSUEDATE BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
-                    $r_sumRoll_3   = db2_fetch_assoc($q_sumRoll_3);
-                    echo number_format($r_sumRoll_3['SUM_ROLL_SJ'], 2)
-                ?>
+                
             </th>
             <th colspan="2" align="center">
-                <?php
-                    $tanggal_awal   = date('Y-m', strtotime('-1 days', strtotime($_GET['tgl1']))).'-01';
-                    $tanggal_akhir  = date('Y-m-d', strtotime($_GET['tgl1']));
-                    $q_sumQty_3   = db2_exec($conn1, "SELECT 
-                                                            SUM(i2.BASEPRIMARYQUANTITY) AS SUM_QTY_SJ
-                                                        FROM 
-                                                            ITXVIEWLAPKIRIMPPC i 
-                                                        LEFT JOIN ITXVIEWALLOCATION0 i2 ON i2.CODE = i.CODE
-                                                        WHERE 
-                                                            i.GOODSISSUEDATE BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
-                    $r_sumQty_3   = db2_fetch_assoc($q_sumQty_3);
-                    echo number_format($r_sumQty_3['SUM_QTY_SJ'], 2)
-                ?>
+                
             </th>
             <th colspan="3" align="center"><?= date('d-M-Y', strtotime($_GET['tgl1'])); ?></th>
             <th colspan="5" align="center"><?= date('d-M-Y', strtotime($_GET['tgl1'])); ?></th>
