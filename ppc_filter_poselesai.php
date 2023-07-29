@@ -102,6 +102,7 @@
                                                             <th title="Sumber data: &#013; 1. Production Order &#013; 2. Reservation &#013; 3. KFF/KGF User Primary Quantity">QTY SALINAN</th>
                                                             <th title="Sumber data: &#013; 1. Production Demand &#013; 2. Bagian group Entered quantity &#013; 3. User Primary Quantity">QTY PACKING</th>
                                                             <th title="Sumber data: &#013; 1. Production Demand &#013; 2. Bagian group Entered quantity &#013; 3. User Secondary Quantity">QTY PACKING YARD</th>
+                                                            <th>QTY SISA</th>
                                                             <th>NETTO(kg)</th>
                                                             <th>NETTO(yd)</th>
                                                             <th>DELAY</th>
@@ -430,6 +431,55 @@
                                                                                                     PROGRESSSTATUS");
                                                             $d_suratjalan   = db2_fetch_assoc($q_suratjalan);
                                                         ?>
+                                                        <?php
+                                                            $sql_benang_booking_new		= db2_exec($conn1, "SELECT * FROM ITXVIEW_BOOKING_NEW WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]'
+                                                                                                                                    AND ORDERLINE = '$rowdb2[ORDERLINE]'");
+                                                            $r_benang_booking_new		= db2_fetch_assoc($sql_benang_booking_new);
+                                                            $d_tglkniting_ready         = substr($r_benang_booking_new['TGLRENCANA'], 0, 10).' s/d '.substr($r_benang_booking_new['TGLPOGREIGE'], 0, 10);
+
+                                                            $q_salesorderline   = db2_exec($conn1, "SELECT * FROM SALESORDERLINE WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]' AND ORDERLINE = '$rowdb2[ORDERLINE]'");
+                                                            $d_salesorderline   = db2_fetch_assoc($q_salesorderline);
+
+                                                            if($itemtype == 'KFF'){
+                                                                IF($s1 == 'T' OR $s1 == 'TX') { 
+                                                                    IF(str_contains($assoc_colorcode['WARNA'], 'BLACK')){
+                                                                        $SUBCODE04_Rajut	= 'D01';
+                                                                    }ELSE{
+                                                                        IF($s4 == 'L02'){
+                                                                            $SUBCODE04_Rajut		= 'L02';
+                                                                        }ELSE{
+                                                                            IF($s6 = 'RP04'){
+                                                                                $SUBCODE04_Rajut	= $s4;
+                                                                            }ELSE{
+                                                                                $SUBCODE04_Rajut	= 'L01';
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }ELSE{ 
+                                                                    $SUBCODE04_Rajut	= $s4;
+                                                                }
+                                                            }else{
+                                                                $SUBCODE04_Rajut	= $s4;
+                                                            }
+
+                                                            $sql_benang_rajut	= db2_exec($conn1, "SELECT * FROM ITXVIEW_RAJUT WHERE (ITEMTYPEAFICODE = 'KGF' OR ITEMTYPEAFICODE = 'FKG')
+                                                                                                                                AND ORIGDLVSALORDLINESALORDERCODE = '$rowdb2[NO_ORDER]'
+                                                                                                                                AND SUBCODE01 = '$d_salesorderline[SUBCODE01]'
+                                                                                                                                AND SUBCODE02 = '$d_salesorderline[SUBCODE02]'
+                                                                                                                                AND SUBCODE03 = '$d_salesorderline[SUBCODE03]'
+                                                                                                                                AND SUBCODE04 = '$SUBCODE04_Rajut'");
+                                                            $r_benang_rajut		= db2_fetch_assoc($sql_benang_rajut);
+                                                            $d_benang_rajut     = $r_benang_rajut['TGLRENCANA'].' s/d '.$r_benang_rajut['TGLPOGREIGE'];
+                                                        ?>
+                                                        <?php
+                                                            $q_element  = db2_exec($conn1, "SELECT * FROM ELEMENTS WHERE SUBSTR(CODE, 1,8) = '$rowdb2[DEMAND]'");
+                                                            $d_elemet   = db2_fetch_assoc($q_element);
+                                                            if($d_elemet['QUALITYREASONCODE'] == 'SD' OR $d_elemet['QUALITYREASONCODE'] == 'SG' OR $d_elemet['QUALITYREASONCODE'] == 'SM' OR $d_elemet['QUALITYREASONCODE'] == 'SP' OR $d_elemet['QUALITYREASONCODE'] == 'ST'){
+                                                                $qty_sisa   = $d_elemet['BASEPRIMARYQUANTITY'];
+                                                            }else{
+                                                                $qty_sisa   = '';
+                                                            }
+                                                        ?>
                                                         <?php if($cek_operation == "MUNCUL" OR $cek_operation == NULL) : ?>
                                                             <tr>
                                                                 <td><?= substr($d_salesorder['CREATIONDATETIME'], 0, 10); ?></td><!-- DATE MARKETING -->
@@ -464,7 +514,12 @@
                                                                 <td><?= $rowdb2['WARNA']; ?></td> <!-- WARNA -->
                                                                 <td><?= $rowdb2['NO_WARNA']; ?></td> <!-- NO WARNA -->
                                                                 <td><?= $rowdb2['DELIVERY']; ?></td> <!-- DELIVERY -->
-                                                                <td>In progress...</td> <!-- GREIGE SCHEDULE -->
+                                                                <td>
+                                                                    <?php 
+                                                                        if($d_tglkniting_ready) { echo $d_tglkniting_ready; }  
+                                                                        if($d_benang_rajutg_ready) { echo $d_benang_rajutg_ready; }  
+                                                                    ?>
+                                                                </td> <!-- GREIGE SCHEDULE -->
                                                                 <td>
                                                                     <?php
                                                                         $q_element      = db2_exec($conn1, "SELECT DISTINCT
@@ -594,6 +649,7 @@
                                                                         echo $d_qtypacking['QTY_PACKING_YARD'];
                                                                     ?>
                                                                 </td> <!-- QTY PACKING YARD -->
+                                                                <td><?= $qty_sisa; ?></td> <!-- QTY SISA -->
                                                                 <td>
                                                                     <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?> 
                                                                         
@@ -619,14 +675,6 @@
                                                                 <td><a target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $rowdb2['DEMAND']; ?>&prod_order=<?= $rowdb2['NO_KK']; ?>">`<?= $rowdb2['DEMAND']; ?></a></td> <!-- DEMAND -->
                                                                 <td>`<?= $rowdb2['NO_KK']; ?></td> <!-- NO KARTU KERJA -->
                                                                 <td>
-                                                                    <?php
-                                                                        $sql_benang_booking_new		= db2_exec($conn1, "SELECT * FROM ITXVIEW_BOOKING_NEW WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]'
-                                                                                                                                                AND ORDERLINE = '$rowdb2[ORDERLINE]'");
-                                                                        $r_benang_booking_new		= db2_fetch_assoc($sql_benang_booking_new);
-                                                                        $d_benang_booking_new		= $r_benang_booking_new['SALESORDERCODE'];
-
-                                                                    ?>
-                                                                    <!-- <a href="http://online.indotaichen.com/laporan/ppc_catatan_po_greige.php?" target="_blank">Detail</a> -->
                                                                     <?php if($d_benang_booking_new){ echo $d_benang_booking_new.'. Greige Ready'; } ?>
                                                                 </td> <!-- CATATAN PO GREIGE -->
                                                                 <td></td> <!-- TARGET SELESAI -->
