@@ -6,13 +6,13 @@
 <table border="1" width="100%">
     <thead>
         <tr>
-            <th colspan="15">Laporan Harian Pengiriman Export</th>
+            <th colspan="16">Laporan Harian Pengiriman Export</th>
         </tr>
         <tr>
-            <th colspan="15">FW-02-PPC-04/02</th>
+            <th colspan="16">FW-02-PPC-04/02</th>
         </tr>
         <tr>
-            <th colspan="15"><?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"M-Y"); ?></th>
+            <th colspan="16"><?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"M-Y"); ?></th>
         </tr>
         <tr>
             <th>NO</th>
@@ -38,8 +38,8 @@
             ini_set("error_reporting", 1);
             session_start();
             require_once "koneksi.php";
-            $tgl1     = $_POST['tgl1'];
-            $no_order = $_POST['no_order'];
+            $tgl1     = $_GET['tgl1'];
+            $no_order = $_GET['no_order'];
 
             if($tgl1){
                 $where_date     = "i.GOODSISSUEDATE = '$tgl1'";
@@ -209,7 +209,7 @@
                 
             </th>
             <th colspan="3" align="center">SINGGIH</th>
-            <th colspan="5" align="center">PUTRI</th>
+            <th colspan="6" align="center">PUTRI</th>
         </tr>
         <tr>
             <th colspan="4" align="left">Total Tanggal 01 S/D <?php echo date('d', strtotime('-1 days', strtotime($_GET['tgl1']))); ?></th>
@@ -220,24 +220,24 @@
                 
             </th>
             <th colspan="3" align="center">STAFF</th>
-            <th colspan="5" align="center">PPC AST. MANAGER</th>
+            <th colspan="6" align="center">PPC AST. MANAGER</th>
         </tr>
         <tr>
-            <th colspan="4" align="left">Total Tanggal 01 S/D <?= date('d', $_GET['tgl1']); ?></th>
+            <th colspan="4" align="left">Total Tanggal 01 S/D <?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"d"); ?></th>
             <th colspan="1" align="center">
                 
             </th>
             <th colspan="2" align="center">
                 
             </th>
-            <th colspan="3" align="center"><?= date('d-M-Y', strtotime($_GET['tgl1'])); ?></th>
-            <th colspan="5" align="center"><?= date('d-M-Y', strtotime($_GET['tgl1'])); ?></th>
+            <th colspan="3" align="center"><?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"d-M-Y"); ?></th>
+            <th colspan="6" align="center"><?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"d-M-Y"); ?></th>
         </tr>
         <tr>
             <th colspan="5"><br></th>
             <th colspan="2"><br></th>
             <th colspan="3"><br><br><br></th>
-            <th colspan="5"><br><br><br></th>
+            <th colspan="6"><br><br><br></th>
         </tr>
     </tfoot>
 </table>
