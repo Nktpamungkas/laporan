@@ -240,6 +240,8 @@
                                                             <form action="" method="POST">
                                                                 <input type="hidden" name="productionorder" value="<?= $d_ITXVIEWKK['PRODUCTIONORDERCODE']; ?>">
                                                                 <input type="hidden" name="productiondemand" value="<?= $d_ITXVIEWKK['PRODUCTIONDEMANDCODE']; ?>">
+                                                                <input type="hidden" name="ipaddress" value="<?= $_SERVER['REMOTE_ADDR'] ?>">
+                                                                <input type="hidden" name="createdatetime" value="<?= date('Y-m-d H:i:s'); ?>">
                                                                 <input type="text" name="keterangan" class="form-control input-sm" value="">
                                                                 <button class="btn btn-primary btn-mini" name="simpan_keterangan">Save</button>
                                                             </form>
