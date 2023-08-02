@@ -29,7 +29,8 @@ $user = "db2admin";
 $passworddb2 = "Sunkam@24809";
 $port="25000";
 $conn_string = "DRIVER={IBM ODBC DB2 DRIVER}; HOSTNAME=$hostname; PORT=$port; PROTOCOL=TCPIP; UID=$user; PWD=$passworddb2; DATABASE=$database;";
-$conn1 = db2_pconnect($conn_string,'', '');
+// $conn1 = db2_pconnect($conn_string,'', '');
+$conn1 = db2_connect($conn_string,'', '');
 
 $con_invoice    = mysqli_connect("10.0.0.10","dit","4dm1n","invoice");
 $con_nowprd     = mysqli_connect("10.0.0.10","dit","4dm1n","nowprd");
