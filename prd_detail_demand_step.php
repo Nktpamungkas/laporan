@@ -4,6 +4,10 @@
     require_once "koneksi.php";
     mysqli_query($con_nowprd, "DELETE FROM itxview_detail_qa_data WHERE CREATEDATETIME BETWEEN NOW() - INTERVAL 3 DAY AND NOW() - INTERVAL 1 DAY");
     mysqli_query($con_nowprd, "DELETE FROM itxview_detail_qa_data WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'"); 
+    mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_ins3_detaildemandstep WHERE CREATEDATETIME BETWEEN NOW() - INTERVAL 3 DAY AND NOW() - INTERVAL 1 DAY");
+    mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_ins3_detaildemandstep WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'"); 
+    mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1_detaildemandstep WHERE CREATEDATETIME BETWEEN NOW() - INTERVAL 3 DAY AND NOW() - INTERVAL 1 DAY");
+    mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1_detaildemandstep WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'"); 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -217,9 +221,43 @@
                                                             session_start();
                                                             require_once "koneksi.php";
 
+                                                            // itxview_posisikk_tgl_in_prodorder_ins3
+                                                            $posisikk_ins3 = db2_exec($conn1, "SELECT * FROM ITXVIEW_POSISIKK_TGL_IN_PRODORDER_INS3 WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]'");
+                                                            while ($row_posisikk_ins3   = db2_fetch_assoc($posisikk_ins3)) {
+                                                                $r_posisikk_ins3[]      = "('".TRIM(addslashes($row_posisikk_ins3['PRODUCTIONORDERCODE']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_ins3['OPERATIONCODE']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_ins3['PROPROGRESSPROGRESSNUMBER']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_ins3['DEMANDSTEPSTEPNUMBER']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_ins3['PROGRESSTEMPLATECODE']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_ins3['MULAI']))."',"
+                                                                                        ."'".$_SERVER['REMOTE_ADDR']."',"
+                                                                                        ."'".date('Y-m-d H:i:s')."')";
+                                                            }
+                                                            if($r_posisikk_ins3){
+                                                                $value_posisikk_ins3        = implode(',', $r_posisikk_ins3);
+                                                                $insert_posisikk_ins3       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_ins3_detaildemandstep(PRODUCTIONORDERCODE,OPERATIONCODE,PROPROGRESSPROGRESSNUMBER,DEMANDSTEPSTEPNUMBER,PROGRESSTEMPLATECODE,MULAI,IPADDRESS,CREATEDATETIME) VALUES $value_posisikk_ins3");
+                                                            }
+                                                            
+                                                            // itxview_posisikk_tgl_in_prodorder_cnp1
+                                                            $posisikk_cnp1 = db2_exec($conn1, "SELECT * FROM ITXVIEW_POSISIKK_TGL_IN_PRODORDER_CNP1 WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]'");
+                                                            while ($row_posisikk_cnp1   = db2_fetch_assoc($posisikk_cnp1)) {
+                                                                $r_posisikk_cnp1[]      = "('".TRIM(addslashes($row_posisikk_cnp1['PRODUCTIONORDERCODE']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_cnp1['OPERATIONCODE']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_cnp1['PROPROGRESSPROGRESSNUMBER']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_cnp1['DEMANDSTEPSTEPNUMBER']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_cnp1['PROGRESSTEMPLATECODE']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_cnp1['MULAI']))."',"
+                                                                                        ."'".$_SERVER['REMOTE_ADDR']."',"
+                                                                                        ."'".date('Y-m-d H:i:s')."')";
+                                                            }
+                                                            if($r_posisikk_cnp1){
+                                                                $value_posisikk_cnp1        = implode(',', $r_posisikk_cnp1);
+                                                                $insert_posisikk_cnp1       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_cnp1_detaildemandstep(PRODUCTIONORDERCODE,OPERATIONCODE,PROPROGRESSPROGRESSNUMBER,DEMANDSTEPSTEPNUMBER,PROGRESSTEMPLATECODE,MULAI,IPADDRESS,CREATEDATETIME) VALUES $value_posisikk_cnp1");
+                                                            }
+
                                                             $sqlDB2 = "SELECT
                                                                             p.WORKCENTERCODE,
-                                                                            p.OPERATIONCODE,
+                                                                            TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
                                                                             o.LONGDESCRIPTION,
                                                                             iptip.MULAI,
                                                                             iptop.SELESAI,
@@ -242,33 +280,69 @@
                                                             <td style="vertical-align: text-top;"><?= $rowdb2['OPERATIONCODE']; ?></td>
                                                             <td style="vertical-align: text-top;"><?= $rowdb2['LONGDESCRIPTION']; ?></td>
                                                             <td style="vertical-align: text-top; text-align: center;">
-                                                                <?php 
-                                                                    $cek_cache  = mysqli_query($con_nowprd, "SELECT * FROM posisikk_cache_in 
-                                                                                                                    WHERE productionorder= '$rowdb2[PRODUCTIONORDERCODE]' 
-                                                                                                                    AND productiondemand = '$rowdb2[PRODUCTIONDEMANDCODE]' 
-                                                                                                                    AND stepnumber = '$rowdb2[STEPNUMBER]'");
-                                                                    $d_cache    = mysqli_fetch_assoc($cek_cache);
-                                                                    $cache_MULAI    = $d_cache['tanggal_in'];
-                                                                ?>
-                                                                <?php if($rowdb2['MULAI']) : ?>
-                                                                    <?= $rowdb2['MULAI']; ?>
+                                                                <?php if($rowdb2['OPERATIONCODE'] == 'INS3') : ?>
+                                                                    <?php
+                                                                        $q_mulai_ins3   = mysqli_query($con_nowprd, "SELECT
+                                                                                                                            * 
+                                                                                                                        FROM
+                                                                                                                            `itxview_posisikk_tgl_in_prodorder_ins3_detaildemandstep` 
+                                                                                                                        WHERE
+                                                                                                                            productionordercode = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]'
+                                                                                                                            AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                        ORDER BY
+                                                                                                                            MULAI ASC LIMIT 1");
+                                                                        $d_mulai_ins3   = mysqli_fetch_assoc($q_mulai_ins3);
+                                                                        echo $d_mulai_ins3['MULAI'];
+                                                                    ?>
+                                                                <?php elseif($rowdb2['OPERATIONCODE'] == 'CNP1') : ?>
+                                                                    <?php
+                                                                        $q_mulai_cnp1   = mysqli_query($con_nowprd, "SELECT
+                                                                                                                            * 
+                                                                                                                        FROM
+                                                                                                                            `itxview_posisikk_tgl_in_prodorder_cnp1_detaildemandstep` 
+                                                                                                                        WHERE
+                                                                                                                            productionordercode = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]'
+                                                                                                                            AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                        ORDER BY
+                                                                                                                            MULAI ASC LIMIT 1");
+                                                                        $d_mulai_cnp1   = mysqli_fetch_assoc($q_mulai_cnp1);
+                                                                        echo $d_mulai_cnp1['MULAI'];
+                                                                    ?>
                                                                 <?php else : ?>
-                                                                    <span style="background-color: #A5CEA8;"><?= $cache_MULAI; ?></span>
+                                                                    <?= $rowdb2['MULAI']; ?>
                                                                 <?php endif; ?>
                                                             </td>
                                                             <td style="vertical-align: text-top; text-align: center;">
-                                                                <?php 
-                                                                    $cek_cache  = mysqli_query($con_nowprd, "SELECT * FROM posisikk_cache_out 
-                                                                                                                    WHERE productionorder= '$rowdb2[PRODUCTIONORDERCODE]' 
-                                                                                                                    AND productiondemand = '$rowdb2[PRODUCTIONDEMANDCODE]' 
-                                                                                                                    AND stepnumber = '$rowdb2[STEPNUMBER]'");
-                                                                    $d_cache    = mysqli_fetch_assoc($cek_cache);
-                                                                    $cache_SELESAI    = $d_cache['tanggal_out'];
-                                                                ?>
-                                                                <?php if($rowdb2['SELESAI']) : ?>
-                                                                    <?= $rowdb2['SELESAI']; ?>
+                                                                <?php if($rowdb2['OPERATIONCODE'] == 'INS3') : ?>
+                                                                    <?php
+                                                                        $q_mulai_ins3   = mysqli_query($con_nowprd, "SELECT
+                                                                                                                            * 
+                                                                                                                        FROM
+                                                                                                                            `itxview_posisikk_tgl_in_prodorder_ins3_detaildemandstep` 
+                                                                                                                        WHERE
+                                                                                                                            productionordercode = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]'
+                                                                                                                            AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                        ORDER BY
+                                                                                                                            MULAI DESC LIMIT 1");
+                                                                        $d_mulai_ins3   = mysqli_fetch_assoc($q_mulai_ins3);
+                                                                        echo $d_mulai_ins3['MULAI'];
+                                                                    ?>
+                                                                <?php elseif($rowdb2['OPERATIONCODE'] == 'CNP1') : ?>
+                                                                    <?php
+                                                                        $q_mulai_cnp1   = mysqli_query($con_nowprd, "SELECT
+                                                                                                                            * 
+                                                                                                                        FROM
+                                                                                                                            `itxview_posisikk_tgl_in_prodorder_cnp1_detaildemandstep` 
+                                                                                                                        WHERE
+                                                                                                                            productionordercode = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]'
+                                                                                                                            AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                        ORDER BY
+                                                                                                                            MULAI DESC LIMIT 1");
+                                                                        $d_mulai_cnp1   = mysqli_fetch_assoc($q_mulai_cnp1);
+                                                                        echo $d_mulai_cnp1['MULAI'];
+                                                                    ?>
                                                                 <?php else : ?>
-                                                                    <span style="background-color: #A5CEA8;"><?= $cache_SELESAI; ?></span>
+                                                                    <?= $rowdb2['SELESAI']; ?>
                                                                 <?php endif; ?>
                                                             </td>
                                                             <?php
