@@ -236,6 +236,13 @@
                                             <span class="pcoded-mcaret"></span>
                                         </a>
                                     </li>
+                                    <li class="">
+                                        <a href="prd_analisaKK.php" data-i18n="nav.animations.main">
+                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
+                                            <span class="pcoded-mtext">Analisa Kartu Kerja</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
