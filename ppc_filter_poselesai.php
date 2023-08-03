@@ -83,6 +83,7 @@
                                                         <tr>
                                                             <th>DATE MARKETING</th>
                                                             <th>DATE PPC RECEIVED BO FROM RMP</th>
+                                                            <th>DATE BAGI LOT</th>
                                                             <th>TGL BUKA KARTU</th>
                                                             <th>PELANGGAN</th>
                                                             <th>NO. ORDER</th>
@@ -472,18 +473,32 @@
                                                             $d_benang_rajut     = $r_benang_rajut['TGLRENCANA'].' s/d '.$r_benang_rajut['TGLPOGREIGE'];
                                                         ?>
                                                         <?php
-                                                            $q_element  = db2_exec($conn1, "SELECT * FROM ELEMENTS WHERE SUBSTR(CODE, 1,8) = '$rowdb2[DEMAND]'");
+                                                            $q_element  = db2_exec($conn1, "SELECT 
+                                                                                                TRIM(QUALITYREASONCODE) AS QUALITYREASONCODE, * 
+                                                                                                FROM 
+                                                                                                    ELEMENTS 
+                                                                                                WHERE 
+                                                                                                    SUBSTR(CODE, 1,8) = '$rowdb2[DEMAND]' AND NOT QUALITYREASONCODE IS NULL
+                                                                                                    AND 
+                                                                                                    (TRIM(QUALITYREASONCODE) = 'SD' OR 
+                                                                                                    TRIM(QUALITYREASONCODE) = 'SG' OR 
+                                                                                                    TRIM(QUALITYREASONCODE) = 'SM' OR 
+                                                                                                    TRIM(QUALITYREASONCODE) = 'SP' OR 
+                                                                                                    TRIM(QUALITYREASONCODE) = 'ST')");
                                                             $d_elemet   = db2_fetch_assoc($q_element);
-                                                            if($d_elemet['QUALITYREASONCODE'] == 'SD' OR $d_elemet['QUALITYREASONCODE'] == 'SG' OR $d_elemet['QUALITYREASONCODE'] == 'SM' OR $d_elemet['QUALITYREASONCODE'] == 'SP' OR $d_elemet['QUALITYREASONCODE'] == 'ST'){
-                                                                $qty_sisa   = $d_elemet['BASEPRIMARYQUANTITY'];
-                                                            }else{
-                                                                $qty_sisa   = '';
-                                                            }
+                                                            $qty_sisa   = $d_elemet['BASEPRIMARYQUANTITY'];
                                                         ?>
                                                         <?php if($cek_operation == "MUNCUL" OR $cek_operation == NULL) : ?>
                                                             <tr>
                                                                 <td><?= substr($d_salesorder['CREATIONDATETIME'], 0, 10); ?></td><!-- DATE MARKETING -->
-                                                                <td>In Progress From Mas Usman...</td><!-- DATE PPC RECEIVED BO FROM RMP -->
+                                                                <td>
+                                                                    <?php
+                                                                        $terimabon  = mysqli_query($con_dbnow_mkt, "SELECT * FROM tbl_salesorder WHERE projectcode = '$rowdb2[NO_ORDER]'");
+                                                                        $d_terimabon= mysqli_fetch_assoc($terimabon);
+                                                                        echo $d_terimabon['ppc_terima'];
+                                                                    ?>
+                                                                </td><!-- DATE PPC RECEIVED BO FROM RMP -->
+                                                                <td><img src="img/progress.png" width="40" height="30"> Maintenance Program </td> <!-- DATE BAGI LOT -->
                                                                 <td><?= $rowdb2['ORDERDATE']; ?></td> <!-- TGL TERIMA ORDER -->
                                                                 <td><?= $rowdb2['PELANGGAN']; ?></td> <!-- PELANGGAN -->
                                                                 <td><?= $rowdb2['NO_ORDER'].'-'.$rowdb2['ORDERLINE']; ?></td> <!-- NO. ORDER -->
