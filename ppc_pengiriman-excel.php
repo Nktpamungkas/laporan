@@ -6,13 +6,13 @@
 <table border="1" width="100%">
     <thead>
         <tr>
-            <th colspan="16">Laporan Harian Pengiriman Export</th>
+            <th colspan="16">Laporan Harian Pengiriman</th>
         </tr>
         <tr>
             <th colspan="16">FW-02-PPC-04/02</th>
         </tr>
         <tr>
-            <th colspan="16"><?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"M-Y"); ?></th>
+            <th colspan="16">BULAN <?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"M-Y"); ?></th>
         </tr>
         <tr>
             <th>NO</th>
@@ -166,8 +166,8 @@
                     
                 ?>
             </td> 
-            <td><?= $d_roll['QTY_SJ_KG'] ?></td> 
-            <td><?= $d_roll['QTY_SJ_YARD'] ?></td> 
+            <td><?= number_format($d_roll['QTY_SJ_KG'], 2); ?></td> 
+            <td><?= number_format($d_roll['QTY_SJ_YARD'], 2); ?></td>
             <td><?= $rowdb2['ORDERPARTNERBRANDCODE']; ?></td> 
             <td>
                 <?php

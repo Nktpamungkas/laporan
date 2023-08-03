@@ -213,11 +213,10 @@
                                                                         $d_roll     = db2_fetch_assoc($q_roll);
                                                                         echo $d_roll['ROLL'];
                                                                     }
-                                                                    
                                                                 ?>
                                                             </td> 
-                                                            <td><?= $d_roll['QTY_SJ_KG'] ?></td> 
-                                                            <td><?= $d_roll['QTY_SJ_YARD'] ?></td> 
+                                                            <td><?= number_format($d_roll['QTY_SJ_KG'], 2); ?></td> 
+                                                            <td><?= number_format($d_roll['QTY_SJ_YARD'], 2); ?></td> 
                                                             <td><?= $rowdb2['ORDERPARTNERBRANDCODE']; ?></td> 
                                                             <td>
                                                                 <?php
