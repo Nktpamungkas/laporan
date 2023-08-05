@@ -120,6 +120,7 @@
         $productionorder    = $_GET['PRODUCTIONORDERCODE'];
         $productiondemand   = $_GET['PRODUCTIONDEMANDCODE'];
         $stepnumber         = $_GET['STEPNUMBER'];
+        $operationcode      = $_GET['OPERATIONCODE'];
         $keterangan         = $_GET['KETERANGAN'];
         $ipaddress          = $_GET['IPADDRESS'];
         $createdatetime     = $_GET['CREATEDATETIME'];
@@ -127,12 +128,14 @@
         $simpan_keterangan  = mysqli_query($con_nowprd, "INSERT INTO keterangan_leader(PRODUCTIONORDERCODE,
                                                                                         PRODUCTIONDEMANDCODE,
                                                                                         STEPNUMBER,
+                                                                                        OPERATIONCODE,
                                                                                         KETERANGAN,
                                                                                         IPADDRESS,
                                                                                         CREATEDATETIME)
                                                             VALUES('$productionorder',
                                                                     '$productiondemand',
                                                                     '$stepnumber',
+                                                                    '$operationcode',
                                                                     '$keterangan',
                                                                     '$ipaddress',
                                                                     '$createdatetime')");
@@ -144,12 +147,14 @@
             echo "INSERT INTO keterangan_leader(PRODUCTIONORDERCODE,
                                                             PRODUCTIONDEMANDCODE,
                                                             STEPNUMBER,
+                                                            OPERATIONCODE,
                                                             KETERANGAN,
                                                             IPADDRESS,
                                                             CREATEDATETIME)
                                                 VALUES('$productionorder',
                                                 '$productiondemand',
                                                 '$stepnumber',
+                                                '$operationcode',
                                                 '$keterangan',
                                                 '$ipaddress',
                                                 '$createdatetime')";
@@ -576,9 +581,10 @@
                                                                                 <p class="text-inverse text-left m-t-15 f-16"><b>Dear Leader, <br> Silahkan masukan keterangan dibawah ini.</b></p>
                                                                                 <div class="input-group">
                                                                                     <span class="input-group-addon"><i class="icofont icofont-user-alt-7"></i></span>
-                                                                                    <input type="text" name="PRODUCTIONORDERCODE" value="<?= TRIM($rowdb2['PRODUCTIONORDERCODE']) ?>">
-                                                                                    <input type="text" name="PRODUCTIONDEMANDCODE" value="<?= TRIM($rowdb2['PRODUCTIONDEMANDCODE']) ?>">
+                                                                                    <input type="hidden" name="PRODUCTIONORDERCODE" value="<?= TRIM($rowdb2['PRODUCTIONORDERCODE']) ?>">
+                                                                                    <input type="hidden" name="PRODUCTIONDEMANDCODE" value="<?= TRIM($rowdb2['PRODUCTIONDEMANDCODE']) ?>">
                                                                                     <input type="hidden" name="STEPNUMBER" value="<?= $rowdb2['STEPNUMBER'] ?>">
+                                                                                    <input type="hidden" name="OPERATIONCODE" value="<?= $rowdb2['OPERATIONCODE'] ?>">
                                                                                     <input type="hidden" name="IPADDRESS" value="<?= $_SERVER['REMOTE_ADDR'] ?>">
                                                                                     <input type="hidden" name="CREATEDATETIME" value="<?= date('Y-m-d H:i:s'); ?>">
                                                                                     <textarea placeholder="your notes..." name="KETERANGAN" 
@@ -628,6 +634,7 @@
                                                                                     <input type="hidden" name="PRODUCTIONORDERCODE" value="<?= TRIM($rowdb2['PRODUCTIONORDERCODE']) ?>">
                                                                                     <input type="hidden" name="PRODUCTIONDEMANDCODE" value="<?= TRIM($rowdb2['PRODUCTIONDEMANDCODE']) ?>">
                                                                                     <input type="hidden" name="STEPNUMBER" value="<?= $rowdb2['STEPNUMBER'] ?>">
+                                                                                    <input type="hidden" name="OPERATIONCODE" value="<?= $rowdb2['OPERATIONCODE'] ?>">
                                                                                     <input type="hidden" name="IPADDRESS" value="<?= $_SERVER['REMOTE_ADDR'] ?>">
                                                                                     <input type="hidden" name="CREATEDATETIME" value="<?= date('Y-m-d H:i:s'); ?>">
                                                                                     <textarea placeholder="your notes..." name="KETERANGAN" 
