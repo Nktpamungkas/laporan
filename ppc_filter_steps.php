@@ -6,7 +6,6 @@
     mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_ins3 WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'"); 
     mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WHERE CREATEDATETIME BETWEEN NOW() - INTERVAL 3 DAY AND NOW() - INTERVAL 1 DAY");
     mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'"); 
-
     if($_GET['demand']){
         $demand     = $_GET['demand'];
     }else{
@@ -117,7 +116,72 @@
         }else{
             echo("Error description: " . mysqli_error($simpan_keterangan));
         }
+    }elseif ($_GET['simpan_note'] == 'simpan_note'){
+        $productionorder    = $_GET['PRODUCTIONORDERCODE'];
+        $productiondemand   = $_GET['PRODUCTIONDEMANDCODE'];
+        $stepnumber         = $_GET['STEPNUMBER'];
+        $keterangan         = $_GET['KETERANGAN'];
+        $ipaddress          = $_GET['IPADDRESS'];
+        $createdatetime     = $_GET['CREATEDATETIME'];
+
+        $simpan_keterangan  = mysqli_query($con_nowprd, "INSERT INTO keterangan_leader(PRODUCTIONORDERCODE,
+                                                                                        PRODUCTIONDEMANDCODE,
+                                                                                        STEPNUMBER,
+                                                                                        KETERANGAN,
+                                                                                        IPADDRESS,
+                                                                                        CREATEDATETIME)
+                                                            VALUES('$productionorder',
+                                                                    '$productiondemand',
+                                                                    '$stepnumber',
+                                                                    '$keterangan',
+                                                                    '$ipaddress',
+                                                                    '$createdatetime')");
+        if($simpan_keterangan){
+            header("Location: https://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=$productiondemand&prod_order=$productionorder");
+            exit;
+        }else{
+            echo("Error description: ".$mysqli -> error);
+            echo "INSERT INTO keterangan_leader(PRODUCTIONORDERCODE,
+                                                            PRODUCTIONDEMANDCODE,
+                                                            STEPNUMBER,
+                                                            KETERANGAN,
+                                                            IPADDRESS,
+                                                            CREATEDATETIME)
+                                                VALUES('$productionorder',
+                                                '$productiondemand',
+                                                '$stepnumber',
+                                                '$keterangan',
+                                                '$ipaddress',
+                                                '$createdatetime')";
+            exit();
+        }
+    }elseif ($_GET['edit_note'] == 'edit_note'){
+        $productionorder    = $_GET['PRODUCTIONORDERCODE'];
+        $productiondemand   = $_GET['PRODUCTIONDEMANDCODE'];
+        $stepnumber         = $_GET['STEPNUMBER'];
+        $keterangan         = $_GET['KETERANGAN'];
+        $ipaddress          = $_GET['IPADDRESS'];
+        $createdatetime     = $_GET['CREATEDATETIME'];
+
+        $ubah_keterangan  = mysqli_query($con_nowprd, "UPDATE keterangan_leader SET KETERANGAN = '$keterangan'
+                                                            WHERE PRODUCTIONORDERCODE = '$productionorder'
+                                                            AND PRODUCTIONDEMANDCODE = '$productiondemand'
+                                                            AND STEPNUMBER = '$stepnumber'");
+        
+        if($ubah_keterangan){
+            header("Location: https://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=$productiondemand&prod_order=$productionorder");
+            exit;
+        }else{
+            echo("Error description: ".$mysqli -> error);
+            echo "UPDATE keterangan_leader SET KETERANGAN = '$keterangan'
+                                        WHERE PRODUCTIONORDERCODE = '$productionorder'
+                                        AND PRODUCTIONDEMANDCODE = '$productiondemand'
+                                        AND STEPNUMBER = '$stepnumber'";
+            exit();
+        }
     }
+
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -254,10 +318,11 @@
                                         </div>
                                         <div class="card-block">
                                             <div class="table-responsive dt-responsive">
-                                                <table border='1' style='font-family:"Microsoft Sans Serif"' width="100%">
+                                                <table border="1" style='font-family:"Microsoft Sans Serif"' width="100%">
                                                     <thead>
                                                         <tr>
                                                             <th width="100px" style="text-align: center;">STEP NUMBER</th>
+                                                            <th width="100px" style="text-align: center;">ACTIONS</th>
                                                             <th width="300px" style="text-align: center;">TANGGAL IN</th>
                                                             <th width="300px" style="text-align: center;">TANGGAL OUT</th>
                                                             <th width="100px" style="text-align: center;">OPERATION</th>
@@ -335,6 +400,22 @@
                                                         ?>
                                                             <tr>
                                                                 <td align="center"><?= $rowdb2['STEPNUMBER']; ?></td>
+                                                                <td align="center">
+                                                                    <?php
+                                                                        $q_ket_leader   = mysqli_query($con_nowprd, "SELECT * FROM keterangan_leader 
+                                                                                                                            WHERE PRODUCTIONORDERCODE = '$rowdb2[PRODUCTIONORDERCODE]' 
+                                                                                                                                AND PRODUCTIONDEMANDCODE = '$rowdb2[PRODUCTIONDEMANDCODE]' 
+                                                                                                                                AND STEPNUMBER = '$rowdb2[STEPNUMBER]'");
+                                                                        $d_ket_leader   = mysqli_fetch_assoc($q_ket_leader);
+                                                                    ?>
+                                                                    <?php if($d_ket_leader['KETERANGAN']) : ?>
+                                                                        <abbr title="<?= $d_ket_leader['KETERANGAN']; ?>" data-toggle="modal" data-target="#view-note<?= $rowdb2['OPERATIONCODE']; ?>">View Note</abbr>
+                                                                    <?php else : ?>
+                                                                        <button type="button" style="color: #4778FF;" data-toggle="modal" data-target="#confirm-note<?= $rowdb2['OPERATIONCODE']; ?>">
+                                                                            <i class="icofont icofont-speech-comments"></i>Notes
+                                                                        </button>
+                                                                    <?php endif; ?>
+                                                                </td>
                                                                 <td align="center">
                                                                     <?php if($rowdb2['OPERATIONCODE'] == 'INS3') : ?>
                                                                         <?php
@@ -466,7 +547,7 @@
                                                                 <td 
                                                                     <?php 
                                                                         if($rowdb2['STATUS_OPERATION'] == 'Closed'){ 
-                                                                            echo 'style="background-color:#E76057; color:#F7F7F7;"'; 
+                                                                            echo 'style="background-color:#FB4A4A; color:#F7F7F7;"'; 
                                                                         }elseif($rowdb2['STATUS_OPERATION'] == 'Progress'){ 
                                                                             echo 'style="background-color:#41CC11;"'; 
                                                                         }else{ 
@@ -478,6 +559,105 @@
                                                                 <td><?= $rowdb2['PRODUCTIONORDERCODE']; ?></td>
                                                                 <td><?= $rowdb2['PRODUCTIONDEMANDCODE']; ?></td>
                                                             </tr>
+                                                            <div id="confirm-note<?= $rowdb2['OPERATIONCODE']; ?>" class="modal fade" role="dialog">
+                                                                <div class="modal-dialog modal-lg">
+                                                                    <div class="login-card card-block login-card-modal">
+                                                                        <form class="md-float-material">
+                                                                            <div class="text-center">
+                                                                                <img src="img\logo.png" alt="Indotaichen" width="50" height="50">
+                                                                            </div>
+                                                                            <div class="card m-t-15">
+                                                                                <div class="auth-box card-block">
+                                                                                <div class="row m-b-20">
+                                                                                    <div class="col-md-12 confirm">
+                                                                                        <h3 class="text-center txt-primary"><i class="icofont icofont-check-circled text-primary"></i> Notes</h3>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <p class="text-inverse text-left m-t-15 f-16"><b>Dear Leader, <br> Silahkan masukan keterangan dibawah ini.</b></p>
+                                                                                <div class="input-group">
+                                                                                    <span class="input-group-addon"><i class="icofont icofont-user-alt-7"></i></span>
+                                                                                    <input type="text" name="PRODUCTIONORDERCODE" value="<?= TRIM($rowdb2['PRODUCTIONORDERCODE']) ?>">
+                                                                                    <input type="text" name="PRODUCTIONDEMANDCODE" value="<?= TRIM($rowdb2['PRODUCTIONDEMANDCODE']) ?>">
+                                                                                    <input type="hidden" name="STEPNUMBER" value="<?= $rowdb2['STEPNUMBER'] ?>">
+                                                                                    <input type="hidden" name="IPADDRESS" value="<?= $_SERVER['REMOTE_ADDR'] ?>">
+                                                                                    <input type="hidden" name="CREATEDATETIME" value="<?= date('Y-m-d H:i:s'); ?>">
+                                                                                    <textarea placeholder="your notes..." name="KETERANGAN" 
+                                                                                        style="width: 100%; 
+                                                                                                height: 150px; 
+                                                                                                padding: 12px 20px; 
+                                                                                                box-sizing: border-box;
+                                                                                                border: 2px solid #ccc; 
+                                                                                                border-radius: 4px; 
+                                                                                                background-color: #f8f8f8; 
+                                                                                                font-size: 16px; 
+                                                                                                resize: none;"></textarea>
+                                                                                </div>
+                                                                                <div class="row m-t-15">
+                                                                                    <div class="col-md-12">
+                                                                                        <button name="simpan_note" value="simpan_note" class="btn btn-primary btn-md btn-block waves-effect text-center">Confirm</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-md-12">
+                                                                                        <p class="text-inverse text-left m-b-0 m-t-10">Anda akan menambahkan notes untuk step <?= $rowdb2['OPERATIONCODE']; ?>.</p>
+                                                                                        <p class="text-inverse text-left"><b>Leader <?= $rowdb2['OPERATIONCODE']; ?></b></p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div id="view-note<?= $rowdb2['OPERATIONCODE']; ?>" class="modal fade" role="dialog">
+                                                                <div class="modal-dialog modal-lg">
+                                                                    <div class="login-card card-block login-card-modal">
+                                                                        <form class="md-float-material">
+                                                                            <div class="text-center">
+                                                                                <img src="img\logo.png" alt="Indotaichen" width="50" height="50">
+                                                                            </div>
+                                                                            <div class="card m-t-15">
+                                                                                <div class="auth-box card-block">
+                                                                                <div class="row m-b-20">
+                                                                                    <div class="col-md-12 confirm">
+                                                                                        <h3 class="text-center txt-primary"><i class="icofont icofont-check-circled text-primary"></i> Notes</h3>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="input-group">
+                                                                                    <span class="input-group-addon"><i class="icofont icofont-user-alt-7"></i></span>
+                                                                                    <input type="hidden" name="PRODUCTIONORDERCODE" value="<?= TRIM($rowdb2['PRODUCTIONORDERCODE']) ?>">
+                                                                                    <input type="hidden" name="PRODUCTIONDEMANDCODE" value="<?= TRIM($rowdb2['PRODUCTIONDEMANDCODE']) ?>">
+                                                                                    <input type="hidden" name="STEPNUMBER" value="<?= $rowdb2['STEPNUMBER'] ?>">
+                                                                                    <input type="hidden" name="IPADDRESS" value="<?= $_SERVER['REMOTE_ADDR'] ?>">
+                                                                                    <input type="hidden" name="CREATEDATETIME" value="<?= date('Y-m-d H:i:s'); ?>">
+                                                                                    <textarea placeholder="your notes..." name="KETERANGAN" 
+                                                                                        style="width: 100%; 
+                                                                                                height: 150px; 
+                                                                                                padding: 12px 20px; 
+                                                                                                box-sizing: border-box;
+                                                                                                border: 2px solid #ccc; 
+                                                                                                border-radius: 4px; 
+                                                                                                background-color: #f8f8f8; 
+                                                                                                font-size: 16px; 
+                                                                                                resize: none;"><?= $d_ket_leader['KETERANGAN']; ?></textarea>
+                                                                                </div>
+                                                                                <div class="row m-t-15">
+                                                                                    <div class="col-md-12">
+                                                                                        <button name="edit_note" value="edit_note" class="btn btn-primary btn-md btn-block waves-effect text-center">save changes</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-md-12">
+                                                                                        <p class="text-inverse text-left m-b-0 m-t-10">Pastikan data yang anda masukan benar.</p>
+                                                                                        <p class="text-inverse text-left"><b>Leader <?= $rowdb2['OPERATIONCODE']; ?></b></p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         <?php } ?>
                                                     </tbody>
                                                 </table>
@@ -493,4 +673,6 @@
         </div>
     </div>
 </body>
+<script src="files\assets\js\pcoded.min.js"></script>
+<script type="text/javascript" src="files\assets\js\script.js"></script>
 <?php require_once 'footer.php'; ?>
