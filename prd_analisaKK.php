@@ -178,6 +178,30 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                     </th>
                                                                 </tr>
                                                                 <tr>
+                                                                    <th style="vertical-align: text-top;">Lebar Gramasi Inspection</th>
+                                                                    <th style="vertical-align: text-top;">:</th>
+                                                                    <th style="vertical-align: text-top;">
+                                                                        <?php
+                                                                                $q_lg_INS3  = db2_exec($conn1, "SELECT
+                                                                                                                    e.ELEMENTCODE,
+                                                                                                                    e.WIDTHGROSS,
+                                                                                                                    a.VALUEDECIMAL 
+                                                                                                                FROM
+                                                                                                                    ELEMENTSINSPECTION e 
+                                                                                                                LEFT JOIN ADSTORAGE a ON a.UNIQUEID = e.ABSUNIQUEID AND a.FIELDNAME = 'GSM'
+                                                                                                                WHERE
+                                                                                                                    e.ELEMENTCODE LIKE '%$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]%'
+                                                                                                                ORDER BY 
+                                                                                                                    e.INSPECTIONSTARTDATETIME ASC LIMIT 1");
+                                                                                $d_lg_INS3  = db2_fetch_assoc($q_lg_INS3);
+
+                                                                                if($rowdb2['OPERATIONCODE'] == 'INS3'){
+                                                                                    echo $d_lg_INS3['WIDTHGROSS'].' x '.$d_lg_INS3['VALUEDECIMAL'];
+                                                                                }
+                                                                        ?>
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
                                                                     <th style="vertical-align: text-top;">Lebar x Gramasi Standart</th>
                                                                     <th style="vertical-align: text-top;">:</th>
                                                                     <th style="vertical-align: text-top;">
@@ -401,7 +425,7 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                         </table>
                                                     </div>
                                                     <hr>
-                                                    <span>Alur Aktual :</span>
+                                                    <span style="color:#000000; background-color: #7BAAE4; font-size:20px; line-height:35px; font-family: Microsoft Sans Serif;">Alur Aktual</span>
                                                     <div style="overflow-x:auto;">
                                                         <table width="100%" border="1">
                                                             <?php
@@ -504,7 +528,8 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                                                                     AND SUBCODE04 = '$d_ITXVIEWKK[SUBCODE04]'");
                                                                                 $title_specs    = "Nilai Standart : &#013;";
                                                                             ?>
-                                                                            <th style="text-align: center;"><abbr title="<?= $title_specs; ?><?php while ($d_specs = db2_fetch_assoc($q_specs)) { echo $d_specs['NAMENAME'].' : '.$d_specs['VALUESTRING'].$d_specs['VALUEDECIMAL'].'&#013;'; } ?>"><?= $rowdb2['OPERATIONCODE']; ?></abbr></th>
+                                                                            <th style="text-align: center;">
+                                                                                <abbr title="<?= $title_specs; ?><?php while ($d_specs = db2_fetch_assoc($q_specs)) { echo $d_specs['NAMENAME'].' : '.$d_specs['VALUESTRING'].$d_specs['VALUEDECIMAL'].'&#013;'; } ?>"><?= $rowdb2['OPERATIONCODE']; ?></abbr></th>
                                                                         <?php endif; ?>
                                                                     <?php } ?>
                                                                 </tr>
@@ -654,16 +679,16 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                 <tr>
                                                                     <?php while ($rowdb4 = db2_fetch_assoc($stmt3)) { ?>
                                                                         <?php
-                                                                        $sqlQAData      = "SELECT DISTINCT * FROM ITXVIEW_DETAIL_QA_DATA 
-                                                                                                                WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
-                                                                                                                AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
-                                                                                                                AND WORKCENTERCODE = '$rowdb4[WORKCENTERCODE]' 
-                                                                                                                AND OPERATIONCODE = '$rowdb4[OPERATIONCODE]' 
-                                                                                                                AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
-                                                                                                                AND STATUS = 'Analisa KK'
-                                                                                                                ORDER BY LINE ASC";
-                                                                        $q_QA_DATAcek   = mysqli_query($con_nowprd, $sqlQAData);
-                                                                        $d_QA_DATAcek   = mysqli_fetch_assoc($q_QA_DATAcek);
+                                                                            $sqlQAData      = "SELECT DISTINCT * FROM ITXVIEW_DETAIL_QA_DATA 
+                                                                                                                    WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
+                                                                                                                    AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
+                                                                                                                    AND WORKCENTERCODE = '$rowdb4[WORKCENTERCODE]' 
+                                                                                                                    AND OPERATIONCODE = '$rowdb4[OPERATIONCODE]' 
+                                                                                                                    AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                    AND STATUS = 'Analisa KK'
+                                                                                                                    ORDER BY LINE ASC";
+                                                                            $q_QA_DATAcek   = mysqli_query($con_nowprd, $sqlQAData);
+                                                                            $d_QA_DATAcek   = mysqli_fetch_assoc($q_QA_DATAcek);
                                                                         ?>
                                                                         <?php if ($d_QA_DATAcek) : ?>
                                                                             <td style="vertical-align: top; font-size:11px;">
@@ -679,7 +704,28 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                                 <?php $no = 1; while ($d_QA_DATA3 = mysqli_fetch_array($q_QA_DATA3)) : ?>
                                                                                     <?php $char_code = $d_QA_DATA3['CHARACTERISTICCODE']; ?>
                                                                                     <?php  if(str_contains($char_code, 'GRB') != true && $char_code <> 'LEBAR' && $char_code <> 'GRAMASI') : ?>
-                                                                                        <?= $no++ . ' : ' . $d_QA_DATA3['CHARACTERISTICCODE'] . ' = ' . $d_QA_DATA3['VALUEQUANTITY'] . '<br>'; ?>
+                                                                                        <?php   
+                                                                                            if($d_QA_DATA3['CHARACTERISTICCODE'] == 'GROUPING' AND $d_QA_DATA3['VALUEQUANTITY'] == '1'){
+                                                                                                $grouping_hue = 'A';
+                                                                                            }elseif($d_QA_DATA3['CHARACTERISTICCODE'] == 'GROUPING' AND $d_QA_DATA3['VALUEQUANTITY'] == '2'){
+                                                                                                $grouping_hue = 'B';
+                                                                                            }elseif($d_QA_DATA3['CHARACTERISTICCODE'] == 'GROUPING' AND $d_QA_DATA3['VALUEQUANTITY'] == '3'){
+                                                                                                $grouping_hue = 'C';
+                                                                                            }elseif($d_QA_DATA3['CHARACTERISTICCODE'] == 'GROUPING' AND $d_QA_DATA3['VALUEQUANTITY'] == '4'){
+                                                                                                $grouping_hue = 'D';
+                                                                                            }elseif($d_QA_DATA3['CHARACTERISTICCODE'] == 'HUE' AND $d_QA_DATA3['VALUEQUANTITY'] == '1'){
+                                                                                                $grouping_hue = 'Red';
+                                                                                            }elseif($d_QA_DATA3['CHARACTERISTICCODE'] == 'HUE' AND $d_QA_DATA3['VALUEQUANTITY'] == '2'){
+                                                                                                $grouping_hue = 'Yellow';
+                                                                                            }elseif($d_QA_DATA3['CHARACTERISTICCODE'] == 'HUE' AND $d_QA_DATA3['VALUEQUANTITY'] == '3'){
+                                                                                                $grouping_hue = 'Green';
+                                                                                            }elseif($d_QA_DATA3['CHARACTERISTICCODE'] == 'HUE' AND $d_QA_DATA3['VALUEQUANTITY'] == '4'){
+                                                                                                $grouping_hue = 'Blue';
+                                                                                            }else{
+                                                                                                $grouping_hue = $d_QA_DATA3['VALUEQUANTITY'];
+                                                                                            }
+                                                                                        ?>
+                                                                                        <?= $no++ . ' : ' . $d_QA_DATA3['CHARACTERISTICCODE'] . ' = ' . $grouping_hue . '<br>'; ?>
                                                                                     <?php endif; ?>
                                                                                 <?php endwhile; ?>
                                                                                 <hr>
