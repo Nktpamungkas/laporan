@@ -42,9 +42,21 @@
                                     <div class="card-block">
                                         <form action="" method="post">
                                             <div class="row">
-                                                <div class="col-sm-12 col-xl-12 m-b-30">
-                                                    <h4 class="sub-title">PRODUCTION ORDER </h4>
-                                                    <input type="text" class="form-control" name="bon_resep" value="<?php if (isset($_POST['submit'])){ echo $_POST['bon_resep']; } ?>" required>
+                                                <div class="col-sm-6 col-xl-6 m-b-30">
+                                                    <h4 class="sub-title">Production Order:</h4>
+                                                    <input type="text" name="prod_order" class="form-control" value="<?php if (isset($_POST['submit'])) {
+                                                                                                                            echo $_POST['prod_order'];
+                                                                                                                        } elseif (isset($_GET['prod_order'])) {
+                                                                                                                            echo $_GET['prod_order'];
+                                                                                                                        } ?>">
+                                                </div>
+                                                <div class="col-sm-6 col-xl-6 m-b-30">
+                                                    <h4 class="sub-title">Production Demand:</h4>
+                                                    <input type="text" name="demand" placeholder="Wajib di isi" class="form-control" required value="<?php if (isset($_POST['submit'])) {
+                                                                                                                                                            echo $_POST['demand'];
+                                                                                                                                                        } elseif (isset($_GET['demand'])) {
+                                                                                                                                                            echo $_GET['demand'];
+                                                                                                                                                        } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
@@ -53,7 +65,7 @@
                                         </form>
                                     </div>
                                 </div>
-                                <?php if (isset($_POST['submit'])) : ?>
+                                <?php if (isset($_POST['submit']) OR isset($_GET['demand']) OR isset($_GET['prod_order'])) : ?>
                                     <div class="card">
                                         <div class="card-block">
                                             <div class="row">
@@ -79,6 +91,24 @@
                                                             <?php 
                                                                 ini_set("error_reporting", 1);
                                                                 require_once "koneksi.php";
+
+                                                                if($_GET['demand']){
+                                                                    $demand     = $_GET['demand'];
+                                                                }else{
+                                                                    $demand     = $_POST['demand'];
+                                                                }
+                                                            
+                                                                $q_ITXVIEWKK    = db2_exec($conn1, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$demand'");
+                                                                $d_ITXVIEWKK    = db2_fetch_assoc($q_ITXVIEWKK);
+                                                                
+                                                                if($_GET['prod_order']){
+                                                                    $prod_order     = $_GET['prod_order'];
+                                                                }elseif($_POST['prod_order']) {
+                                                                    $prod_order     = $_POST['prod_order'];
+                                                                }else{
+                                                                    $prod_order     = $d_ITXVIEWKK['PRODUCTIONORDERCODE'];
+                                                                }
+
                                                                 $sql_reservation = "SELECT 
                                                                                         DISTINCT 
                                                                                         r.GROUPLINE,
@@ -96,8 +126,11 @@
                                                                                             WHEN p.LONGDESCRIPTION IS NULL THEN r2.LONGDESCRIPTION 
                                                                                             ELSE p.LONGDESCRIPTION 
                                                                                         END AS LONGDESCRIPTION,
-                                                                                        SUM(r.USERPRIMARYQUANTITY) AS USERPRIMARYQUANTITY,
-                                                                                        TRIM(r.USERPRIMARYUOMCODE) AS USERPRIMARYUOMCODE,
+                                                                                        r.USERPRIMARYQUANTITY,
+                                                                                        CASE
+                                                                                            WHEN TRIM(r.USERPRIMARYUOMCODE) = 'l' THEN 'Liter'
+                                                                                            WHEN TRIM(r.USERPRIMARYUOMCODE) = 'g' THEN 'Gram'
+                                                                                        END AS USERPRIMARYUOMCODE,
                                                                                         r.USEDUSERPRIMARYQUANTITY,
                                                                                         CASE
                                                                                             WHEN r.PROGRESSSTATUS = 0 THEN 'Entered'
@@ -115,28 +148,12 @@
                                                                                                         AND p.SUBCODE04 = r.SUBCODE04
                                                                                                         AND p.ITEMTYPECODE = r.ITEMTYPEAFICODE
                                                                                     LEFT JOIN RECIPE r2 ON r2.SUBCODE01 = r.SUBCODE01 AND r2.SUFFIXCODE = r.SUFFIXCODE
-                                                                                    WHERE r.PRODUCTIONORDERCODE = '$_POST[bon_resep]' AND (NOT r.ITEMTYPEAFICODE = 'KGF' OR r.ITEMTYPEAFICODE = 'KFF')
-                                                                                    GROUP BY
-                                                                                        r.GROUPLINE,
-                                                                                        r.GROUPSTEPNUMBER,
-                                                                                        r.PRODRESERVATIONLINKGROUPCODE,
-                                                                                        r.ITEMTYPEAFICODE,
-                                                                                        r.SUBCODE01,
-                                                                                        r.SUBCODE02,
-                                                                                        r.SUBCODE03,
-                                                                                        r.SUBCODE04,
-                                                                                        r.SUFFIXCODE,
-                                                                                        p.LONGDESCRIPTION,
-                                                                                        r2.LONGDESCRIPTION,
-                                                                                        r.USERPRIMARYUOMCODE,
-                                                                                        r.USEDUSERPRIMARYQUANTITY,
-                                                                                        r.PROGRESSSTATUS,
-                                                                                        r.WAREHOUSECODE,
-                                                                                        r.ISSUEDATE,
-                                                                                        r.PROJECTCODE 
+                                                                                    WHERE 
+                                                                                        r.PRODUCTIONORDERCODE = '$prod_order' 
+                                                                                        AND ORDERCODE = '$demand' 
+                                                                                        AND (NOT r.ITEMTYPEAFICODE = 'KGF' OR r.ITEMTYPEAFICODE = 'KFF') 
                                                                                     ORDER BY 
-                                                                                        r.GROUPLINE,
-                                                                                        r.GROUPSTEPNUMBER ASC";
+                                                                                        r.GROUPLINE ASC";
                                                                 $stmt   = db2_exec($conn1, $sql_reservation);
                                                                 while ($row_reservation = db2_fetch_assoc($stmt)) {
                                                             ?>
@@ -147,15 +164,7 @@
                                                                 <td style="text-align: left;"><?= $row_reservation['ITEMCODE']; ?></td>
                                                                 <td style="text-align: left;"><?= $row_reservation['LONGDESCRIPTION']; ?></td>
                                                                 <td style="text-align: right;"><?= $row_reservation['USERPRIMARYQUANTITY']; ?></td>
-                                                                <td style="text-align: left;">
-                                                                    <?php 
-                                                                        if($row_reservation['USERPRIMARYUOMCODE'] == 'l'){
-                                                                            echo 'Liter';
-                                                                        }elseif($row_reservation['USERPRIMARYUOMCODE'] == 'g'){
-                                                                            echo 'Gram';
-                                                                        }
-                                                                    ?>
-                                                                </td>
+                                                                <td style="text-align: left;"><?= $row_reservation['USERPRIMARYUOMCODE']; ?></td>
                                                                 <td style="text-align: right;"><?= $row_reservation['USEDUSERPRIMARYQUANTITY']; ?></td>
                                                                 <td style="text-align: left;"><?= $row_reservation['PROGRESSSTATUS']; ?></td>
                                                                 <td style="text-align: left;"><?= $row_reservation['WAREHOUSECODE']; ?></td>
