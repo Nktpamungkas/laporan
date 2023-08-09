@@ -94,8 +94,8 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                 <center>
                                                     <h4>ANALISA PROBLEM SOLVING</h4>
                                                 </center>
-                                                <center>
-                                                    <div style="overflow-x:auto;">
+                                                <!-- <center> -->
+                                                    <!-- <div style="overflow-x:auto;"> -->
                                                         <table width="100%" border="0">
                                                             <?php
                                                                 require_once "koneksi.php";
@@ -178,7 +178,31 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                     </th>
                                                                 </tr>
                                                                 <tr>
-                                                                    <th style="vertical-align: text-top;">Lebar Gramasi Inspection</th>
+                                                                    <th style="vertical-align: text-top;">Lebar x Gramasi Kain Jadi</th>
+                                                                    <th style="vertical-align: text-top;">:</th>
+                                                                    <th style="vertical-align: text-top;">
+                                                                        <?php 
+                                                                            $q_lebar = db2_exec($conn1, "SELECT * FROM ITXVIEWLEBAR WHERE SALESORDERCODE = '$d_ITXVIEWKK[BONORDER]' AND ORDERLINE = '$d_ITXVIEWKK[ORDERLINE]'");
+                                                                            $d_lebar = db2_fetch_assoc($q_lebar);
+                                                                        ?>
+                                                                        <?php 
+                                                                            $q_gramasi = db2_exec($conn1, "SELECT * FROM ITXVIEWGRAMASI WHERE SALESORDERCODE = '$d_ITXVIEWKK[BONORDER]' AND ORDERLINE = '$d_ITXVIEWKK[ORDERLINE]'");
+                                                                            $d_gramasi = db2_fetch_assoc($q_gramasi);
+                                                                        ?>
+                                                                        <?php 
+                                                                            if($d_gramasi['GRAMASI_KFF']){
+                                                                                $gramasi = number_format($d_gramasi['GRAMASI_KFF'], 0);
+                                                                            }elseif($d_gramasi['GRAMASI_FKF']){
+                                                                                $gramasi = number_format($d_gramasi['GRAMASI_FKF'], 0);
+                                                                            }else{
+                                                                                $gramasi = '-';
+                                                                            }
+                                                                        ?>
+                                                                        <?= number_format($d_lebar['LEBAR'],0).' x '.$gramasi; ?>
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th style="vertical-align: text-top;">Lebar x Gramasi Inspection</th>
                                                                     <th style="vertical-align: text-top;">:</th>
                                                                     <th style="vertical-align: text-top;">
                                                                         <?php
@@ -202,7 +226,7 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                     </th>
                                                                 </tr>
                                                                 <tr>
-                                                                    <th style="vertical-align: text-top;">Lebar x Gramasi Standart</th>
+                                                                    <th style="vertical-align: text-top;">Lebar x Gramasi Standart Greige</th>
                                                                     <th style="vertical-align: text-top;">:</th>
                                                                     <th style="vertical-align: text-top;">
                                                                         <?php
@@ -232,6 +256,7 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                             $q_lg_element   = db2_exec($conn1, "SELECT DISTINCT
                                                                                                                     s2.TRANSACTIONDATE,
                                                                                                                     s2.LOTCODE,
+                                                                                                                    a2.VALUESTRING AS MESIN_KNT,
                                                                                                                     s.PROJECTCODE,
                                                                                                                     floor(e.WIDTHNET) AS LEBAR, -- Untuk laporan mr. james
                                                                                                                     floor(a.VALUEDECIMAL) AS GRAMASI -- Untuk laporan mr. james
@@ -240,6 +265,8 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                                                                 LEFT JOIN STOCKTRANSACTION s2 ON s2.ITEMELEMENTCODE = s.ITEMELEMENTCODE AND s2.TEMPLATECODE = '204'
                                                                                                                 LEFT JOIN ELEMENTSINSPECTION e ON e.DEMANDCODE = s2.LOTCODE AND e.ELEMENTCODE = s2.ITEMELEMENTCODE -- Untuk laporan mr. james
                                                                                                                 LEFT JOIN ADSTORAGE a ON a.UNIQUEID = e.ABSUNIQUEID AND a.FIELDNAME = 'GSM' -- Untuk laporan mr. james
+                                                                                                                LEFT JOIN PRODUCTIONDEMAND p ON p.CODE = s2.LOTCODE
+                                                                                                                LEFT JOIN ADSTORAGE a2 ON a2.UNIQUEID = p.ABSUNIQUEID AND a2.FIELDNAME = 'MachineNoCode'
                                                                                                                 WHERE
                                                                                                                     s.TEMPLATECODE = '120' 
                                                                                                                     AND 
@@ -249,11 +276,12 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                         ?>
                                                                         <?php if ($cek_lg_element) : ?>
                                                                             *From Element
-                                                                            <table width="100%" style="border:1px solid black;border-collapse:collapse;">
+                                                                            <table width="30%" style="border:1px solid black;border-collapse:collapse;">
                                                                                 <thead>
                                                                                     <tr>
                                                                                         <th style="border:1px solid red; text-align: center; background-color: #EEE6B3">Tanggal Terima Kain</th>
                                                                                         <th style="border:1px solid red; text-align: center; background-color: #EEE6B3">LOTCODE</th>
+                                                                                        <th style="border:1px solid red; text-align: center; background-color: #EEE6B3">MESIN KNT</th>
                                                                                         <th style="border:1px solid red; text-align: center; background-color: #EEE6B3">PROJECTCODE</th>
                                                                                         <th style="border:1px solid red; text-align: center; background-color: #EEE6B3">LEBAR x GRAMASI</th>
                                                                                     </tr>
@@ -263,6 +291,7 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                                         <tr>
                                                                                             <td style="border:1px solid red; text-align: center;"><?= $d_lg_element['TRANSACTIONDATE']; ?></td>
                                                                                             <td style="border:1px solid red; text-align: center;"><?= $d_lg_element['LOTCODE']; ?></td>
+                                                                                            <td style="border:1px solid red; text-align: center;"><?= $d_lg_element['MESIN_KNT']; ?></td>
                                                                                             <td style="border:1px solid red; text-align: center;"><?= $d_lg_element['PROJECTCODE']; ?></td>
                                                                                             <td style="border:1px solid red; text-align: center;"><?= $d_lg_element['LEBAR'] . ' x ' . $d_lg_element['GRAMASI']; ?></td>
                                                                                         </tr>
@@ -274,6 +303,7 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                             $q_lg_element_cut   = db2_exec($conn1, "SELECT DISTINCT
                                                                                                                         s4.TRANSACTIONDATE,
                                                                                                                         s4.LOTCODE,
+                                                                                                                        a2.VALUESTRING AS MESIN_KNT,
                                                                                                                         s.PROJECTCODE,
                                                                                                                         floor(e.WIDTHNET) AS LEBAR, -- Untuk laporan mr. james
                                                                                                                         floor(a.VALUEDECIMAL) AS GRAMASI -- Untuk laporan mr. james
@@ -284,19 +314,22 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                                                                     LEFT JOIN STOCKTRANSACTION s4 ON s4.ITEMELEMENTCODE = s3.ITEMELEMENTCODE AND s4.TEMPLATECODE = '204'
                                                                                                                     LEFT JOIN ELEMENTSINSPECTION e ON e.DEMANDCODE = s4.LOTCODE AND e.ELEMENTCODE = s4.ITEMELEMENTCODE -- Untuk laporan mr. james
                                                                                                                     LEFT JOIN ADSTORAGE a ON a.UNIQUEID = e.ABSUNIQUEID AND a.FIELDNAME = 'GSM' -- Untuk laporan mr. james
+                                                                                                                    LEFT JOIN PRODUCTIONDEMAND p ON p.CODE = s2.LOTCODE
+                                                                                                                    LEFT JOIN ADSTORAGE a2 ON a2.UNIQUEID = p.ABSUNIQUEID AND a2.FIELDNAME = 'MachineNoCode'
                                                                                                                     WHERE
                                                                                                                         s.TEMPLATECODE = '120' 
                                                                                                                         AND s.ORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' -- PRODUCTION NUMBER
                                                                                                                         AND SUBSTR(s.ITEMELEMENTCODE, 1,1) = '8'");
                                                                             $cek_lg_element_cut = db2_fetch_assoc($q_lg_element_cut);
                                                                         ?>
-                                                                        <?php if ($cek_lg_element_cut) : ?>
+                                                                        <?php if (empty($cek_lg_element_cut['LEBAR'])) : ?>
                                                                             *From Cutting Element
-                                                                            <table width="100%" style="border:1px solid black;border-collapse:collapse;">
+                                                                            <table width="30%" style="border:1px solid black;border-collapse:collapse;">
                                                                                 <thead>
                                                                                     <tr>
                                                                                         <th style="border:1px solid red; text-align: center; background-color: #B3DDEE">Tanggal Terima Kain</th>
                                                                                         <th style="border:1px solid red; text-align: center; background-color: #B3DDEE">LOTCODE</th>
+                                                                                        <th style="border:1px solid red; text-align: center; background-color: #EEE6B3">MESIN KNT</th>
                                                                                         <th style="border:1px solid red; text-align: center; background-color: #B3DDEE">PROJECTCODE</th>
                                                                                         <th style="border:1px solid red; text-align: center; background-color: #B3DDEE">LEBAR x GRAMASI</th>
                                                                                     </tr>
@@ -308,6 +341,7 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                                         <tr>
                                                                                             <td style="border:1px solid red; text-align: center;"><?= $d_lg_element_cut['TRANSACTIONDATE']; ?></td>
                                                                                             <td style="border:1px solid red; text-align: center;"><?= $d_lg_element_cut['LOTCODE']; ?></td>
+                                                                                            <td style="border:1px solid red; text-align: center;"><?= $d_lg_element_cut['MESIN_KNT']; ?></td>
                                                                                             <td style="border:1px solid red; text-align: center;"><?= $d_lg_element_cut['PROJECTCODE']; ?></td>
                                                                                             <td style="border:1px solid red; text-align: center;"><?= $d_lg_element_cut['LEBAR'] . ' x ' . $d_lg_element_cut['GRAMASI']; ?></td>
                                                                                         </tr>
@@ -322,58 +356,50 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                     <th style="vertical-align: text-top;">:</th>
                                                                     <th style="vertical-align: text-top;">
                                                                         <?php
-                                                                            $q_benang   = db2_exec($conn1, "SELECT 
-                                                                                                                PRODUCTIONORDERCODE,
-                                                                                                                LISTAGG(BENANG, ', ') AS BENANG
-                                                                                                            FROM 
-                                                                                                            (SELECT DISTINCT
-                                                                                                                p.PRODUCTIONORDERCODE,
-                                                                                                                TRIM(p2.LONGDESCRIPTION) || ' (' || TRIM(CAST(p3.COMMENTTEXT AS VARCHAR(1000))) || ')' AS BENANG
-                                                                                                            FROM  
-                                                                                                                STOCKTRANSACTION s 
-                                                                                                            LEFT JOIN STOCKTRANSACTION s2 ON s2.ITEMELEMENTCODE = s.ITEMELEMENTCODE AND s2.TEMPLATECODE = '204'
-                                                                                                            LEFT JOIN PRODUCTIONRESERVATION p ON p.ORDERCODE = s2.LOTCODE 
-                                                                                                            LEFT JOIN PRODUCTIONRESERVATIONCOMMENT p3 ON p3.PRODUCTIONRESERVATIONORDERCODE = p.ORDERCODE 
-                                                                                                                                                    AND p3.PRORESERVATIONRESERVATIONLINE = p.RESERVATIONLINE
-                                                                                                            LEFT JOIN PRODUCT p2 ON p2.ITEMTYPECODE = p.ITEMTYPEAFICODE AND NOT p2.ITEMTYPECODE = 'DYC' AND NOT p2.ITEMTYPECODE = 'WTR' AND 
-                                                                                                            --							NOT p2.ITEMTYPECODE = 'KFF' AND
-                                                                                                                                        p2.SUBCODE01 = p.SUBCODE01 AND 
-                                                                                                                                        p2.SUBCODE02 = p.SUBCODE02 AND
-                                                                                                                                        p2.SUBCODE03 = p.SUBCODE03 AND 
-                                                                                                                                        p2.SUBCODE04 = p.SUBCODE04 AND
-                                                                                                                                        p2.SUBCODE05 = p.SUBCODE05 AND 
-                                                                                                                                        p2.SUBCODE06 = p.SUBCODE06 AND
-                                                                                                                                        p2.SUBCODE07 = p.SUBCODE07 
-                                                                                                            WHERE
-                                                                                                                s.TEMPLATECODE = '120' 
-                                                                                                                AND 
-                                                                                                                s.ORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' -- PRODUCTION ORDER 
-                                                                                                                AND SUBSTR(s.ITEMELEMENTCODE, 1,1) = '0')
-                                                                                                            GROUP BY 
-                                                                                                                PRODUCTIONORDERCODE");
+                                                                            $q_benang   = db2_exec($conn1, "SELECT DISTINCT
+                                                                                                                    TRIM(p.PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE
+                                                                                                                FROM  
+                                                                                                                    STOCKTRANSACTION s 
+                                                                                                                LEFT JOIN STOCKTRANSACTION s2 ON s2.ITEMELEMENTCODE = s.ITEMELEMENTCODE AND s2.TEMPLATECODE = '204'
+                                                                                                                LEFT JOIN PRODUCTIONRESERVATION p ON p.ORDERCODE = s2.LOTCODE 
+                                                                                                                WHERE
+                                                                                                                    s.TEMPLATECODE = '120' 
+                                                                                                                    AND 
+                                                                                                                    s.ORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' -- PRODUCTION ORDER 
+                                                                                                                    AND SUBSTR(s.ITEMELEMENTCODE, 1,1) = '0'");
                                                                             $no = 1;
                                                                             while ($d_benang = db2_fetch_assoc($q_benang)) {
-                                                                                $q_lotcode  = db2_exec($conn1, "SELECT 
-                                                                                                                    LISTAGG(LOTCODE, ', ') AS LOTCODE
-                                                                                                                FROM
-                                                                                                                    (SELECT 
-                                                                                                                        LOTCODE
-                                                                                                                    FROM 
-                                                                                                                        (SELECT  
-                                                                                                                            CASE
-                                                                                                                                WHEN LOCATE('+', LOTCODE) > 1 THEN SUBSTR(LOTCODE, 1, LOCATE('+', LOTCODE)-1)
-                                                                                                                                ELSE LOTCODE
-                                                                                                                            END AS LOTCODE
-                                                                                                                        FROM
-                                                                                                                            STOCKTRANSACTION
-                                                                                                                        WHERE
-                                                                                                                            TEMPLATECODE = '120'
-                                                                                                                            AND ORDERCODE = '$d_benang[PRODUCTIONORDERCODE]'
-                                                                                                                        GROUP BY LOTCODE)
-                                                                                                                    GROUP BY LOTCODE)");
-                                                                                $d_lotcode  = db2_fetch_assoc($q_lotcode);
+                                                                                $r_benang[]      = "('".$d_benang['PRODUCTIONORDERCODE']."')";
+                                                                            }
+                                                                            $value_benang        = implode(',', $r_benang);
+
+                                                                            $q_lotcode  = db2_exec($conn1, "SELECT DISTINCT 
+                                                                                                                CASE
+                                                                                                                    WHEN LOCATE('+', s.LOTCODE) > 1 THEN SUBSTR(s.LOTCODE, 1, LOCATE('+', s.LOTCODE)-1)
+                                                                                                                    ELSE s.LOTCODE
+                                                                                                                END AS LOTCODE,
+                                                                                                                p2.LONGDESCRIPTION
+                                                                                                            FROM
+                                                                                                                STOCKTRANSACTION s
+                                                                                                            LEFT JOIN PRODUCT p2 ON p2.ITEMTYPECODE = s.ITEMTYPECODE AND NOT 
+                                                                                                                                        p2.ITEMTYPECODE = 'DYC' AND NOT 
+                                                                                                                                        p2.ITEMTYPECODE = 'WTR' AND 
+                                                                                                                                        p2.SUBCODE01 = s.DECOSUBCODE01  AND 
+                                                                                                                                        p2.SUBCODE02 = s.DECOSUBCODE02 AND
+                                                                                                                                        p2.SUBCODE03 = s.DECOSUBCODE03 AND 
+                                                                                                                                        p2.SUBCODE04 = s.DECOSUBCODE04 AND
+                                                                                                                                        p2.SUBCODE05 = s.DECOSUBCODE05 AND 
+                                                                                                                                        p2.SUBCODE06 = s.DECOSUBCODE06 AND
+                                                                                                                                        p2.SUBCODE07 = s.DECOSUBCODE07 
+                                                                                                            WHERE
+                                                                                                                ORDERCODE IN $value_benang
+                                                                                                                AND (TEMPLATECODE = '125' OR TEMPLATECODE = '120')");
+                                                                            while ($d_lotcode = db2_fetch_assoc($q_lotcode)) {
                                                                         ?>
-                                                                            <?= $no++; ?>. <?= $d_benang['BENANG']; ?> (<?= $d_benang['PRODUCTIONORDERCODE']; ?>) || <?= $d_lotcode['LOTCODE']; ?> <br>
+                                                                            
+                                                                            <span style="color:#000000; font-size:12px; font-family: Microsoft Sans Serif;">
+                                                                                <?= $no++; ?>. <?= $d_lotcode['LONGDESCRIPTION']; ?> - <?= $d_lotcode['LOTCODE']; ?>
+                                                                            </span><br>
                                                                         <?php } ?>
                                                                     </th>
                                                                 </tr>
@@ -383,13 +409,17 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                     <th style="vertical-align: text-top;">
                                                                         <?php
                                                                             $q_routing  = db2_exec($conn1, "SELECT
-                                                                                                            TRIM(r.OPERATIONCODE) AS OPERATIONCODE,
-                                                                                                            TRIM(r.LONGDESCRIPTION) AS DESCRIPTION 
-                                                                                                        FROM
-                                                                                                            PRODUCTIONDEMAND p
-                                                                                                        LEFT JOIN ROUTINGSTEP r ON r.ROUTINGNUMBERID = p.ROUTINGNUMBERID 
-                                                                                                        WHERE 
-                                                                                                            p.CODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]'");
+                                                                                                                TRIM(r.OPERATIONCODE) AS OPERATIONCODE,
+                                                                                                                TRIM(r.LONGDESCRIPTION) AS DESCRIPTION 
+                                                                                                            FROM
+                                                                                                                PRODUCTIONDEMAND p
+                                                                                                            LEFT JOIN ROUTINGSTEP r ON r.ROUTINGNUMBERID = p.ROUTINGNUMBERID 
+                                                                                                            LEFT JOIN OPERATION o ON o.CODE = r.OPERATIONCODE 
+                                                                                                            LEFT JOIN ADSTORAGE a ON a.UNIQUEID = o.ABSUNIQUEID AND a.FIELDNAME = 'AlurProses'
+                                                                                                            WHERE 
+                                                                                                                p.CODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' AND a.VALUESTRING = '2'
+                                                                                                            ORDER BY
+	                                                                                                            r.SEQUENCE ASC");
                                                                         ?>
                                                                         <div class="row">
                                                                             <div class="col-sm-6 col-xl-1 m-b-30">
@@ -400,34 +430,12 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                         </div>
                                                                     </th>
                                                                 </tr>
-                                                                <tr>
-                                                                    <th style="vertical-align: text-top;">Note Leader</th>
-                                                                    <th style="vertical-align: text-top;">:</th>
-                                                                    <th style="vertical-align: text-top;">
-                                                                        <?php
-                                                                            $q_routing  = mysqli_query($con_nowprd, "SELECT * FROM keterangan_leader 
-                                                                                                                        WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
-                                                                                                                        AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]'");
-                                                                        ?>
-                                                                        <table style="border:1px solid black;border-collapse:collapse;">
-                                                                            <thead>
-                                                                                <?php while ($d_routing = mysqli_fetch_array($q_routing)) : ?>
-                                                                                    <tr>
-                                                                                        <th style="border:1px solid red; background-color: #EEE6B3"><?= $d_routing['OPERATIONCODE']; ?></th>
-                                                                                        <td style="border:1px solid red; "><?= $d_routing['KETERANGAN']; ?></td>
-                                                                                    </tr>
-                                                                                <?php endwhile; ?>
-                                                                            </thead>
-                                                                        </table>
-                                                                    </th>
-                                                                </tr>
                                                             </thead>
                                                         </table>
-                                                    </div>
-                                                    <hr>
-                                                    <span style="color:#000000; background-color: #7BAAE4; font-size:20px; line-height:35px; font-family: Microsoft Sans Serif;">Alur Aktual</span>
+                                                    <!-- </div> -->
+                                                    <span>Alur Aktual</span>
                                                     <div style="overflow-x:auto;">
-                                                        <table width="100%" border="1">
+                                                        <table border="1">
                                                             <?php
                                                                 ini_set("error_reporting", 1);
                                                                 session_start();
@@ -474,6 +482,7 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                     $sqlDB2 = "SELECT
                                                                                     p.WORKCENTERCODE,
                                                                                     TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
+                                                                                    TRIM(o.OPERATIONGROUPCODE) AS OPERATIONGROUPCODE,
                                                                                     o.LONGDESCRIPTION,
                                                                                     iptip.MULAI,
                                                                                     iptop.SELESAI,
@@ -491,90 +500,76 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                                 LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                 WHERE
                                                                                     p.PRODUCTIONORDERCODE  = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' AND p.PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
+                                                                                    AND NOT iptip.MULAI IS NULL AND NOT iptop.SELESAI IS NULL
                                                                                 ORDER BY iptip.MULAI ASC";
                                                                     $stmt = db2_exec($conn1, $sqlDB2);
                                                                     $stmt2 = db2_exec($conn1, $sqlDB2);
                                                                     $stmt3 = db2_exec($conn1, $sqlDB2);
                                                                     $stmt4 = db2_exec($conn1, $sqlDB2);
                                                                     $stmt5 = db2_exec($conn1, $sqlDB2);
+                                                                    $stmt6 = db2_exec($conn1, $sqlDB2);
+                                                                    $stmt7 = db2_exec($conn1, $sqlDB2);
                                                                 ?>
                                                                 <tr>
                                                                     <?php while ($rowdb2 = db2_fetch_assoc($stmt)) { ?>
                                                                         <?php
-                                                                        $q_QA_DATA  = mysqli_query($con_nowprd, "SELECT DISTINCT * FROM ITXVIEW_DETAIL_QA_DATA 
-                                                                                                                    WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
-                                                                                                                    AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
-                                                                                                                    AND WORKCENTERCODE = '$rowdb2[WORKCENTERCODE]' 
-                                                                                                                    AND OPERATIONCODE = '$rowdb2[OPERATIONCODE]' 
-                                                                                                                    AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
-                                                                                                                    AND STATUS = 'Analisa KK'
-                                                                                                                    ORDER BY LINE ASC");
-                                                                        $cek_QA_DATA    = mysqli_fetch_assoc($q_QA_DATA);
+                                                                            $q_QA_DATA  = mysqli_query($con_nowprd, "SELECT DISTINCT * FROM ITXVIEW_DETAIL_QA_DATA 
+                                                                                                                        WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
+                                                                                                                        AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
+                                                                                                                        AND WORKCENTERCODE = '$rowdb2[WORKCENTERCODE]' 
+                                                                                                                        AND OPERATIONCODE = '$rowdb2[OPERATIONCODE]' 
+                                                                                                                        AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                        AND STATUS = 'Analisa KK'
+                                                                                                                        ORDER BY LINE ASC");
+                                                                            $cek_QA_DATA    = mysqli_fetch_assoc($q_QA_DATA);
                                                                         ?>
                                                                         <?php if ($cek_QA_DATA) : ?>
-                                                                            <?php
-                                                                                $q_specs    = db2_exec($conn1, "SELECT 
-                                                                                                                    TRIM(a.NAMENAME) AS NAMENAME,
-                                                                                                                    a.VALUESTRING,
-                                                                                                                    floor(a.VALUEDECIMAL) AS VALUEDECIMAL
-                                                                                                                FROM 
-                                                                                                                    PRODUCTIONSPECS p 
-                                                                                                                LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID
-                                                                                                                WHERE 
-                                                                                                                    OPERATIONCODE = '$rowdb2[OPERATIONCODE]' 
-                                                                                                                    AND SUBCODE01 = '$d_ITXVIEWKK[SUBCODE01]' 
-                                                                                                                    AND SUBCODE02 = '$d_ITXVIEWKK[SUBCODE02]' 
-                                                                                                                    AND SUBCODE03 ='$d_ITXVIEWKK[SUBCODE03]' 
-                                                                                                                    AND SUBCODE04 = '$d_ITXVIEWKK[SUBCODE04]'");
-                                                                                $title_specs    = "Nilai Standart : &#013;";
-                                                                            ?>
-                                                                            <th style="text-align: center;">
-                                                                                <abbr title="<?= $title_specs; ?><?php while ($d_specs = db2_fetch_assoc($q_specs)) { echo $d_specs['NAMENAME'].' : '.$d_specs['VALUESTRING'].$d_specs['VALUEDECIMAL'].'&#013;'; } ?>"><?= $rowdb2['OPERATIONCODE']; ?></abbr></th>
+                                                                            <th style="text-align: center;"><?= $rowdb2['OPERATIONCODE']; ?></th>
                                                                         <?php endif; ?>
                                                                     <?php } ?>
                                                                 </tr>
                                                                 <tr>
                                                                     <?php while ($rowdb4 = db2_fetch_assoc($stmt4)) { ?>
                                                                         <?php
-                                                                        $q_QA_DATA4  = mysqli_query($con_nowprd, "SELECT DISTINCT * FROM ITXVIEW_DETAIL_QA_DATA 
-                                                                                                                    WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
-                                                                                                                    AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
-                                                                                                                    AND WORKCENTERCODE = '$rowdb4[WORKCENTERCODE]' 
-                                                                                                                    AND OPERATIONCODE = '$rowdb4[OPERATIONCODE]' 
-                                                                                                                    AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
-                                                                                                                    AND STATUS = 'Analisa KK'
-                                                                                                                    ORDER BY LINE ASC");
-                                                                        $cek_QA_DATA4    = mysqli_fetch_assoc($q_QA_DATA4);
+                                                                            $q_QA_DATA4  = mysqli_query($con_nowprd, "SELECT DISTINCT * FROM ITXVIEW_DETAIL_QA_DATA 
+                                                                                                                        WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
+                                                                                                                        AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
+                                                                                                                        AND WORKCENTERCODE = '$rowdb4[WORKCENTERCODE]' 
+                                                                                                                        AND OPERATIONCODE = '$rowdb4[OPERATIONCODE]' 
+                                                                                                                        AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                        AND STATUS = 'Analisa KK'
+                                                                                                                        ORDER BY LINE ASC");
+                                                                            $cek_QA_DATA4    = mysqli_fetch_assoc($q_QA_DATA4);
                                                                         ?>
                                                                         <?php if ($cek_QA_DATA4) : ?>
                                                                             <th style="text-align: center; font-size:11px; background-color: #EEE6B3">
                                                                                 <?php if ($rowdb4['OPERATIONCODE'] == 'INS3') : ?>
                                                                                     <?php
-                                                                                    $q_mulai_ins3   = mysqli_query($con_nowprd, "SELECT
-                                                                                                                                        * 
-                                                                                                                                    FROM
-                                                                                                                                        `itxview_posisikk_tgl_in_prodorder_ins3_detaildemandstep` 
-                                                                                                                                    WHERE
-                                                                                                                                        productionordercode = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]'
-                                                                                                                                        AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
-                                                                                                                                    ORDER BY
-                                                                                                                                        MULAI ASC LIMIT 1");
-                                                                                    $d_mulai_ins3   = mysqli_fetch_assoc($q_mulai_ins3);
-                                                                                    echo $d_mulai_ins3['MULAI'];
+                                                                                        $q_mulai_ins3   = mysqli_query($con_nowprd, "SELECT
+                                                                                                                                            * 
+                                                                                                                                        FROM
+                                                                                                                                            `itxview_posisikk_tgl_in_prodorder_ins3_detaildemandstep` 
+                                                                                                                                        WHERE
+                                                                                                                                            productionordercode = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]'
+                                                                                                                                            AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                                        ORDER BY
+                                                                                                                                            MULAI ASC LIMIT 1");
+                                                                                        $d_mulai_ins3   = mysqli_fetch_assoc($q_mulai_ins3);
+                                                                                        echo $d_mulai_ins3['MULAI'];
                                                                                     ?>
                                                                                 <?php elseif ($rowdb4['OPERATIONCODE'] == 'CNP1') : ?>
                                                                                     <?php
-                                                                                    $q_mulai_cnp1   = mysqli_query($con_nowprd, "SELECT
-                                                                                                                                        * 
-                                                                                                                                    FROM
-                                                                                                                                        `itxview_posisikk_tgl_in_prodorder_cnp1_detaildemandstep` 
-                                                                                                                                    WHERE
-                                                                                                                                        productionordercode = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]'
-                                                                                                                                        AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
-                                                                                                                                    ORDER BY
-                                                                                                                                        MULAI ASC LIMIT 1");
-                                                                                    $d_mulai_cnp1   = mysqli_fetch_assoc($q_mulai_cnp1);
-                                                                                    echo $d_mulai_cnp1['MULAI'];
+                                                                                        $q_mulai_cnp1   = mysqli_query($con_nowprd, "SELECT
+                                                                                                                                            * 
+                                                                                                                                        FROM
+                                                                                                                                            `itxview_posisikk_tgl_in_prodorder_cnp1_detaildemandstep` 
+                                                                                                                                        WHERE
+                                                                                                                                            productionordercode = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]'
+                                                                                                                                            AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                                        ORDER BY
+                                                                                                                                            MULAI ASC LIMIT 1");
+                                                                                        $d_mulai_cnp1   = mysqli_fetch_assoc($q_mulai_cnp1);
+                                                                                        echo $d_mulai_cnp1['MULAI'];
                                                                                     ?>
                                                                                 <?php else : ?>
                                                                                     <?= $rowdb4['MULAI']; ?>
@@ -618,15 +613,15 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                 <tr>
                                                                     <?php while ($rowdb3 = db2_fetch_assoc($stmt2)) { ?>
                                                                         <?php
-                                                                        $q_QA_DATA2  = mysqli_query($con_nowprd, "SELECT DISTINCT * FROM ITXVIEW_DETAIL_QA_DATA 
-                                                                                                                    WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
-                                                                                                                    AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
-                                                                                                                    AND WORKCENTERCODE = '$rowdb3[WORKCENTERCODE]' 
-                                                                                                                    AND OPERATIONCODE = '$rowdb3[OPERATIONCODE]' 
-                                                                                                                    AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
-                                                                                                                    AND STATUS = 'Analisa KK'
-                                                                                                                    ORDER BY LINE ASC");
-                                                                        $cek_QA_DATA2    = mysqli_fetch_assoc($q_QA_DATA2);
+                                                                            $q_QA_DATA2  = mysqli_query($con_nowprd, "SELECT DISTINCT * FROM ITXVIEW_DETAIL_QA_DATA 
+                                                                                                                        WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
+                                                                                                                        AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
+                                                                                                                        AND WORKCENTERCODE = '$rowdb3[WORKCENTERCODE]' 
+                                                                                                                        AND OPERATIONCODE = '$rowdb3[OPERATIONCODE]' 
+                                                                                                                        AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                        AND STATUS = 'Analisa KK'
+                                                                                                                        ORDER BY LINE ASC");
+                                                                            $cek_QA_DATA2    = mysqli_fetch_assoc($q_QA_DATA2);
                                                                         ?>
                                                                         <?php if ($cek_QA_DATA2) : ?>
                                                                             <th style="text-align: center;"><?= $rowdb3['MESIN']; ?></th>
@@ -665,14 +660,93 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                                                                                         ORDER BY
                                                                                                                                             a.id DESC LIMIT 1 ");
                                                                                     $d_dye_montemp      = mysqli_fetch_assoc($q_dye_montemp);
+
                                                                                 ?>
                                                                                 <th style="text-align: center;">
-                                                                                    <a style="color: #E95D4E;" href="https://online.indotaichen.com/dye-itti/pages/cetak/cetak_monitoring_new.php?idkk=&no=<?= $d_dye_montemp['no_resep']; ?>&idm=<?php echo $d_dye_montemp['idm']; ?>&ids=<?php echo $d_dye_montemp['ids']; ?>" target="_blank">Monitoring <i class="icofont icofont-external-link"></i>
-                                                                                    </a> 
+                                                                                    <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/dye-itti/pages/cetak/cetak_monitoring_new.php?idkk=&no=<?= $d_dye_montemp['no_resep']; ?>&idm=<?php echo $d_dye_montemp['idm']; ?>&ids=<?php echo $d_dye_montemp['ids']; ?>" target="_blank">Monitoring <i class="icofont icofont-external-link"></i></a>
+                                                                                    &ensp;
+                                                                                    <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/laporan/dye_filter_bon_reservation.php?demand=<?= $d_ITXVIEWKK['PRODUCTIONDEMANDCODE']; ?>&prod_order=<?= $d_ITXVIEWKK['PRODUCTIONORDERCODE']; ?>" target="_blank">Bon Resep <i class="icofont icofont-external-link"></i></a>
                                                                                 </th>
                                                                             <?php else : ?>
-                                                                                <th style="text-align: center;">-</th>
+                                                                                <th style="text-align: center;">
+                                                                                    <?php $opr_grup = $rowdb5['OPERATIONGROUPCODE']; if(str_contains($opr_grup, "FIN")) : ?>
+                                                                                        <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/finishing2-new/reports/pages/reports-detail-stenter.php?FromAnalisa=FromAnalisa&prod_order=<?= TRIM($d_ITXVIEWKK['PRODUCTIONORDERCODE']); ?>&prod_demand=<?= TRIM($d_ITXVIEWKK['PRODUCTIONDEMANDCODE']); ?>&tgl_in=<?= substr($rowdb5['MULAI'], 1, 10); ?>&tgl_out=<?= substr($rowdb5['SELESAI'], 1, 10); ?>" target="_blank">Detail proses <i class="icofont icofont-external-link"></i></a>
+                                                                                    <?php else : ?>
+                                                                                        <th style="text-align: center;">-</th>
+                                                                                    <?php endif; ?>
+                                                                                </th>
                                                                             <?php endif; ?>
+                                                                        <?php endif; ?>
+                                                                    <?php } ?>
+                                                                </tr>
+                                                                <tr>
+                                                                    <?php while ($rowdb7 = db2_fetch_assoc($stmt7)) { ?>
+                                                                        <?php
+                                                                            $q_QA_DATA7  = mysqli_query($con_nowprd, "SELECT DISTINCT * FROM ITXVIEW_DETAIL_QA_DATA 
+                                                                                                                        WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
+                                                                                                                        AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
+                                                                                                                        AND WORKCENTERCODE = '$rowdb7[WORKCENTERCODE]' 
+                                                                                                                        AND OPERATIONCODE = '$rowdb7[OPERATIONCODE]' 
+                                                                                                                        AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                        AND STATUS = 'Analisa KK'
+                                                                                                                        ORDER BY LINE ASC");
+                                                                            $cek_QA_DATA7    = mysqli_fetch_assoc($q_QA_DATA7);
+                                                                        ?>
+                                                                        <?php if ($cek_QA_DATA7) : ?>
+                                                                            <?php
+                                                                                $q_routing  = mysqli_query($con_nowprd, "SELECT * FROM keterangan_leader 
+                                                                                                                            WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
+                                                                                                                            AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]'
+                                                                                                                            AND OPERATIONCODE = '$rowdb7[OPERATIONCODE]'");
+                                                                                $d_routing  = mysqli_fetch_assoc($q_routing);
+                                                                            ?>
+                                                                            <td style="vertical-align: top; font-size:11px;">
+                                                                                <?= substr($d_routing['KETERANGAN'], 0,35); ?><?php if(substr($d_routing['KETERANGAN'], 0,35)){ echo "<br>"; } ?>
+                                                                                <?= substr($d_routing['KETERANGAN'], 35,70); ?><?php if(substr($d_routing['KETERANGAN'], 35,70)){ echo "<br>"; } ?>
+                                                                                <?= substr($d_routing['KETERANGAN'], 70,105); ?><?php if(substr($d_routing['KETERANGAN'], 70,105)){ echo "<br>"; } ?>
+                                                                                <?= substr($d_routing['KETERANGAN'], 105,140); ?><?php if(substr($d_routing['KETERANGAN'], 105,140)){ echo "<br>"; } ?>
+                                                                                <?= substr($d_routing['KETERANGAN'], 140,175); ?><?php if(substr($d_routing['KETERANGAN'], 140,175)){ echo "<br>"; } ?>
+                                                                                <?= substr($d_routing['KETERANGAN'], 175,210); ?><?php if(substr($d_routing['KETERANGAN'], 175,210)){ echo "<br>"; } ?>
+                                                                                <?= substr($d_routing['KETERANGAN'], 210); ?><?php if(substr($d_routing['KETERANGAN'], 210)){ echo ""; } ?>
+                                                                            </td>
+                                                                        <?php endif; ?>
+                                                                    <?php } ?>
+                                                                </tr>
+                                                                <tr>
+                                                                    <?php while ($rowdb6 = db2_fetch_assoc($stmt6)) { ?>
+                                                                        <?php
+                                                                            $q_QA_DATA8  = mysqli_query($con_nowprd, "SELECT DISTINCT * FROM ITXVIEW_DETAIL_QA_DATA 
+                                                                                                                        WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
+                                                                                                                        AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
+                                                                                                                        AND WORKCENTERCODE = '$rowdb6[WORKCENTERCODE]' 
+                                                                                                                        AND OPERATIONCODE = '$rowdb6[OPERATIONCODE]' 
+                                                                                                                        AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                        AND STATUS = 'Analisa KK'
+                                                                                                                        ORDER BY LINE ASC");
+                                                                            $cek_QA_DATA8    = mysqli_fetch_assoc($q_QA_DATA8);
+                                                                        ?>
+                                                                        <?php if ($cek_QA_DATA8) : ?>
+                                                                            <?php
+                                                                                $q_specs    = db2_exec($conn1, "SELECT 
+                                                                                                                TRIM(a.NAMENAME) AS NAMENAME,
+                                                                                                                a.VALUESTRING,
+                                                                                                                floor(a.VALUEDECIMAL) AS VALUEDECIMAL
+                                                                                                            FROM 
+                                                                                                                PRODUCTIONSPECS p 
+                                                                                                            LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID
+                                                                                                            WHERE 
+                                                                                                                OPERATIONCODE = '$rowdb6[OPERATIONCODE]' 
+                                                                                                                AND SUBCODE01 = '$d_ITXVIEWKK[SUBCODE01]' 
+                                                                                                                AND SUBCODE02 = '$d_ITXVIEWKK[SUBCODE02]' 
+                                                                                                                AND SUBCODE03 ='$d_ITXVIEWKK[SUBCODE03]' 
+                                                                                                                AND SUBCODE04 = '$d_ITXVIEWKK[SUBCODE04]'");
+                                                                            ?>
+                                                                            <td style="vertical-align: top; font-size:11px;">
+                                                                                <b>Acuan Standart :</b> <br>
+                                                                                <?php while ($d_specs = db2_fetch_assoc($q_specs)) {  ?>
+                                                                                    <li><?= $d_specs['NAMENAME']; ?> : <?= $d_specs['VALUESTRING'].$d_specs['VALUEDECIMAL']; ?> </li>
+                                                                                <?php } ?>
+                                                                            </td>
                                                                         <?php endif; ?>
                                                                     <?php } ?>
                                                                 </tr>
@@ -743,7 +817,7 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                             </thead>
                                                         </table>
                                                     </div>
-                                                </center>
+                                                <!-- </center> -->
                                             </div>
                                         </div>
                                     </div>
