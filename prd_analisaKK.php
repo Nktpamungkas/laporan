@@ -1,5 +1,5 @@
 <?php
-ini_set("error_reporting", 1);
+ini_set("error_reporting", 0);
 session_start();
 require_once "koneksi.php";
 mysqli_query($con_nowprd, "DELETE FROM itxview_detail_qa_data WHERE CREATEDATETIME BETWEEN NOW() - INTERVAL 3 DAY AND NOW() - INTERVAL 1 DAY AND STATUS = 'Analisa KK'");
@@ -322,7 +322,7 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                                                                         AND SUBSTR(s.ITEMELEMENTCODE, 1,1) = '8'");
                                                                             $cek_lg_element_cut = db2_fetch_assoc($q_lg_element_cut);
                                                                         ?>
-                                                                        <?php if (empty($cek_lg_element_cut['LEBAR'])) : ?>
+                                                                        <?php if (!empty($cek_lg_element_cut['LEBAR'])) : ?>
                                                                             *From Cutting Element
                                                                             <table width="30%" style="border:1px solid black;border-collapse:collapse;">
                                                                                 <thead>
@@ -356,6 +356,8 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                     <th style="vertical-align: text-top;">:</th>
                                                                     <th style="vertical-align: text-top;">
                                                                         <?php
+                                                                            ini_set("error_reporting", 0);
+
                                                                             $q_benang   = db2_exec($conn1, "SELECT DISTINCT
                                                                                                                     TRIM(p.PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE
                                                                                                                 FROM  
@@ -368,38 +370,48 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                                                                     s.ORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' -- PRODUCTION ORDER 
                                                                                                                     AND SUBSTR(s.ITEMELEMENTCODE, 1,1) = '0'");
                                                                             $no = 1;
-                                                                            while ($d_benang = db2_fetch_assoc($q_benang)) {
-                                                                                $r_benang[]      = "('".$d_benang['PRODUCTIONORDERCODE']."')";
-                                                                            }
-                                                                            $value_benang        = implode(',', $r_benang);
-
-                                                                            $q_lotcode  = db2_exec($conn1, "SELECT DISTINCT 
-                                                                                                                CASE
-                                                                                                                    WHEN LOCATE('+', s.LOTCODE) > 1 THEN SUBSTR(s.LOTCODE, 1, LOCATE('+', s.LOTCODE)-1)
-                                                                                                                    ELSE s.LOTCODE
-                                                                                                                END AS LOTCODE,
-                                                                                                                p2.LONGDESCRIPTION
-                                                                                                            FROM
-                                                                                                                STOCKTRANSACTION s
-                                                                                                            LEFT JOIN PRODUCT p2 ON p2.ITEMTYPECODE = s.ITEMTYPECODE AND NOT 
-                                                                                                                                        p2.ITEMTYPECODE = 'DYC' AND NOT 
-                                                                                                                                        p2.ITEMTYPECODE = 'WTR' AND 
-                                                                                                                                        p2.SUBCODE01 = s.DECOSUBCODE01  AND 
-                                                                                                                                        p2.SUBCODE02 = s.DECOSUBCODE02 AND
-                                                                                                                                        p2.SUBCODE03 = s.DECOSUBCODE03 AND 
-                                                                                                                                        p2.SUBCODE04 = s.DECOSUBCODE04 AND
-                                                                                                                                        p2.SUBCODE05 = s.DECOSUBCODE05 AND 
-                                                                                                                                        p2.SUBCODE06 = s.DECOSUBCODE06 AND
-                                                                                                                                        p2.SUBCODE07 = s.DECOSUBCODE07 
-                                                                                                            WHERE
-                                                                                                                ORDERCODE IN $value_benang
-                                                                                                                AND (TEMPLATECODE = '125' OR TEMPLATECODE = '120')");
-                                                                            while ($d_lotcode = db2_fetch_assoc($q_lotcode)) {
+                                                                            $cekada_benang  = db2_fetch_assoc($q_benang);                                                                            
                                                                         ?>
-                                                                            
-                                                                            <span style="color:#000000; font-size:12px; font-family: Microsoft Sans Serif;">
-                                                                                <?= $no++; ?>. <?= $d_lotcode['LONGDESCRIPTION']; ?> - <?= $d_lotcode['LOTCODE']; ?>
-                                                                            </span><br>
+                                                                        <?php if(!empty($cekada_benang['PRODUCTIONORDERCODE'])){ ?>
+                                                                            <?php   
+                                                                                while ($d_benang = db2_fetch_assoc($q_benang)) {
+                                                                                    $r_benang[]      = "('".$d_benang['PRODUCTIONORDERCODE']."')";
+                                                                                }
+                                                                                $value_benang        = implode(',', $r_benang);
+
+                                                                                $q_lotcode  = db2_exec($conn1, "SELECT 
+                                                                                                                    LISTAGG(TRIM(LOTCODE), ', ') AS LOTCODE,
+                                                                                                                    LONGDESCRIPTION
+                                                                                                                    FROM
+                                                                                                                    (SELECT DISTINCT 
+                                                                                                                                CASE
+                                                                                                                                    WHEN LOCATE('+', s.LOTCODE) > 1 THEN SUBSTR(s.LOTCODE, 1, LOCATE('+', s.LOTCODE)-1)
+                                                                                                                                    ELSE s.LOTCODE
+                                                                                                                                END AS LOTCODE,
+                                                                                                                                p2.LONGDESCRIPTION
+                                                                                                                            FROM
+                                                                                                                                STOCKTRANSACTION s
+                                                                                                                            LEFT JOIN PRODUCT p2 ON p2.ITEMTYPECODE = s.ITEMTYPECODE AND NOT 
+                                                                                                                                                        p2.ITEMTYPECODE = 'DYC' AND NOT 
+                                                                                                                                                        p2.ITEMTYPECODE = 'WTR' AND 
+                                                                                                                                                        p2.SUBCODE01 = s.DECOSUBCODE01  AND 
+                                                                                                                                                        p2.SUBCODE02 = s.DECOSUBCODE02 AND
+                                                                                                                                                        p2.SUBCODE03 = s.DECOSUBCODE03 AND 
+                                                                                                                                                        p2.SUBCODE04 = s.DECOSUBCODE04 AND
+                                                                                                                                                        p2.SUBCODE05 = s.DECOSUBCODE05 AND 
+                                                                                                                                                        p2.SUBCODE06 = s.DECOSUBCODE06 AND
+                                                                                                                                                        p2.SUBCODE07 = s.DECOSUBCODE07 
+                                                                                                                            WHERE
+                                                                                                                                ORDERCODE IN $value_benang
+                                                                                                                                AND (TEMPLATECODE = '125' OR TEMPLATECODE = '120'))
+                                                                                                                    GROUP BY
+	                                                                                                                    LONGDESCRIPTION");
+                                                                                while ($d_lotcode = db2_fetch_assoc($q_lotcode)) {
+                                                                            ?>
+                                                                                <span style="color:#000000; font-size:12px; font-family: Microsoft Sans Serif;">
+                                                                                    <?= $no++; ?>. <?= $d_lotcode['LONGDESCRIPTION']; ?> - <?= $d_lotcode['LOTCODE']; ?>
+                                                                                </span><br>
+                                                                            <?php } ?>
                                                                         <?php } ?>
                                                                     </th>
                                                                 </tr>
@@ -437,7 +449,7 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                     <div style="overflow-x:auto;">
                                                         <table border="1">
                                                             <?php
-                                                                ini_set("error_reporting", 1);
+                                                                ini_set("error_reporting", 0);
                                                                 session_start();
                                                                 require_once "koneksi.php";
 
@@ -668,13 +680,13 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                                     <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/laporan/dye_filter_bon_reservation.php?demand=<?= $d_ITXVIEWKK['PRODUCTIONDEMANDCODE']; ?>&prod_order=<?= $d_ITXVIEWKK['PRODUCTIONORDERCODE']; ?>" target="_blank">Bon Resep <i class="icofont icofont-external-link"></i></a>
                                                                                 </th>
                                                                             <?php else : ?>
-                                                                                <th style="text-align: center;">
                                                                                     <?php $opr_grup = $rowdb5['OPERATIONGROUPCODE']; if(str_contains($opr_grup, "FIN")) : ?>
-                                                                                        <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/finishing2-new/reports/pages/reports-detail-stenter.php?FromAnalisa=FromAnalisa&prod_order=<?= TRIM($d_ITXVIEWKK['PRODUCTIONORDERCODE']); ?>&prod_demand=<?= TRIM($d_ITXVIEWKK['PRODUCTIONDEMANDCODE']); ?>&tgl_in=<?= substr($rowdb5['MULAI'], 1, 10); ?>&tgl_out=<?= substr($rowdb5['SELESAI'], 1, 10); ?>" target="_blank">Detail proses <i class="icofont icofont-external-link"></i></a>
+                                                                                        <th style="text-align: center;">
+                                                                                            <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/finishing2-new/reports/pages/reports-detail-stenter.php?FromAnalisa=FromAnalisa&prod_order=<?= TRIM($d_ITXVIEWKK['PRODUCTIONORDERCODE']); ?>&prod_demand=<?= TRIM($d_ITXVIEWKK['PRODUCTIONDEMANDCODE']); ?>&tgl_in=<?= substr($rowdb5['MULAI'], 1, 10); ?>&tgl_out=<?= substr($rowdb5['SELESAI'], 1, 10); ?>" target="_blank">Detail proses <i class="icofont icofont-external-link"></i></a>
+                                                                                        </th>
                                                                                     <?php else : ?>
                                                                                         <th style="text-align: center;">-</th>
                                                                                     <?php endif; ?>
-                                                                                </th>
                                                                             <?php endif; ?>
                                                                         <?php endif; ?>
                                                                     <?php } ?>
