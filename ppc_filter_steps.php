@@ -121,7 +121,7 @@
         $productiondemand   = $_GET['PRODUCTIONDEMANDCODE'];
         $stepnumber         = $_GET['STEPNUMBER'];
         $operationcode      = $_GET['OPERATIONCODE'];
-        $keterangan         = $_GET['KETERANGAN'];
+        $keterangan         = str_replace ("'","\'", $_GET['KETERANGAN']);
         $ipaddress          = $_GET['IPADDRESS'];
         $createdatetime     = $_GET['CREATEDATETIME'];
 
@@ -164,7 +164,7 @@
         $productionorder    = $_GET['PRODUCTIONORDERCODE'];
         $productiondemand   = $_GET['PRODUCTIONDEMANDCODE'];
         $stepnumber         = $_GET['STEPNUMBER'];
-        $keterangan         = $_GET['KETERANGAN'];
+        $keterangan         = str_replace ("'","\'", $_GET['KETERANGAN']);
         $ipaddress          = $_GET['IPADDRESS'];
         $createdatetime     = $_GET['CREATEDATETIME'];
 
