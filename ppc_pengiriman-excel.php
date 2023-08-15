@@ -152,19 +152,51 @@
                 <td><?= $no++; ?></td>
                 <td><?= $rowdb2['GOODSISSUEDATE']; ?></td> 
                 <td><?= $rowdb2['PROVISIONALCODE']; ?></td> 
-                <td></td>
-                <td><?= $d_ket_foc['ROLL']; ?></td>
-                <td><?= number_format($d_ket_foc['KG'], 2); ?></td>
-                <td><?= number_format($d_ket_foc['YARD_MTR'], 2); ?></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>FOC</td>
-                <td></td>
+                <td><?= $rowdb2['WARNA']; ?></td> 
+                <td><?= $d_ket_foc['ROLL']; ?></td> 
+                <td><?= number_format($d_ket_foc['KG'], 2); ?></td> 
+                <td><?= number_format($d_ket_foc['YARD_MTR'], 2); ?></td> 
+                <td><?= $rowdb2['ORDERPARTNERBRANDCODE']; ?></td> 
+                <td>
+                    <?php
+                        $q_pelanggan    = db2_exec($conn1, "SELECT * FROM ITXVIEW_PELANGGAN WHERE ORDPRNCUSTOMERSUPPLIERCODE = '$rowdb2[ORDPRNCUSTOMERSUPPLIERCODE]' 
+                                                                                            AND CODE = '$rowdb2[DLVSALORDERLINESALESORDERCODE]'");
+                        $r_pelanggan    = db2_fetch_assoc($q_pelanggan);
+                        if($rowdb2['CODE'] == 'EXPORT'){
+                            echo $d_roll['ADDRESSEE'].' - '.$d_roll['BRAND_NM'];
+                        }else{
+                            echo $r_pelanggan['LANGGANAN'];
+
+                        }
+                    ?>
+                </td> 
+                <td>`<?= $rowdb2['PO_NUMBER']; ?></td> 
+                <td>
+                    <?php
+                        if($rowdb2['CODE'] == 'EXPORT'){
+                            echo $d_roll['PROJECT'];
+                        }else{
+                            echo $rowdb2['DLVSALORDERLINESALESORDERCODE'];
+                        }
+                    ?>
+                </td> 
+                <td><?= $rowdb2['ITEMDESCRIPTION']; ?></td> 
+                <td>`<?= $rowdb2['LOTCODE']; ?></td> 
+                <td>
+                    <?php
+                        $q_demand   = db2_exec($conn1, "SELECT 
+                                                            PRODUCTIONDEMANDCODE
+                                                        FROM 
+                                                            ITXVIEW_DEMANDBYLOTCODE 
+                                                        WHERE 
+                                                            PRODUCTIONORDERCODE = '$rowdb2[LOTCODE]'
+                                                            AND DLVSALESORDERLINEORDERLINE = '$rowdb2[DLVSALESORDERLINEORDERLINE]'");
+                        $d_demand   = db2_fetch_assoc($q_demand);
+                    ?>
+                    <?= $d_demand['PRODUCTIONDEMANDCODE']; ?>
+                </td> 
+                <td><?php if($rowdb2['PAYMENTMETHODCODE'] == 'FOC'){ echo $rowdb2['PAYMENTMETHODCODE']; } ?></td> 
+                <td><?= $rowdb2['ITEMTYPEAFICODE']; ?></td> 
             </tr>
             <tr>
                 <td><?= $no++; ?></td>
