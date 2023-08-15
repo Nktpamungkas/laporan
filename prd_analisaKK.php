@@ -443,6 +443,25 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                         </div>
                                                                     </th>
                                                                 </tr>
+                                                                <tr>
+                                                                    <th style="vertical-align: text-top;">Hasil test quality</th>
+                                                                    <th style="vertical-align: text-top;">:</th>
+                                                                    <th style="vertical-align: text-top;">
+                                                                        <?php
+                                                                            $q_cari_tq  = mysqli_query($con_db_qc, "SELECT * FROM tbl_tq_nokk WHERE nodemand = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' ORDER BY id DESC");
+                                                                        ?>
+                                                                        <?php while ($row_tq = mysqli_fetch_array($q_cari_tq)) { ?>
+                                                                            <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_result.php?idkk=<?= $row_tq['id']; ?>&noitem=<?= $row_tq['no_item']; ?>&nohanger=<?= $row_tq['no_hanger']; ?>" target="_blank">Detail test quality (<?= $row_tq['no_test']; ?>)<i class="icofont icofont-external-link"></i></a><br>
+                                                                        <?php } ?>
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th style="vertical-align: text-top;">Hasil test inspect</th>
+                                                                    <th style="vertical-align: text-top;">:</th>
+                                                                    <th style="vertical-align: text-top;">
+                                                                        <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($d_ITXVIEWKK['PRODUCTIONDEMANDCODE']); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
+                                                                    </th>
+                                                                </tr>
                                                             </thead>
                                                         </table>
                                                     <!-- </div> -->
