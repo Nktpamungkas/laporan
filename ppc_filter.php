@@ -146,6 +146,7 @@
                                                             <th>DELAY</th>
                                                             <th>KODE DEPT</th>
                                                             <th>STATUS TERAKHIR</th>
+                                                            <th>DELAY PROGRESS STATUS</th>
                                                             <th>PROGRESS STATUS</th>
                                                             <th>LOT</th>
                                                             <th>NO DEMAND</th>
@@ -337,13 +338,51 @@
                                                                     $q_deteksi_status_close = db2_exec($conn1, "SELECT 
                                                                                                                     p.PRODUCTIONORDERCODE AS PRODUCTIONORDERCODE, 
                                                                                                                     p.GROUPSTEPNUMBER AS GROUPSTEPNUMBER,
-                                                                                                                    p.PROGRESSSTATUS AS PROGRESSSTATUS
+                                                                                                                    TRIM(p.PROGRESSSTATUS) AS PROGRESSSTATUS
                                                                                                                 FROM 
                                                                                                                     VIEWPRODUCTIONDEMANDSTEP p
                                                                                                                 WHERE
                                                                                                                     p.PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' AND
                                                                                                                     (p.PROGRESSSTATUS = '3' OR p.PROGRESSSTATUS = '2') ORDER BY p.GROUPSTEPNUMBER DESC LIMIT 1");
                                                                     $row_status_close = db2_fetch_assoc($q_deteksi_status_close);
+
+                                                                    // UNTUK DELAY PROGRESS STATUS PERMINTAAN MS. AMY
+                                                                        if($row_status_close['PROGRESSSTATUS'] == '2'){ // KALAU PROGRESS STATUSNYA ENTERED
+                                                                            $q_delay_progress_selesai   = db2_exec($conn1, "SELECT 
+                                                                                                                                p.PRODUCTIONORDERCODE AS PRODUCTIONORDERCODE, 
+                                                                                                                                p.GROUPSTEPNUMBER AS GROUPSTEPNUMBER,
+                                                                                                                                iptip.MULAI,
+                                                                                                                                DAYS(CURRENT DATE) - DAYS(iptip.MULAI) AS DELAY_PROGRESSSTATUS,
+                                                                                                                                p.PROGRESSSTATUS AS PROGRESSSTATUS
+                                                                                                                            FROM 
+                                                                                                                                PRODUCTIONDEMANDSTEP p
+                                                                                                                            LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
+                                                                                                                            WHERE
+                                                                                                                                p.PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' AND p.PROGRESSSTATUS = '2' ORDER BY p.GROUPSTEPNUMBER DESC LIMIT 1");
+                                                                            $d_delay_progress_selesai   = db2_fetch_assoc($q_delay_progress_selesai);
+                                                                            $jam_status_terakhir        = $d_delay_progress_selesai['MULAI'];
+                                                                            $delay_progress_status      = $d_delay_progress_selesai['DELAY_PROGRESSSTATUS'].' Hari';
+                                                                        }elseif($row_status_close['PROGRESSSTATUS'] == '3'){ // KALAU PROGRESS STATUSNYA PROGRESS
+                                                                            $q_delay_progress_mulai   = db2_exec($conn1, "SELECT 
+                                                                                                                                p.PRODUCTIONORDERCODE AS PRODUCTIONORDERCODE, 
+                                                                                                                                p.GROUPSTEPNUMBER AS GROUPSTEPNUMBER,
+                                                                                                                                iptop.SELESAI,
+                                                                                                                                DAYS(CURRENT DATE) - DAYS(iptop.SELESAI) AS DELAY_PROGRESSSTATUS,
+                                                                                                                                p.PROGRESSSTATUS AS PROGRESSSTATUS
+                                                                                                                            FROM 
+                                                                                                                                VIEWPRODUCTIONDEMANDSTEP p
+                                                                                                                            LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.GROUPSTEPNUMBER
+                                                                                                                            WHERE
+                                                                                                                                p.PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' AND p.PROGRESSSTATUS = '3' ORDER BY p.GROUPSTEPNUMBER DESC LIMIT 1");
+                                                                            $d_delay_progress_mulai   = db2_fetch_assoc($q_delay_progress_mulai);
+                                                                            $jam_status_terakhir      = $d_delay_progress_mulai['SELESAI'];
+                                                                            $delay_progress_status    = $d_delay_progress_mulai['DELAY_PROGRESSSTATUS'].' Hari';
+                                                                        }else{
+                                                                            $jam_status_terakhir      = '';
+                                                                            $delay_progress_status    = '';
+
+                                                                        }
+                                                                    // UNTUK DELAY PROGRESS STATUS PERMINTAAN MS. AMY
                                                                     if(!empty($row_status_close['GROUPSTEPNUMBER'])){
                                                                         $groupstepnumber    = $row_status_close['GROUPSTEPNUMBER'];
                                                                     }else{
@@ -620,7 +659,8 @@
                                                             </td> <!-- NETTO YD-->
                                                             <td><?= $rowdb2['DELAY']; ?></td> <!-- DELAY -->
                                                             <td><?= $kode_dept; ?></td> <!-- KODE DEPT -->
-                                                            <td><?= $status_terakhir; ?></td> <!-- STATUS TERAKHIR -->
+                                                            <td><?= $status_terakhir; ?> (<?= $jam_status_terakhir; ?>)</td> <!-- STATUS TERAKHIR -->
+                                                            <td><?= $delay_progress_status; ?></td> <!-- DELAY PROGRESS STATUS -->
                                                             <td><?= $status_operation; ?></td> <!-- PROGRESS STATUS -->
                                                             <td><?= $rowdb2['LOT']; ?></td> <!-- LOT -->
                                                             <td><a target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $rowdb2['DEMAND']; ?>&prod_order=<?= $rowdb2['NO_KK']; ?>">`<?= $rowdb2['DEMAND']; ?></a></td> <!-- DEMAND -->
