@@ -57,7 +57,7 @@
                                             <div class="row">
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Bon Order</h4>
-                                                    <input type="text" name="no_order" required class="form-control" onkeyup="this.value = this.value.toUpperCase()" value="<?php if (isset($_POST['submit'])){ echo $_POST['no_order']; } ?>">
+                                                    <input type="text" name="no_order" class="form-control" onkeyup="this.value = this.value.toUpperCase()" value="<?php if (isset($_POST['submit'])){ echo $_POST['no_order']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Status PO Selesai</h4>
@@ -65,6 +65,20 @@
                                                         <option value="0" <?php if ($_POST['status_order'] == "0"){ echo "SELECTED"; } ?>>All</option>
                                                         <option value="1" <?php if ($_POST['status_order'] == "1"){ echo "SELECTED"; } ?>>Close</option>
                                                     </select>
+                                                </div>
+                                                <!-- PERMINTAAN BU YUSTINE -->
+                                                <div class="col-sm-12 col-xl-2 m-b-30">
+                                                    <h4 class="sub-title">Dari Tanggal</h4>
+                                                    <input type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
+                                                </div>
+                                                <div class="col-sm-12 col-xl-2 m-b-30">
+                                                    <h4 class="sub-title">Sampai Tanggal</h4>
+                                                    <input type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
+                                                </div>
+                                                <div class="col-sm-12 col-xl-2 m-b-30">
+                                                    <h4 class="sub-title">Jenis kain recycled</h4>
+                                                    <input type="checkbox" id="rec" name="rec" value="rec" <?php if($_POST['rec'] == 'rec'){ echo 'checked'; } ?>>
+                                                    <label for="rec"> Checklist for recycled</label><br>
                                                 </div>
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
@@ -87,6 +101,7 @@
                                                             <th>PELANGGAN</th>
                                                             <th>NO. ORDER</th>
                                                             <th>NO. PO</th>
+                                                            <th>JENIS KAIN</th>
                                                             <th>KETERANGAN PRODUCT</th>
                                                             <th>LEBAR</th>
                                                             <th>GRAMASI</th>
@@ -134,21 +149,29 @@
                                                             session_start();
                                                             require_once "koneksi.php";
                                                             $no_order       = $_POST['no_order'];
+                                                            $tgl1           = $_POST['tgl1'];
+                                                            $tgl2           = $_POST['tgl2'];
                                                             
                                                             if($no_order){
                                                                 $where_order            = "NO_ORDER = '$no_order'";
                                                             }else{
                                                                 $where_order            = "";
                                                             }
+                                                            if($tgl1 & $tgl2){
+                                                                $where_date             = "DELIVERY BETWEEN '$tgl1' AND '$tgl2'";
+                                                            }else{
+                                                                $where_date             = "";
+                                                            }
                                                             
                                                             // ITXVIEW_MEMOPENTINGPPC
-                                                            $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_order");
+                                                            $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_order $where_date");
                                                             while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
                                                                 $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['NO_ORDER']))."',"
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['NO_PO']))."',"
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN_PRODUCT']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['JENIS_KAIN']))."',"
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['WARNA']))."',"
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['NO_WARNA']))."',"
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['DELIVERY']))."',"
@@ -167,21 +190,28 @@
                                                                                         ."'".'PO SELESAI'."')";
                                                             }
                                                             $value_itxviewmemo        = implode(',', $r_itxviewmemo);
-                                                            $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_poselesai(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,QTY_BAGIKAIN_YD_MTR,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
-                                                                
+                                                            $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_poselesai(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,JENIS_KAIN,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,QTY_BAGIKAIN_YD_MTR,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
                                                             
                                                             // --------------------------------------------------------------------------------------------------------------- //
                                                             $no_order_2     = $_POST['no_order'];
+                                                            $tgl1_2         = $_POST['tgl1'];
+                                                            $tgl2_2         = $_POST['tgl2'];
 
                                                             if($no_order_2){
                                                                 $where_order2    = "NO_ORDER = '$no_order_2'";
                                                             }else{
                                                                 $where_order2    = "";
                                                             }
-                                                            $sqlDB2 = "SELECT DISTINCT * FROM itxview_poselesai WHERE $where_order2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY NO_ORDER, ORDERLINE ASC";
+                                                            if($tgl1_2 & $tgl2_2){
+                                                                $where_date2     = "DELIVERY BETWEEN '$tgl1_2' AND '$tgl2_2'";
+                                                            }else{
+                                                                $where_date2     = "";
+                                                            }
+                                                            $sqlDB2 = "SELECT DISTINCT * FROM itxview_poselesai WHERE $where_order2 $where_date2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY NO_ORDER, ORDERLINE ASC";
                                                             $stmt   = mysqli_query($con_nowprd,$sqlDB2);
                                                             while ($rowdb2 = mysqli_fetch_array($stmt)) {
                                                         ?>
+                                                        <!-- WHILE -->
                                                         <?php 
                                                             //Deteksi Production Demand Closed Atau Belum
                                                             if($rowdb2['PROGRESSSTATUS_DEMAND'] == 6){
@@ -365,15 +395,6 @@
                                                                 }
                                                             }
                                                         ?>
-                                                        <?php 
-                                                            if($operation_2){
-                                                                if($rowdb2['OPERATIONCODE'] == $kode_dept) {
-                                                                    $cek_operation  = "MUNCUL";
-                                                                }else{
-                                                                    $cek_operation  = "TIDAK MUNCUL";
-                                                                }
-                                                            }
-                                                        ?>
                                                         <?php
                                                             $q_salesorder   = db2_exec($conn1, "SELECT * FROM SALESORDER WHERE CODE = '$rowdb2[NO_ORDER]'");
                                                             $d_salesorder   = db2_fetch_assoc($q_salesorder);        
@@ -487,7 +508,7 @@
                                                             $d_elemet   = db2_fetch_assoc($q_element);
                                                             $qty_sisa   = $d_elemet['BASEPRIMARYQUANTITY'];
                                                         ?>
-                                                        <?php if($cek_operation == "MUNCUL" OR $cek_operation == NULL) : ?>
+                                                        <?php $jeniskain = $rowdb2['JENIS_KAIN']; if($_POST['rec'] == 'rec' AND str_contains($jeniskain, 'RECYCLED')) : ?>
                                                             <tr>
                                                                 <td><?= substr($d_salesorder['CREATIONDATETIME'], 0, 10); ?></td><!-- DATE MARKETING -->
                                                                 <td>
@@ -502,13 +523,14 @@
                                                                 <td><?= $rowdb2['PELANGGAN']; ?></td> <!-- PELANGGAN -->
                                                                 <td><?= $rowdb2['NO_ORDER'].'-'.$rowdb2['ORDERLINE']; ?></td> <!-- NO. ORDER -->
                                                                 <td><?= $rowdb2['NO_PO']; ?></td> <!-- NO. PO -->
+                                                                <td><?= $rowdb2['JENIS_KAIN']; ?></td> <!-- JENIS KAIN -->
                                                                 <td><?= $rowdb2['KETERANGAN_PRODUCT']; ?></td> <!-- KETERANGAN PRODUCT -->
                                                                 <td>
                                                                     <?php 
                                                                         $q_lebar = db2_exec($conn1, "SELECT * FROM ITXVIEWLEBAR WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]' AND ORDERLINE = '$rowdb2[ORDERLINE]'");
                                                                         $d_lebar = db2_fetch_assoc($q_lebar);
                                                                     ?>
-                                                                    <?= number_format($d_lebar['LEBAR'],0); ?>
+                                                                    <?= number_format($d_lebar['LEBAR'],0); ?> 
                                                                 </td><!-- LEBAR -->
                                                                 <td>
                                                                     <?php 
@@ -653,14 +675,14 @@
                                                                     <?php
                                                                         $q_qtypacking = db2_exec($conn1, "SELECT * FROM ITXVIEW_QTYPACKING WHERE DEMANDCODE = '$rowdb2[DEMAND]'");
                                                                         $d_qtypacking = db2_fetch_assoc($q_qtypacking);
-                                                                        echo $d_qtypacking['QTY_PACKING'];
+                                                                        echo number_format($d_qtypacking['QTY_PACKING'], 2);
                                                                     ?>
                                                                 </td> <!-- QTY PACKING -->
                                                                 <td>
                                                                     <?php
                                                                         $q_qtypacking = db2_exec($conn1, "SELECT * FROM ITXVIEW_QTYPACKING WHERE DEMANDCODE = '$rowdb2[DEMAND]'");
                                                                         $d_qtypacking = db2_fetch_assoc($q_qtypacking);
-                                                                        echo $d_qtypacking['QTY_PACKING_YARD'];
+                                                                        echo number_format($d_qtypacking['QTY_PACKING_YARD'], 2);
                                                                     ?>
                                                                 </td> <!-- QTY PACKING YARD -->
                                                                 <td><?= $qty_sisa; ?></td> <!-- QTY SISA -->
