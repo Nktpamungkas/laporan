@@ -159,6 +159,21 @@
                 <td><?= $rowdb2['ORDERPARTNERBRANDCODE']; ?></td> 
                 <td>
                     <?php
+                        $q_roll     = db2_exec($conn1, "SELECT
+                                                    COUNT(ise.COUNTROLL) AS ROLL,
+                                                    SUM(ise.QTY_KG) AS QTY_SJ_KG,
+                                                    SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD,
+                                                    inpe.PROJECT,
+                                                    ise.ADDRESSEE,
+                                                    ise.BRAND_NM
+                                                FROM
+                                                    ITXVIEW_SURATJALAN_EXIM2 ise 
+                                                LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
+                                                WHERE 
+                                                    ise.PROVISIONALCODE = '$rowdb2[PROVISIONALCODE]'
+                                                GROUP BY 
+                                                    inpe.PROJECT,ise.ADDRESSEE,ise.BRAND_NM");
+                        $d_roll     = db2_fetch_assoc($q_roll);
                         $q_pelanggan    = db2_exec($conn1, "SELECT * FROM ITXVIEW_PELANGGAN WHERE ORDPRNCUSTOMERSUPPLIERCODE = '$rowdb2[ORDPRNCUSTOMERSUPPLIERCODE]' 
                                                                                             AND CODE = '$rowdb2[DLVSALORDERLINESALESORDERCODE]'");
                         $r_pelanggan    = db2_fetch_assoc($q_pelanggan);
