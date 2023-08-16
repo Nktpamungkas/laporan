@@ -127,7 +127,9 @@
                                                                                 WHEN $codeExport THEN 0 ELSE i.DLVSALESORDERLINEORDERLINE
                                                                             END AS DLVSALESORDERLINEORDERLINE,
                                                                             CASE
-                                                                                WHEN $codeExport THEN '' ELSE i.ITEMDESCRIPTION
+                                                                                WHEN $codeExport THEN '' ELSE 
+                                                                                    TRIM(i.SUBCODE01) || '-' || TRIM(i.SUBCODE02) || '-' || TRIM(i.SUBCODE03) || '-' || TRIM(i.SUBCODE04) || '-' ||
+                                                                                    TRIM(i.SUBCODE05) || '-' || TRIM(i.SUBCODE06) || '-' || TRIM(i.SUBCODE07) || '-' || TRIM(i.SUBCODE08)
                                                                             END AS ITEMDESCRIPTION,
                                                                             CASE
                                                                                 WHEN $codeExport THEN '' ELSE iasp.LOTCODE
@@ -169,7 +171,17 @@
                                                                             i.DEFINITIVECOUNTERCODE,
                                                                             i2.WARNA,
                                                                             i.LEGALNAME1,
-                                                                            i.CODE
+                                                                            i.CODE,
+                                                                            i.SUBCODE01,
+                                                                            i.SUBCODE02,
+                                                                            i.SUBCODE03,
+                                                                            i.SUBCODE04,
+                                                                            i.SUBCODE05,
+                                                                            i.SUBCODE06,
+                                                                            i.SUBCODE07,
+                                                                            i.SUBCODE08,
+                                                                            i.SUBCODE09,
+                                                                            i.SUBCODE10
                                                                         ORDER BY 
                                                                             i.PROVISIONALCODE ASC";
                                                             $stmt   = db2_exec($conn1,$sqlDB2);
