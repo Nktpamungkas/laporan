@@ -383,6 +383,7 @@
 
                                                                         }
                                                                     // UNTUK DELAY PROGRESS STATUS PERMINTAAN MS. AMY
+
                                                                     if(!empty($row_status_close['GROUPSTEPNUMBER'])){
                                                                         $groupstepnumber    = $row_status_close['GROUPSTEPNUMBER'];
                                                                     }else{
@@ -659,8 +660,8 @@
                                                             </td> <!-- NETTO YD-->
                                                             <td><?= $rowdb2['DELAY']; ?></td> <!-- DELAY -->
                                                             <td><?= $kode_dept; ?></td> <!-- KODE DEPT -->
-                                                            <td><?= $status_terakhir; ?> (<?= $jam_status_terakhir; ?>)</td> <!-- STATUS TERAKHIR -->
-                                                            <td><?= $delay_progress_status; ?></td> <!-- DELAY PROGRESS STATUS -->
+                                                            <td><?= $status_terakhir; ?> <?php if($status_operation != 'KK Oke') : ?> (<?= $jam_status_terakhir; ?>) <?php endif; ?></td> <!-- STATUS TERAKHIR -->
+                                                            <td> <?php if($status_operation != 'KK Oke') : ?><?= $delay_progress_status; ?><?php endif; ?></td> <!-- DELAY PROGRESS STATUS -->
                                                             <td><?= $status_operation; ?></td> <!-- PROGRESS STATUS -->
                                                             <td><?= $rowdb2['LOT']; ?></td> <!-- LOT -->
                                                             <td><a target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $rowdb2['DEMAND']; ?>&prod_order=<?= $rowdb2['NO_KK']; ?>">`<?= $rowdb2['DEMAND']; ?></a></td> <!-- DEMAND -->
