@@ -43,6 +43,15 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
         color: #FFF;
         text-align: center;
     }
+    .btn-link {
+        border: none;
+        outline: none;
+        background: none;
+        cursor: pointer;
+        color: #0000EE;
+        padding: 0;
+        text-decoration: underline;
+    }
 </style>
 <?php require_once 'header.php'; ?>
 
@@ -460,6 +469,30 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                     <th style="vertical-align: text-top;">:</th>
                                                                     <th style="vertical-align: text-top;">
                                                                         <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($d_ITXVIEWKK['PRODUCTIONDEMANDCODE']); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th style="vertical-align: text-top;">Hasil test inspect</th>
+                                                                    <th style="vertical-align: text-top;">:</th>
+                                                                    <th style="vertical-align: text-top;">
+                                                                        <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($d_ITXVIEWKK['PRODUCTIONDEMANDCODE']); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th style="vertical-align: text-top;">Detail bagi kain</th>
+                                                                    <th style="vertical-align: text-top;">:</th>
+                                                                    <th style="vertical-align: text-top;">
+                                                                        <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/nowgkg/pages/cetak/cetakbagikain.php?demandno=<?= TRIM($d_ITXVIEWKK['PRODUCTIONDEMANDCODE']); ?>" target="_blank">Click here! <i class="icofont icofont-external-link"></i></a><br>
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th style="vertical-align: text-top;">Detail quantity packing</th>
+                                                                    <th style="vertical-align: text-top;">:</th>
+                                                                    <th style="vertical-align: text-top;">
+                                                                        <form action="https://online.indotaichen.com/nowqcf/CekKainDemand" method="post" target="_blank">
+                                                                            <input name="nodemand" value="<?= TRIM($d_ITXVIEWKK['PRODUCTIONDEMANDCODE']); ?>" type="hidden" class="form-control form-control-sm" id="" required>
+			                                                                <button class="btn-link" style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" type="submit">Click here! <i class="icofont icofont-external-link"></i></button>
+                                                                        </form>
                                                                     </th>
                                                                 </tr>
                                                             </thead>
