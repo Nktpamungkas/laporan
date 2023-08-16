@@ -68,22 +68,28 @@
                                                 </div>
                                                 <!-- PERMINTAAN BU YUSTINE -->
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
-                                                    <h4 class="sub-title">Dari Tanggal</h4>
+                                                    <h4 class="sub-title">Dari Tanggal (Delivery)</h4>
                                                     <input type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
-                                                    <h4 class="sub-title">Sampai Tanggal</h4>
+                                                    <h4 class="sub-title">Sampai Tanggal (Delivery)</h4>
                                                     <input type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
                                                 </div>
-                                                <div class="col-sm-12 col-xl-2 m-b-30">
+                                                <div class="col-sm-12 col-xl-4 m-b-30">
                                                     <h4 class="sub-title">Jenis kain recycled</h4>
                                                     <input type="checkbox" id="rec" name="rec" value="rec" <?php if($_POST['rec'] == 'rec'){ echo 'checked'; } ?>>
                                                     <label for="rec"> Checklist for recycled</label><br>
                                                 </div>
+                                                <div class="col-sm-12 col-xl-2 m-b-30">
+                                                    <h4 class="sub-title">Tanggal (Tgl Kirim)</h4>
+                                                    <input type="date" name="tgl1_kirim" class="form-control" id="tgl1_kirim" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1_kirim']; } ?>">
+                                                </div>
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
+                                                    <a class="btn btn-warning" href="ppc_filter_poselesai.php">Reset</a>
                                                 </div>
                                             </div>
+                                            <p>*Note : Jika data terasa mulai <b>lambat</b> cobalah untuk klik tombol <b>Reset</b> untuk menghapus semua history pencarian.</p>
                                         </form>
                                     </div>
                                 </div>
@@ -151,6 +157,7 @@
                                                             $no_order       = $_POST['no_order'];
                                                             $tgl1           = $_POST['tgl1'];
                                                             $tgl2           = $_POST['tgl2'];
+                                                            $tgl1_kirim     = $_POST['tgl1_kirim'];
                                                             
                                                             if($no_order){
                                                                 $where_order            = "NO_ORDER = '$no_order'";
@@ -163,52 +170,124 @@
                                                                 $where_date             = "";
                                                             }
                                                             
-                                                            // ITXVIEW_MEMOPENTINGPPC
-                                                            $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_order $where_date");
-                                                            while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
-                                                                $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_ORDER']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_PO']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN_PRODUCT']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['JENIS_KAIN']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['WARNA']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_WARNA']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['DELIVERY']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['QTY_BAGIKAIN']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['QTY_BAGIKAIN_YD_MTR']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NETTO']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['DELAY']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_KK']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['DEMAND']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['ORDERLINE']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS_DEMAND']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN']))."',"
-                                                                                        ."'".$_SERVER['REMOTE_ADDR']."',"
-                                                                                        ."'".date('Y-m-d H:i:s')."',"
-                                                                                        ."'".'PO SELESAI'."')";
-                                                            }
-                                                            $value_itxviewmemo        = implode(',', $r_itxviewmemo);
-                                                            $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_poselesai(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,JENIS_KAIN,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,QTY_BAGIKAIN_YD_MTR,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
-                                                            
-                                                            // --------------------------------------------------------------------------------------------------------------- //
-                                                            $no_order_2     = $_POST['no_order'];
-                                                            $tgl1_2         = $_POST['tgl1'];
-                                                            $tgl2_2         = $_POST['tgl2'];
+                                                            if($tgl1_kirim){
+                                                                // PENCARIAN TANGGAL KIRIM
+                                                                    $itxviewmemo              = db2_exec($conn1, "SELECT 
+                                                                                                                    im.ORDERDATE,
+                                                                                                                    im.PELANGGAN,
+                                                                                                                    im.NO_ORDER,
+                                                                                                                    im.ORDERDATE,
+                                                                                                                    im.PELANGGAN,
+                                                                                                                    im.NO_ORDER,
+                                                                                                                    im.NO_PO,
+                                                                                                                    im.KETERANGAN_PRODUCT,
+                                                                                                                    im.JENIS_KAIN,
+                                                                                                                    im.WARNA,
+                                                                                                                    im.NO_WARNA,
+                                                                                                                    im.DELIVERY,
+                                                                                                                    im.QTY_BAGIKAIN,
+                                                                                                                    im.QTY_BAGIKAIN_YD_MTR,
+                                                                                                                    im.NETTO,
+                                                                                                                    im.DELAY,
+                                                                                                                    im.NO_KK,
+                                                                                                                    im.DEMAND,
+                                                                                                                    im.ORDERLINE,
+                                                                                                                    im.PROGRESSSTATUS,
+                                                                                                                    im.PROGRESSSTATUS_DEMAND,
+                                                                                                                    im.KETERANGAN,
+                                                                                                                    isp.PROVISIONALCODE AS SURATJALAN,
+                                                                                                                    isp.GOODSISSUEDATE AS TGL_KIRIM
+                                                                                                                FROM 
+                                                                                                                    ITXVIEW_SURATJALAN_PPC_FOR_POSELESAI isp
+                                                                                                                LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON isp.CODE = iasp.CODE 
+                                                                                                                LEFT JOIN ITXVIEW_MEMOPENTINGPPC im ON im.NO_KK = iasp.LOTCODE 
+                                                                                                                WHERE 
+                                                                                                                    isp.GOODSISSUEDATE = '$tgl1_kirim'");
+                                                                    while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
+                                                                        $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['NO_ORDER']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['NO_PO']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN_PRODUCT']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['JENIS_KAIN']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['WARNA']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['NO_WARNA']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['DELIVERY']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['QTY_BAGIKAIN']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['QTY_BAGIKAIN_YD_MTR']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['NETTO']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['DELAY']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['NO_KK']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['DEMAND']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['ORDERLINE']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS_DEMAND']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['SURATJALAN']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['TGL_KIRIM']))."',"
+                                                                                                ."'".$_SERVER['REMOTE_ADDR']."',"
+                                                                                                ."'".date('Y-m-d H:i:s')."',"
+                                                                                                ."'".'PO SELESAI'."')";
+                                                                    }
+                                                                    $value_itxviewmemo        = implode(',', $r_itxviewmemo);
+                                                                    $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_poselesai(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,JENIS_KAIN,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,QTY_BAGIKAIN_YD_MTR,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,SURATJALAN,TGL_KIRIM,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
 
-                                                            if($no_order_2){
-                                                                $where_order2    = "NO_ORDER = '$no_order_2'";
+                                                                    // --------------------------------------------------------------------------------------------------------------- //
+                                                                    $tgl1_kirim_2   = $_POST['tgl1_kirim'];
+
+                                                                    $sqlDB2 = "SELECT DISTINCT * FROM itxview_poselesai WHERE TGL_KIRIM = '$tgl1_kirim_2' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY NO_ORDER, ORDERLINE ASC";
+                                                                    $stmt   = mysqli_query($con_nowprd,$sqlDB2);
+                                                                // PENCARIAN TANGGAL KIRIM
                                                             }else{
-                                                                $where_order2    = "";
+                                                                // PENCARIAN BUKAN DENGAN TANGGAL KIRIM
+                                                                    // ITXVIEW_MEMOPENTINGPPC
+                                                                    $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_order $where_date");
+                                                                    while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
+                                                                        $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['NO_ORDER']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['NO_PO']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN_PRODUCT']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['JENIS_KAIN']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['WARNA']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['NO_WARNA']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['DELIVERY']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['QTY_BAGIKAIN']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['QTY_BAGIKAIN_YD_MTR']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['NETTO']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['DELAY']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['NO_KK']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['DEMAND']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['ORDERLINE']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS_DEMAND']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN']))."',"
+                                                                                                ."'".$_SERVER['REMOTE_ADDR']."',"
+                                                                                                ."'".date('Y-m-d H:i:s')."',"
+                                                                                                ."'".'PO SELESAI'."')";
+                                                                    }
+                                                                    $value_itxviewmemo        = implode(',', $r_itxviewmemo);
+                                                                    $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_poselesai(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,JENIS_KAIN,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,QTY_BAGIKAIN_YD_MTR,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
+                                                                    
+                                                                    // --------------------------------------------------------------------------------------------------------------- //
+                                                                    $no_order_2     = $_POST['no_order'];
+                                                                    $tgl1_2         = $_POST['tgl1'];
+                                                                    $tgl2_2         = $_POST['tgl2'];
+                                                                    
+                                                                    if($no_order_2){
+                                                                        $where_order2    = "NO_ORDER = '$no_order_2'";
+                                                                    }else{
+                                                                        $where_order2    = "";
+                                                                    }
+                                                                    if($tgl1_2 & $tgl2_2){
+                                                                        $where_date2     = "DELIVERY BETWEEN '$tgl1_2' AND '$tgl2_2'";
+                                                                    }else{
+                                                                        $where_date2     = "";
+                                                                    }
+                                                                    $sqlDB2 = "SELECT DISTINCT * FROM itxview_poselesai WHERE $where_order2 $where_date2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY NO_ORDER, ORDERLINE ASC";
+                                                                    $stmt   = mysqli_query($con_nowprd,$sqlDB2);
+                                                                // PENCARIAN BUKAN DENGAN TANGGAL KIRIM
                                                             }
-                                                            if($tgl1_2 & $tgl2_2){
-                                                                $where_date2     = "DELIVERY BETWEEN '$tgl1_2' AND '$tgl2_2'";
-                                                            }else{
-                                                                $where_date2     = "";
-                                                            }
-                                                            $sqlDB2 = "SELECT DISTINCT * FROM itxview_poselesai WHERE $where_order2 $where_date2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY NO_ORDER, ORDERLINE ASC";
-                                                            $stmt   = mysqli_query($con_nowprd,$sqlDB2);
                                                             while ($rowdb2 = mysqli_fetch_array($stmt)) {
                                                         ?>
                                                         <!-- WHILE -->
