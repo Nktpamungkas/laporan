@@ -3,17 +3,8 @@
     header("content-disposition:attachment;filename=Laporan Pengiriman.xls");
     header('Cache-Control: max-age=0');
 ?>
-<table border="1" width="100%">
+<table border='1'>
     <thead>
-        <tr>
-            <th colspan="16">Laporan Harian Pengiriman</th>
-        </tr>
-        <tr>
-            <th colspan="16">FW-02-PPC-04/02</th>
-        </tr>
-        <tr>
-            <th colspan="16">BULAN <?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"M-Y"); ?></th>
-        </tr>
         <tr>
             <th>NO</th>
             <th>TANGGAL</th>
@@ -72,20 +63,15 @@
                             i.PAYMENTMETHODCODE,   
                             i.ITEMTYPEAFICODE,
                             CASE
-                                WHEN TRIM(i.DEFINITIVECOUNTERCODE) = 'CESDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'CESPROV' OR
-                                    TRIM(i.DEFINITIVECOUNTERCODE) = 'DREDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'DREPROV' OR 
-                                    TRIM(i.DEFINITIVECOUNTERCODE) = 'DSEDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDDEF' OR
-                                    TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPDEF' OR
-                                    TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEDEF' OR 
-                                    TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'PSEPROV' THEN '' ELSE i.DLVSALORDERLINESALESORDERCODE
+                                WHEN $codeExport THEN '' ELSE i.DLVSALORDERLINESALESORDERCODE
                             END AS DLVSALORDERLINESALESORDERCODE,
                             CASE
                                 WHEN $codeExport THEN 0 ELSE i.DLVSALESORDERLINEORDERLINE
                             END AS DLVSALESORDERLINEORDERLINE,
                             CASE
                                 WHEN $codeExport THEN '' ELSE 
-                                TRIM(i.SUBCODE01) || '-' || TRIM(i.SUBCODE02) || '-' || TRIM(i.SUBCODE03) || '-' || TRIM(i.SUBCODE04) || '-' ||
-                                TRIM(i.SUBCODE05) || '-' || TRIM(i.SUBCODE06) || '-' || TRIM(i.SUBCODE07) || '-' || TRIM(i.SUBCODE08)
+                                    TRIM(i.SUBCODE01) || '-' || TRIM(i.SUBCODE02) || '-' || TRIM(i.SUBCODE03) || '-' || TRIM(i.SUBCODE04) || '-' ||
+                                    TRIM(i.SUBCODE05) || '-' || TRIM(i.SUBCODE06) || '-' || TRIM(i.SUBCODE07) || '-' || TRIM(i.SUBCODE08)
                             END AS ITEMDESCRIPTION,
                             CASE
                                 WHEN $codeExport THEN '' ELSE iasp.LOTCODE
@@ -172,19 +158,19 @@
                 <td>
                     <?php
                         $q_roll     = db2_exec($conn1, "SELECT
-                                                    COUNT(ise.COUNTROLL) AS ROLL,
-                                                    SUM(ise.QTY_KG) AS QTY_SJ_KG,
-                                                    SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD,
-                                                    inpe.PROJECT,
-                                                    ise.ADDRESSEE,
-                                                    ise.BRAND_NM
-                                                FROM
-                                                    ITXVIEW_SURATJALAN_EXIM2 ise 
-                                                LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
-                                                WHERE 
-                                                    ise.PROVISIONALCODE = '$rowdb2[PROVISIONALCODE]'
-                                                GROUP BY 
-                                                    inpe.PROJECT,ise.ADDRESSEE,ise.BRAND_NM");
+                                                            COUNT(ise.COUNTROLL) AS ROLL,
+                                                            SUM(ise.QTY_KG) AS QTY_SJ_KG,
+                                                            SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD,
+                                                            inpe.PROJECT,
+                                                            ise.ADDRESSEE,
+                                                            ise.BRAND_NM
+                                                        FROM
+                                                            ITXVIEW_SURATJALAN_EXIM2 ise 
+                                                        LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
+                                                        WHERE 
+                                                            ise.PROVISIONALCODE = '$rowdb2[PROVISIONALCODE]'
+                                                        GROUP BY 
+                                                            inpe.PROJECT,ise.ADDRESSEE,ise.BRAND_NM");
                         $d_roll     = db2_fetch_assoc($q_roll);
                         $q_pelanggan    = db2_exec($conn1, "SELECT * FROM ITXVIEW_PELANGGAN WHERE ORDPRNCUSTOMERSUPPLIERCODE = '$rowdb2[ORDPRNCUSTOMERSUPPLIERCODE]' 
                                                                                             AND CODE = '$rowdb2[DLVSALORDERLINESALESORDERCODE]'");
@@ -416,13 +402,226 @@
         <?php } ?>
     </tbody>
     <tfoot>
+        <?php
+        // ROLL TANGGAL HARI 
+            $q_roll_harian     = "SELECT DISTINCT
+                                    TRIM(i.PROVISIONALCODE) AS PROVISIONALCODE,
+                                    CASE
+                                        WHEN TRIM(i.DEFINITIVECOUNTERCODE) = 'CESDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'CESPROV' OR
+                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'DREDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'DREPROV' OR 
+                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'DSEDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDDEF' OR
+                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPDEF' OR
+                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEDEF' OR 
+                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'PSEPROV' THEN 'EXPORT' 
+                                        ELSE TRIM(i.CODE)
+                                    END AS CODE
+                                FROM 
+                                    ITXVIEW_SURATJALAN_PPC_FOR_POSELESAI i
+                                LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON iasp.CODE = i.CODE
+                                LEFT JOIN ITXVIEWCOLOR i2 ON i2.ITEMTYPECODE =  i.ITEMTYPEAFICODE
+                                                        AND i2.SUBCODE01 = i.SUBCODE01 AND i2.SUBCODE02 = i.SUBCODE02
+                                                        AND i2.SUBCODE03 = i.SUBCODE03 AND i2.SUBCODE04 = i.SUBCODE04
+                                                        AND i2.SUBCODE05 = i.SUBCODE05 AND i2.SUBCODE06 = i.SUBCODE06
+                                                        AND i2.SUBCODE07 = i.SUBCODE07 AND i2.SUBCODE08 = i.SUBCODE08
+                                                        AND i2.SUBCODE09 = i.SUBCODE09 AND i2.SUBCODE10 = i.SUBCODE10
+                                WHERE 
+                                    i.GOODSISSUEDATE = '$_GET[tgl1]' AND i.DOCUMENTTYPETYPE = 05 AND NOT i.CODE IS NULL AND i.PROGRESSSTATUS_SALDOC = 2
+                                GROUP BY
+                                    i.PROVISIONALCODE,
+                                    i.DEFINITIVECOUNTERCODE,
+                                    i.CODE";
+            $db2_roll_harian_local    = db2_exec($conn1, $q_roll_harian);
+            $db2_roll_harian_export    = db2_exec($conn1, $q_roll_harian);
+
+            // LOCAL
+                while ($row_roll_harian_code_local     = db2_fetch_assoc($db2_roll_harian_local)) {
+                    if($row_roll_harian_code_local['CODE'] != 'EXPORT'){
+                        $r_roll_harian_code_local[]        = "'" .$row_roll_harian_code_local['CODE']. "'";
+                    }
+                }
+                $value_roll_harian_code_local     = implode(',', $r_roll_harian_code_local);
+                $data_roll_harian_code_local      = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
+                                                                            SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
+                                                                            SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
+                                                                    FROM 
+                                                                        ITXVIEWALLOCATION0 
+                                                                    WHERE 
+                                                                        CODE IN ($value_roll_harian_code_local)");
+                $fetch_roll_harian_local  = db2_fetch_assoc($data_roll_harian_code_local);
+            // LOCAL
+
+            // EXPORT
+                while ($row_roll_harian_code_export     = db2_fetch_assoc($db2_roll_harian_export)) {
+                    if($row_roll_harian_code_export['CODE'] == 'EXPORT'){
+                        $r_roll_harian_code_export[]        = "'" .$row_roll_harian_code_export['PROVISIONALCODE']. "'";
+                    }
+                }
+                $value_roll_harian_code_export     = implode(',', $r_roll_harian_code_export);
+                $data_roll_harian_code_export      = db2_exec($conn1, "SELECT COUNT(ise.COUNTROLL) AS ROLL,
+                                                                            SUM(ise.QTY_KG) AS QTY_SJ_KG,
+                                                                            SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD
+                                                                        FROM
+                                                                            ITXVIEW_SURATJALAN_EXIM2 ise 
+                                                                        LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
+                                                                        WHERE 
+                                                                            ise.PROVISIONALCODE IN ($value_roll_harian_code_export)");
+                $fetch_roll_harian_export  = db2_fetch_assoc($data_roll_harian_code_export);
+            // EXPORT
+        // ROLL TANGGAL HARI
+        
+        // ROLL TANGGAL HARI -1
+            $tgl1_kurang = $_GET['tgl1'];// pendefinisian tanggal awal
+            $tgl2_kurang = date('Y-m-d', strtotime('-1 days', strtotime($tgl1_kurang))); //operasi pengurangan tanggal sebanyak 1 hari
+
+            $awal_bulan = substr($_GET['tgl1'], 0,8).'01';
+
+            $q_roll_harian_1     = "SELECT DISTINCT
+                                    TRIM(i.PROVISIONALCODE) AS PROVISIONALCODE,
+                                    CASE
+                                        WHEN TRIM(i.DEFINITIVECOUNTERCODE) = 'CESDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'CESPROV' OR
+                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'DREDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'DREPROV' OR 
+                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'DSEDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDDEF' OR
+                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPDEF' OR
+                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEDEF' OR 
+                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'PSEPROV' THEN 'EXPORT' 
+                                        ELSE TRIM(i.CODE)
+                                    END AS CODE
+                                FROM 
+                                    ITXVIEW_SURATJALAN_PPC_FOR_POSELESAI i
+                                LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON iasp.CODE = i.CODE
+                                LEFT JOIN ITXVIEWCOLOR i2 ON i2.ITEMTYPECODE =  i.ITEMTYPEAFICODE
+                                                        AND i2.SUBCODE01 = i.SUBCODE01 AND i2.SUBCODE02 = i.SUBCODE02
+                                                        AND i2.SUBCODE03 = i.SUBCODE03 AND i2.SUBCODE04 = i.SUBCODE04
+                                                        AND i2.SUBCODE05 = i.SUBCODE05 AND i2.SUBCODE06 = i.SUBCODE06
+                                                        AND i2.SUBCODE07 = i.SUBCODE07 AND i2.SUBCODE08 = i.SUBCODE08
+                                                        AND i2.SUBCODE09 = i.SUBCODE09 AND i2.SUBCODE10 = i.SUBCODE10
+                                WHERE 
+                                    i.GOODSISSUEDATE BETWEEN '$awal_bulan' AND '$tgl2_kurang' AND i.DOCUMENTTYPETYPE = 05 AND NOT i.CODE IS NULL AND i.PROGRESSSTATUS_SALDOC = 2
+                                GROUP BY
+                                    i.PROVISIONALCODE,
+                                    i.DEFINITIVECOUNTERCODE,
+                                    i.CODE";
+            $db2_roll_harian_local_1    = db2_exec($conn1, $q_roll_harian_1);
+            $db2_roll_harian_export_1   = db2_exec($conn1, $q_roll_harian_1);
+
+            // LOCAL
+                while ($row_roll_harian_code_local_1     = db2_fetch_assoc($db2_roll_harian_local_1)) {
+                    if($row_roll_harian_code_local_1['CODE'] != 'EXPORT'){
+                        $r_roll_harian_code_local_1[]        = "'" .$row_roll_harian_code_local_1['CODE']. "'";
+                    }
+                }
+                $value_roll_harian_code_local_1     = implode(',', $r_roll_harian_code_local_1);
+                $data_roll_harian_code_local_1      = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
+                                                                            SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
+                                                                            SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
+                                                                    FROM 
+                                                                        ITXVIEWALLOCATION0 
+                                                                    WHERE 
+                                                                        CODE IN ($value_roll_harian_code_local_1)");
+                $fetch_roll_harian_local_1  = db2_fetch_assoc($data_roll_harian_code_local_1);
+            // LOCAL
+
+            // EXPORT
+                while ($row_roll_harian_code_export_1     = db2_fetch_assoc($db2_roll_harian_export_1)) {
+                    if($row_roll_harian_code_export_1['CODE'] == 'EXPORT'){
+                        $r_roll_harian_code_export_1[]        = "'" .$row_roll_harian_code_export_1['PROVISIONALCODE']. "'";
+                    }
+                }
+                $value_roll_harian_code_export_1     = implode(',', $r_roll_harian_code_export_1);
+                $data_roll_harian_code_export_1      = db2_exec($conn1, "SELECT COUNT(ise.COUNTROLL) AS ROLL,
+                                                                            SUM(ise.QTY_KG) AS QTY_SJ_KG,
+                                                                            SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD
+                                                                        FROM
+                                                                            ITXVIEW_SURATJALAN_EXIM2 ise 
+                                                                        LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
+                                                                        WHERE 
+                                                                            ise.PROVISIONALCODE IN ($value_roll_harian_code_export_1)");
+                $fetch_roll_harian_export_1  = db2_fetch_assoc($data_roll_harian_code_export_1);
+            // EXPORT
+        // ROLL TANGGAL HARI -1
+        
+        // ROLL TANGGAL HARI sd hari H
+            $tgl1_hariH = $_GET['tgl1'];// pendefinisian tanggal awal
+            $tgl2_hariH = date('Y-m-d', strtotime('+1 days', strtotime($tgl1_hariH))); //operasi pengurangan tanggal sebanyak 1 hari
+
+            $awal_bulan_hariH = substr($_GET['tgl1'], 0,8).'01';
+
+
+            $q_roll_harian_hariH     = "SELECT DISTINCT
+                                    TRIM(i.PROVISIONALCODE) AS PROVISIONALCODE,
+                                    CASE
+                                        WHEN TRIM(i.DEFINITIVECOUNTERCODE) = 'CESDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'CESPROV' OR
+                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'DREDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'DREPROV' OR 
+                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'DSEDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDDEF' OR
+                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPDEF' OR
+                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEDEF' OR 
+                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'PSEPROV' THEN 'EXPORT' 
+                                        ELSE TRIM(i.CODE)
+                                    END AS CODE
+                                FROM 
+                                    ITXVIEW_SURATJALAN_PPC_FOR_POSELESAI i
+                                LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON iasp.CODE = i.CODE
+                                LEFT JOIN ITXVIEWCOLOR i2 ON i2.ITEMTYPECODE =  i.ITEMTYPEAFICODE
+                                                        AND i2.SUBCODE01 = i.SUBCODE01 AND i2.SUBCODE02 = i.SUBCODE02
+                                                        AND i2.SUBCODE03 = i.SUBCODE03 AND i2.SUBCODE04 = i.SUBCODE04
+                                                        AND i2.SUBCODE05 = i.SUBCODE05 AND i2.SUBCODE06 = i.SUBCODE06
+                                                        AND i2.SUBCODE07 = i.SUBCODE07 AND i2.SUBCODE08 = i.SUBCODE08
+                                                        AND i2.SUBCODE09 = i.SUBCODE09 AND i2.SUBCODE10 = i.SUBCODE10
+                                WHERE 
+                                    i.GOODSISSUEDATE BETWEEN '$awal_bulan_hariH' AND '$tgl2_hariH' AND i.DOCUMENTTYPETYPE = 05 AND NOT i.CODE IS NULL AND i.PROGRESSSTATUS_SALDOC = 2
+                                GROUP BY
+                                    i.PROVISIONALCODE,
+                                    i.DEFINITIVECOUNTERCODE,
+                                    i.CODE";
+            $db2_roll_harian_local_hariH    = db2_exec($conn1, $q_roll_harian_hariH);
+            $db2_roll_harian_export_hariH   = db2_exec($conn1, $q_roll_harian_hariH);
+
+            // LOCAL
+                while ($row_roll_harian_code_local_hariH     = db2_fetch_assoc($db2_roll_harian_local_hariH)) {
+                    if($row_roll_harian_code_local_hariH['CODE'] != 'EXPORT'){
+                        $r_roll_harian_code_local_hariH[]        = "'" .$row_roll_harian_code_local_hariH['CODE']. "'";
+                    }
+                }
+                $value_roll_harian_code_local_hariH     = implode(',', $r_roll_harian_code_local_hariH);
+                $data_roll_harian_code_local_hariH      = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
+                                                                            SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
+                                                                            SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
+                                                                    FROM 
+                                                                        ITXVIEWALLOCATION0 
+                                                                    WHERE 
+                                                                        CODE IN ($value_roll_harian_code_local_hariH)");
+                $fetch_roll_harian_local_hariH  = db2_fetch_assoc($data_roll_harian_code_local_hariH);
+            // LOCAL
+
+            // EXPORT
+                while ($row_roll_harian_code_export_hariH     = db2_fetch_assoc($db2_roll_harian_export_hariH)) {
+                    if($row_roll_harian_code_export_hariH['CODE'] == 'EXPORT'){
+                        $r_roll_harian_code_export_hariH[]        = "'" .$row_roll_harian_code_export_hariH['PROVISIONALCODE']. "'";
+                    }
+                }
+                $value_roll_harian_code_export_hariH     = implode(',', $r_roll_harian_code_export_hariH);
+                $data_roll_harian_code_export_hariH      = db2_exec($conn1, "SELECT COUNT(ise.COUNTROLL) AS ROLL,
+                                                                            SUM(ise.QTY_KG) AS QTY_SJ_KG,
+                                                                            SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD
+                                                                        FROM
+                                                                            ITXVIEW_SURATJALAN_EXIM2 ise 
+                                                                        LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
+                                                                        WHERE 
+                                                                            ise.PROVISIONALCODE IN ($value_roll_harian_code_export_hariH)");
+                $fetch_roll_harian_export_hariH  = db2_fetch_assoc($data_roll_harian_code_export_hariH);
+            // EXPORT
+        // ROLL TANGGAL HARI sd hari H
+        ?>
         <tr>
             <th colspan="4" align="left">Total Tanggal <?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"d"); ?></th>
             <th colspan="1" align="center">
-                
+                <?= number_format($fetch_roll_harian_local['ROLL'] + $fetch_roll_harian_export['ROLL'], 0); ?>
             </th>
-            <th colspan="2" align="center">
-                
+            <th colspan="1" align="center">
+                <?= number_format($fetch_roll_harian_local['QTY_SJ_KG'] + $fetch_roll_harian_export['QTY_SJ_KG'], 2); ?>
+            </th>
+            <th colspan="1" align="center">
+                <?= number_format($fetch_roll_harian_local['QTY_SJ_YARD'] + $fetch_roll_harian_export['QTY_SJ_YARD'], 2); ?>
             </th>
             <th colspan="3" align="center">SINGGIH</th>
             <th colspan="6" align="center">PUTRI</th>
@@ -430,10 +629,14 @@
         <tr>
             <th colspan="4" align="left">Total Tanggal 01 S/D <?php echo date('d', strtotime('-1 days', strtotime($_GET['tgl1']))); ?></th>
             <th colspan="1" align="center">
+                <?= number_format($fetch_roll_harian_local_1['ROLL'] + $fetch_roll_harian_export_1['ROLL'], 0); ?>
+            </th>
+            <th colspan="1" align="center">
+            <?= number_format($fetch_roll_harian_local_1['QTY_SJ_KG'] + $fetch_roll_harian_export_1['QTY_SJ_KG'], 2); ?>
                 
             </th>
-            <th colspan="2" align="center">
-                
+            <th colspan="1" align="center">
+            <?= number_format($fetch_roll_harian_local_1['QTY_SJ_YARD'] + $fetch_roll_harian_export_1['QTY_SJ_YARD'], 2); ?>
             </th>
             <th colspan="3" align="center">STAFF</th>
             <th colspan="6" align="center">PPC AST. MANAGER</th>
@@ -441,10 +644,14 @@
         <tr>
             <th colspan="4" align="left">Total Tanggal 01 S/D <?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"d"); ?></th>
             <th colspan="1" align="center">
-                
+                <?= $fetch_roll_harian_local_hariH['ROLL'] + $fetch_roll_harian_export_hariH['ROLL']; ?>
             </th>
-            <th colspan="2" align="center">
-                
+            <th colspan="1" align="center">
+                <?= $fetch_roll_harian_local_hariH['QTY_SJ_KG'] + $fetch_roll_harian_export_hariH['QTY_SJ_KG']; ?>
+            </th>
+            </th>
+            <th colspan="1" align="center">
+                <?= $fetch_roll_harian_local_hariH['QTY_SJ_YARD'] + $fetch_roll_harian_export_hariH['QTY_SJ_YARD']; ?>
             </th>
             <th colspan="3" align="center"><?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"d-M-Y"); ?></th>
             <th colspan="6" align="center"><?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"d-M-Y"); ?></th>
