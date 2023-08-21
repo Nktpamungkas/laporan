@@ -644,14 +644,14 @@
         <tr>
             <th colspan="4" align="left">Total Tanggal 01 S/D <?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"d"); ?></th>
             <th colspan="1" align="center">
-                <?= $fetch_roll_harian_local_hariH['ROLL'] + $fetch_roll_harian_export_hariH['ROLL']; ?>
+                <?= number_format($fetch_roll_harian_local_hariH['ROLL'] + $fetch_roll_harian_export_hariH['ROLL'], 2); ?>
             </th>
             <th colspan="1" align="center">
-                <?= $fetch_roll_harian_local_hariH['QTY_SJ_KG'] + $fetch_roll_harian_export_hariH['QTY_SJ_KG']; ?>
+                <?= number_format($fetch_roll_harian_local_hariH['QTY_SJ_KG'] + $fetch_roll_harian_export_hariH['QTY_SJ_KG'], 2); ?>
             </th>
             </th>
             <th colspan="1" align="center">
-                <?= $fetch_roll_harian_local_hariH['QTY_SJ_YARD'] + $fetch_roll_harian_export_hariH['QTY_SJ_YARD']; ?>
+                <?= number_format($fetch_roll_harian_local_hariH['QTY_SJ_YARD'] + $fetch_roll_harian_export_hariH['QTY_SJ_YARD'], 2); ?>
             </th>
             <th colspan="3" align="center"><?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"d-M-Y"); ?></th>
             <th colspan="6" align="center"><?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"d-M-Y"); ?></th>
