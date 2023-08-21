@@ -151,7 +151,10 @@
                                                                                                 AND i2.SUBCODE07 = i.SUBCODE07 AND i2.SUBCODE08 = i.SUBCODE08
                                                                                                 AND i2.SUBCODE09 = i.SUBCODE09 AND i2.SUBCODE10 = i.SUBCODE10
                                                                         WHERE 
-                                                                            $where_no_order $where_date AND i.DOCUMENTTYPETYPE = 05 AND NOT i.CODE IS NULL AND i.PROGRESSSTATUS_SALDOC = 2
+                                                                            $where_no_order $where_date 
+                                                                            AND i.DOCUMENTTYPETYPE = 05 
+                                                                            AND NOT i.CODE IS NULL 
+                                                                            AND i.PROGRESSSTATUS_SALDOC = 2
                                                                         GROUP BY
                                                                             i.PROVISIONALCODE,
                                                                             i.PRICEUNITOFMEASURECODE,
@@ -266,7 +269,7 @@
                                                                     ?>
                                                                     <?= $d_demand['PRODUCTIONDEMANDCODE']; ?>
                                                                 </td> 
-                                                                <td><?php if($rowdb2['PAYMENTMETHODCODE'] == 'FOC'){ echo $rowdb2['PAYMENTMETHODCODE']; } ?></td> 
+                                                                <td>FOC</td> 
                                                                 <td><?= $rowdb2['ITEMTYPEAFICODE']; ?></td> 
                                                             </tr>
                                                             <tr>
@@ -300,11 +303,14 @@
                                                                         }else{
                                                                             $q_roll     = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
                                                                                                                     SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
-                                                                                                                    SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
+                                                                                                                    SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD,
+                                                                                                                    LOTCODE
                                                                                                             FROM 
                                                                                                                 ITXVIEWALLOCATION0 
                                                                                                             WHERE 
-                                                                                                                CODE = '$rowdb2[CODE]'");
+                                                                                                                CODE = '$rowdb2[CODE]' AND LOTCODE = '$rowdb2[LOTCODE]'
+                                                                                                            GROUP BY 
+	                                                                                                            LOTCODE");
                                                                             $d_roll     = db2_fetch_assoc($q_roll);
                                                                             echo $d_roll['ROLL'];
                                                                         }
@@ -372,6 +378,7 @@
                                                                     <?php
                                                                         if($rowdb2['CODE'] == 'EXPORT'){
                                                                             $q_roll     = db2_exec($conn1, "SELECT
+                                                                                                                ise.ITEMTYPEAFICODE,
                                                                                                                 COUNT(ise.COUNTROLL) AS ROLL,
                                                                                                                 SUM(ise.QTY_KG) AS QTY_SJ_KG,
                                                                                                                 SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD,
@@ -382,9 +389,12 @@
                                                                                                                 ITXVIEW_SURATJALAN_EXIM2 ise 
                                                                                                             LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
                                                                                                             WHERE 
-                                                                                                                ise.PROVISIONALCODE = '$rowdb2[PROVISIONALCODE]'
+                                                                                                                ise.PROVISIONALCODE = '$rowdb2[PROVISIONALCODE]' AND ise.ITEMTYPEAFICODE = '$rowdb2[ITEMTYPEAFICODE]'
                                                                                                             GROUP BY 
-                                                                                                                inpe.PROJECT,ise.ADDRESSEE,ise.BRAND_NM");
+                                                                                                                ise.ITEMTYPEAFICODE,
+                                                                                                                inpe.PROJECT,
+                                                                                                                ise.ADDRESSEE,
+                                                                                                                ise.BRAND_NM");
                                                                             $d_roll     = db2_fetch_assoc($q_roll);
                                                                             if($d_ket_foc['ROLL'] > 0 AND $d_ket_foc['KG'] > 0 AND $d_ket_foc['YARD_MTR'] > 0) { // MENGHITUNG JIKA FOC SEBAGIAN, MAKA ROLL UNTUK FOC DIPISAH DARI KESELURUHAN
                                                                                 echo $d_roll['ROLL'] - $d_ket_foc['ROLL'];
@@ -394,11 +404,14 @@
                                                                         }else{
                                                                             $q_roll     = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
                                                                                                                     SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
-                                                                                                                    SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
+                                                                                                                    SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD,
+                                                                                                                    LOTCODE
                                                                                                             FROM 
                                                                                                                 ITXVIEWALLOCATION0 
                                                                                                             WHERE 
-                                                                                                                CODE = '$rowdb2[CODE]'");
+                                                                                                                CODE = '$rowdb2[CODE]' AND LOTCODE = '$rowdb2[LOTCODE]'
+                                                                                                            GROUP BY 
+                                                                                                                LOTCODE");
                                                                             $d_roll     = db2_fetch_assoc($q_roll);
                                                                             echo $d_roll['ROLL'];
                                                                         }

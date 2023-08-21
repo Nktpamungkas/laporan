@@ -93,7 +93,10 @@
                                                 AND i2.SUBCODE07 = i.SUBCODE07 AND i2.SUBCODE08 = i.SUBCODE08
                                                 AND i2.SUBCODE09 = i.SUBCODE09 AND i2.SUBCODE10 = i.SUBCODE10
                         WHERE 
-                            $where_no_order $where_date AND i.DOCUMENTTYPETYPE = 05 AND NOT i.CODE IS NULL AND i.PROGRESSSTATUS_SALDOC = 2
+                            $where_no_order $where_date 
+                            AND i.DOCUMENTTYPETYPE = 05 
+                            AND NOT i.CODE IS NULL 
+                            AND i.PROGRESSSTATUS_SALDOC = 2
                         GROUP BY
                             i.PROVISIONALCODE,
                             i.PRICEUNITOFMEASURECODE,
@@ -208,7 +211,7 @@
                     ?>
                     <?= $d_demand['PRODUCTIONDEMANDCODE']; ?>
                 </td> 
-                <td><?php if($rowdb2['PAYMENTMETHODCODE'] == 'FOC'){ echo $rowdb2['PAYMENTMETHODCODE']; } ?></td> 
+                <td>FOC</td> 
                 <td><?= $rowdb2['ITEMTYPEAFICODE']; ?></td> 
             </tr>
             <tr>
@@ -242,11 +245,14 @@
                         }else{
                             $q_roll     = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
                                                                     SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
-                                                                    SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
+                                                                    SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD,
+                                                                    LOTCODE
                                                             FROM 
                                                                 ITXVIEWALLOCATION0 
                                                             WHERE 
-                                                                CODE = '$rowdb2[CODE]'");
+                                                                CODE = '$rowdb2[CODE]' AND LOTCODE = '$rowdb2[LOTCODE]'
+                                                            GROUP BY 
+                                                                LOTCODE");
                             $d_roll     = db2_fetch_assoc($q_roll);
                             echo $d_roll['ROLL'];
                         }
@@ -314,6 +320,7 @@
                     <?php
                         if($rowdb2['CODE'] == 'EXPORT'){
                             $q_roll     = db2_exec($conn1, "SELECT
+                                                                ise.ITEMTYPEAFICODE,
                                                                 COUNT(ise.COUNTROLL) AS ROLL,
                                                                 SUM(ise.QTY_KG) AS QTY_SJ_KG,
                                                                 SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD,
@@ -324,9 +331,12 @@
                                                                 ITXVIEW_SURATJALAN_EXIM2 ise 
                                                             LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
                                                             WHERE 
-                                                                ise.PROVISIONALCODE = '$rowdb2[PROVISIONALCODE]'
+                                                                ise.PROVISIONALCODE = '$rowdb2[PROVISIONALCODE]' AND ise.ITEMTYPEAFICODE = '$rowdb2[ITEMTYPEAFICODE]'
                                                             GROUP BY 
-                                                                inpe.PROJECT,ise.ADDRESSEE,ise.BRAND_NM");
+                                                                ise.ITEMTYPEAFICODE,
+                                                                inpe.PROJECT,
+                                                                ise.ADDRESSEE,
+                                                                ise.BRAND_NM");
                             $d_roll     = db2_fetch_assoc($q_roll);
                             if($d_ket_foc['ROLL'] > 0 AND $d_ket_foc['KG'] > 0 AND $d_ket_foc['YARD_MTR'] > 0) { // MENGHITUNG JIKA FOC SEBAGIAN, MAKA ROLL UNTUK FOC DIPISAH DARI KESELURUHAN
                                 echo $d_roll['ROLL'] - $d_ket_foc['ROLL'];
@@ -336,11 +346,14 @@
                         }else{
                             $q_roll     = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
                                                                     SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
-                                                                    SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
+                                                                    SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD,
+                                                                    LOTCODE
                                                             FROM 
                                                                 ITXVIEWALLOCATION0 
                                                             WHERE 
-                                                                CODE = '$rowdb2[CODE]'");
+                                                                CODE = '$rowdb2[CODE]' AND LOTCODE = '$rowdb2[LOTCODE]'
+                                                            GROUP BY 
+                                                                LOTCODE");
                             $d_roll     = db2_fetch_assoc($q_roll);
                             echo $d_roll['ROLL'];
                         }
@@ -471,36 +484,40 @@
         
         // ROLL TANGGAL HARI -1
             $tgl1_kurang = $_GET['tgl1'];// pendefinisian tanggal awal
-            $tgl2_kurang = date('Y-m-d', strtotime('-1 days', strtotime($tgl1_kurang))); //operasi pengurangan tanggal sebanyak 1 hari
+            if(substr($tgl1_kurang, 9, 2) != '01'){
+                $tgl2_kurang = date('Y-m-d', strtotime('-1 days', strtotime($tgl1_kurang))); //operasi pengurangan tanggal sebanyak 1 hari
+            }else{
+                $tgl2_kurang = substr($_GET['tgl1'], 0,8).'01'; // operasi pengurang tidak dikurangi jika tanggal 01 disetiap bulan
+            }
 
             $awal_bulan = substr($_GET['tgl1'], 0,8).'01';
 
             $q_roll_harian_1     = "SELECT DISTINCT
-                                    TRIM(i.PROVISIONALCODE) AS PROVISIONALCODE,
-                                    CASE
-                                        WHEN TRIM(i.DEFINITIVECOUNTERCODE) = 'CESDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'CESPROV' OR
-                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'DREDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'DREPROV' OR 
-                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'DSEDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDDEF' OR
-                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPDEF' OR
-                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEDEF' OR 
-                                            TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'PSEPROV' THEN 'EXPORT' 
-                                        ELSE TRIM(i.CODE)
-                                    END AS CODE
-                                FROM 
-                                    ITXVIEW_SURATJALAN_PPC_FOR_POSELESAI i
-                                LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON iasp.CODE = i.CODE
-                                LEFT JOIN ITXVIEWCOLOR i2 ON i2.ITEMTYPECODE =  i.ITEMTYPEAFICODE
-                                                        AND i2.SUBCODE01 = i.SUBCODE01 AND i2.SUBCODE02 = i.SUBCODE02
-                                                        AND i2.SUBCODE03 = i.SUBCODE03 AND i2.SUBCODE04 = i.SUBCODE04
-                                                        AND i2.SUBCODE05 = i.SUBCODE05 AND i2.SUBCODE06 = i.SUBCODE06
-                                                        AND i2.SUBCODE07 = i.SUBCODE07 AND i2.SUBCODE08 = i.SUBCODE08
-                                                        AND i2.SUBCODE09 = i.SUBCODE09 AND i2.SUBCODE10 = i.SUBCODE10
-                                WHERE 
-                                    i.GOODSISSUEDATE BETWEEN '$awal_bulan' AND '$tgl2_kurang' AND i.DOCUMENTTYPETYPE = 05 AND NOT i.CODE IS NULL AND i.PROGRESSSTATUS_SALDOC = 2
-                                GROUP BY
-                                    i.PROVISIONALCODE,
-                                    i.DEFINITIVECOUNTERCODE,
-                                    i.CODE";
+                                            TRIM(i.PROVISIONALCODE) AS PROVISIONALCODE,
+                                            CASE
+                                                WHEN TRIM(i.DEFINITIVECOUNTERCODE) = 'CESDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'CESPROV' OR
+                                                    TRIM(i.DEFINITIVECOUNTERCODE) = 'DREDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'DREPROV' OR 
+                                                    TRIM(i.DEFINITIVECOUNTERCODE) = 'DSEDEF' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDDEF' OR
+                                                    TRIM(i.DEFINITIVECOUNTERCODE) = 'EXDPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPDEF' OR
+                                                    TRIM(i.DEFINITIVECOUNTERCODE) = 'EXPPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEDEF' OR 
+                                                    TRIM(i.DEFINITIVECOUNTERCODE) = 'GSEPROV' OR TRIM(i.DEFINITIVECOUNTERCODE) = 'PSEPROV' THEN 'EXPORT' 
+                                                ELSE TRIM(i.CODE)
+                                            END AS CODE
+                                        FROM 
+                                            ITXVIEW_SURATJALAN_PPC_FOR_POSELESAI i
+                                        LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON iasp.CODE = i.CODE
+                                        LEFT JOIN ITXVIEWCOLOR i2 ON i2.ITEMTYPECODE =  i.ITEMTYPEAFICODE
+                                                                AND i2.SUBCODE01 = i.SUBCODE01 AND i2.SUBCODE02 = i.SUBCODE02
+                                                                AND i2.SUBCODE03 = i.SUBCODE03 AND i2.SUBCODE04 = i.SUBCODE04
+                                                                AND i2.SUBCODE05 = i.SUBCODE05 AND i2.SUBCODE06 = i.SUBCODE06
+                                                                AND i2.SUBCODE07 = i.SUBCODE07 AND i2.SUBCODE08 = i.SUBCODE08
+                                                                AND i2.SUBCODE09 = i.SUBCODE09 AND i2.SUBCODE10 = i.SUBCODE10
+                                        WHERE 
+                                            i.GOODSISSUEDATE BETWEEN '$awal_bulan' AND '$tgl2_kurang' AND i.DOCUMENTTYPETYPE = 05 AND NOT i.CODE IS NULL AND i.PROGRESSSTATUS_SALDOC = 2
+                                        GROUP BY
+                                            i.PROVISIONALCODE,
+                                            i.DEFINITIVECOUNTERCODE,
+                                            i.CODE";
             $db2_roll_harian_local_1    = db2_exec($conn1, $q_roll_harian_1);
             $db2_roll_harian_export_1   = db2_exec($conn1, $q_roll_harian_1);
 
@@ -542,8 +559,12 @@
         
         // ROLL TANGGAL HARI sd hari H
             $tgl1_hariH = $_GET['tgl1'];// pendefinisian tanggal awal
-            $tgl2_hariH = date('Y-m-d', strtotime('+1 days', strtotime($tgl1_hariH))); //operasi pengurangan tanggal sebanyak 1 hari
 
+            if(substr($tgl1_kurang, 9, 2) != '01'){
+                $tgl2_hariH = date('Y-m-d', strtotime('+1 days', strtotime($tgl1_hariH))); //operasi pengurangan tanggal sebanyak 1 hari
+            }else{
+                $tgl2_hariH = substr($_GET['tgl1'], 0,8).'01'; // operasi pengurang tidak dikurangi jika tanggal 01 disetiap bulan
+            }
             $awal_bulan_hariH = substr($_GET['tgl1'], 0,8).'01';
 
 
@@ -627,7 +648,16 @@
             <th colspan="6" align="center">PUTRI</th>
         </tr>
         <tr>
-            <th colspan="4" align="left">Total Tanggal 01 S/D <?php echo date('d', strtotime('-1 days', strtotime($_GET['tgl1']))); ?></th>
+            <th colspan="4" align="left">Total Tanggal 01 S/D 
+                <?php 
+                    if(substr($_GET['tgl1'], 9, 2) != '01'){ 
+                        echo date('d', strtotime('-1 days', strtotime($_GET['tgl1']))); 
+                    }else{
+                        $date = date_create($_GET['tgl1'] ); 
+                        echo date_format($date,"d");
+                    }
+                ?>
+            </th>
             <th colspan="1" align="center">
                 <?= number_format($fetch_roll_harian_local_1['ROLL'] + $fetch_roll_harian_export_1['ROLL'], 0); ?>
             </th>
@@ -642,7 +672,16 @@
             <th colspan="6" align="center">PPC AST. MANAGER</th>
         </tr>
         <tr>
-            <th colspan="4" align="left">Total Tanggal 01 S/D <?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"d"); ?></th>
+            <th colspan="4" align="left">Total Tanggal 01 S/D 
+                <?php 
+                    if(substr($tgl1_kurang, 9, 2) != '01'){ 
+                        $date = date_create($_GET['tgl1'] ); 
+                        echo date_format($date,"d");
+                    }else{
+                        
+                    }
+                ?>
+            </th>
             <th colspan="1" align="center">
                 <?= number_format($fetch_roll_harian_local_hariH['ROLL'] + $fetch_roll_harian_export_hariH['ROLL'], 2); ?>
             </th>
