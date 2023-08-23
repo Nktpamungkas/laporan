@@ -72,7 +72,7 @@
                                                         <table id="basic-btn" class="table compact table-striped table-bordered nowrap">
                                                             <thead>
                                                                 <tr>
-                                                                    <th>No</th>
+                                                                    <!-- <th>No</th> -->
                                                                     <th>No. Group Line</th>
                                                                     <th>No. KK</th>
                                                                     <th>Kode Obat</th>
@@ -116,7 +116,11 @@
                                                                         $db_reservation     = db2_exec($conn1, "SELECT 
                                                                                                                     TRIM(p.PRODUCTIONORDERCODE) || '-' || TRIM(p.GROUPSTEPNUMBER) AS NO_RESEP,
                                                                                                                     p.USERPRIMARYQUANTITY,
-                                                                                                                    p2.LONGDESCRIPTION AS KETERANGAN
+                                                                                                                    CASE
+                                                                                                                        WHEN p2.CODE = 'T1' OR p2.CODE = 'T2' OR p2.CODE = 'T3' OR p2.CODE = 'T4' OR p2.CODE = 'T5' OR p2.CODE = 'T6' OR p2.CODE = 'T7' THEN 'Tambah Obat'
+                                                                                                                        WHEN p2.CODE = 'R1' OR p2.CODE = 'R2' OR p2.CODE = 'R3' OR p2.CODE = 'R4' OR p2.CODE = 'R5' OR p2.CODE = 'R6' OR p2.CODE = 'R7' THEN 'Perbaikan'
+                                                                                                                        ELSE 'Normal'
+                                                                                                                    END AS KETERANGAN
                                                                                                                 FROM
                                                                                                                     PRODUCTIONRESERVATION p
                                                                                                                 LEFT JOIN PRODRESERVATIONLINKGROUP p2 ON p2.CODE = p.PRODRESERVATIONLINKGROUPCODE 
@@ -128,7 +132,7 @@
                                                                         $row_reservation    = db2_fetch_assoc($db_reservation);
                                                                 ?>
                                                                 <tr>
-                                                                    <td><?= $no++; ?></td>
+                                                                    <!-- <td><?= $no++; ?></td> -->
                                                                     <td><?= $row_reservation['NO_RESEP']; ?></td>
                                                                     <td><?= $row_stocktransaction['PRODUCTIONORDERCODE']; ?></td>
                                                                     <td><?= $row_stocktransaction['KODE_OBAT']; ?></td>
