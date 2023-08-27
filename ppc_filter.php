@@ -31,7 +31,13 @@
     <script src="TabCounter.js"></script>
 </head>
 <?php require_once 'header.php'; ?>
-
+<span class="count" hidden></span>
+<script>
+    tabCount.onTabChange(function(count){
+        document.querySelector(".count").innerText = count;
+        document.querySelector("title").innerText=count + " Tabs opened Memo Penting.";
+    },true);
+</script>
 <body>
     <div class="pcoded-content">
         <div class="pcoded-inner-content">
@@ -43,13 +49,6 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h5>Filter Data</h5>
-                                        <span class="count" hidden></span>
-                                        <script>
-                                            tabCount.onTabChange(function(count){
-                                                document.querySelector(".count").innerText = count;
-                                                document.querySelector("title").innerText=count + " Tabs opened Memo Penting.";
-                                            },true);
-                                        </script>
                                     </div>
                                     <div class="card-block">
                                         <form action="" method="post">
@@ -387,7 +386,7 @@
                                                                     if(!empty($row_status_close['GROUPSTEPNUMBER'])){
                                                                         $groupstepnumber    = $row_status_close['GROUPSTEPNUMBER'];
                                                                     }else{
-                                                                        $groupstepnumber    = '10';
+                                                                        $groupstepnumber    = '0';
                                                                     }
 
                                                                     $q_cnp1             = db2_exec($conn1, "SELECT 

@@ -347,9 +347,9 @@
                             ?>
                             <?php
                             if ($d_gramasi['GRAMASI_KFF']) {
-                                echo number_format($d_gramasi['GRAMASI_KFF'], 0);
+                                echo $d_gramasi['GRAMASI_KFF'];
                             } else {
-                                echo number_format($d_gramasi['GRAMASI_FKF'], 0);
+                                echo $d_gramasi['GRAMASI_FKF'];
                             }
                         ?>
                     </td> <!-- GRAMASI -->
