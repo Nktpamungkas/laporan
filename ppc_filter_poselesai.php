@@ -597,7 +597,7 @@
                                                                         echo $d_terimabon['ppc_terima'];
                                                                     ?>
                                                                 </td><!-- DATE PPC RECEIVED BO FROM RMP -->
-                                                                <td><img src="img/progress.png" width="40" height="30"> Maintenance Program </td> <!-- DATE BAGI LOT -->
+                                                                <td><?= $d_terimabon['ppc_bagilot']; ?></td> <!-- DATE BAGI LOT -->
                                                                 <td><?= $rowdb2['ORDERDATE']; ?></td> <!-- TGL TERIMA ORDER -->
                                                                 <td><?= $rowdb2['PELANGGAN']; ?></td> <!-- PELANGGAN -->
                                                                 <td><?= $rowdb2['NO_ORDER'].'-'.$rowdb2['ORDERLINE']; ?></td> <!-- NO. ORDER -->
@@ -838,7 +838,7 @@
                                                                         echo $d_terimabon['ppc_terima'];
                                                                     ?>
                                                                 </td><!-- DATE PPC RECEIVED BO FROM RMP -->
-                                                                <td><img src="img/progress.png" width="40" height="30"> Maintenance Program </td> <!-- DATE BAGI LOT -->
+                                                                <td><?= $d_terimabon['ppc_bagilot']; ?></td> <!-- DATE BAGI LOT -->
                                                                 <td><?= $rowdb2['ORDERDATE']; ?></td> <!-- TGL TERIMA ORDER -->
                                                                 <td><?= $rowdb2['PELANGGAN']; ?></td> <!-- PELANGGAN -->
                                                                 <td><?= $rowdb2['NO_ORDER'].'-'.$rowdb2['ORDERLINE']; ?></td> <!-- NO. ORDER -->
