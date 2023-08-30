@@ -1,7 +1,7 @@
 <?php
-    header("content-type:application/vnd-ms-excel");
-    header("content-disposition:attachment;filename=Memo Penting.xls");
-    header('Cache-Control: max-age=0');
+ header("content-type:application/vnd-ms-excel");
+header("content-disposition:attachment;filename=Memo Penting.xls");
+header('Cache-Control: max-age=0');
 ?>
 <style>
     .str {
@@ -137,7 +137,7 @@
                         if(!empty($row_status_close['GROUPSTEPNUMBER'])){
                             $groupstepnumber    = $row_status_close['GROUPSTEPNUMBER'];
                         }else{
-                            $groupstepnumber    = '10';
+                            $groupstepnumber    = '0';
                         }
 
                         $q_cnp1             = db2_exec($conn1, "SELECT 

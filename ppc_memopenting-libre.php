@@ -137,7 +137,7 @@ header('Cache-Control: max-age=0');
                         if(!empty($row_status_close['GROUPSTEPNUMBER'])){
                             $groupstepnumber    = $row_status_close['GROUPSTEPNUMBER'];
                         }else{
-                            $groupstepnumber    = '10';
+                            $groupstepnumber    = '0';
                         }
 
                         $q_cnp1             = db2_exec($conn1, "SELECT 
