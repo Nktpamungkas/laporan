@@ -546,7 +546,11 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                 <?php
                                                                     $sqlDB2 = "SELECT
                                                                                     p.WORKCENTERCODE,
-                                                                                    TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
+                                                                                    CASE
+                                                                                        WHEN p.PRODRESERVATIONLINKGROUPCODE IS NULL THEN TRIM(p.OPERATIONCODE) 
+                                                                                        WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE) 
+                                                                                        ELSE p.PRODRESERVATIONLINKGROUPCODE
+                                                                                    END	AS OPERATIONCODE,
                                                                                     TRIM(o.OPERATIONGROUPCODE) AS OPERATIONGROUPCODE,
                                                                                     o.LONGDESCRIPTION,
                                                                                     iptip.MULAI,
