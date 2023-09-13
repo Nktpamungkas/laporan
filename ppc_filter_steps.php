@@ -335,6 +335,8 @@
                                                             <th width="100px" style="text-align: center;">STATUS</th>
                                                             <th width="100px" style="text-align: center;">PROD. ORDER</th>
                                                             <th width="100px" style="text-align: center;">PROD. DEMAND</th>
+                                                            <th width="100px" style="text-align: center;">OPERATOR IN</th>
+                                                            <th width="100px" style="text-align: center;">OPERATOR OUT</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody> 
@@ -352,12 +354,13 @@
                                                                                         ."'".TRIM(addslashes($row_posisikk_ins3['DEMANDSTEPSTEPNUMBER']))."',"
                                                                                         ."'".TRIM(addslashes($row_posisikk_ins3['PROGRESSTEMPLATECODE']))."',"
                                                                                         ."'".TRIM(addslashes($row_posisikk_ins3['MULAI']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_ins3['OP']))."',"
                                                                                         ."'".$_SERVER['REMOTE_ADDR']."',"
                                                                                         ."'".date('Y-m-d H:i:s')."')";
                                                             }
                                                             if($r_posisikk_ins3){
                                                                 $value_posisikk_ins3        = implode(',', $r_posisikk_ins3);
-                                                                $insert_posisikk_ins3       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_ins3(PRODUCTIONORDERCODE,OPERATIONCODE,PROPROGRESSPROGRESSNUMBER,DEMANDSTEPSTEPNUMBER,PROGRESSTEMPLATECODE,MULAI,IPADDRESS,CREATEDATETIME) VALUES $value_posisikk_ins3");
+                                                                $insert_posisikk_ins3       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_ins3(PRODUCTIONORDERCODE,OPERATIONCODE,PROPROGRESSPROGRESSNUMBER,DEMANDSTEPSTEPNUMBER,PROGRESSTEMPLATECODE,MULAI,OP,IPADDRESS,CREATEDATETIME) VALUES $value_posisikk_ins3");
                                                             }
                                                             
                                                             // itxview_posisikk_tgl_in_prodorder_cnp1
@@ -369,12 +372,13 @@
                                                                                         ."'".TRIM(addslashes($row_posisikk_cnp1['DEMANDSTEPSTEPNUMBER']))."',"
                                                                                         ."'".TRIM(addslashes($row_posisikk_cnp1['PROGRESSTEMPLATECODE']))."',"
                                                                                         ."'".TRIM(addslashes($row_posisikk_cnp1['MULAI']))."',"
+                                                                                        ."'".TRIM(addslashes($row_posisikk_cnp1['OP']))."',"
                                                                                         ."'".$_SERVER['REMOTE_ADDR']."',"
                                                                                         ."'".date('Y-m-d H:i:s')."')";
                                                             }
                                                             if($r_posisikk_cnp1){
                                                                 $value_posisikk_cnp1        = implode(',', $r_posisikk_cnp1);
-                                                                $insert_posisikk_cnp1       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_cnp1(PRODUCTIONORDERCODE,OPERATIONCODE,PROPROGRESSPROGRESSNUMBER,DEMANDSTEPSTEPNUMBER,PROGRESSTEMPLATECODE,MULAI,IPADDRESS,CREATEDATETIME) VALUES $value_posisikk_cnp1");
+                                                                $insert_posisikk_cnp1       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_cnp1(PRODUCTIONORDERCODE,OPERATIONCODE,PROPROGRESSPROGRESSNUMBER,DEMANDSTEPSTEPNUMBER,PROGRESSTEMPLATECODE,MULAI,OP,IPADDRESS,CREATEDATETIME) VALUES $value_posisikk_cnp1");
                                                             }
                                                             
                                                             $sqlDB2 = "SELECT
@@ -391,7 +395,9 @@
                                                                             iptip.MULAI,
                                                                             iptop.SELESAI,
                                                                             p.PRODUCTIONORDERCODE,
-                                                                            p.PRODUCTIONDEMANDCODE
+                                                                            p.PRODUCTIONDEMANDCODE,
+                                                                            iptip.LONGDESCRIPTION AS OP1,
+                                                                            iptop.LONGDESCRIPTION AS OP2
                                                                         FROM 
                                                                             PRODUCTIONDEMANDSTEP p 
                                                                         LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
@@ -496,8 +502,8 @@
                                                                                                                                 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
                                                                                                                             ORDER BY
                                                                                                                                 MULAI DESC LIMIT 1");
-                                                                            $d_mulai_ins3   = mysqli_fetch_assoc($q_mulai_ins3);
-                                                                            echo $d_mulai_ins3['MULAI'];
+                                                                            $d_selesai_ins3   = mysqli_fetch_assoc($q_mulai_ins3);
+                                                                            echo $d_selesai_ins3['MULAI'];
                                                                         ?>
                                                                     <?php elseif($rowdb2['OPERATIONCODE'] == 'CNP1') : ?>
                                                                         <?php
@@ -510,8 +516,8 @@
                                                                                                                                 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
                                                                                                                             ORDER BY
                                                                                                                                 MULAI DESC LIMIT 1");
-                                                                            $d_mulai_cnp1   = mysqli_fetch_assoc($q_mulai_cnp1);
-                                                                            echo $d_mulai_cnp1['MULAI'];
+                                                                            $d_selesai_cnp1   = mysqli_fetch_assoc($q_mulai_cnp1);
+                                                                            echo $d_selesai_cnp1['MULAI'];
                                                                         ?>
                                                                     <?php else : ?>
                                                                         <?php if($rowdb2['SELESAI']) : ?>
@@ -563,6 +569,24 @@
                                                                 </td>
                                                                 <td><?= $rowdb2['PRODUCTIONORDERCODE']; ?></td>
                                                                 <td><?= $rowdb2['PRODUCTIONDEMANDCODE']; ?></td>
+                                                                <td>
+                                                                <?php if($rowdb2['OPERATIONCODE'] == 'INS3') : ?>
+                                                                    <?= $d_mulai_ins3['OP']; ?>
+                                                                <?php elseif($rowdb2['OPERATIONCODE'] == 'CNP1') : ?>
+                                                                    <?= $d_mulai_cnp1['OP']; ?>
+                                                                <?php else : ?>
+                                                                    <?= $rowdb2['OP1']; ?>
+                                                                <?php endif; ?>
+                                                                </td>
+                                                                <td>
+                                                                <?php if($rowdb2['OPERATIONCODE'] == 'INS3') : ?>
+                                                                    <?= $d_selesai_ins3['OP']; ?>
+                                                                <?php elseif($rowdb2['OPERATIONCODE'] == 'CNP1') : ?>
+                                                                    <?= $d_selesai_cnp1['OP']; ?>
+                                                                <?php else : ?>
+                                                                    <?= $rowdb2['OP2']; ?>
+                                                                <?php endif; ?>
+                                                                </td>
                                                             </tr>
                                                             <div id="confirm-note<?= $rowdb2['OPERATIONCODE']; ?>" class="modal fade" role="dialog">
                                                                 <div class="modal-dialog modal-lg">
