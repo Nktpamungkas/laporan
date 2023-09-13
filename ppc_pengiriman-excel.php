@@ -5,6 +5,18 @@
 ?>
 <table border='1'>
     <thead>
+        <?php
+            $dateformat = date_create($_GET['tgl1'] ); 
+        ?>
+        <tr align="center">
+            <th colspan="16">LAPORAN HARIAN PENGIRIMAN</th>
+        </tr>
+        <tr>
+            <th colspan="16">FW-02-PPC-04/02</th>
+        </tr>
+        <tr>
+            <th colspan="16">BULAN <?= date_format($dateformat,"M Y"); ?></th>
+        </tr>
         <tr>
             <th>NO</th>
             <th>TANGGAL</th>
@@ -444,7 +456,7 @@
                                     i.DEFINITIVECOUNTERCODE,
                                     i.CODE";
             $db2_roll_harian_local    = db2_exec($conn1, $q_roll_harian);
-            $db2_roll_harian_export    = db2_exec($conn1, $q_roll_harian);
+            $db2_roll_harian_export   = db2_exec($conn1, $q_roll_harian);
 
             // LOCAL
                 while ($row_roll_harian_code_local     = db2_fetch_assoc($db2_roll_harian_local)) {
@@ -632,6 +644,24 @@
                 $fetch_roll_harian_export_hariH  = db2_fetch_assoc($data_roll_harian_code_export_hariH);
             // EXPORT
         // ROLL TANGGAL HARI sd hari H
+        
+        // TOTAL SURAT JALAN
+            $q_countSJ  = db2_exec($conn1, "SELECT
+                                                COUNT(*) AS TOTAL_SJ
+                                            FROM
+                                                (SELECT
+                                                        (i.PROVISIONALCODE) AS JUMLAH_SJ
+                                                    FROM
+                                                        ITXVIEW_SURATJALAN_PPC_FOR_POSELESAI i
+                                                    WHERE
+                                                        $where_date
+                                                        AND i.DOCUMENTTYPETYPE = 05
+                                                        AND NOT i.CODE IS NULL
+                                                        AND i.PROGRESSSTATUS_SALDOC = 2
+                                                    GROUP BY
+                                                        i.PROVISIONALCODE)");
+            $row_countSJ   = db2_fetch_assoc($q_countSJ);
+        // TOTAL SURAT JALAN
         ?>
         <tr>
             <th colspan="4" align="left">Total Tanggal <?php $date = date_create($_GET['tgl1'] ); echo date_format($date,"d"); ?></th>
@@ -700,6 +730,14 @@
             <th colspan="2"><br></th>
             <th colspan="3"><br><br><br></th>
             <th colspan="6"><br><br><br></th>
-        </tr>
+        </tr>       
     </tfoot>
+</table>
+<table border="0">
+    <thead>
+        <tr>
+            <th>Total SJ</th>
+            <th><?= $row_countSJ['TOTAL_SJ']; ?></th>
+        </tr>
+    </thead>
 </table>
