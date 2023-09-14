@@ -137,20 +137,22 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                                                                 ORDER BY LINE ASC");
                                                                 while ($row_itxview_detail_qa_data     = db2_fetch_assoc($itxview_detail_qa_data)) {
                                                                     $r_itxview_detail_qa_data[]        = "('" . TRIM(addslashes($row_itxview_detail_qa_data['PRODUCTIONDEMANDCODE'])) . "',"
-                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['PRODUCTIONORDERCODE'])) . "',"
-                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['WORKCENTERCODE'])) . "',"
-                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['OPERATIONCODE'])) . "',"
-                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['LINE'])) . "',"
-                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['QUALITYDOCUMENTHEADERNUMBERID'])) . "',"
-                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['CHARACTERISTICCODE'])) . "',"
-                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['LONGDESCRIPTION'])) . "',"
-                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['VALUEQUANTITY'])) . "',"
-                                                                        . "'" . $_SERVER['REMOTE_ADDR'] . "',"
-                                                                        . "'" . date('Y-m-d H:i:s') . "',"
-                                                                        . "'" . 'Analisa KK' . "')";
+                                                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['PRODUCTIONORDERCODE'])) . "',"
+                                                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['WORKCENTERCODE'])) . "',"
+                                                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['OPERATIONCODE'])) . "',"
+                                                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['LINE'])) . "',"
+                                                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['QUALITYDOCUMENTHEADERNUMBERID'])) . "',"
+                                                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['CHARACTERISTICCODE'])) . "',"
+                                                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['LONGDESCRIPTION'])) . "',"
+                                                                                                        . "'" . TRIM(addslashes($row_itxview_detail_qa_data['VALUEQUANTITY'])) . "',"
+                                                                                                        . "'" . $_SERVER['REMOTE_ADDR'] . "',"
+                                                                                                        . "'" . date('Y-m-d H:i:s') . "',"
+                                                                                                        . "'" . 'Analisa KK' . "')";
                                                                 }
-                                                                $value_itxview_detail_qa_data        = implode(',', $r_itxview_detail_qa_data);
-                                                                $insert_itxview_detail_qa_data       = mysqli_query($con_nowprd, "INSERT INTO itxview_detail_qa_data(PRODUCTIONDEMANDCODE,PRODUCTIONORDERCODE,WORKCENTERCODE,OPERATIONCODE,LINE,QUALITYDOCUMENTHEADERNUMBERID,CHARACTERISTICCODE,LONGDESCRIPTION,VALUEQUANTITY,IPADDRESS,CREATEDATETIME,STATUS) VALUES $value_itxview_detail_qa_data");
+                                                                if(!empty($r_itxview_detail_qa_data)){
+                                                                    $value_itxview_detail_qa_data        = implode(',', $r_itxview_detail_qa_data);
+                                                                    $insert_itxview_detail_qa_data       = mysqli_query($con_nowprd, "INSERT INTO itxview_detail_qa_data(PRODUCTIONDEMANDCODE,PRODUCTIONORDERCODE,WORKCENTERCODE,OPERATIONCODE,LINE,QUALITYDOCUMENTHEADERNUMBERID,CHARACTERISTICCODE,LONGDESCRIPTION,VALUEQUANTITY,IPADDRESS,CREATEDATETIME,STATUS) VALUES $value_itxview_detail_qa_data");
+                                                                }
                                                             ?>
                                                             <thead>
                                                                 <tr>
