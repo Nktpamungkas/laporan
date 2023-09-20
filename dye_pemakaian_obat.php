@@ -115,7 +115,7 @@
                                                                     while ($row_stocktransaction = db2_fetch_assoc($db_stocktransaction)) {
                                                                         $db_reservation     = db2_exec($conn1, "SELECT 
                                                                                                                     TRIM(p.PRODUCTIONORDERCODE) || '-' || TRIM(p.GROUPSTEPNUMBER) AS NO_RESEP,
-                                                                                                                    p.USERPRIMARYQUANTITY,
+                                                                                                                    SUM(p.USERPRIMARYQUANTITY) AS USERPRIMARYQUANTITY,
                                                                                                                     CASE
                                                                                                                         WHEN p2.CODE = 'T1' OR p2.CODE = 'T2' OR p2.CODE = 'T3' OR p2.CODE = 'T4' OR p2.CODE = 'T5' OR p2.CODE = 'T6' OR p2.CODE = 'T7' THEN 'Tambah Obat'
                                                                                                                         WHEN p2.CODE = 'R1' OR p2.CODE = 'R2' OR p2.CODE = 'R3' OR p2.CODE = 'R4' OR p2.CODE = 'R5' OR p2.CODE = 'R6' OR p2.CODE = 'R7' THEN 'Perbaikan'
@@ -128,7 +128,11 @@
                                                                                                                     p.PRODUCTIONORDERCODE = '$row_stocktransaction[PRODUCTIONORDERCODE]' 
                                                                                                                     AND p.SUBCODE01 = '$row_stocktransaction[DECOSUBCODE01]' 
                                                                                                                     AND p.SUBCODE02 = '$row_stocktransaction[DECOSUBCODE02]' 
-                                                                                                                    AND p.SUBCODE03 = '$row_stocktransaction[DECOSUBCODE03]'");
+                                                                                                                    AND p.SUBCODE03 = '$row_stocktransaction[DECOSUBCODE03]'
+                                                                                                                GROUP BY
+                                                                                                                    p.PRODUCTIONORDERCODE,
+                                                                                                                    p.GROUPSTEPNUMBER,
+                                                                                                                    p2.CODE");
                                                                         $row_reservation    = db2_fetch_assoc($db_reservation);
                                                                 ?>
                                                                 <tr>
