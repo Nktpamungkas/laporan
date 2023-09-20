@@ -481,16 +481,18 @@
                         $r_roll_harian_code_export[]        = "'" .$row_roll_harian_code_export['PROVISIONALCODE']. "'";
                     }
                 }
-                $value_roll_harian_code_export     = implode(',', $r_roll_harian_code_export);
-                $data_roll_harian_code_export      = db2_exec($conn1, "SELECT COUNT(ise.COUNTROLL) AS ROLL,
-                                                                            SUM(ise.QTY_KG) AS QTY_SJ_KG,
-                                                                            SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD
-                                                                        FROM
-                                                                            ITXVIEW_SURATJALAN_EXIM2 ise 
-                                                                        LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
-                                                                        WHERE 
-                                                                            ise.PROVISIONALCODE IN ($value_roll_harian_code_export)");
-                $fetch_roll_harian_export  = db2_fetch_assoc($data_roll_harian_code_export);
+                if(!empty($r_roll_harian_code_export)){
+                    $value_roll_harian_code_export     = implode(',', $r_roll_harian_code_export);
+                    $data_roll_harian_code_export      = db2_exec($conn1, "SELECT COUNT(ise.COUNTROLL) AS ROLL,
+                                                                                SUM(ise.QTY_KG) AS QTY_SJ_KG,
+                                                                                SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD
+                                                                            FROM
+                                                                                ITXVIEW_SURATJALAN_EXIM2 ise 
+                                                                            LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
+                                                                            WHERE 
+                                                                                ise.PROVISIONALCODE IN ($value_roll_harian_code_export)");
+                    $fetch_roll_harian_export  = db2_fetch_assoc($data_roll_harian_code_export);
+                }
             // EXPORT
         // ROLL TANGGAL HARI
         
