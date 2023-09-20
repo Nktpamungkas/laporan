@@ -79,7 +79,7 @@
                                                         require_once "koneksi.php";
                                                         $q_operation    = db2_exec($conn1, "SELECT * FROM OPERATION WHERE NOT LONGDESCRIPTION LIKE '%DO NOT USE%' ORDER BY CODE ASC");
                                                     ?>
-                                                    <select class="js-example-basic-single form-control input-xl" name="operation">
+                                                    <select class="form-control input-xl" name="operation">
                                                         <option selected value="">-</option>
                                                         <?php while ($d_operation = db2_fetch_assoc($q_operation)) { ?>
                                                             <option value="<?= $d_operation['CODE']; ?>" 
