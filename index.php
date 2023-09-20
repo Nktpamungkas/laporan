@@ -26,6 +26,9 @@
     <link rel="stylesheet" type="text/css" href="files\assets\pages\data-table\css\buttons.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="files\bower_components\datatables.net-responsive-bs4\css\responsive.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="files\assets\css\pcoded-horizontal.min.css">
+    <?php if($pinjambuku = 'pinjam_buku') : ?>
+        <script src="xeditable/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+    <?php endif; ?>
 </head>
 <?php require_once 'header.php'; ?>
 <?php

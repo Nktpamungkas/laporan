@@ -51,6 +51,35 @@
 <script type="text/javascript" src="files\assets\js\classie.js"></script>
 <script src="dist/js/select2.min.js"></script>
 <script type="text/javascript" src="files\bower_components\select2\js\select2.full.min.js"></script>
+<script type="text/javascript" src="files\assets\pages\advance-elements\select2-custom.js"></script>
+<?php if($pinjambuku = 'pinjam_buku') : ?>
+  <script src="xeditable/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<?php endif; ?>
+<script>
+    $.fn.editable.defaults.mode = 'inline';
+    $(document).ready(function() {
+      $('.note_edit').editable({
+          type: 'text',
+          showbuttons : false,
+          url: 'editable/editable_bukupinjam_note.php',
+      });
+      $('.kode_edit').editable({
+        type: 'select',
+        showbuttons : false,
+        url: 'editable/editable_bukupinjam_kode.php',
+        disabled : false,
+        showbuttons : false,
+        source:[{value: "", text: ""}, 
+                {value: "DL", text: "DL - Dye Lot Card"},
+                {value: "RC", text: "RC - Recipe Card"},
+                {value: "OR", text: "OR - Original"},
+                {value: "LD", text: "LD - Lab Dip"},
+                {value: "SL", text: "SL - Sample L/D"},
+                {value: "TE", text: "TE - Tempelan Sample Celup"},
+                {value: "FL", text: "FL - Frist Lot"}]
+      });
+    })
+</script>
 
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -62,6 +91,10 @@
 
   gtag('config', 'UA-23581568-13');
 
+  $(document).ready(function(){
+	// Single Search Select
+      $(".js-example-basic-single").select2();
+  });
 </script>
 </body>
 

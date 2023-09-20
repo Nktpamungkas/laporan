@@ -25,10 +25,6 @@
     <link rel="stylesheet" type="text/css" href="files\assets\css\pcoded-horizontal.min.css">
 </head>
 <?php require_once 'header.php'; ?>
-<?php
-    
-
-?>
 <body>
     <div class="pcoded-content">
         <div class="pcoded-inner-content">

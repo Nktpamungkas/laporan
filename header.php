@@ -266,6 +266,13 @@
                                             <span class="pcoded-mcaret"></span>
                                         </a>
                                     </li>
+                                    <li class="">
+                                        <a href="prd_pinjam_stdcckwarna.php" data-i18n="nav.animations.main">
+                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
+                                            <span class="pcoded-mtext">Pinjam Std Cck Warna</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="pcoded-hasmenu">
