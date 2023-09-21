@@ -2,31 +2,40 @@
     ini_set("error_reporting", 1);
     session_start();
     require_once "koneksi.php";
-    $pinjambuku = 'pinjam_buku';
+    if (isset($_POST['submit'])) {
+        $qry_usergeneric    = "SELECT
+                                    CODE,
+                                    VALUESTRING AS IDCUSTOMER,
+                                    LEGALNAME1 AS CUSTOMER
+                                FROM
+                                    USERGENERICGROUP u 
+                                LEFT JOIN ADSTORAGE a ON a.UNIQUEID = u.ABSUNIQUEID AND a.FIELDNAME = 'OriginalCustomerCode'
+                                LEFT JOIN ORDERPARTNER o ON o.CUSTOMERSUPPLIERCODE = a.VALUESTRING 
+                                LEFT JOIN BUSINESSPARTNER b ON b.NUMBERID = o.ORDERBUSINESSPARTNERNUMBERID
+                                WHERE
+                                    u.USERGENERICGROUPTYPECODE = 'CL1'";
+        $usergenericgroup           = db2_exec($conn1, $qry_usergeneric);
 
-    if (isset($_POST['Simpan'])){
-        $nowarna = $_POST['no_warna'];
-        $kode    = $_POST['kode'];
-        $note    = $_POST['note'];
 
-        if(empty($nowarna) && empty($kode)){
-            $warning1 = 'Silahkan pilih No Warna';
-            $warning2 = 'Silahkan pilih Kode';
-        }elseif(!empty($nowarna) && empty($kode)){
-            $warning1 = '';
-            $warning2 = 'Silahkan pilih Kode';
-        }elseif(empty($nowarna) && !empty($kode)){
-            $warning1 = 'Silahkan pilih No Warna';
-            $warning2 = '';
-        }else{
-            $warning1 = '';
-            $warning2 = '';
-            $insert_master      = mysqli_query($con_nowprd, "INSERT INTO buku_pinjam(no_warna,kode,note)VALUES('$nowarna', '$kode', '$note')");
+        while ($row_usergenericgroup   = db2_fetch_assoc($usergenericgroup)) {
+            $cekusergeneric_mysqli      = mysqli_query($con_nowprd, "SELECT COUNT(*) AS hasildata FROM buku_pinjam WHERE no_warna = '$row_usergenericgroup[CODE]'");
+            $hasil_cek_mysqli           = mysqli_fetch_assoc($cekusergeneric_mysqli);
+
+            if($hasil_cek_mysqli['hasildata'] == 0){
+                $r_usergenericgroup[]      = "('".TRIM(addslashes($row_usergenericgroup['CODE']))."',"
+                                            ."'RC',"
+                                            ."'".TRIM(addslashes($row_usergenericgroup['IDCUSTOMER']))."',"
+                                            ."'".TRIM(addslashes($row_usergenericgroup['CUSTOMER']))."',"
+                                            ."'".$_SERVER['REMOTE_ADDR']."',"
+                                            ."'".date('Y-m-d H:i:s')."')";
+            }
+        }
+        if(!empty($r_usergenericgroup)){
+            $value_usergenericgroup        = implode(',', $r_usergenericgroup);
+            mysqli_query($con_nowprd, "INSERT INTO buku_pinjam(no_warna,kode,idcustomer,customer,IPADDRESS,CREATEDATETIME) VALUES $value_usergenericgroup");
         }
 
-        if($insert_master){
-            header("Location: prd_pinjam_stdcckwarna.php");
-        }
+        header("Location: prd_pinjam_stdcckwarna.php");
     }
 ?>
 <!DOCTYPE html>
@@ -40,28 +49,17 @@
     <meta name="keywords" content="Admin , Responsive, Landing, Bootstrap, App, Template, Mobile, iOS, Android, apple, creative app">
     <meta name="author" content="#">
     <link rel="icon" href="files\assets\images\favicon.ico" type="image/x-icon">
-    <!-- <link rel="stylesheet" type="text/css" href="files\bower_components\bootstrap\css\bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="files\assets\icon\themify-icons\themify-icons.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="files\assets\icon\icofont\css\icofont.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="files\assets\icon\feather\css\feather.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="files\assets\pages\prism\prism.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="files\assets\css\style.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="files\assets\css\jquery.mCustomScrollbar.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="files\bower_components\datatables.net-bs4\css\dataTables.bootstrap4.min.css"> -->
-
-
-    <link rel="stylesheet" type="text/css" href="files\assets\css\pcoded-horizontal.min.css">
-    <link rel="stylesheet" type="text/css" href="files\assets\pages\data-table\css\buttons.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="files\bower_components\datatables.net-responsive-bs4\css\responsive.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="files\bower_components\bootstrap\css\bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\themify-icons\themify-icons.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\icofont\css\icofont.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\feather\css\feather.css">
-    <link rel="stylesheet" href="files\bower_components\select2\css\select2.min.css">
-    <link rel="stylesheet" type="text/css" href="files\bower_components\bootstrap-multiselect\css\bootstrap-multiselect.css">
-    <link rel="stylesheet" type="text/css" href="files\bower_components\multiselect\css\multi-select.css">
+    <link rel="stylesheet" type="text/css" href="files\assets\pages\prism\prism.css">
     <link rel="stylesheet" type="text/css" href="files\assets\css\style.css">
     <link rel="stylesheet" type="text/css" href="files\assets\css\jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" type="text/css" href="files\assets\css\pcoded-horizontal.min.css">
+    <link rel="stylesheet" type="text/css" href="files\bower_components\datatables.net-bs4\css\dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="files\assets\pages\data-table\css\buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="files\bower_components\datatables.net-responsive-bs4\css\responsive.bootstrap4.min.css">
 </head>
 <?php require_once 'header.php'; ?>
 <body>
@@ -74,93 +72,62 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Input data </h5>
+                                        <h5>Sync Data</h5>
                                     </div>
                                     <div class="card-block">
                                         <form action="" method="post">
-                                            <div class="form-group row">
-                                                <label class="col-sm-2 col-form-label"><span style="color: red;"><i><?= $warning1; ?></i></span><br>Pilih No Warna</label>
-                                                <div class="col-sm-10">
-                                                    <select name="no_warna" class="js-example-basic-single">
-                                                        <option value="" selected disabled>Pilih No Warna</option>
-                                                        <?php
-                                                            $q_usergeneric  = db2_exec($conn1, "SELECT TRIM(CODE) AS CODE, TRIM(LONGDESCRIPTION) AS LONGDESCRIPTION FROM USERGENERICGROUP WHERE USERGENERICGROUPTYPECODE = 'CL1'");
-                                                        ?>
-                                                        <?php while ($row_usergeneric = db2_fetch_assoc($q_usergeneric)) { ?>
-                                                            <option value="<?= $row_usergeneric['CODE']; ?>"><?= $row_usergeneric['CODE'].'- '.$row_usergeneric['LONGDESCRIPTION']; ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-sm-2 col-form-label"><span style="color: red;"><i><?= $warning2; ?></i></span><br>Kode</label>
-                                                <div class="col-sm-10">
-                                                    <select name="kode" class="form-control">
-                                                        <option value="" selected disabled>Kode</option>
-                                                        <option value="DL">DL - Dye Lot Card</option>
-                                                        <option value="RC">RC - Recipe Card</option>
-                                                        <option value="OR">OR - Original</option>
-                                                        <option value="LD">LD - Lab Dip</option>
-                                                        <option value="SL">SL - Sample L/D</option>
-                                                        <option value="TE">TE - Tempelan Sample Celup</option>
-                                                        <option value="FL">FL - Frist Lot</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-sm-2 col-form-label">Note</label>
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" name="note" placeholder="Note...">
-                                                    <span class="messages"></span>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-sm-2"></label>
-                                                <div class="col-sm-10">
-                                                    <button type="submit" name="Simpan" class="btn btn-primary m-b-0">Submit</button>
-                                                    <button type="submit" name="Lihat" class="btn btn-warning m-b-0">Lihat Data</button>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-xl-12 m-b-30">
+                                                    <button type="submit" name="submit" class="btn btn-warning btn-sm">Fetch Data</button>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
-                                <?php if (isset($_POST['Lihat'])) : ?>
-                                    <div class="card">
-                                        <div class="card-block">
-                                            <div class="dt-responsive table-responsive">
-                                                <table class="table table-striped table-bordered nowrap">
-                                                    <thead>
-                                                        <th>No Warna</th>
-                                                        <th>Kode</th>
-                                                        <th>Note</th>
-                                                        <th>Barcode</th>
-                                                    </thead>
-                                                    <tbody>
-                                                        <?php
-                                                            $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam");
-                                                        ?>
-                                                        <?php while ($row_bukupinjam = mysqli_fetch_array($q_bukupinjam)) { ?>
-                                                            <tr>
-                                                                <td><?= $row_bukupinjam['no_warna']; ?></td>
-                                                                <td>
-                                                                    <a style="border-bottom:1px dashed green;" data-pk="<?= $row_bukupinjam['id'] ?>" data-value="<?= $row_bukupinjam['kode'] ?>" class="kode_edit" href="javascipt:void(0)">
-                                                                        <?= $row_bukupinjam['kode']; ?>
-                                                                    </a>
-                                                                </td>
-                                                                <td>
-                                                                    <a style="border-bottom:1px dashed green;" data-pk="<?= $row_bukupinjam['id'] ?>" data-value="<?= $row_bukupinjam['note'] ?>" class="note_edit" href="javascipt:void(0)">
-                                                                        <?= $row_bukupinjam['note']; ?>
-                                                                    </a>
-                                                                </td>
-                                                                <td><a href="printbarcode_bukupinjam.php?id=<?= sprintf("%'.06d\n", $row_bukupinjam['id']); ?>" class="btn btn-success btn-sm" target="_blank">Print Barcode</a></td>
-                                                            </tr>
-                                                        <?php } ?>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Data Barcode</h5>
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="dt-responsive table-responsive">
+                                            <table id="excel-LA" class="table compact table-striped table-bordered nowrap">
+                                                <thead>
+                                                    <th>No Barcode</th>
+                                                    <th>No Warna</th>
+                                                    <th>Kode</th>
+                                                    <th>Note</th>
+                                                    <th>Customer</th>
+                                                    <th>Status Pinjam</th>
+                                                    <th>Barcode</th>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                        $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam");
+                                                    ?>
+                                                    <?php while ($row_bukupinjam = mysqli_fetch_array($q_bukupinjam)) { ?>
+                                                        <tr>
+                                                            <td><?= sprintf("%'.06d\n", $row_bukupinjam['id']); ?></td>
+                                                            <td><?= $row_bukupinjam['no_warna']; ?></td>
+                                                            <td>
+                                                                <a style="border-bottom:1px dashed green;" data-pk="<?= $row_bukupinjam['id'] ?>" data-value="<?= $row_bukupinjam['kode'] ?>" class="kode_edit" href="javascipt:void(0)">
+                                                                    <?= $row_bukupinjam['kode']; ?>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <a style="border-bottom:1px dashed green;" data-pk="<?= $row_bukupinjam['id'] ?>" data-value="<?= $row_bukupinjam['note'] ?>" class="note_edit" href="javascipt:void(0)">
+                                                                    <?= $row_bukupinjam['note']; ?>
+                                                                </a>
+                                                            </td>
+                                                            <td><?= $row_bukupinjam['customer']; ?></td>
+                                                            <td></td>
+                                                            <td><a href="printbarcode_bukupinjam.php?id=<?= sprintf("%'.06d\n", $row_bukupinjam['id']); ?>" class="btn btn-success btn-sm" target="_blank">Print Barcode</a></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
-                                <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -169,4 +136,43 @@
         </div>
     </div>
 </body>
+<script type="text/javascript" src="files\bower_components\jquery\js\jquery.min.js"></script>
+<script type="text/javascript" src="files\bower_components\jquery-ui\js\jquery-ui.min.js"></script>
+<script src="files\bower_components\datatables.net\js\jquery.dataTables.min.js"></script>
+<script src="files\bower_components\datatables.net-buttons\js\dataTables.buttons.min.js"></script>
+<script src="files\assets\pages\data-table\extensions\buttons\js\dataTables.buttons.min.js"></script>
+<script src="files\assets\pages\data-table\extensions\buttons\js\buttons.flash.min.js"></script>
+<script src="files\assets\pages\data-table\extensions\buttons\js\jszip.min.js"></script>
+<script src="files\assets\pages\data-table\extensions\buttons\js\vfs_fonts.js"></script>
+<script src="files\assets\pages\data-table\extensions\buttons\js\buttons.colVis.min.js"></script>
+<script src="files\bower_components\datatables.net-buttons\js\buttons.print.min.js"></script>
+<script src="files\bower_components\datatables.net-buttons\js\buttons.html5.min.js"></script>
+<script src="files\bower_components\datatables.net-bs4\js\dataTables.bootstrap4.min.js"></script>
+<script src="files\bower_components\datatables.net-responsive\js\dataTables.responsive.min.js"></script>
+<script src="files\bower_components\datatables.net-responsive-bs4\js\responsive.bootstrap4.min.js"></script>
+<script type="text/javascript" src="files\bower_components\i18next\js\i18next.min.js"></script>
+<script type="text/javascript" src="files\bower_components\i18next-xhr-backend\js\i18nextXHRBackend.min.js"></script>
+<script type="text/javascript" src="files\bower_components\i18next-browser-languagedetector\js\i18nextBrowserLanguageDetector.min.js"></script>
+<script type="text/javascript" src="files\bower_components\jquery-i18next\js\jquery-i18next.min.js"></script>
+<script src="files\assets\pages\data-table\extensions\buttons\js\extension-btns-custom.js"></script>
+<script src="files\assets\js\pcoded.min.js"></script>
+<script src="files\assets\js\menu\menu-hori-fixed.js"></script>
+<script src="files\assets\js\jquery.mCustomScrollbar.concat.min.js"></script>
+<script type="text/javascript" src="files\assets\js\script.js"></script>
+<script>
+    $('#excel-LA').DataTable({
+        dom: 'Bfrtip',
+        buttons: [{
+            extend: 'excelHtml5',
+            customize: function(xlsx) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                $('row c[r^="F"]', sheet).each(function() {
+                    if ($('is t', this).text().replace(/[^\d]/g, '') * 1 >= 500000) {
+                        $(this).attr('s', '20');
+                    }
+                });
+            }
+        }]
+    });
+</script>
 <?php require_once 'footer.php'; ?>
