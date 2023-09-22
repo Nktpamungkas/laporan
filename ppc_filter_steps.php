@@ -420,9 +420,9 @@
                                                                         $d_ket_leader   = mysqli_fetch_assoc($q_ket_leader);
                                                                     ?>
                                                                     <?php if($d_ket_leader['KETERANGAN']) : ?>
-                                                                        <abbr title="<?= $d_ket_leader['KETERANGAN']; ?>" data-toggle="modal" data-target="#view-note<?= $rowdb2['OPERATIONCODE']; ?>">View Note</abbr>
+                                                                        <abbr title="<?= $d_ket_leader['KETERANGAN']; ?>" data-toggle="modal" data-target="#view-note<?= $rowdb2['STEPNUMBER']; ?>">View Note</abbr>
                                                                     <?php else : ?>
-                                                                        <button type="button" style="color: #4778FF;" data-toggle="modal" data-target="#confirm-note<?= $rowdb2['OPERATIONCODE']; ?>">
+                                                                        <button type="button" style="color: #4778FF;" data-toggle="modal" data-target="#confirm-note<?= $rowdb2['STEPNUMBER']; ?>">
                                                                             <i class="icofont icofont-speech-comments"></i>Notes
                                                                         </button>
                                                                     <?php endif; ?>
@@ -588,7 +588,7 @@
                                                                 <?php endif; ?>
                                                                 </td>
                                                             </tr>
-                                                            <div id="confirm-note<?= $rowdb2['OPERATIONCODE']; ?>" class="modal fade" role="dialog">
+                                                            <div id="confirm-note<?= $rowdb2['STEPNUMBER']; ?>" class="modal fade" role="dialog">
                                                                 <div class="modal-dialog modal-lg">
                                                                     <div class="login-card card-block login-card-modal">
                                                                         <form class="md-float-material">
