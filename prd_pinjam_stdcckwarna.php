@@ -16,7 +16,6 @@
                                     u.USERGENERICGROUPTYPECODE = 'CL1'";
         $usergenericgroup           = db2_exec($conn1, $qry_usergeneric);
 
-
         while ($row_usergenericgroup   = db2_fetch_assoc($usergenericgroup)) {
             $cekusergeneric_mysqli      = mysqli_query($con_nowprd, "SELECT COUNT(*) AS hasildata FROM buku_pinjam WHERE no_warna = '$row_usergenericgroup[CODE]'");
             $hasil_cek_mysqli           = mysqli_fetch_assoc($cekusergeneric_mysqli);
@@ -36,6 +35,34 @@
         }
 
         header("Location: prd_pinjam_stdcckwarna.php");
+    }elseif (isset($_POST['simpan'])) {
+        $id         = sprintf("%'.00d\n", $_POST['id']);
+        $no_absen   = $_POST['no_absen'];
+        $ket        = $_POST['ket'];
+        $tgl        = date('Y-m-d H:i:s');
+
+        $caritgl_in = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE id ='$id'");
+        $row_tgl_in = mysqli_fetch_assoc($caritgl_in);
+
+        if(empty($row_tgl_in['tgl_in'])){
+            $in             = mysqli_query($con_nowprd, "UPDATE buku_pinjam 
+                                                            SET absen_in = '$no_absen',
+                                                                ket = '$ket',
+                                                                tgl_in = '$tgl'
+                                                            WHERE
+                                                                id = '$id'");
+            $in_history     = mysqli_query($con_nowprd, "INSERT INTO buku_pinjam_history(id_buku_pinjam,no_absen,tgl_in,ket)VALUES('$id','$no_absen', '$tgl', '$ket')");
+        }else{
+            $out            = mysqli_query($con_nowprd, "UPDATE buku_pinjam 
+                                                            SET absen_out = '$no_absen',
+                                                                ket = '$ket',
+                                                                tgl_out = '$tgl'
+                                                            WHERE
+                                                                id = '$id'");
+            $out_history    = mysqli_query($con_nowprd, "INSERT INTO buku_pinjam_history(id_buku_pinjam,no_absen,tgl_out,ket)VALUES('$id','$no_absen', '$tgl', '$ket')");
+        }
+        header("Location: prd_pinjam_stdcckwarna.php");
+
     }
 ?>
 <!DOCTYPE html>
@@ -60,7 +87,28 @@
     <link rel="stylesheet" type="text/css" href="files\bower_components\datatables.net-bs4\css\dataTables.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="files\assets\pages\data-table\css\buttons.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="files\bower_components\datatables.net-responsive-bs4\css\responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="files\bower_components\select2\css\select2.min.css">
+    <link rel="stylesheet" type="text/css" href="files\bower_components\bootstrap-multiselect\css\bootstrap-multiselect.css">
+    <link rel="stylesheet" type="text/css" href="files\bower_components\multiselect\css\multi-select.css">
+    
 </head>
+<script type="text/javascript">
+	function barcode(){
+		var id		= document.getElementById("id").value;
+
+		$.get("api_barcode_bukupinjam.php?id="+id,function(data){
+			document.getElementById("muncul_nowarna").value = data.no_warna;
+		});
+	}
+	function absen(){
+		var no_absen		= document.getElementById("no_absen").value;
+
+		$.get("api_hris.php?no_absen="+no_absen,function(data){
+			document.getElementById("nama").value = data.nama;
+		});
+	}
+
+</script>
 <?php require_once 'header.php'; ?>
 <body>
     <div class="pcoded-content">
@@ -72,62 +120,142 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Sync Data</h5>
+                                        <h5>Form Pinjam Buku</h5>
                                     </div>
                                     <div class="card-block">
                                         <form action="" method="post">
-                                            <div class="row">
-                                                <div class="col-sm-12 col-xl-12 m-b-30">
-                                                    <button type="submit" name="submit" class="btn btn-warning btn-sm">Fetch Data</button>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Scan Barcode</label>
+                                                <div class="col-sm-2">
+                                                    <input type="text" class="form-control input-sm" name="id" id="id" onchange="barcode()" placeholder="Scan Barcode..." autofocus>
                                                 </div>
+                                                <div class="col-sm-2">
+                                                    <input type="text" style="background: rgba(0, 0, 0, 0); border: none; outline: none;" disabled id="muncul_nowarna">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Scan No Absen</label>
+                                                <div class="col-sm-2">
+                                                    <input type="text" class="form-control input-sm" name="no_absen" id="no_absen" onchange="absen()" placeholder="Scan No Absen...">
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <input type="text" style="background: rgba(0, 0, 0, 0); border: none; outline: none;" disabled id="nama">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Keterangan</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control input-sm" name="ket" placeholder="Keterangan...">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-xl-12 m-b-30">
+                                                <button type="submit" name="simpan" class="btn btn-primary btn-sm">Simpan</button>
+                                                <button type="submit" name="submit" class="btn btn-success btn-sm">Fetch Data</button>
+                                                <button type="submit" name="lihatdata" class="btn btn-warning btn-sm">Lihat Data</button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5>Data Barcode</h5>
-                                    </div>
-                                    <div class="card-block">
-                                        <div class="dt-responsive table-responsive">
-                                            <table id="excel-LA" class="table compact table-striped table-bordered nowrap">
-                                                <thead>
-                                                    <th>No Barcode</th>
-                                                    <th>No Warna</th>
-                                                    <th>Kode</th>
-                                                    <th>Note</th>
-                                                    <th>Customer</th>
-                                                    <th>Status Pinjam</th>
-                                                    <th>Barcode</th>
-                                                </thead>
-                                                <tbody>
-                                                    <?php
-                                                        $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam");
-                                                    ?>
-                                                    <?php while ($row_bukupinjam = mysqli_fetch_array($q_bukupinjam)) { ?>
-                                                        <tr>
-                                                            <td><?= sprintf("%'.06d\n", $row_bukupinjam['id']); ?></td>
-                                                            <td><?= $row_bukupinjam['no_warna']; ?></td>
-                                                            <td>
-                                                                <a style="border-bottom:1px dashed green;" data-pk="<?= $row_bukupinjam['id'] ?>" data-value="<?= $row_bukupinjam['kode'] ?>" class="kode_edit" href="javascipt:void(0)">
-                                                                    <?= $row_bukupinjam['kode']; ?>
-                                                                </a>
-                                                            </td>
-                                                            <td>
-                                                                <a style="border-bottom:1px dashed green;" data-pk="<?= $row_bukupinjam['id'] ?>" data-value="<?= $row_bukupinjam['note'] ?>" class="note_edit" href="javascipt:void(0)">
-                                                                    <?= $row_bukupinjam['note']; ?>
-                                                                </a>
-                                                            </td>
-                                                            <td><?= $row_bukupinjam['customer']; ?></td>
-                                                            <td></td>
-                                                            <td><a href="printbarcode_bukupinjam.php?id=<?= sprintf("%'.06d\n", $row_bukupinjam['id']); ?>" class="btn btn-success btn-sm" target="_blank">Print Barcode</a></td>
-                                                        </tr>
-                                                    <?php } ?>
-                                                </tbody>
-                                            </table>
+                                <?php if (isset($_POST['lihatdata'])) : ?>
+                                    <div class="card">
+                                    <form action="printbarcode_bukupinjam.php" method="POST" target="_blank">
+                                        <div class="card-header text-right">
+                                            <button type="submit" name="print_select" class="btn btn-primary btn-sm">Print Selected Barcode</button>
+                                            <span>Maks. 3 Barcode yg dipilih</span>
+                                        </div>
+                                        <div class="card-block">
+                                            <div class="dt-responsive table-responsive">
+                                                <table id="lang-dt" class="table compact table-striped table-bordered nowrap" style="width:100%">
+                                                    <thead>
+                                                        <th align="center" width="3%">Print</th>
+                                                        <th width="4%">No Barcode</th>
+                                                        <th width="4%">No Warna</th>
+                                                        <th width="3%">Kode</th>
+                                                        <th width="22%">Note</th>
+                                                        <th width="7%">Customer</th>
+                                                        <th width="20%">Status Pinjam</th>
+                                                        <th width="10%">Opsi</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php
+                                                            $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam ");
+                                                        ?>
+                                                        
+                                                        <?php while ($row_bukupinjam = mysqli_fetch_array($q_bukupinjam)) { ?>
+                                                            <tr>
+                                                                <td align="center">
+                                                                    <input type="checkbox" name="id_barcode[]" value="<?= sprintf("%'.06d\n", $row_bukupinjam['id']); ?>">
+                                                                </td>
+                                                                <td><?= sprintf("%'.06d\n", $row_bukupinjam['id']); ?></td>
+                                                                <td><?= $row_bukupinjam['no_warna']; ?></td>
+                                                                <td>
+                                                                    <a style="border-bottom:1px dashed green;" data-pk="<?= $row_bukupinjam['id'] ?>" data-value="<?= $row_bukupinjam['kode'] ?>" class="kode_edit" href="javascipt:void(0)">
+                                                                        <?= $row_bukupinjam['kode']; ?>
+                                                                    </a>
+                                                                </td>
+                                                                <td>
+                                                                    <a style="border-bottom:1px dashed green;" data-pk="<?= $row_bukupinjam['id'] ?>" data-value="<?= $row_bukupinjam['note'] ?>" class="note_edit" href="javascipt:void(0)">
+                                                                        <?= $row_bukupinjam['note']; ?>
+                                                                    </a>
+                                                                </td>
+                                                                <td><?= $row_bukupinjam['customer']; ?></td>
+                                                                <td>
+                                                                    <?php
+                                                                        $cari_nama_in = mysqli_query($con_hrd, "SELECT * FROM tbl_makar WHERE no_scan = '$row_bukupinjam[absen_in]'");
+                                                                        $cari_nama_out = mysqli_query($con_hrd, "SELECT * FROM tbl_makar WHERE no_scan = '$row_bukupinjam[absen_out]'");
+                                                                        $nama_in    = mysqli_fetch_assoc($cari_nama_in);
+                                                                        $nama_out   = mysqli_fetch_assoc($cari_nama_out);
+                                                                        if(!empty($row_bukupinjam['tgl_in'])){
+                                                                            echo    "Dipinjam : $nama_in[nama], $row_bukupinjam[tgl_in] <br>";
+                                                                        }
+                                                                        if(!empty($row_bukupinjam['tgl_out'])){
+                                                                            echo    "Dikembalikan : $nama_out[nama], $row_bukupinjam[tgl_out]";
+                                                                        }
+                                                                    ?>
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button" style="color: #4778FF;" data-toggle="modal" data-target="#history<?= $row_bukupinjam['id']; ?>">
+                                                                        <i class="icofont icofont-speech-comments"></i>History
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                            <!-- <div id="history<?= $row_bukupinjam['id']; ?>" class="modal fade" role="dialog">
+                                                                <div class="modal-dialog modal-lg">
+                                                                    <div class="login-card card-block login-card-modal">
+                                                                        <table class="table table-xs">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Nama</th>
+                                                                                    <th>Tanggal Pinjam</th>
+                                                                                    <th>Tanggal Kembali</th>
+                                                                                    <th>Ket</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <?php
+                                                                                    $q_history  = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam_history WHERE id_buku_pinjam = '$row_bukupinjam[id]'");
+                                                                                    while ($row_history = mysqli_fetch_array($q_history)) {
+                                                                                ?>
+                                                                                <tr>
+                                                                                    <th scope="row"><?= $row_history['no_absen']; ?></th>
+                                                                                    <td><?= $row_history['tgl_in']; ?></td>
+                                                                                    <td><?= $row_history['tgl_out']; ?></td>
+                                                                                    <td><?= $row_history['ket']; ?></td>
+                                                                                </tr>
+                                                                                <?php } ?>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div> -->
+                                                        <?php } ?>
+                                                        </form>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -163,7 +291,6 @@
     $('#excel-LA').DataTable({
         dom: 'Bfrtip',
         buttons: [{
-            extend: 'excelHtml5',
             customize: function(xlsx) {
                 var sheet = xlsx.xl.worksheets['sheet1.xml'];
                 $('row c[r^="F"]', sheet).each(function() {
