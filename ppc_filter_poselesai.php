@@ -124,6 +124,8 @@
                                                             <th title="Sumber data: &#013; 1. Production Demand &#013; 2. Bagian group Entered quantity &#013; 3. User Primary Quantity">QTY PACKING</th>
                                                             <th title="Sumber data: &#013; 1. Production Demand &#013; 2. Bagian group Entered quantity &#013; 3. User Secondary Quantity">QTY PACKING YARD</th>
                                                             <th>QTY SISA</th>
+                                                            <th>QTY PACKING KURANG (KG)</th>
+                                                            <th>QTY PACKING KURANG (YARD/MTR)</th>
                                                             <th>NETTO(kg)</th>
                                                             <th>NETTO(yd)</th>
                                                             <th>DELAY</th>
@@ -143,8 +145,8 @@
                                                             <th>TGL KIRIM</th>
                                                             <th>QTY KIRIM (KG)</th>
                                                             <th>QTY KIRIM (YARD/MTR)</th>
-                                                            <th>QTY KURANG (KG)</th>
-                                                            <th>QTY KURANG (YARD/MTR)</th>
+                                                            <th>QTY KIRIM KURANG (KG)</th>
+                                                            <th>QTY KIRIM KURANG (YARD/MTR)</th>
                                                             <th>FOC</th>
                                                             <th>LOSS (KG)</th>
                                                         </tr>
@@ -767,6 +769,18 @@
                                                                 <td><?= $qty_sisa; ?></td> <!-- QTY SISA -->
                                                                 <td>
                                                                     <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?> 
+                                                                    <?php else : ?>
+                                                                        <?= number_format($d_qtypacking['QTY_PACKING'],2) - number_format($rowdb2['NETTO'], 2); ?>
+                                                                    <?php endif; ?>
+                                                                </td> <!-- QTY PACKING KURANG KG -->
+                                                                <td>
+                                                                    <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?> 
+                                                                    <?php else : ?>
+                                                                        <?= number_format($d_qtypacking['QTY_PACKING'], 2) - number_format($d_netto_yd['BASESECONDARYQUANTITY'],2); ?>
+                                                                    <?php endif; ?>
+                                                                </td> <!-- QTY PACKING KURANG YARD/METER -->
+                                                                <td>
+                                                                    <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?> 
                                                                         
                                                                     <?php else : ?>
                                                                         <?= number_format($rowdb2['NETTO'],0); ?>
@@ -810,13 +824,13 @@
                                                                     <?php else : ?>
                                                                         <?= number_format($d_suratjalan['QTY_KIRIM_KG'],2) - number_format($rowdb2['NETTO'], 2); ?>
                                                                     <?php endif; ?>
-                                                                </td> <!-- QTY KURANG KG -->
+                                                                </td> <!-- QTY KIRIM KURANG KG -->
                                                                 <td>
                                                                     <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?> 
                                                                     <?php else : ?>
                                                                         <?= number_format($d_suratjalan['QTY_KIRIM_YARD_MTR'], 2) - number_format($d_netto_yd['BASESECONDARYQUANTITY'],2); ?>
                                                                     <?php endif; ?>
-                                                                </td> <!-- QTY KURANG YARD/METER -->
+                                                                </td> <!-- QTY KIRIM KURANG YARD/METER -->
                                                                 <td><?= $d_suratjalan['FOC']; ?></td> <!-- FOC -->
                                                                 <td>
                                                                     <?php 
@@ -1006,6 +1020,18 @@
                                                                     ?>
                                                                 </td> <!-- QTY PACKING YARD -->
                                                                 <td><?= $qty_sisa; ?></td> <!-- QTY SISA -->
+                                                                <td>
+                                                                    <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?> 
+                                                                    <?php else : ?>
+                                                                        <?= number_format($d_qtypacking['QTY_PACKING'],2) - number_format($rowdb2['NETTO'], 2); ?>
+                                                                    <?php endif; ?>
+                                                                </td> <!-- QTY PACKING KURANG KG -->
+                                                                <td>
+                                                                    <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?> 
+                                                                    <?php else : ?>
+                                                                        <?= number_format($d_qtypacking['QTY_PACKING'], 2) - number_format($d_netto_yd['BASESECONDARYQUANTITY'],2); ?>
+                                                                    <?php endif; ?>
+                                                                </td> <!-- QTY PACKING KURANG YARD/METER -->
                                                                 <td>
                                                                     <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?> 
                                                                         
