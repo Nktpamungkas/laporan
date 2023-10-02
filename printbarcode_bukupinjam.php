@@ -3,7 +3,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="styles_cetak.css" rel="stylesheet" type="text/css">
-<title>Print Barcode</title>
+<?php if(isset($_POST['print_select'])){ ?>
+    <title>Print Barcode</title>
+<?php }elseif(isset($_POST['arsip_select'])){ ?>
+    <title>Arsip Data Resep</title>
+<?php } ?>
 <style>
 	td{
         border-top:0px #000000 solid; 
@@ -23,14 +27,13 @@ if(isset($_POST['print_select'])){
     } else {
         $total_selected = count($id_generate);
 
-        for ($i = 3; $i < $total_selected; $i++) {
+        for ($i = 0 ; $i < 3; $i++) {
             $value_generate[]   =  "'".$id_generate[$i]."'";
         }
         $where_value    = implode(', ', $value_generate);
 
         $q_pinjambuku   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE id IN ($where_value)");
     }
-}
 ?>
 <table width="100%" border="0" style="width: 7in;">
     <tbody>    
@@ -59,16 +62,49 @@ if(isset($_POST['print_select'])){
             <td></td>
             <td></td>
             <td></td>
-            <?php while ($row_data = mysqli_fetch_array($q_pinjambuku)) { ?>
-                <td align="left" valign="top" style="height: 1.6in;"><table width="100%" border="0" class="table-list1" style="width: 2.3in;">
-                    <tr>
-                        <img src='https://barcode.tec-it.com/barcode.ashx?data=<?= sprintf("%'.06d\n", $row_data['id']); ?>&code=Code128&translate-esc=on'/>
-                    </tr>
-                    </table>
-                </td>
-            <?php } ?>
+			<?php if (!empty($id_generate)) { ?>
+                <?php while ($row_data = mysqli_fetch_array($q_pinjambuku)) { ?>
+                    <td align="left" valign="top" style="height: 1.6in;"><table width="100%" border="0" class="table-list1" style="width: 2.3in;">
+                        <tr>
+                            <img src='https://barcode.tec-it.com/barcode.ashx?data=<?= sprintf("%'.06d\n", $row_data['id']); ?>&code=Code128&translate-esc=on'/>
+                        </tr>
+                        </table>
+                    </td>
+                <?php } ?>
+			<?php } ?>
         </tr>
     </tbody>
 </table>
+<?php }elseif(isset($_POST['arsip_select'])){ ?>
+    <?php
+        require_once "koneksi.php";
+        $id_generate = $_POST['id_barcode'];
+        if (empty($id_generate)) {
+            echo ("You didn't select anything");
+        } else {
+            $total_selected = count($id_generate);
+    
+            for ($i = 0 ; $i < 50; $i++) {
+                $value_generate[]   =  "'".$id_generate[$i]."'";
+            }
+            $where_value    = implode(', ', $value_generate);
+    
+            $q_pinjambuku   = mysqli_query($con_nowprd, "UPDATE buku_pinjam 
+                                                            SET status_file = 'Arsip' 
+                                                            WHERE id IN ($where_value)");
+            if($q_pinjambuku){
+                echo '<script language="javascript">';
+                echo 'let text = "Data Resep Berhasil di arsip !";
+                        if (confirm(text) == true) {
+                            document.location.href = "prd_pinjam_stdcckwarna.php";
+                        } else {
+                            document.location.href = "prd_pinjam_stdcckwarna.php";
+                        }';
+                echo '</script>';
+
+            }
+        }
+    ?>
+<?php } ?>
 </body>
 </html>
