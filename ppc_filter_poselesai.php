@@ -589,6 +589,16 @@
                                                             $d_elemet   = db2_fetch_assoc($q_element);
                                                             $qty_sisa   = $d_elemet['BASEPRIMARYQUANTITY'];
                                                         ?>
+                                                        <?php
+                                                            //SUMMARY UNTUK QTY PACKING KURANG 
+                                                            $q_qtypacking_sum = db2_exec($conn1, "SELECT * FROM ITXVIEW_QTYPACKING_SUM WHERE ORIGDLVSALORDLINESALORDERCODE = '$rowdb2[NO_ORDER]'
+                                                                                                    AND ORIGDLVSALORDERLINEORDERLINE = '$rowdb2[ORDERLINE]'");
+                                                            $d_qtypacking_sum = db2_fetch_assoc($q_qtypacking_sum);
+
+                                                            // NETTO YARD
+                                                            $sql_netto_yd = db2_exec($conn1, "SELECT * FROM ITXVIEW_NETTO WHERE CODE = '$rowdb2[DEMAND]'");
+                                                            $d_netto_yd = db2_fetch_assoc($sql_netto_yd);
+                                                        ?>
                                                         <?php $jeniskain = $rowdb2['JENIS_KAIN']; if($_POST['rec'] == 'rec' AND str_contains($jeniskain, 'RECYCLED')) : ?>
                                                             <tr>
                                                                 <td><?= substr($d_salesorder['CREATIONDATETIME'], 0, 10); ?></td><!-- DATE MARKETING -->
@@ -764,11 +774,6 @@
                                                                         $q_qtypacking = db2_exec($conn1, "SELECT * FROM ITXVIEW_QTYPACKING WHERE DEMANDCODE = '$rowdb2[DEMAND]'");
                                                                         $d_qtypacking = db2_fetch_assoc($q_qtypacking);
                                                                         echo number_format($d_qtypacking['QTY_PACKING_YARD'], 2);
-
-                                                                        //SUMMARY UNTUK QTY PACKING KURANG 
-                                                                        $q_qtypacking_sum = db2_exec($conn1, "SELECT * FROM ITXVIEW_QTYPACKING_SUM WHERE ORIGDLVSALORDLINESALORDERCODE = '$rowdb2[NO_ORDER]'
-                                                                                                                                                AND ORIGDLVSALORDERLINEORDERLINE = '$rowdb2[ORDERLINE]'");
-                                                                        $d_qtypacking_sum = db2_fetch_assoc($q_qtypacking_sum);
                                                                     ?>
                                                                 </td> <!-- QTY PACKING YARD -->
                                                                 <td><?= $qty_sisa; ?></td> <!-- QTY SISA -->
@@ -781,7 +786,7 @@
                                                                 <td>
                                                                     <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?> 
                                                                     <?php else : ?>
-                                                                        <?= number_format($d_qtypacking_sum['QTY_PACKING'], 2) - number_format($d_netto_yd['BASESECONDARYQUANTITY'],2); ?>
+                                                                        <?= number_format($d_qtypacking_sum['QTY_PACKING_YARD'], 2) - number_format($d_netto_yd['BASESECONDARYQUANTITY'],2); ?>
                                                                     <?php endif; ?>
                                                                 </td> <!-- QTY PACKING KURANG YARD/METER -->
                                                                 <td>
@@ -796,8 +801,6 @@
                                                                         
                                                                     <?php else : ?>
                                                                         <?php 
-                                                                            $sql_netto_yd = db2_exec($conn1, "SELECT * FROM ITXVIEW_NETTO WHERE CODE = '$rowdb2[DEMAND]'");
-                                                                            $d_netto_yd = db2_fetch_assoc($sql_netto_yd);
                                                                             echo number_format($d_netto_yd['BASESECONDARYQUANTITY'],0);
                                                                         ?>
                                                                     <?php endif; ?>
@@ -1015,11 +1018,6 @@
                                                                         $q_qtypacking = db2_exec($conn1, "SELECT * FROM ITXVIEW_QTYPACKING WHERE DEMANDCODE = '$rowdb2[DEMAND]'");
                                                                         $d_qtypacking = db2_fetch_assoc($q_qtypacking);
                                                                         echo number_format($d_qtypacking['QTY_PACKING'], 2);
-
-                                                                        //SUMMARY UNTUK QTY PACKING KURANG 
-                                                                        $q_qtypacking_sum = db2_exec($conn1, "SELECT * FROM ITXVIEW_QTYPACKING_SUM WHERE ORIGDLVSALORDLINESALORDERCODE = '$rowdb2[NO_ORDER]'
-                                                                                                                                                AND ORIGDLVSALORDERLINEORDERLINE = '$rowdb2[ORDERLINE]'");
-                                                                        $d_qtypacking_sum = db2_fetch_assoc($q_qtypacking_sum);
                                                                     ?>
                                                                 </td> <!-- QTY PACKING -->
                                                                 <td>
@@ -1039,7 +1037,7 @@
                                                                 <td>
                                                                     <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?> 
                                                                     <?php else : ?>
-                                                                        <?= number_format($d_qtypacking_sum['QTY_PACKING'], 2) - number_format($d_netto_yd['BASESECONDARYQUANTITY'],2); ?>
+                                                                        <?= number_format($d_qtypacking_sum['QTY_PACKING_YARD'], 2) - number_format($d_netto_yd['BASESECONDARYQUANTITY'],2); ?>
                                                                     <?php endif; ?>
                                                                 </td> <!-- QTY PACKING KURANG YARD/METER -->
                                                                 <td>
@@ -1054,8 +1052,6 @@
                                                                         
                                                                     <?php else : ?>
                                                                         <?php 
-                                                                            $sql_netto_yd = db2_exec($conn1, "SELECT * FROM ITXVIEW_NETTO WHERE CODE = '$rowdb2[DEMAND]'");
-                                                                            $d_netto_yd = db2_fetch_assoc($sql_netto_yd);
                                                                             echo number_format($d_netto_yd['BASESECONDARYQUANTITY'],0);
                                                                         ?>
                                                                     <?php endif; ?>
