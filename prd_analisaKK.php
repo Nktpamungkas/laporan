@@ -260,6 +260,29 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                     </th>
                                                                 </tr>
                                                                 <tr>
+                                                                    <th style="vertical-align: text-top;">Gauge x Diameter Mesin (inch) </th>
+                                                                    <th style="vertical-align: text-top;">:</th>
+                                                                    <th style="vertical-align: text-top;">
+                                                                        <?php
+                                                                        $q_lg_standart  = db2_exec($conn1, "SELECT 
+                                                                                                                a.VALUEDECIMAL AS LEBAR,
+                                                                                                                a2.VALUEDECIMAL AS GRAMASI
+                                                                                                            FROM 
+                                                                                                                PRODUCT p 
+                                                                                                            LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'Gauge'
+                                                                                                            LEFT JOIN ADSTORAGE a2 ON a2.UNIQUEID = p.ABSUNIQUEID AND a2.FIELDNAME = 'Diameter'
+                                                                                                            WHERE 
+                                                                                                                SUBCODE01 = '$d_ITXVIEWKK[SUBCODE01]' 
+                                                                                                                AND SUBCODE02 = '$d_ITXVIEWKK[SUBCODE02]' 
+                                                                                                                AND SUBCODE03 = '$d_ITXVIEWKK[SUBCODE03]'
+                                                                                                                AND SUBCODE04 = '$d_ITXVIEWKK[SUBCODE04]' 
+                                                                                                                AND ITEMTYPECODE = 'KGF'");
+                                                                        $d_lg_standart  = db2_fetch_assoc($q_lg_standart);
+                                                                        echo number_format($d_lg_standart['LEBAR'], 0) . ' x ' . number_format($d_lg_standart['GRAMASI'], 0);
+                                                                        ?>
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
                                                                     <th style="vertical-align: text-top;">Lebar x Gramasi Greige</th>
                                                                     <th style="vertical-align: text-top;">:</th>
                                                                     <th>
