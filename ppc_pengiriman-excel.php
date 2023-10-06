@@ -464,15 +464,17 @@
                         $r_roll_harian_code_local[]        = "'" .$row_roll_harian_code_local['CODE']. "'";
                     }
                 }
-                $value_roll_harian_code_local     = implode(',', $r_roll_harian_code_local);
-                $data_roll_harian_code_local      = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
-                                                                            SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
-                                                                            SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
-                                                                    FROM 
-                                                                        ITXVIEWALLOCATION0 
-                                                                    WHERE 
-                                                                        CODE IN ($value_roll_harian_code_local)");
-                $fetch_roll_harian_local  = db2_fetch_assoc($data_roll_harian_code_local);
+                if($r_roll_harian_code_local){
+                    $value_roll_harian_code_local     = implode(',', $r_roll_harian_code_local);
+                    $data_roll_harian_code_local      = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
+                                                                                SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
+                                                                                SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
+                                                                        FROM 
+                                                                            ITXVIEWALLOCATION0 
+                                                                        WHERE 
+                                                                            CODE IN ($value_roll_harian_code_local)");
+                    $fetch_roll_harian_local  = db2_fetch_assoc($data_roll_harian_code_local);
+                }
             // LOCAL
 
             // EXPORT
@@ -541,15 +543,17 @@
                         $r_roll_harian_code_local_1[]        = "'" .$row_roll_harian_code_local_1['CODE']. "'";
                     }
                 }
-                $value_roll_harian_code_local_1     = implode(',', $r_roll_harian_code_local_1);
-                $data_roll_harian_code_local_1      = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
-                                                                            SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
-                                                                            SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
-                                                                    FROM 
-                                                                        ITXVIEWALLOCATION0 
-                                                                    WHERE 
-                                                                        CODE IN ($value_roll_harian_code_local_1)");
-                $fetch_roll_harian_local_1  = db2_fetch_assoc($data_roll_harian_code_local_1);
+                if($r_roll_harian_code_local_1){
+                    $value_roll_harian_code_local_1     = implode(',', $r_roll_harian_code_local_1);
+                    $data_roll_harian_code_local_1      = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
+                                                                                SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
+                                                                                SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
+                                                                        FROM 
+                                                                            ITXVIEWALLOCATION0 
+                                                                        WHERE 
+                                                                            CODE IN ($value_roll_harian_code_local_1)");
+                    $fetch_roll_harian_local_1  = db2_fetch_assoc($data_roll_harian_code_local_1);
+                }
             // LOCAL
 
             // EXPORT
@@ -558,16 +562,18 @@
                         $r_roll_harian_code_export_1[]        = "'" .$row_roll_harian_code_export_1['PROVISIONALCODE']. "'";
                     }
                 }
-                $value_roll_harian_code_export_1     = implode(',', $r_roll_harian_code_export_1);
-                $data_roll_harian_code_export_1      = db2_exec($conn1, "SELECT COUNT(ise.COUNTROLL) AS ROLL,
-                                                                            SUM(ise.QTY_KG) AS QTY_SJ_KG,
-                                                                            SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD
-                                                                        FROM
-                                                                            ITXVIEW_SURATJALAN_EXIM2 ise 
-                                                                        LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
-                                                                        WHERE 
-                                                                            ise.PROVISIONALCODE IN ($value_roll_harian_code_export_1)");
-                $fetch_roll_harian_export_1  = db2_fetch_assoc($data_roll_harian_code_export_1);
+                if($r_roll_harian_code_export_1){
+                    $value_roll_harian_code_export_1     = implode(',', $r_roll_harian_code_export_1);
+                    $data_roll_harian_code_export_1      = db2_exec($conn1, "SELECT COUNT(ise.COUNTROLL) AS ROLL,
+                                                                                SUM(ise.QTY_KG) AS QTY_SJ_KG,
+                                                                                SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD
+                                                                            FROM
+                                                                                ITXVIEW_SURATJALAN_EXIM2 ise 
+                                                                            LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
+                                                                            WHERE 
+                                                                                ise.PROVISIONALCODE IN ($value_roll_harian_code_export_1)");
+                    $fetch_roll_harian_export_1  = db2_fetch_assoc($data_roll_harian_code_export_1);
+                }
             // EXPORT
         // ROLL TANGGAL HARI -1
         
@@ -617,15 +623,17 @@
                         $r_roll_harian_code_local_hariH[]        = "'" .$row_roll_harian_code_local_hariH['CODE']. "'";
                     }
                 }
-                $value_roll_harian_code_local_hariH     = implode(',', $r_roll_harian_code_local_hariH);
-                $data_roll_harian_code_local_hariH      = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
-                                                                            SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
-                                                                            SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
-                                                                    FROM 
-                                                                        ITXVIEWALLOCATION0 
-                                                                    WHERE 
-                                                                        CODE IN ($value_roll_harian_code_local_hariH)");
-                $fetch_roll_harian_local_hariH  = db2_fetch_assoc($data_roll_harian_code_local_hariH);
+                if($r_roll_harian_code_local_hariH){
+                    $value_roll_harian_code_local_hariH     = implode(',', $r_roll_harian_code_local_hariH);
+                    $data_roll_harian_code_local_hariH      = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
+                                                                                SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
+                                                                                SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD
+                                                                        FROM 
+                                                                            ITXVIEWALLOCATION0 
+                                                                        WHERE 
+                                                                            CODE IN ($value_roll_harian_code_local_hariH)");
+                    $fetch_roll_harian_local_hariH  = db2_fetch_assoc($data_roll_harian_code_local_hariH);
+                }
             // LOCAL
 
             // EXPORT
@@ -634,16 +642,18 @@
                         $r_roll_harian_code_export_hariH[]        = "'" .$row_roll_harian_code_export_hariH['PROVISIONALCODE']. "'";
                     }
                 }
-                $value_roll_harian_code_export_hariH     = implode(',', $r_roll_harian_code_export_hariH);
-                $data_roll_harian_code_export_hariH      = db2_exec($conn1, "SELECT COUNT(ise.COUNTROLL) AS ROLL,
-                                                                            SUM(ise.QTY_KG) AS QTY_SJ_KG,
-                                                                            SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD
-                                                                        FROM
-                                                                            ITXVIEW_SURATJALAN_EXIM2 ise 
-                                                                        LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
-                                                                        WHERE 
-                                                                            ise.PROVISIONALCODE IN ($value_roll_harian_code_export_hariH)");
-                $fetch_roll_harian_export_hariH  = db2_fetch_assoc($data_roll_harian_code_export_hariH);
+                if($r_roll_harian_code_export_hariH){
+                    $value_roll_harian_code_export_hariH     = implode(',', $r_roll_harian_code_export_hariH);
+                    $data_roll_harian_code_export_hariH      = db2_exec($conn1, "SELECT COUNT(ise.COUNTROLL) AS ROLL,
+                                                                                SUM(ise.QTY_KG) AS QTY_SJ_KG,
+                                                                                SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD
+                                                                            FROM
+                                                                                ITXVIEW_SURATJALAN_EXIM2 ise 
+                                                                            LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
+                                                                            WHERE 
+                                                                                ise.PROVISIONALCODE IN ($value_roll_harian_code_export_hariH)");
+                    $fetch_roll_harian_export_hariH  = db2_fetch_assoc($data_roll_harian_code_export_hariH);
+                }
             // EXPORT
         // ROLL TANGGAL HARI sd hari H
         
