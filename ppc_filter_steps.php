@@ -639,7 +639,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div id="view-note<?= $rowdb2['OPERATIONCODE']; ?>" class="modal fade" role="dialog">
+                                                            <div id="view-note<?= $rowdb2['STEPNUMBER']; ?>" class="modal fade" role="dialog">
                                                                 <div class="modal-dialog modal-lg">
                                                                     <div class="login-card card-block login-card-modal">
                                                                         <form class="md-float-material">
