@@ -12,7 +12,16 @@
             <th colspan="16">LAPORAN HARIAN PENGIRIMAN</th>
         </tr>
         <tr>
-            <th colspan="16">FW-02-PPC-04/02</th>
+            <th colspan="16">
+                <?php
+                    $date   = $_GET['tgl1'];
+                    if($date <= '2023-09-20'){
+                        echo "FW-02-PPC-04/02";
+                    }else{
+                        echo "FW-02-PPC-04/03";
+                    }
+                ?>
+            </th>
         </tr>
         <tr>
             <th colspan="16">BULAN <?= date_format($dateformat,"M Y"); ?></th>
