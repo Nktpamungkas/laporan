@@ -848,13 +848,13 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WH
                                                                     <?php while ($rowdb4 = db2_fetch_assoc($stmt3)) { ?>
                                                                         <?php
                                                                             $sqlQAData      = "SELECT DISTINCT * FROM ITXVIEW_DETAIL_QA_DATA 
-                                                                                                                    WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
-                                                                                                                    AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
-                                                                                                                    AND WORKCENTERCODE = '$rowdb4[WORKCENTERCODE]' 
-                                                                                                                    AND OPERATIONCODE = '$rowdb4[OPERATIONCODE]' 
-                                                                                                                    AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
-                                                                                                                    AND STATUS = 'Analisa KK'
-                                                                                                                    ORDER BY LINE ASC";
+                                                                                                WHERE PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' 
+                                                                                                AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
+                                                                                                AND WORKCENTERCODE = '$rowdb4[WORKCENTERCODE]' 
+                                                                                                AND OPERATIONCODE = '$rowdb4[OPERATIONCODE]' 
+                                                                                                AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                AND STATUS = 'Analisa KK'
+                                                                                                ORDER BY LINE ASC";
                                                                             $q_QA_DATAcek   = mysqli_query($con_nowprd, $sqlQAData);
                                                                             $d_QA_DATAcek   = mysqli_fetch_assoc($q_QA_DATAcek);
                                                                         ?>

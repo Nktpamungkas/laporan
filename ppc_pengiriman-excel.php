@@ -509,7 +509,7 @@
         
         // ROLL TANGGAL HARI -1
             $tgl1_kurang = $_GET['tgl1'];// pendefinisian tanggal awal
-            if(substr($tgl1_kurang, 9, 2) != '01'){
+            if(substr($tgl1_kurang, 8, 2) != '01'){
                 $tgl2_kurang = date('Y-m-d', strtotime('-1 days', strtotime($tgl1_kurang))); //operasi pengurangan tanggal sebanyak 1 hari
             }else{
                 $tgl2_kurang = substr($_GET['tgl1'], 0,8).'01'; // operasi pengurang tidak dikurangi jika tanggal 01 disetiap bulan
@@ -589,7 +589,7 @@
         // ROLL TANGGAL HARI sd hari H
             $tgl1_hariH = $_GET['tgl1'];// pendefinisian tanggal awal
 
-            if(substr($tgl1_kurang, 9, 2) != '01'){
+            if(substr($tgl1_kurang, 8, 2) != '01'){
                 $tgl2_hariH = date('Y-m-d', strtotime('+1 days', strtotime($tgl1_hariH))); //operasi pengurangan tanggal sebanyak 1 hari
             }else{
                 $tgl2_hariH = substr($_GET['tgl1'], 0,8).'01'; // operasi pengurang tidak dikurangi jika tanggal 01 disetiap bulan
@@ -701,7 +701,7 @@
         <tr>
             <th colspan="4" align="left">Total Tanggal 01 S/D 
                 <?php 
-                    if(substr($_GET['tgl1'], 9, 2) != '01'){ 
+                    if(substr($_GET['tgl1'], 8, 2) != '01'){ 
                         echo date('d', strtotime('-1 days', strtotime($_GET['tgl1']))); 
                     }else{
                         $date = date_create($_GET['tgl1'] ); 
@@ -725,7 +725,7 @@
         <tr>
             <th colspan="4" align="left">Total Tanggal 01 S/D 
                 <?php 
-                    if(substr($tgl1_kurang, 9, 2) != '01'){ 
+                    if(substr($tgl1_kurang, 8, 2) != '01'){ 
                         $date = date_create($_GET['tgl1'] ); 
                         echo date_format($date,"d");
                     }else{
