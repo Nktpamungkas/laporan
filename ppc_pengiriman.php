@@ -226,7 +226,7 @@
                                                                                                             ise.ADDRESSEE,
                                                                                                             ise.BRAND_NM
                                                                                                         FROM
-                                                                                                            ITXVIEW_SURATJALAN_EXIM2 ise 
+                                                                                                            ITXVIEW_SURATJALAN_EXIM2A ise 
                                                                                                         LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
                                                                                                         WHERE 
                                                                                                             ise.PROVISIONALCODE = '$rowdb2[PROVISIONALCODE]'
@@ -288,7 +288,7 @@
                                                                                                                 ise.ADDRESSEE,
                                                                                                                 ise.BRAND_NM
                                                                                                             FROM
-                                                                                                                ITXVIEW_SURATJALAN_EXIM2 ise 
+                                                                                                                ITXVIEW_SURATJALAN_EXIM2A ise 
                                                                                                             LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
                                                                                                             WHERE 
                                                                                                                 ise.PROVISIONALCODE = '$rowdb2[PROVISIONALCODE]'
@@ -386,7 +386,7 @@
                                                                                                                 ise.ADDRESSEE,
                                                                                                                 ise.BRAND_NM
                                                                                                             FROM
-                                                                                                                ITXVIEW_SURATJALAN_EXIM2 ise 
+                                                                                                                ITXVIEW_SURATJALAN_EXIM2A ise 
                                                                                                             LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
                                                                                                             WHERE 
                                                                                                                 ise.PROVISIONALCODE = '$rowdb2[PROVISIONALCODE]' AND ise.ITEMTYPEAFICODE = '$rowdb2[ITEMTYPEAFICODE]'
