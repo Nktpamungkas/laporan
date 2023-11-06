@@ -6,7 +6,7 @@
     // $order = $_GET['order'];
     $sqlcetaklabel = "SELECT 
                             i.DEAMAND AS DEMAND,
-                            i.PRODUCTIONORDERCODE AS ORDER,
+                            LISTAGG(TRIM(i.PRODUCTIONORDERCODE), ', ') AS ORDER,
                             ip.LANGGANAN AS PELANGGAN,
                             i.PROJECTCODE AS NOMOR_ORDER,
                             (trim( i.SUBCODE02 ) || trim( i.SUBCODE03 )) AS HANGER,
@@ -18,7 +18,17 @@
                             ITXVIEWKK i
                         LEFT JOIN ITXVIEW_PELANGGAN ip ON ip.ORDPRNCUSTOMERSUPPLIERCODE  = i.ORDPRNCUSTOMERSUPPLIERCODE AND ip.CODE = i.PROJECTCODE
                         LEFT JOIN ITXVIEW_KGBRUTO ik ON ik.PROJECTCODE = i.PROJECTCODE AND ik.ORIGDLVSALORDERLINEORDERLINE = i.ORIGDLVSALORDERLINEORDERLINE AND ik.CODE = i.DEAMAND
-                        WHERE i.DEAMAND LIKE '%$demand%'";
+                        WHERE i.DEAMAND LIKE '%$demand%'
+                        GROUP BY 
+                            i.DEAMAND,
+                            ip.LANGGANAN,
+                            i.PROJECTCODE,
+                            i.SUBCODE02,
+                            i.SUBCODE03,
+                            i.ITEMDESCRIPTION,
+                            i.WARNA,
+                            i.SUBCODE05,
+                            ik.EXTERNALREFERENCE";
     $stmt_cetaklabel = db2_exec($conn1,$sqlcetaklabel, array('cursor'=>DB2_SCROLLABLE));
     $rowdb2_cetaklabel = db2_fetch_assoc($stmt_cetaklabel);
 ?>
