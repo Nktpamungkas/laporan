@@ -280,6 +280,13 @@
                                             <span class="pcoded-mcaret"></span>
                                         </a>
                                     </li>
+                                    <li class="">
+                                        <a href="prd_openticketMTC.php" data-i18n="nav.animations.main">
+                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
+                                            <span class="pcoded-mtext">View Openticket MTC</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="pcoded-hasmenu">
@@ -293,6 +300,22 @@
                                         <a href="prt_pemakaian_obat.php" data-i18n="nav.animations.main">
                                             <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
                                             <span class="pcoded-mtext">Laporan pemakaian obat</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="pcoded-hasmenu">
+                                <a href="javascript:void(0)">
+                                    <span class="pcoded-micon"><i class="feather icon-box"></i></span>
+                                    <span class="pcoded-mtext">AFTER SALES SERVICES</span>
+                                    <span class="pcoded-mcaret"></span>
+                                </a>
+                                <ul class="pcoded-submenu">
+                                    <li class=" ">
+                                        <a href="aftersales_memopenting_order.php" data-i18n="nav.animations.main">
+                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
+                                            <span class="pcoded-mtext">MEMO PENTING ORDER REPLACEMENT DAN RETUR </span>
                                             <span class="pcoded-mcaret"></span>
                                         </a>
                                     </li>
