@@ -1,7 +1,7 @@
 <?php
     include 'koneksi.php';
 
-    $no_absen    = $_GET['no_absen'];
+    $no_absen    = ltrim($_GET['no_absen'], '0');
     // Syntax MySql untuk melihat semua record yang
     $sql = "SELECT * FROM tbl_makar WHERE no_scan = '$no_absen'";
 

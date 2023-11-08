@@ -52,9 +52,7 @@
 <script src="dist/js/select2.min.js"></script>
 <script type="text/javascript" src="files\bower_components\select2\js\select2.full.min.js"></script>
 <script type="text/javascript" src="files\assets\pages\advance-elements\select2-custom.js"></script>
-<?php if($pinjambuku = 'pinjam_buku') : ?>
-  <script src="xeditable/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-<?php endif; ?>
+<script type="text/javascript" src="xeditable/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
 <script>
     $.fn.editable.defaults.mode = 'inline';
     $(document).ready(function() {
@@ -78,9 +76,18 @@
                 {value: "TE", text: "TE - Tempelan Sample Celup"},
                 {value: "FL", text: "FL - Frist Lot"}]
       });
+      $('.archive_edit').editable({
+        type: 'select',
+        showbuttons : false,
+        url: 'editable/editable_archive.php',
+        disabled : false,
+        showbuttons : false,
+        source:[{value: "", text: ""}, 
+                {value: "Diarsipkan", text: "Diarsipkan"},
+                {value: "Belum_Diarsipkan", text: "Belum Diarsipkan"}]
+      });
     })
 </script>
-
 <script>
   window.dataLayer = window.dataLayer || [];
 
