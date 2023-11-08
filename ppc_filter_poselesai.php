@@ -505,6 +505,7 @@
                                                                                                         isp.CODE,
                                                                                                         isp.PROVISIONALCODE AS SURAT_JALAN,
                                                                                                         isp.GOODSISSUEDATE AS TGL_KIRIM,
+                                                                                                        iasp2.LINENUMBER,
                                                                                                         iasp2.BASEPRIMARYQUANTITY AS QTY_KIRIM_KG_DETAIL,
                                                                                                         CASE
                                                                                                             WHEN isp.PAYMENTMETHODCODE = 'FOC' THEN isp.PAYMENTMETHODCODE
