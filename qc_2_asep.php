@@ -80,15 +80,18 @@
                                                 $conn_string = "DRIVER={IBM ODBC DB2 DRIVER}; HOSTNAME=$hostname; PORT=$port; PROTOCOL=TCPIP; UID=$user; PWD=$passworddb2; DATABASE=$database;";
                                                 $con = db2_connect($conn_string,'', '');
 
+
                                                 function cekDemand($noDemand) { // 1. cek data
-                                                    global $con;
-                                                    $query = "SELECT
-                                                                    TRIM(p.CODE) AS PRODUCTIONDEMANDCODE,
-                                                                    RIGHT(a.VALUESTRING, 8) AS ORIGINALPDCODE
-                                                                FROM
-                                                                    PRODUCTIONDEMAND p
-                                                                LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'OriginalPDCode'   
-                                                                WHERE p.CODE = '$noDemand'"; 
+                                                    global $con;$query = "SELECT
+                                                    TRIM(p.CODE) AS PRODUCTIONDEMANDCODE,
+                                                    RIGHT(a.VALUESTRING, 8) AS ORIGINALPDCODE
+                                                    FROM
+                                                    PRODUCTIONDEMAND p
+                                                    LEFT JOIN ADSTORAGE a ON
+                                                    a.UNIQUEID = p.ABSUNIQUEID
+                                                    AND a.FIELDNAME = 'OriginalPDCode'   
+                                                    WHERE p.CODE = '$noDemand'"; 
+
                                                     $stmt=db2_exec($con,$query);
                                                     $row = db2_fetch_assoc($stmt);
                                                     return $row ; 
@@ -97,11 +100,13 @@
                                                 function cariRootDemand($noDemand) { // 2. cari root demand
                                                     global $con; 
                                                     $query = "SELECT
-                                                                RIGHT(a.VALUESTRING, 8) AS ORIGINALPDCODE
-                                                            FROM
-                                                                PRODUCTIONDEMAND p
-                                                            LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'OriginalPDCode'   
-                                                            WHERE LEFT(p.CODE,8) = '$noDemand'";
+                                                    RIGHT(a.VALUESTRING, 8) AS ORIGINALPDCODE
+                                                    FROM
+                                                    PRODUCTIONDEMAND p
+                                                    LEFT JOIN ADSTORAGE a ON
+                                                    a.UNIQUEID = p.ABSUNIQUEID
+                                                    AND a.FIELDNAME = 'OriginalPDCode'   
+                                                    WHERE LEFT(p.CODE,8) = '$noDemand'";
 
                                                     $stmt = db2_exec($con, $query);
                                                     if ($stmt) {	
@@ -118,16 +123,19 @@
 
                                                 function mapping($rootDemand, $parent = null) { // 3. mapping demand
                                                     global $con; 
+                                                    global $tabel;
                                                     $rootDemand = substr($rootDemand, 0, 8);
                                                     $query = "SELECT
-                                                                    TRIM(p.CODE) AS PRODUCTIONDEMANDCODE
-                                                                FROM
-                                                                    PRODUCTIONDEMAND p
-                                                                LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'OriginalPDCode'   
-                                                                WHERE RIGHT(a.VALUESTRING, 8) = '$rootDemand'";
+                                                    TRIM(p.CODE) AS PRODUCTIONDEMANDCODE
+                                                    FROM
+                                                    PRODUCTIONDEMAND p
+                                                    LEFT JOIN ADSTORAGE a ON
+                                                    a.UNIQUEID = p.ABSUNIQUEID
+                                                    AND a.FIELDNAME = 'OriginalPDCode'   
+                                                    WHERE  RIGHT(a.VALUESTRING, 8) = '$rootDemand'";
 
                                                     $stmt = db2_exec($con, $query,array('cursor'=>DB2_SCROLLABLE) );
-                                                    $output = [];
+                                                $output = [];
                                                     if (db2_num_rows($stmt) > 0) {
                                                         while ($row = db2_fetch_assoc($stmt)) {
                                                             $output[] = [$row['PRODUCTIONDEMANDCODE'], $parent];
@@ -137,6 +145,7 @@
                                                     return $output;
                                                 }
 
+
                                                 $noDemand = $_POST['Demand'];
                                                 $noDemand = substr($noDemand, 0, 8); 
 
@@ -144,40 +153,40 @@
                                                 //$result = 1;
 
                                                 if ($result) {
+                                                    
+                                                
                                                     $rootDemand = cariRootDemand($noDemand);
                                                     $resultArray = mapping($rootDemand, $rootDemand);
                                                     
                                                     $highlightValue = $noDemand;
                                                     $resultArray = array_map(function ($row) use ($highlightValue) { // highlight
                                                     return array_map(function ($value) use ($highlightValue) {
-                                                        return ($value === $highlightValue) ? '<div style="color:red;font-weight:bold;font-size:15px">' . $highlightValue : 
-                                                                                              '<div style="color:black;font-weight:bold;font-size:15px">' . $value . '</div>';
-                                                        
+                                                        return ($value === $highlightValue) ? '<div style="color:red;font-weight:bold;font-size:15px">' . $highlightValue . '</div>' : $value;
                                                     }, $row);
                                                     }, $resultArray); ?>
 
-                                                    <script type="text/javascript" src="dist/js/loader.js"></script>
+                                                    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
                                                     <script type="text/javascript">
-                                                        google.charts.load('current', { 'packages': ['orgchart'] });
-                                                        google.charts.setOnLoadCallback(drawChart);
+                                                    google.charts.load('current', { 'packages': ['orgchart'] });
+                                                    google.charts.setOnLoadCallback(drawChart);
 
-                                                        function drawChart() {
-                                                            var data = new google.visualization.DataTable();
-                                                            data.addColumn('string', 'DemandChild');
-                                                            data.addColumn('string', 'DemandParent');
-                                                            //data.addColumn('string', 'ToolTip');
+                                                    function drawChart() {
+                                                    var data = new google.visualization.DataTable();
+                                                    data.addColumn('string', 'DemandChild');
+                                                    data.addColumn('string', 'DemandParent');
+                                                    //data.addColumn('string', 'ToolTip');
 
-                                                            var phpArray = <?php echo json_encode($resultArray, JSON_UNESCAPED_UNICODE); ?>;
-                                                            var jsData = phpArray.map(function (item) {
-                                                                return [item[0], item[1]]; 
-                                                            });
-                                                            data.addRows(jsData);
-                                                            var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
-                                                            chart.draw(data, { allowHtml: true });
-                                                        }
+                                                    var phpArray = <?php echo json_encode($resultArray, JSON_UNESCAPED_UNICODE); ?>;
+                                                    var jsData = phpArray.map(function (item) {
+                                                    return [item[0], item[1]]; 
+                                                    });
+                                                    data.addRows(jsData);
+                                                    var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+                                                    chart.draw(data, { allowHtml: true });
+                                                    }
                                                     </script>
                                                 <h3>Struktur Mapping No Demand</h3>
-                                                <div id="chart_div" style="border:dotted thin #000; width:100%; padding:10px" ></div>
+                                                <div id="chart_div" style="border:dotted thin #000;width:100%;padding:10px" ></div>
 
                                                 <?php } else {
                                                     echo "PRODUCTIONDEMANDCODE tidak ditemukan.";
@@ -189,7 +198,7 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>Cara membaca Riwayat Salin No Demand</h5><hr>
-                                            <img src="img/Carabaca.PNG" width="1000px" height="500px">
+                                            <img src="img/Carabaca.PNG" width="800px" height="500px">
                                         </div>
                                     </div>
                                 <?php endif; ?>
