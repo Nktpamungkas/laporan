@@ -4,8 +4,14 @@
     // require_once "koneksi.php";
     // mysqli_query($con_nowprd, "DELETE FROM itxview_leadtime WHERE CREATEDATETIME BETWEEN NOW() - INTERVAL 3 DAY AND NOW() - INTERVAL 1 DAY");
     // mysqli_query($con_nowprd, "DELETE FROM itxview_leadtime WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'"); 
+
+    // mysqli_query($con_nowprd, "DELETE FROM posisikk_cache_leadtime WHERE CREATEDATETIME BETWEEN NOW() - INTERVAL 3 DAY AND NOW() - INTERVAL 1 DAY");
     // mysqli_query($con_nowprd, "DELETE FROM posisikk_cache_leadtime WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'"); 
+
+    // mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_ins3_leadtime WHERE CREATEDATETIME BETWEEN NOW() - INTERVAL 3 DAY AND NOW() - INTERVAL 1 DAY");
     // mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_ins3_leadtime WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'"); 
+
+    // mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1_leadtime WHERE CREATEDATETIME BETWEEN NOW() - INTERVAL 3 DAY AND NOW() - INTERVAL 1 DAY");
     // mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1_leadtime WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'"); 
 ?>
 <?php
@@ -82,7 +88,6 @@
             <th style="text-align: center;">SUB1</th>
             <th style="text-align: center;">CUR1</th>
             <th style="text-align: center;">INS3</th>
-            <th style="text-align: center;" hidden>QCF1</th>
             <th style="text-align: center;">QCF4</th>
             <th style="text-align: center;">CNP1</th>
             <th style="text-align: center;">GKJ1</th>
@@ -139,7 +144,6 @@
             <td>PRINTING SUBLIM</td>
             <td>CURING</td>
             <td>FINAL INSPECTION</td>
-            <td hidden>TEST QUALITY</td>
             <td>QC FINAL</td>
             <td>CUTTING + PACKING</td>
             <td>MUTASI</td>
@@ -183,7 +187,7 @@
                                                             LEFT JOIN ITXVIEW_POSISIKK_MUTASI ipm ON ipm.PRODUCTIONORDERCODE = im.NO_KK AND ipm.DEMANDSTEPPRODUCTIONDEMANDCODE = im.DEMAND 
                                                             WHERE
                                                                 ipm.PROGRESSSTARTPROCESSDATE BETWEEN '$tgl1' AND '$tgl2'
-                                                                -- im.NO_KK = '00074756'
+                                                                -- im.NO_KK = '00083693'
                                                                 ");
             while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
                 $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
@@ -224,8 +228,8 @@
             }else{
                 $where_date2     = "";
             }
-            $sqlDB2 = "SELECT DISTINCT * FROM itxview_leadtime WHERE $where_date2 AND ACCESS_TO = 'LEADTIME' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
-            // $sqlDB2 = "SELECT DISTINCT * FROM itxview_leadtime WHERE NO_KK = '00091577' AND ACCESS_TO = 'LEADTIME' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC ";
+            $sqlDB2 = "SELECT DISTINCT * FROM itxview_leadtime WHERE $where_date2 AND ACCESS_TO = 'LEADTIME' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY TGL_MUTASI ASC";
+            // $sqlDB2 = "SELECT DISTINCT * FROM itxview_leadtime WHERE NO_KK = '00083693' AND ACCESS_TO = 'LEADTIME' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC ";
 
             $stmt   = mysqli_query($con_nowprd, $sqlDB2);
             while ($rowdb2 = mysqli_fetch_array($stmt)) {
@@ -265,41 +269,75 @@
             // TGL INSPECT
 
             // POSISI KK INS3
-                $posisikk_ins3 = db2_exec($conn1, "SELECT * FROM ITXVIEW_POSISIKK_TGL_IN_PRODORDER_INS3 WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'");
-                while ($row_posisikk_ins3   = db2_fetch_assoc($posisikk_ins3)) {
-                    $r_posisikk_ins3[]      = "('".TRIM(addslashes($row_posisikk_ins3['PRODUCTIONORDERCODE']))."',"
-                                            ."'".TRIM(addslashes($row_posisikk_ins3['OPERATIONCODE']))."',"
-                                            ."'".TRIM(addslashes($row_posisikk_ins3['PROPROGRESSPROGRESSNUMBER']))."',"
-                                            ."'".TRIM(addslashes($row_posisikk_ins3['DEMANDSTEPSTEPNUMBER']))."',"
-                                            ."'".TRIM(addslashes($row_posisikk_ins3['PROGRESSTEMPLATECODE']))."',"
-                                            ."'".TRIM(addslashes($row_posisikk_ins3['MULAI']))."',"
-                                            ."'".TRIM(addslashes($row_posisikk_ins3['OP']))."',"
-                                            ."'".$_SERVER['REMOTE_ADDR']."',"
-                                            ."'".date('Y-m-d H:i:s')."')";
-                }
-                if($r_posisikk_ins3){
-                    $value_posisikk_ins3        = implode(',', $r_posisikk_ins3);
-                    $insert_posisikk_ins3       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_ins3_leadtime(PRODUCTIONORDERCODE,OPERATIONCODE,PROPROGRESSPROGRESSNUMBER,DEMANDSTEPSTEPNUMBER,PROGRESSTEMPLATECODE,MULAI,OP,IPADDRESS,CREATEDATETIME) VALUES $value_posisikk_ins3");
-                }
+                // $posisikk_ins3 = db2_exec($conn1, "SELECT * FROM ITXVIEW_POSISIKK_TGL_IN_PRODORDER_INS3 WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'");
+                // while ($row_posisikk_ins3   = db2_fetch_assoc($posisikk_ins3)) {
+                //     $PRODUCTIONORDERCODE        = TRIM(addslashes($row_posisikk_ins3['PRODUCTIONORDERCODE']));
+                //     $OPERATIONCODE              = TRIM(addslashes($row_posisikk_ins3['OPERATIONCODE']));
+                //     $PROPROGRESSPROGRESSNUMBER  = TRIM(addslashes($row_posisikk_ins3['PROPROGRESSPROGRESSNUMBER']));
+                //     $DEMANDSTEPSTEPNUMBER       = TRIM(addslashes($row_posisikk_ins3['DEMANDSTEPSTEPNUMBER']));
+                //     $PROGRESSTEMPLATECODE       = TRIM(addslashes($row_posisikk_ins3['PROGRESSTEMPLATECODE']));
+                //     $MULAI                      = TRIM(addslashes($row_posisikk_ins3['MULAI']));
+                //     $OP                         = TRIM(addslashes($row_posisikk_ins3['OP']));
+                //     $IPADDRESS                  = $_SERVER['REMOTE_ADDR'];
+                //     $CREATEDATETIME             = date('Y-m-d H:i:s');
+                // }
+                // if($r_posisikk_ins3){
+                //     $value_posisikk_ins3        = implode(',', $r_posisikk_ins3);
+                //     $insert_posisikk_ins3       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_ins3_leadtime
+                //                                                                         (PRODUCTIONORDERCODE,
+                //                                                                         OPERATIONCODE,
+                //                                                                         PROPROGRESSPROGRESSNUMBER,
+                //                                                                         DEMANDSTEPSTEPNUMBER,
+                //                                                                         PROGRESSTEMPLATECODE,
+                //                                                                         MULAI,
+                //                                                                         OP,
+                //                                                                         IPADDRESS,
+                //                                                                         CREATEDATETIME) 
+                //                                                                 VALUES ('$PRODUCTIONORDERCODE',
+                //                                                                 '$OPERATIONCODE',
+                //                                                                 '$PROPROGRESSPROGRESSNUMBER',
+                //                                                                 '$DEMANDSTEPSTEPNUMBER',
+                //                                                                 '$PROGRESSTEMPLATECODE',
+                //                                                                 '$MULAI',
+                //                                                                 '$OP',
+                //                                                                 '$IPADDRESS',
+                //                                                                 '$CREATEDATETIME')");
+                // }
             // POSISI KK INS3
             
             // POSISI KK CNP1
-                $posisikk_cnp1 = db2_exec($conn1, "SELECT * FROM ITXVIEW_POSISIKK_TGL_IN_PRODORDER_CNP1 WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'");
-                while ($row_posisikk_cnp1   = db2_fetch_assoc($posisikk_cnp1)) {
-                    $r_posisikk_cnp1[]      = "('".TRIM(addslashes($row_posisikk_cnp1['PRODUCTIONORDERCODE']))."',"
-                                            ."'".TRIM(addslashes($row_posisikk_cnp1['OPERATIONCODE']))."',"
-                                            ."'".TRIM(addslashes($row_posisikk_cnp1['PROPROGRESSPROGRESSNUMBER']))."',"
-                                            ."'".TRIM(addslashes($row_posisikk_cnp1['DEMANDSTEPSTEPNUMBER']))."',"
-                                            ."'".TRIM(addslashes($row_posisikk_cnp1['PROGRESSTEMPLATECODE']))."',"
-                                            ."'".TRIM(addslashes($row_posisikk_cnp1['MULAI']))."',"
-                                            ."'".TRIM(addslashes($row_posisikk_cnp1['OP']))."',"
-                                            ."'".$_SERVER['REMOTE_ADDR']."',"
-                                            ."'".date('Y-m-d H:i:s')."')";
-                }
-                if($r_posisikk_cnp1){
-                    $value_posisikk_cnp1        = implode(',', $r_posisikk_cnp1);
-                    $insert_posisikk_cnp1       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_cnp1_leadtime(PRODUCTIONORDERCODE,OPERATIONCODE,PROPROGRESSPROGRESSNUMBER,DEMANDSTEPSTEPNUMBER,PROGRESSTEMPLATECODE,MULAI,OP,IPADDRESS,CREATEDATETIME) VALUES $value_posisikk_cnp1");
-                }
+                // $posisikk_cnp1 = db2_exec($conn1, "SELECT * FROM ITXVIEW_POSISIKK_TGL_IN_PRODORDER_CNP1 WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'");
+                // while ($row_posisikk_cnp1   = db2_fetch_assoc($posisikk_cnp1)) {
+                //     $PRODUCTIONORDERCODE            = TRIM(addslashes($row_posisikk_cnp1['PRODUCTIONORDERCODE']));
+                //     $OPERATIONCODE                  = TRIM(addslashes($row_posisikk_cnp1['OPERATIONCODE']));
+                //     $PROPROGRESSPROGRESSNUMBER      = TRIM(addslashes($row_posisikk_cnp1['PROPROGRESSPROGRESSNUMBER']));
+                //     $DEMANDSTEPSTEPNUMBER           = TRIM(addslashes($row_posisikk_cnp1['DEMANDSTEPSTEPNUMBER']));
+                //     $PROGRESSTEMPLATECODE           = TRIM(addslashes($row_posisikk_cnp1['PROGRESSTEMPLATECODE']));
+                //     $MULAI                          = TRIM(addslashes($row_posisikk_cnp1['MULAI']));
+                //     $OP                             = TRIM(addslashes($row_posisikk_cnp1['OP']));
+                //     $IPADDRESS                      = $_SERVER['REMOTE_ADDR'];
+                //     $CREATEDATETIME                 = date('Y-m-d H:i:s');
+
+                //     $insert_posisikk_cnp1       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_cnp1_leadtime
+                //                                                                         (PRODUCTIONORDERCODE,
+                //                                                                         OPERATIONCODE,
+                //                                                                         PROPROGRESSPROGRESSNUMBER,
+                //                                                                         DEMANDSTEPSTEPNUMBER,
+                //                                                                         PROGRESSTEMPLATECODE,
+                //                                                                         MULAI,
+                //                                                                         OP,
+                //                                                                         IPADDRESS,
+                //                                                                         CREATEDATETIME) 
+                //                                                                 VALUES ('$PRODUCTIONORDERCODE',
+                //                                                                 '$OPERATIONCODE',
+                //                                                                 '$PROPROGRESSPROGRESSNUMBER',
+                //                                                                 '$DEMANDSTEPSTEPNUMBER',
+                //                                                                 '$PROGRESSTEMPLATECODE',
+                //                                                                 '$MULAI',
+                //                                                                 '$OP',
+                //                                                                 '$IPADDRESS',
+                //                                                                 '$CREATEDATETIME')");
+                // }
             // POSISI KK CNP1
 
             // POSISI KK
@@ -360,7 +398,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_bat1_1      = mysqli_fetch_assoc($q_posisikk_bat1_1);
 
                 $q_posisikk_bat1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -373,9 +410,12 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_bat1_2      = mysqli_fetch_assoc($q_posisikk_bat1_2);
 
-                if($row_posisikk_bat1_1){
+                if($q_posisikk_bat1_1->num_rows >0){
+
+                    $row_posisikk_bat1_1      = mysqli_fetch_assoc($q_posisikk_bat1_1);
+                    $row_posisikk_bat1_2      = mysqli_fetch_assoc($q_posisikk_bat1_2);
+
                     if($row_posisikk_bat1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_bat1         = date_create($row_posisikk_bat1_2['mulai']);
                         $waktuakhir_bat1        = date_create($row_posisikk_bat1_2['selesai']);
@@ -403,7 +443,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_bat2_1      = mysqli_fetch_assoc($q_posisikk_bat2_1);
 
                 $q_posisikk_bat2_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -416,9 +455,12 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_bat2_2      = mysqli_fetch_assoc($q_posisikk_bat2_2);
 
-                if($row_posisikk_bat2_1){
+                if($row_posisikk_bat2_1->num_rows >0){
+
+                    $row_posisikk_bat2_1      = mysqli_fetch_assoc($q_posisikk_bat2_1);
+                    $row_posisikk_bat2_2      = mysqli_fetch_assoc($q_posisikk_bat2_2);
+
                     if($row_posisikk_bat2_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_bat2         = date_create($row_posisikk_bat2_2['mulai']);
                         $waktuakhir_bat2        = date_create($row_posisikk_bat2_2['selesai']);
@@ -446,7 +488,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_bkn1_1      = mysqli_fetch_assoc($q_posisikk_bkn1_1);
 
                 $q_posisikk_bkn1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -459,9 +500,12 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_bkn1_2      = mysqli_fetch_assoc($q_posisikk_bkn1_2);
                 
-                if($row_posisikk_bkn1_1){
+                if($row_posisikk_bkn1_1->num_rows >0){
+
+                    $row_posisikk_bkn1_1      = mysqli_fetch_assoc($q_posisikk_bkn1_1);
+                    $row_posisikk_bkn1_2      = mysqli_fetch_assoc($q_posisikk_bkn1_2);
+
                     if($row_posisikk_bkn1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_bkn1        = date_create($row_posisikk_bkn1_2['mulai']);
                         $waktuawal_bkn1        = date_create($row_posisikk_bkn1_2['selesai']);
@@ -489,7 +533,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_sco1_1      = mysqli_fetch_assoc($q_posisikk_sco1_1);
 
                 $q_posisikk_sco1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -502,9 +545,13 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_sco1_2      = mysqli_fetch_assoc($q_posisikk_sco1_2);
+                
 
-                if($row_posisikk_sco1_1){
+                if($row_posisikk_sco1_1->num_rows >0){
+
+                    $row_posisikk_sco1_1      = mysqli_fetch_assoc($q_posisikk_sco1_1);
+                    $row_posisikk_sco1_2      = mysqli_fetch_assoc($q_posisikk_sco1_2);
+
                     if($row_posisikk_sco1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_sco1        = date_create($row_posisikk_sco1_2['mulai']);
                         $waktuakhir_sco1        = date_create($row_posisikk_sco1_2['selesai']);
@@ -532,7 +579,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_rlx1_1      = mysqli_fetch_assoc($q_posisikk_rlx1_1);
 
                 $q_posisikk_rlx1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -545,9 +591,12 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_rlx1_2      = mysqli_fetch_assoc($q_posisikk_rlx1_2);
 
-                if($row_posisikk_rlx1_1){
+                if($row_posisikk_rlx1_1->num_rows >0){
+
+                    $row_posisikk_rlx1_1      = mysqli_fetch_assoc($q_posisikk_rlx1_1);
+                    $row_posisikk_rlx1_2      = mysqli_fetch_assoc($q_posisikk_rlx1_2);
+
                     if($row_posisikk_rlx1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_rlx1         = date_create($row_posisikk_rlx1_2['mulai']);
                         $waktuakhir_rlx1        = date_create($row_posisikk_rlx1_2['selesai']);
@@ -575,7 +624,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_cbl1_1      = mysqli_fetch_assoc($q_posisikk_cbl1_1);
 
                 $q_posisikk_cbl1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -588,9 +636,12 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_cbl1_2      = mysqli_fetch_assoc($q_posisikk_cbl1_2);
 
-                if($row_posisikk_cbl1_1){
+                if($row_posisikk_cbl1_1->num_rows >0){
+
+                    $row_posisikk_cbl1_1      = mysqli_fetch_assoc($q_posisikk_cbl1_1);
+                    $row_posisikk_cbl1_2      = mysqli_fetch_assoc($q_posisikk_cbl1_2);
+
                     if($row_posisikk_cbl1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_cbl1         = date_create($row_posisikk_cbl1_2['mulai']);
                         $waktuakhir_cbl1        = date_create($row_posisikk_cbl1_2['selesai']);
@@ -618,7 +669,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_mat1_1      = mysqli_fetch_assoc($q_posisikk_mat1_1);
 
                 $q_posisikk_mat1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -631,9 +681,12 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_mat1_2      = mysqli_fetch_assoc($q_posisikk_mat1_2);
 
-                if($row_posisikk_mat1_1){
+                if($row_posisikk_mat1_1->num_rows >0){
+
+                    $row_posisikk_mat1_1      = mysqli_fetch_assoc($q_posisikk_mat1_1);
+                    $row_posisikk_mat1_2      = mysqli_fetch_assoc($q_posisikk_mat1_2);
+
                     if($row_posisikk_mat1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_mat1         = date_create($row_posisikk_mat1_2['mulai']);
                         $waktuakhir_mat1        = date_create($row_posisikk_mat1_2['selesai']);
@@ -661,7 +714,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_pre1_1      = mysqli_fetch_assoc($q_posisikk_pre1_1);
 
                 $q_posisikk_pre1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -674,9 +726,12 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_pre1_2      = mysqli_fetch_assoc($q_posisikk_pre1_2);
 
-                if($row_posisikk_pre1_1){
+                if($row_posisikk_pre1_1->num_rows >0){
+
+                    $row_posisikk_pre1_1      = mysqli_fetch_assoc($q_posisikk_pre1_1);
+                    $row_posisikk_pre1_2      = mysqli_fetch_assoc($q_posisikk_pre1_2);
+
                     if($row_posisikk_pre1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_pre1         = date_create($row_posisikk_pre1_2['mulai']);
                         $waktuakhir_pre1        = date_create($row_posisikk_pre1_2['selesai']);
@@ -704,7 +759,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_rse1_1      = mysqli_fetch_assoc($q_posisikk_rse1_1);
 
                 $q_posisikk_rse1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -717,9 +771,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_rse1_2      = mysqli_fetch_assoc($q_posisikk_rse1_2);
 
-                if($row_posisikk_rse1_1){
+                if($row_posisikk_rse1_1->num_rows >0){
+                    $row_posisikk_rse1_1      = mysqli_fetch_assoc($q_posisikk_rse1_1);
+                    $row_posisikk_rse1_2      = mysqli_fetch_assoc($q_posisikk_rse1_2);
+
                     if($row_posisikk_rse1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_rse1         = date_create($row_posisikk_rse1_2['mulai']);
                         $waktuakhir_rse1        = date_create($row_posisikk_rse1_2['selesai']);
@@ -747,7 +803,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_rse2_1      = mysqli_fetch_assoc($q_posisikk_rse2_1);
 
                 $q_posisikk_rse2_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -760,9 +815,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_rse2_2      = mysqli_fetch_assoc($q_posisikk_rse2_2);
 
-                if($row_posisikk_rse2_1){
+                if($row_posisikk_rse2_1->num_rows >0){
+                    $row_posisikk_rse2_1      = mysqli_fetch_assoc($q_posisikk_rse2_1);
+                    $row_posisikk_rse2_2      = mysqli_fetch_assoc($q_posisikk_rse2_2);
+
                     if($row_posisikk_rse2_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_rse2         = date_create($row_posisikk_rse2_2['mulai']);
                         $waktuakhir_rse2        = date_create($row_posisikk_rse2_2['selesai']);
@@ -790,7 +847,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_shr1_1      = mysqli_fetch_assoc($q_posisikk_shr1_1);
 
                 $q_posisikk_shr1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -803,9 +859,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_shr1_2      = mysqli_fetch_assoc($q_posisikk_shr1_2);
 
-                if($row_posisikk_shr1_1){
+                if($row_posisikk_shr1_1->num_rows >0){
+                    $row_posisikk_shr1_1      = mysqli_fetch_assoc($q_posisikk_shr1_1);
+                    $row_posisikk_shr1_2      = mysqli_fetch_assoc($q_posisikk_shr1_2);
+
                     if($row_posisikk_shr1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_shr1         = date_create($row_posisikk_shr1_2['mulai']);
                         $waktuakhir_shr1        = date_create($row_posisikk_shr1_2['selesai']);
@@ -834,7 +892,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_shr2_1      = mysqli_fetch_assoc($q_posisikk_shr2_1);
 
                 $q_posisikk_shr2_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -847,9 +904,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_shr2_2      = mysqli_fetch_assoc($q_posisikk_shr2_2);
 
-                if($row_posisikk_shr2_1){
+                if($row_posisikk_shr2_1->num_rows >0){
+                    $row_posisikk_shr2_1      = mysqli_fetch_assoc($q_posisikk_shr2_1);
+                    $row_posisikk_shr2_2      = mysqli_fetch_assoc($q_posisikk_shr2_2);
+
                     if($row_posisikk_shr2_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_shr2         = date_create($row_posisikk_shr2_2['mulai']);
                         $waktuakhir_shr2        = date_create($row_posisikk_shr2_2['selesai']);
@@ -877,7 +936,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_sue1_1      = mysqli_fetch_assoc($q_posisikk_sue1_1);
 
                 $q_posisikk_sue1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -890,9 +948,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_sue1_2      = mysqli_fetch_assoc($q_posisikk_sue1_2);
 
-                if($row_posisikk_sue1_1){
+                if($row_posisikk_sue1_1->num_rows >0){
+                    $row_posisikk_sue1_1      = mysqli_fetch_assoc($q_posisikk_sue1_1);
+                    $row_posisikk_sue1_2      = mysqli_fetch_assoc($q_posisikk_sue1_2);
+
                     if($row_posisikk_sue1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_sue1         = date_create($row_posisikk_sue1_2['mulai']);
                         $waktuakhir_sue1        = date_create($row_posisikk_sue1_2['selesai']);
@@ -921,7 +981,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_sue2_1      = mysqli_fetch_assoc($q_posisikk_sue2_1);
 
                 $q_posisikk_sue2_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -934,9 +993,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_sue2_2      = mysqli_fetch_assoc($q_posisikk_sue2_2);
 
-                if($row_posisikk_sue2_1){
+                if($row_posisikk_sue2_1->num_rows >0){
+                    $row_posisikk_sue2_1      = mysqli_fetch_assoc($q_posisikk_sue2_1);
+                    $row_posisikk_sue2_2      = mysqli_fetch_assoc($q_posisikk_sue2_2);
+
                     if($row_posisikk_sue2_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_sue2         = date_create($row_posisikk_sue2_2['mulai']);
                         $waktuakhir_sue2        = date_create($row_posisikk_sue2_2['selesai']);
@@ -965,7 +1026,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_dye1_1      = mysqli_fetch_assoc($q_posisikk_dye1_1);
 
                 $q_posisikk_dye1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -978,9 +1038,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_dye1_2      = mysqli_fetch_assoc($q_posisikk_dye1_2);
 
-                if($row_posisikk_dye1_1){
+                if($row_posisikk_dye1_1->num_rows >0){
+                    $row_posisikk_dye1_1      = mysqli_fetch_assoc($q_posisikk_dye1_1);
+                    $row_posisikk_dye1_2      = mysqli_fetch_assoc($q_posisikk_dye1_2);
+
                     if($row_posisikk_dye1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_dye1         = date_create($row_posisikk_dye1_2['mulai']);
                         $waktuakhir_dye1        = date_create($row_posisikk_dye1_2['selesai']);
@@ -1008,7 +1070,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_dye2_1      = mysqli_fetch_assoc($q_posisikk_dye2_1);
 
                 $q_posisikk_dye2_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1021,9 +1082,12 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_dye2_2      = mysqli_fetch_assoc($q_posisikk_dye2_2);
 
-                if($row_posisikk_dye2_1){
+                if($row_posisikk_dye2_1->num_rows >0){
+                    $row_posisikk_dye2_1      = mysqli_fetch_assoc($q_posisikk_dye2_1);
+                    $row_posisikk_dye2_2      = mysqli_fetch_assoc($q_posisikk_dye2_2);
+
+
                     if($row_posisikk_dye2_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_dye2         = date_create($row_posisikk_dye2_2['mulai']);
                         $waktuakhir_dye2        = date_create($row_posisikk_dye2_2['selesai']);
@@ -1051,7 +1115,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_dye3_1      = mysqli_fetch_assoc($q_posisikk_dye3_1);
 
                 $q_posisikk_dye3_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1064,9 +1127,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_dye3_2      = mysqli_fetch_assoc($q_posisikk_dye3_2);
 
-                if($row_posisikk_dye3_1){
+                if($row_posisikk_dye3_1->num_rows >0){
+                    $row_posisikk_dye3_1      = mysqli_fetch_assoc($q_posisikk_dye3_1);
+                    $row_posisikk_dye3_2      = mysqli_fetch_assoc($q_posisikk_dye3_2);
+
                     if($row_posisikk_dye3_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_dye3         = date_create($row_posisikk_dye3_2['mulai']);
                         $waktuakhir_dye3        = date_create($row_posisikk_dye3_2['selesai']);
@@ -1095,7 +1160,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_dye4_1      = mysqli_fetch_assoc($q_posisikk_dye4_1);
 
                 $q_posisikk_dye4_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1108,9 +1172,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_dye4_2      = mysqli_fetch_assoc($q_posisikk_dye4_2);
 
-                if($row_posisikk_dye4_1){
+                if($row_posisikk_dye4_1->num_rows >0){
+                    $row_posisikk_dye4_1      = mysqli_fetch_assoc($q_posisikk_dye4_1);
+                    $row_posisikk_dye4_2      = mysqli_fetch_assoc($q_posisikk_dye4_2);
+
                     if($row_posisikk_dye4_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_dye4         = date_create($row_posisikk_dye4_2['mulai']);
                         $waktuakhir_dye4        = date_create($row_posisikk_dye4_2['selesai']);
@@ -1138,7 +1204,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_dye5_1      = mysqli_fetch_assoc($q_posisikk_dye5_1);
 
                 $q_posisikk_dye5_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1151,9 +1216,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_dye5_2      = mysqli_fetch_assoc($q_posisikk_dye5_2);
                 
-                if($row_posisikk_dye5_1){
+                if($row_posisikk_dye5_1->num_rows >0){
+                $row_posisikk_dye5_1      = mysqli_fetch_assoc($q_posisikk_dye5_1);
+                $row_posisikk_dye5_2      = mysqli_fetch_assoc($q_posisikk_dye5_2);
+
                     if($row_posisikk_dye5_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_dye5         = date_create($row_posisikk_dye5_2['mulai']);
                         $waktuakhir_dye5        = date_create($row_posisikk_dye5_2['selesai']);
@@ -1181,7 +1248,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_dye6_1      = mysqli_fetch_assoc($q_posisikk_dye6_1);
 
                 $q_posisikk_dye6_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1194,9 +1260,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_dye6_2      = mysqli_fetch_assoc($q_posisikk_dye6_2);
 
-                if($row_posisikk_dye6_1){
+                if($row_posisikk_dye6_1->num_rows >0){
+                    $row_posisikk_dye6_1      = mysqli_fetch_assoc($q_posisikk_dye6_1);
+                    $row_posisikk_dye6_2      = mysqli_fetch_assoc($q_posisikk_dye6_2);
+
                     if($row_posisikk_dye6_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_dye6         = date_create($row_posisikk_dye6_2['mulai']);
                         $waktuakhir_dye6        = date_create($row_posisikk_dye6_2['selesai']);
@@ -1224,7 +1292,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_sop1_1      = mysqli_fetch_assoc($q_posisikk_sop1_1);
 
                 $q_posisikk_sop1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1237,9 +1304,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_sop1_2      = mysqli_fetch_assoc($q_posisikk_sop1_2);
 
-                if($row_posisikk_sop1_1){
+                if($row_posisikk_sop1_1->num_rows >0){
+                    $row_posisikk_sop1_1      = mysqli_fetch_assoc($q_posisikk_sop1_1);
+                    $row_posisikk_sop1_2      = mysqli_fetch_assoc($q_posisikk_sop1_2);
+
                     if($row_posisikk_sop1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_sop1         = date_create($row_posisikk_sop1_2['mulai']);
                         $waktuakhir_sop1        = date_create($row_posisikk_sop1_2['selesai']);
@@ -1267,7 +1336,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_bld1_1      = mysqli_fetch_assoc($q_posisikk_bld1_1);
 
                 $q_posisikk_bld1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1280,9 +1348,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_bld1_2      = mysqli_fetch_assoc($q_posisikk_bld1_2);
 
-                if($row_posisikk_bld1_1){
+                if($row_posisikk_bld1_1->num_rows >0){
+                    $row_posisikk_bld1_1      = mysqli_fetch_assoc($q_posisikk_bld1_1);
+                    $row_posisikk_bld1_2      = mysqli_fetch_assoc($q_posisikk_bld1_2);
+
                     if($row_posisikk_bld1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_bld1         = date_create($row_posisikk_bld1_2['mulai']);
                         $waktuakhir_bld1        = date_create($row_posisikk_bld1_2['selesai']);
@@ -1310,7 +1380,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_blp1_1      = mysqli_fetch_assoc($q_posisikk_blp1_1);
 
                 $q_posisikk_blp1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1323,9 +1392,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_blp1_2      = mysqli_fetch_assoc($q_posisikk_blp1_2);
 
-                if($row_posisikk_blp1_1){
+                if($row_posisikk_blp1_1->num_rows >0){
+                    $row_posisikk_blp1_1      = mysqli_fetch_assoc($q_posisikk_blp1_1);
+                    $row_posisikk_blp1_2      = mysqli_fetch_assoc($q_posisikk_blp1_2);
+
                     if($row_posisikk_blp1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_blp1         = date_create($row_posisikk_blp1_2['mulai']);
                         $waktuakhir_blp1        = date_create($row_posisikk_blp1_2['selesai']);
@@ -1353,7 +1424,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_opw1_1      = mysqli_fetch_assoc($q_posisikk_opw1_1);
 
                 $q_posisikk_opw1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1366,9 +1436,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_opw1_2      = mysqli_fetch_assoc($q_posisikk_opw1_2);
 
-                if($row_posisikk_opw1_1){
+                if($row_posisikk_opw1_1->num_rows >0){
+                    $row_posisikk_opw1_1      = mysqli_fetch_assoc($q_posisikk_opw1_1);
+                    $row_posisikk_opw1_2      = mysqli_fetch_assoc($q_posisikk_opw1_2);
+
                     if($row_posisikk_opw1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_opw1         = date_create($row_posisikk_opw1_2['mulai']);
                         $waktuakhir_opw1        = date_create($row_posisikk_opw1_2['selesai']);
@@ -1396,7 +1468,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_ovd1_1      = mysqli_fetch_assoc($q_posisikk_ovd1_1);
 
                 $q_posisikk_ovd1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1409,9 +1480,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_ovd1_2      = mysqli_fetch_assoc($q_posisikk_ovd1_2);
 
-                if($row_posisikk_ovd1_1){
+                if($row_posisikk_ovd1_1->num_rows >0){
+                    $row_posisikk_ovd1_1      = mysqli_fetch_assoc($q_posisikk_ovd1_1);
+                    $row_posisikk_ovd1_2      = mysqli_fetch_assoc($q_posisikk_ovd1_2);
+
                     if($row_posisikk_ovd1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_ovd1         = date_create($row_posisikk_ovd1_2['mulai']);
                         $waktuakhir_ovd1        = date_create($row_posisikk_ovd1_2['selesai']);
@@ -1439,7 +1512,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_ovn1_1      = mysqli_fetch_assoc($q_posisikk_ovn1_1);
 
                 $q_posisikk_ovn1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1452,9 +1524,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_ovn1_2      = mysqli_fetch_assoc($q_posisikk_ovn1_2);
 
-                if($row_posisikk_ovn1_1){
+                if($row_posisikk_ovn1_1->num_rows >0){
+                    $row_posisikk_ovn1_1      = mysqli_fetch_assoc($q_posisikk_ovn1_1);
+                    $row_posisikk_ovn1_2      = mysqli_fetch_assoc($q_posisikk_ovn1_2);
+
                     if($row_posisikk_ovn1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_ovn1         = date_create($row_posisikk_ovn1_2['mulai']);
                         $waktuakhir_ovn1        = date_create($row_posisikk_ovn1_2['selesai']);
@@ -1482,7 +1556,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_ovn2_1      = mysqli_fetch_assoc($q_posisikk_ovn2_1);
 
                 $q_posisikk_ovn2_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1495,9 +1568,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_ovn2_2      = mysqli_fetch_assoc($q_posisikk_ovn2_2);
 
-                if($row_posisikk_ovn2_1){
+                if($row_posisikk_ovn2_1->num_rows >0){
+                    $row_posisikk_ovn2_1      = mysqli_fetch_assoc($q_posisikk_ovn2_1);
+                    $row_posisikk_ovn2_2      = mysqli_fetch_assoc($q_posisikk_ovn2_2);
+
                     if($row_posisikk_ovn2_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_ovn2         = date_create($row_posisikk_ovn2_2['mulai']);
                         $waktuakhir_ovn2        = date_create($row_posisikk_ovn2_2['selesai']);
@@ -1525,7 +1600,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_ovn3_1      = mysqli_fetch_assoc($q_posisikk_ovn3_1);
 
                 $q_posisikk_ovn3_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1538,9 +1612,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_ovn3_2      = mysqli_fetch_assoc($q_posisikk_ovn3_2);
                 
-                if($row_posisikk_ovn3_1){
+                if($row_posisikk_ovn3_1->num_rows >0){
+                    $row_posisikk_ovn3_1      = mysqli_fetch_assoc($q_posisikk_ovn3_1);
+                    $row_posisikk_ovn3_2      = mysqli_fetch_assoc($q_posisikk_ovn3_2);
+
                     if($row_posisikk_ovn3_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_ovn3         = date_create($row_posisikk_ovn3_2['mulai']);
                         $waktuakhir_ovn3        = date_create($row_posisikk_ovn3_2['selesai']);
@@ -1568,7 +1644,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_cpt1_1      = mysqli_fetch_assoc($q_posisikk_cpt1_1);
 
                 $q_posisikk_cpt1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1581,9 +1656,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_cpt1_2      = mysqli_fetch_assoc($q_posisikk_cpt1_2);
 
-                if($row_posisikk_cpt1_1){
+                if($row_posisikk_cpt1_1->num_rows >0){
+                    $row_posisikk_cpt1_1      = mysqli_fetch_assoc($q_posisikk_cpt1_1);
+                    $row_posisikk_cpt1_2      = mysqli_fetch_assoc($q_posisikk_cpt1_2);
+
                     if($row_posisikk_cpt1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_cpt1         = date_create($row_posisikk_cpt1_2['mulai']);
                         $waktuakhir_cpt1        = date_create($row_posisikk_cpt1_2['selesai']);
@@ -1611,7 +1688,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_fin1_1      = mysqli_fetch_assoc($q_posisikk_fin1_1);
 
                 $q_posisikk_fin1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1624,9 +1700,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_fin1_2      = mysqli_fetch_assoc($q_posisikk_fin1_2);
 
-                if($row_posisikk_fin1_1){
+                if($row_posisikk_fin1_1->num_rows >0){
+                    $row_posisikk_fin1_1      = mysqli_fetch_assoc($q_posisikk_fin1_1);
+                    $row_posisikk_fin1_2      = mysqli_fetch_assoc($q_posisikk_fin1_2);
+
                     if($row_posisikk_fin1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_fin1         = date_create($row_posisikk_fin1_2['mulai']);
                         $waktuakhir_fin1        = date_create($row_posisikk_fin1_2['selesai']);
@@ -1654,7 +1732,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_fnj1_1      = mysqli_fetch_assoc($q_posisikk_fnj1_1);
 
                 $q_posisikk_fnj1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1667,9 +1744,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_fnj1_2      = mysqli_fetch_assoc($q_posisikk_fnj1_2);
 
-                if($row_posisikk_fnj1_1){
+                if($row_posisikk_fnj1_1->num_rows >0){
+                    $row_posisikk_fnj1_1      = mysqli_fetch_assoc($q_posisikk_fnj1_1);
+                    $row_posisikk_fnj1_2      = mysqli_fetch_assoc($q_posisikk_fnj1_2);
+
                     if($row_posisikk_fnj1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_fnj1         = date_create($row_posisikk_fnj1_2['mulai']);
                         $waktuakhir_fnj1        = date_create($row_posisikk_fnj1_2['selesai']);
@@ -1697,7 +1776,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_stm1_1      = mysqli_fetch_assoc($q_posisikk_stm1_1);
 
                 $q_posisikk_stm1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1710,9 +1788,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_stm1_2      = mysqli_fetch_assoc($q_posisikk_stm1_2);
 
-                if($row_posisikk_stm1_1){
+                if($row_posisikk_stm1_1->num_rows >0){
+                    $row_posisikk_stm1_1      = mysqli_fetch_assoc($q_posisikk_stm1_1);
+                    $row_posisikk_stm1_2      = mysqli_fetch_assoc($q_posisikk_stm1_2);
+
                     if($row_posisikk_stm1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_fin1         = date_create($row_posisikk_fin1_2['mulai']);
                         $waktuakhir_fin1        = date_create($row_posisikk_fin1_2['selesai']);
@@ -1740,7 +1820,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_stm2_1      = mysqli_fetch_assoc($q_posisikk_stm2_1);
 
                 $q_posisikk_stm2_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1753,9 +1832,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_stm2_2      = mysqli_fetch_assoc($q_posisikk_stm2_2);
 
-                if($row_posisikk_stm2_1){
+                if($row_posisikk_stm2_1->num_rows >0){
+                    $row_posisikk_stm2_1      = mysqli_fetch_assoc($q_posisikk_stm2_1);
+                    $row_posisikk_stm2_2      = mysqli_fetch_assoc($q_posisikk_stm2_2);
+
                     if($row_posisikk_stm2_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_stm2         = date_create($row_posisikk_stm2_2['mulai']);
                         $waktuakhir_stm2        = date_create($row_posisikk_stm2_2['selesai']);
@@ -1783,7 +1864,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_tdr1_1      = mysqli_fetch_assoc($q_posisikk_tdr1_1);
 
                 $q_posisikk_tdr1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1796,9 +1876,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_tdr1_2      = mysqli_fetch_assoc($q_posisikk_tdr1_2);
 
-                if($row_posisikk_tdr1_1){
+                if($row_posisikk_tdr1_1->num_rows >0){
+                    $row_posisikk_tdr1_1      = mysqli_fetch_assoc($q_posisikk_tdr1_1);
+                    $row_posisikk_tdr1_2      = mysqli_fetch_assoc($q_posisikk_tdr1_2);
+
                     if($row_posisikk_tdr1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_tdr1         = date_create($row_posisikk_tdr1_2['mulai']);
                         $waktuakhir_tdr1        = date_create($row_posisikk_tdr1_2['selesai']);
@@ -1826,7 +1908,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_shr3_1      = mysqli_fetch_assoc($q_posisikk_shr3_1);
 
                 $q_posisikk_shr3_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1839,9 +1920,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_shr3_2      = mysqli_fetch_assoc($q_posisikk_shr3_2);
 
-                if($row_posisikk_shr3_1){
+                if($row_posisikk_shr3_1->num_rows >0){
+                    $row_posisikk_shr3_1      = mysqli_fetch_assoc($q_posisikk_shr3_1);
+                    $row_posisikk_shr3_2      = mysqli_fetch_assoc($q_posisikk_shr3_2);
+
                     if($row_posisikk_shr3_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_shr3         = date_create($row_posisikk_shr3_2['mulai']);
                         $waktuakhir_shr3        = date_create($row_posisikk_shr3_2['selesai']);
@@ -1869,7 +1952,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_shr4_1      = mysqli_fetch_assoc($q_posisikk_shr4_1);
 
                 $q_posisikk_shr4_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1882,9 +1964,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_shr4_2      = mysqli_fetch_assoc($q_posisikk_shr4_2);
 
-                if($row_posisikk_shr4_1){
+                if($row_posisikk_shr4_1->num_rows >0){
+                    $row_posisikk_shr4_1      = mysqli_fetch_assoc($q_posisikk_shr4_1);
+                    $row_posisikk_shr4_2      = mysqli_fetch_assoc($q_posisikk_shr4_2);
+
                     if($row_posisikk_shr4_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_shr4         = date_create($row_posisikk_shr4_2['mulai']);
                         $waktuakhir_shr4        = date_create($row_posisikk_shr4_2['selesai']);
@@ -1912,7 +1996,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_shr5_1      = mysqli_fetch_assoc($q_posisikk_shr5_1);
 
                 $q_posisikk_shr5_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1925,9 +2008,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_shr5_2      = mysqli_fetch_assoc($q_posisikk_shr5_2);
 
-                if($row_posisikk_shr5_1){
+                if($row_posisikk_shr5_1->num_rows >0){
+                    $row_posisikk_shr5_1      = mysqli_fetch_assoc($q_posisikk_shr5_1);
+                    $row_posisikk_shr5_2      = mysqli_fetch_assoc($q_posisikk_shr5_2);
+
                     if($row_posisikk_shr5_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_shr5         = date_create($row_posisikk_shr5_2['mulai']);
                         $waktuakhir_shr5        = date_create($row_posisikk_shr5_2['selesai']);
@@ -1955,7 +2040,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_sue3_1      = mysqli_fetch_assoc($q_posisikk_sue3_1);
 
                 $q_posisikk_sue3_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -1968,9 +2052,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_sue3_2      = mysqli_fetch_assoc($q_posisikk_sue3_2);
 
-                if($row_posisikk_sue3_1){
+                if($row_posisikk_sue3_1->num_rows >0){
+                    $row_posisikk_sue3_1      = mysqli_fetch_assoc($q_posisikk_sue3_1);
+                    $row_posisikk_sue3_2      = mysqli_fetch_assoc($q_posisikk_sue3_2);
+
                     if($row_posisikk_sue3_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_sue3         = date_create($row_posisikk_sue3_2['mulai']);
                         $waktuakhir_sue3        = date_create($row_posisikk_sue3_2['selesai']);
@@ -1998,7 +2084,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_sue4_1      = mysqli_fetch_assoc($q_posisikk_sue4_1);
 
                 $q_posisikk_sue4_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -2011,9 +2096,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_sue4_2      = mysqli_fetch_assoc($q_posisikk_sue4_2);
 
-                if($row_posisikk_sue4_1){
+                if($row_posisikk_sue4_1->num_rows >0){
+                    $row_posisikk_sue4_1      = mysqli_fetch_assoc($q_posisikk_sue4_1);
+                    $row_posisikk_sue4_2      = mysqli_fetch_assoc($q_posisikk_sue4_2);
+
                     if($row_posisikk_sue4_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_sue4         = date_create($row_posisikk_sue4_2['mulai']);
                         $waktuakhir_sue4        = date_create($row_posisikk_sue4_2['selesai']);
@@ -2041,7 +2128,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_flt1_1      = mysqli_fetch_assoc($q_posisikk_flt1_1);
 
                 $q_posisikk_flt1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -2054,9 +2140,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_flt1_2      = mysqli_fetch_assoc($q_posisikk_flt1_2);
 
-                if($row_posisikk_flt1_1){
+                if($row_posisikk_flt1_1->num_rows >0){
+                    $row_posisikk_flt1_1      = mysqli_fetch_assoc($q_posisikk_flt1_1);
+                    $row_posisikk_flt1_2      = mysqli_fetch_assoc($q_posisikk_flt1_2);
+
                     if($row_posisikk_flt1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_flt1         = date_create($row_posisikk_flt1_2['mulai']);
                         $waktuakhir_flt1        = date_create($row_posisikk_flt1_2['selesai']);
@@ -2084,7 +2172,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_ins2_1      = mysqli_fetch_assoc($q_posisikk_ins2_1);
 
                 $q_posisikk_ins2_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -2097,9 +2184,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_ins2_2      = mysqli_fetch_assoc($q_posisikk_ins2_2);
 
-                if($row_posisikk_ins2_1){
+                if($row_posisikk_ins2_1->num_rows >0){
+                    $row_posisikk_ins2_1      = mysqli_fetch_assoc($q_posisikk_ins2_1);
+                    $row_posisikk_ins2_2      = mysqli_fetch_assoc($q_posisikk_ins2_2);
+
                     if($row_posisikk_ins2_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_ins2         = date_create($row_posisikk_ins2_2['mulai']);
                         $waktuakhir_ins2        = date_create($row_posisikk_ins2_2['selesai']);
@@ -2127,7 +2216,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_rot1_1      = mysqli_fetch_assoc($q_posisikk_rot1_1);
 
                 $q_posisikk_rot1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -2140,9 +2228,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_rot1_2      = mysqli_fetch_assoc($q_posisikk_rot1_2);
 
-                if($row_posisikk_rot1_1){
+                if($row_posisikk_rot1_1->num_rows >0){
+                    $row_posisikk_rot1_1      = mysqli_fetch_assoc($q_posisikk_rot1_1);
+                    $row_posisikk_rot1_2      = mysqli_fetch_assoc($q_posisikk_rot1_2);
+
                     if($row_posisikk_rot1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_rot1         = date_create($row_posisikk_rot1_2['mulai']);
                         $waktuakhir_rot1        = date_create($row_posisikk_rot1_2['selesai']);
@@ -2170,7 +2260,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_spt1_1      = mysqli_fetch_assoc($q_posisikk_spt1_1);
 
                 $q_posisikk_spt1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -2183,9 +2272,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_spt1_2      = mysqli_fetch_assoc($q_posisikk_spt1_2);
 
-                if($row_posisikk_spt1_1){
+                if($row_posisikk_spt1_1->num_rows >0){
+                    $row_posisikk_spt1_1      = mysqli_fetch_assoc($q_posisikk_spt1_1);
+                    $row_posisikk_spt1_2      = mysqli_fetch_assoc($q_posisikk_spt1_2);
+
                     if($row_posisikk_spt1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_spt1         = date_create($row_posisikk_spt1_2['mulai']);
                         $waktuakhir_spt1        = date_create($row_posisikk_spt1_2['selesai']);
@@ -2213,7 +2304,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_sub1_1      = mysqli_fetch_assoc($q_posisikk_sub1_1);
 
                 $q_posisikk_sub1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -2226,9 +2316,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_sub1_2      = mysqli_fetch_assoc($q_posisikk_sub1_2);
                 
-                if($row_posisikk_sub1_1){
+                if($row_posisikk_sub1_1->num_rows >0){
+                    $row_posisikk_sub1_1      = mysqli_fetch_assoc($q_posisikk_sub1_1);
+                    $row_posisikk_sub1_2      = mysqli_fetch_assoc($q_posisikk_sub1_2);
+
                     if($row_posisikk_sub1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_sub1         = date_create($row_posisikk_sub1_2['mulai']);
                         $waktuakhir_sub1        = date_create($row_posisikk_sub1_2['selesai']);
@@ -2256,7 +2348,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_cur1_1      = mysqli_fetch_assoc($q_posisikk_cur1_1);
 
                 $q_posisikk_cur1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -2269,9 +2360,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_cur1_2      = mysqli_fetch_assoc($q_posisikk_cur1_2);
 
-                if($row_posisikk_cur1_1){
+                if($row_posisikk_cur1_1->num_rows >0){
+                    $row_posisikk_cur1_1      = mysqli_fetch_assoc($q_posisikk_cur1_1);
+                    $row_posisikk_cur1_2      = mysqli_fetch_assoc($q_posisikk_cur1_2);
+
                     if($row_posisikk_cur1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_cur1         = date_create($row_posisikk_cur1_2['mulai']);
                         $waktuakhir_cur1        = date_create($row_posisikk_cur1_2['selesai']);
@@ -2285,86 +2378,23 @@
 
                     $diff_cur1              = date_diff($waktuawal_cur1, $waktuakhir_cur1);
                 }
-            // ins3
+            // CUR1
 
             // INS3
-                $q_posisikk_ins3_1        = mysqli_query($con_nowprd, "SELECT
-                                                                            * 
-                                                                        FROM
-                                                                            `itxview_posisikk_tgl_in_prodorder_ins3_leadtime` 
-                                                                        WHERE
-                                                                            PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'
-                                                                            AND OPERATIONCODE = 'INS3'
-                                                                            AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
-                                                                        ORDER BY 
-                                                                            MULAI ASC LIMIT 1");
-                $row_posisikk_ins3_1      = mysqli_fetch_assoc($q_posisikk_ins3_1);
+                $q_posisikk_ins3_1      = db2_exec($conn1, "SELECT * FROM ITXVIEW_POSISIKK_TGL_IN_PRODORDER_INS3 WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' ORDER BY MULAI ASC LIMIT 1");                                                           
+                $q_posisikk_ins3_2      = db2_exec($conn1, "SELECT * FROM ITXVIEW_POSISIKK_TGL_IN_PRODORDER_INS3 WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' ORDER BY MULAI DESC LIMIT 1");  
 
-                $q_posisikk_ins3_2        = mysqli_query($con_nowprd, "SELECT
-                                                                            * 
-                                                                        FROM
-                                                                            `itxview_posisikk_tgl_in_prodorder_ins3_leadtime` 
-                                                                        WHERE
-                                                                            PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'
-                                                                            AND OPERATIONCODE = 'INS3'
-                                                                            AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
-                                                                        ORDER BY 
-                                                                            MULAI DESC LIMIT 1");
-                $row_posisikk_ins3_2      = mysqli_fetch_assoc($q_posisikk_ins3_2);
+                $row_posisikk_ins3_1      = db2_fetch_assoc($q_posisikk_ins3_1);
+                $row_posisikk_ins3_2      = db2_fetch_assoc($q_posisikk_ins3_2);
 
-                if($row_posisikk_ins3_1){
-                    if($row_posisikk_ins3_1['mulai'] == '0000-00-00 00:00:00'){
-                        $waktuawal_ins3         = date_create($row_posisikk_ins3_2['mulai']);
-                        $waktuakhir_ins3        = date_create($row_posisikk_ins3_2['selesai']);
-                    }elseif($row_posisikk_ins3_2['MULAI'] == '0000-00-00 00:00:00'){
-                        $waktuawal_ins3         = date_create($row_posisikk_ins3_1['MULAI']);
-                        $waktuakhir_ins3        = date_create($row_posisikk_ins3_1['MULAI']);
-                    }else{
-                        $waktuawal_ins3         = date_create($row_posisikk_ins3_1['MULAI']);
-                        $waktuakhir_ins3        = date_create($row_posisikk_ins3_2['MULAI']);
-                    }
-
+                if($row_posisikk_ins3_1['MULAI']){
+                    $waktuawal_ins3         = date_create($row_posisikk_ins3_1['MULAI']);
+                    $waktuakhir_ins3        = date_create($row_posisikk_ins3_2['MULAI']);
+                    
                     $diff_ins3              = date_diff($waktuawal_ins3, $waktuakhir_ins3);
                 }
+
             // INS3
-
-            // QCF1
-                // $q_posisikk_qcf1_1        = mysqli_query($con_nowprd, "SELECT
-                //                                                             * 
-                //                                                         FROM
-                //                                                             `posisikk_cache_leadtime` 
-                //                                                         WHERE
-                //                                                             productionorder = '$rowdb2[NO_KK]'
-                //                                                             AND productiondemand = '$rowdb2[DEMAND]'
-                //                                                             AND operationcode = 'QCF1'
-                //                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
-                //                                                         ORDER BY 
-                //                                                             stepnumber ASC LIMIT 1");
-                // $row_posisikk_qcf1_1      = mysqli_fetch_assoc($q_posisikk_qcf1_1);
-
-                // $q_posisikk_qcf1_2        = mysqli_query($con_nowprd, "SELECT
-                //                                                             * 
-                //                                                         FROM
-                //                                                             `posisikk_cache_leadtime` 
-                //                                                         WHERE
-                //                                                             productionorder = '$rowdb2[NO_KK]'
-                //                                                             AND productiondemand = '$rowdb2[DEMAND]'
-                //                                                             AND operationcode = 'QCF1'
-                //                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
-                //                                                         ORDER BY 
-                //                                                             stepnumber DESC LIMIT 1");
-                // $row_posisikk_qcf1_2      = mysqli_fetch_assoc($q_posisikk_qcf1_2);
-
-                // if($row_posisikk_qcf1_2['selesai'] == '0000-00-00 00:00:00'){
-                //     $waktuawal_qcf1         = date_create($row_posisikk_qcf1_1['mulai']);
-                //     $waktuakhir_qcf1        = date_create($row_posisikk_qcf1_1['mulai']);
-                // }else{
-                //     $waktuawal_qcf1         = date_create($row_posisikk_qcf1_1['mulai']);
-                //     $waktuakhir_qcf1        = date_create($row_posisikk_qcf1_2['selesai']);
-                // }
-
-                // $diff_qcf1              = date_diff($waktuawal_qcf1, $waktuakhir_qcf1);
-            // QCF1
 
             // QCF4
                 $q_posisikk_qcf4_1        = mysqli_query($con_nowprd, "SELECT
@@ -2378,7 +2408,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_qcf4_1      = mysqli_fetch_assoc($q_posisikk_qcf4_1);
 
                 $q_posisikk_qcf4_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -2391,9 +2420,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_qcf4_2      = mysqli_fetch_assoc($q_posisikk_qcf4_2);
 
-                if($row_posisikk_qcf4_1){
+                if($row_posisikk_qcf4_1->num_rows >0){
+                    $row_posisikk_qcf4_1      = mysqli_fetch_assoc($q_posisikk_qcf4_1);
+                    $row_posisikk_qcf4_2      = mysqli_fetch_assoc($q_posisikk_qcf4_2);
+
                     if($row_posisikk_qcf4_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_qcf4         = date_create($row_posisikk_qcf4_2['mulai']);
                         $waktuakhir_qcf4        = date_create($row_posisikk_qcf4_2['selesai']);
@@ -2410,44 +2441,19 @@
             // QCF4
 
             // CNP1
-                $q_posisikk_cnp1_1        = mysqli_query($con_nowprd, "SELECT
-                                                                            * 
-                                                                        FROM
-                                                                            `itxview_posisikk_tgl_in_prodorder_cnp1_leadtime` 
-                                                                        WHERE
-                                                                            PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'
-                                                                            AND OPERATIONCODE = 'CNP1'
-                                                                            AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
-                                                                        ORDER BY 
-                                                                            MULAI ASC LIMIT 1");
-                $row_posisikk_cnp1_1      = mysqli_fetch_assoc($q_posisikk_cnp1_1);
+                $q_posisikk_cnp1_1      = db2_exec($conn1, "SELECT * FROM ITXVIEW_POSISIKK_TGL_IN_PRODORDER_CNP1 WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' ORDER BY MULAI ASC LIMIT 1");                                                           
+                $q_posisikk_cnp1_2      = db2_exec($conn1, "SELECT * FROM ITXVIEW_POSISIKK_TGL_IN_PRODORDER_CNP1 WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' ORDER BY MULAI DESC LIMIT 1");                                                           
 
-                $q_posisikk_cnp1_2        = mysqli_query($con_nowprd, "SELECT
-                                                                            * 
-                                                                        FROM
-                                                                            `itxview_posisikk_tgl_in_prodorder_cnp1_leadtime` 
-                                                                        WHERE
-                                                                            PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'
-                                                                            AND OPERATIONCODE = 'CNP1'
-                                                                            AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
-                                                                        ORDER BY 
-                                                                            MULAI DESC LIMIT 1");
-                $row_posisikk_cnp1_2      = mysqli_fetch_assoc($q_posisikk_cnp1_2);
+                $row_posisikk_cnp1_1      = db2_fetch_assoc($q_posisikk_cnp1_1);
+                $row_posisikk_cnp1_2      = db2_fetch_assoc($q_posisikk_cnp1_2);
 
-                if($row_posisikk_cnp1_1){
-                    if($row_posisikk_cnp1_1['mulai'] == '0000-00-00 00:00:00'){
-                        $waktuawal_cnp1         = date_create($row_posisikk_cnp1_2['mulai']);
-                        $waktuakhir_cnp1        = date_create($row_posisikk_cnp1_2['selesai']);
-                    }elseif($row_posisikk_cnp1_2['MULAI'] == '0000-00-00 00:00:00'){
-                        $waktuawal_cnp1         = date_create($row_posisikk_cnp1_1['MULAI']);
-                        $waktuakhir_cnp1        = date_create($row_posisikk_cnp1_1['MULAI']);
-                    }else{
-                        $waktuawal_cnp1         = date_create($row_posisikk_cnp1_1['MULAI']);
-                        $waktuakhir_cnp1        = date_create($row_posisikk_cnp1_2['MULAI']);
-                    }
+                if($row_posisikk_cnp1_1['MULAI']){
+                    $waktuawal_cnp1         = date_create($row_posisikk_cnp1_1['MULAI']);
+                    $waktuakhir_cnp1        = date_create($row_posisikk_cnp1_2['MULAI']);
 
                     $diff_cnp1              = date_diff($waktuawal_cnp1, $waktuakhir_cnp1);
                 }
+
             // CNP1
 
             // GKJ1
@@ -2462,7 +2468,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_gkj1_1      = mysqli_fetch_assoc($q_posisikk_gkj1_1);
 
                 $q_posisikk_gkj1_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -2475,9 +2480,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_gkj1_2      = mysqli_fetch_assoc($q_posisikk_gkj1_2);
 
-                if($row_posisikk_gkj1_1){
+                if($row_posisikk_gkj1_1->num_rows >0){
+                    $row_posisikk_gkj1_1      = mysqli_fetch_assoc($q_posisikk_gkj1_1);
+                    $row_posisikk_gkj1_2      = mysqli_fetch_assoc($q_posisikk_gkj1_2);
+
                     if($row_posisikk_gkj1_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_gkj1         = date_create($row_posisikk_gkj1_2['mulai']);
                         $waktuakhir_gkj1        = date_create($row_posisikk_gkj1_2['selesai']);
@@ -2505,7 +2512,6 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber ASC LIMIT 1");
-                $row_posisikk_ppc4_1      = mysqli_fetch_assoc($q_posisikk_ppc4_1);
 
                 $q_posisikk_ppc4_2        = mysqli_query($con_nowprd, "SELECT
                                                                             * 
@@ -2518,9 +2524,11 @@
                                                                             AND ipaddress = '$_SERVER[REMOTE_ADDR]'
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
-                $row_posisikk_ppc4_2      = mysqli_fetch_assoc($q_posisikk_ppc4_2);
 
-                if($row_posisikk_ppc4_1){
+                if($row_posisikk_ppc4_1->num_rows >0){
+                    $row_posisikk_ppc4_1      = mysqli_fetch_assoc($q_posisikk_ppc4_1);
+                    $row_posisikk_ppc4_2      = mysqli_fetch_assoc($q_posisikk_ppc4_2);
+
                     if($row_posisikk_ppc4_1['mulai'] == '0000-00-00 00:00:00'){
                         $waktuawal_ppc4         = date_create($row_posisikk_ppc4_2['mulai']);
                         $waktuakhir_ppc4        = date_create($row_posisikk_ppc4_2['selesai']);
@@ -2537,127 +2545,95 @@
             // PPC4
 
             // Internal Lead Time Adidas & Lead Time Produksi
-                if($row_posisikk_dye1_1['mulai']){
-                    $dye_start    = date_create($row_posisikk_dye1_1['mulai']);
-                }elseif($row_posisikk_dye2_1['mulai']){
-                    $dye_start    = date_create($row_posisikk_dye2_1['mulai']);
-                }elseif($row_posisikk_dye3_1['mulai']){
-                    $dye_start    = date_create($row_posisikk_dye3_1['mulai']);
-                }elseif($row_posisikk_dye4_1['mulai']){
-                    $dye_start    = date_create($row_posisikk_dye4_1['mulai']);
-                }elseif($row_posisikk_dye5_1['mulai']){
-                    $dye_start    = date_create($row_posisikk_dye5_1['mulai']);
-                }elseif($row_posisikk_dye6_1['mulai']){
-                    $dye_start    = date_create($row_posisikk_dye6_1['mulai']);
-                }else{
-                    $dye_start    = date_create($row_posisikk_gkj1_2['mulai']);
-                }
-                $int_leadtime_adidas_end    = date_create($row_posisikk_gkj1_2['selesai']);
-
-                $diff_int_leadtime_adidas   = date_diff($dye_start, $int_leadtime_adidas_end);
+                $diff_int_leadtime_adidas   = round($diff_dye1->d + $diff_dye1->h / 24 + $diff_dye1->i / 1440, 2) +
+                                            round($diff_dye2->d + $diff_dye2->h / 24 + $diff_dye2->i / 1440, 2) +
+                                            round($diff_dye3->d + $diff_dye3->h / 24 + $diff_dye3->i / 1440, 2) +
+                                            round($diff_dye4->d + $diff_dye4->h / 24 + $diff_dye4->i / 1440, 2) +
+                                            round($diff_dye5->d + $diff_dye5->h / 24 + $diff_dye5->i / 1440, 2) +
+                                            round($diff_dye6->d + $diff_dye6->h / 24 + $diff_dye6->i / 1440, 2) +
+                                            round($diff_sop1->d + $diff_sop1->h / 24 + $diff_sop1->i / 1440, 2) +
+                                            round($diff_bld1->d + $diff_bld1->h / 24 + $diff_bld1->i / 1440, 2) +
+                                            round($diff_blp1->d + $diff_blp1->h / 24 + $diff_blp1->i / 1440, 2) +
+                                            round($diff_opw1->d + $diff_opw1->h / 24 + $diff_opw1->i / 1440, 2) +
+                                            round($diff_ovd1->d + $diff_ovd1->h / 24 + $diff_ovd1->i / 1440, 2) +
+                                            round($diff_ovn1->d + $diff_ovn1->h / 24 + $diff_ovn1->i / 1440, 2) +
+                                            round($diff_ovn2->d + $diff_ovn2->h / 24 + $diff_ovn2->i / 1440, 2) +
+                                            round($diff_ovn3->d + $diff_ovn3->h / 24 + $diff_ovn3->i / 1440, 2) +
+                                            round($diff_cpt1->d + $diff_cpt1->h / 24 + $diff_cpt1->i / 1440, 2) +
+                                            round($diff_fin1->d + $diff_fin1->h / 24 + $diff_fin1->i / 1440, 2) +
+                                            round($diff_fnj1->d + $diff_fnj1->h / 24 + $diff_fnj1->i / 1440, 2) +
+                                            round($diff_stm1->d + $diff_stm1->h / 24 + $diff_stm1->i / 1440, 2) +
+                                            round($diff_stm2->d + $diff_stm2->h / 24 + $diff_stm2->i / 1440, 2) +
+                                            round($diff_tdr1->d + $diff_tdr1->h / 24 + $diff_tdr1->i / 1440, 2) +
+                                            round($diff_shr3->d + $diff_shr3->h / 24 + $diff_shr3->i / 1440, 2) +
+                                            round($diff_shr4->d + $diff_shr4->h / 24 + $diff_shr4->i / 1440, 2) +
+                                            round($diff_shr5->d + $diff_shr5->h / 24 + $diff_shr5->i / 1440, 2) +
+                                            round($diff_sue3->d + $diff_sue3->h / 24 + $diff_sue3->i / 1440, 2) +
+                                            round($diff_sue4->d + $diff_sue4->h / 24 + $diff_sue4->i / 1440, 2) +
+                                            round($diff_flt1->d + $diff_flt1->h / 24 + $diff_flt1->i / 1440, 2) +
+                                            round($diff_ins2->d + $diff_ins2->h / 24 + $diff_ins2->i / 1440, 2) +
+                                            round($diff_rot1->d + $diff_rot1->h / 24 + $diff_rot1->i / 1440, 2) +
+                                            round($diff_spt1->d + $diff_spt1->h / 24 + $diff_spt1->i / 1440, 2) +
+                                            round($diff_sub1->d + $diff_sub1->h / 24 + $diff_sub1->i / 1440, 2) +
+                                            round($diff_cur1->d + $diff_cur1->h / 24 + $diff_cur1->i / 1440, 2) +
+                                            round($diff_ins3->d + $diff_ins3->h / 24 + $diff_ins3->i / 1440, 2) +
+                                            round($diff_qcf4->d + $diff_qcf4->h / 24 + $diff_qcf4->i / 1440, 2) +
+                                            round($diff_cnp1->d + $diff_cnp1->h / 24 + $diff_cnp1->i / 1440, 2) +
+                                            round($diff_gkj1->d + $diff_gkj1->h / 24 + $diff_gkj1->i / 1440, 2) +
+                                            round($diff_ppc4->d + $diff_ppc4->h / 24 + $diff_ppc4->i / 1440, 2);
             // Internal Lead Time Adidas & Lead Time Produksi
             
             // Internal Lead Time Excluding Testing & TOTAL LEADTIME
-                if($row_posisikk_bat1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_bat1_1['mulai']);
-                }elseif($row_posisikk_bat2_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_bat2_1['mulai']);
-                }elseif($row_posisikk_bkn1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_bkn1_1['mulai']);
-                }elseif($row_posisikk_sco1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_sco1_1['mulai']);
-                }elseif($row_posisikk_rlx1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_rlx1_1['mulai']);
-                }elseif($row_posisikk_cbl1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_cbl1_1['mulai']);
-                }elseif($row_posisikk_mat1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_mat1_1['mulai']);
-                }elseif($row_posisikk_pre1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_pre1_1['mulai']);
-                }elseif($row_posisikk_rse1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_rse1_1['mulai']);
-                }elseif($row_posisikk_rse2_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_rse2_1['mulai']);
-                }elseif($row_posisikk_shr1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_shr1_1['mulai']);
-                }elseif($row_posisikk_shr2_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_shr2_1['mulai']);
-                }elseif($row_posisikk_sue1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_sue1_1['mulai']);
-                }elseif($row_posisikk_sue2_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_sue2_1['mulai']);
-                }elseif($row_posisikk_dye1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_dye1_1['mulai']);
-                }elseif($row_posisikk_dye2_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_dye2_1['mulai']);
-                }elseif($row_posisikk_dye3_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_dye3_1['mulai']);
-                }elseif($row_posisikk_dye4_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_dye4_1['mulai']);
-                }elseif($row_posisikk_dye5_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_dye5_1['mulai']);
-                }elseif($row_posisikk_dye6_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_dye6_1['mulai']);
-                }elseif($row_posisikk_sop1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_sop1_1['mulai']);
-                }elseif($row_posisikk_bld1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_bld1_1['mulai']);
-                }elseif($row_posisikk_blp1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_blp1_1['mulai']);
-                }elseif($row_posisikk_opw1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_opw1_1['mulai']);
-                }elseif($row_posisikk_ovd1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_ovd1_1['mulai']);
-                }elseif($row_posisikk_ovn1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_ovn1_1['mulai']);
-                }elseif($row_posisikk_ovn2_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_ovn2_1['mulai']);
-                }elseif($row_posisikk_ovn3_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_ovn3_1['mulai']);
-                }elseif($row_posisikk_cpt1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_cpt1_1['mulai']);
-                }elseif($row_posisikk_fin1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_fin1_1['mulai']);
-                }elseif($row_posisikk_fnj1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_fnj1_1['mulai']);
-                }elseif($row_posisikk_stm1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_stm1_1['mulai']);
-                }elseif($row_posisikk_stm2_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_stm2_1['mulai']);
-                }elseif($row_posisikk_tdr1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_tdr1_1['mulai']);
-                }elseif($row_posisikk_shr3_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_shr3_1['mulai']);
-                }elseif($row_posisikk_shr4_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_shr4_1['mulai']);
-                }elseif($row_posisikk_shr5_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_shr5_1['mulai']);
-                }elseif($row_posisikk_sue3_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_sue3_1['mulai']);
-                }elseif($row_posisikk_sue4_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_sue4_1['mulai']);
-                }elseif($row_posisikk_flt1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_flt1_1['mulai']);
-                }elseif($row_posisikk_ins2_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_ins2_1['mulai']);
-                }elseif($row_posisikk_rot1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_rot1_1['mulai']);
-                }elseif($row_posisikk_spt1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_spt1_1['mulai']);
-                }elseif($row_posisikk_sub1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_sub1_1['mulai']);
-                }elseif($row_posisikk_cur1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_cur1_1['mulai']);
-                }elseif($row_posisikk_ins3_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_ins3_1['mulai']);
-                }elseif($row_posisikk_qcf4_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_qcf4_1['mulai']);
-                }elseif($row_posisikk_cnp1_1['mulai'] != '0000-00-00 00:00:00'){
-                    $waktuawal_exluding_testing_start = date_create($row_posisikk_cnp1_1['mulai']);
-                }
-                $waktuakhir_exluding_testing_end        = date_create($row_posisikk_gkj1_2['selesai']);
-                $diff_waktuawal_exluding_testing        = date_diff($waktuawal_exluding_testing_start, $waktuakhir_exluding_testing_end);
-                // $diff_waktuawal_exluding_testing    = 
+                $diff_waktuawal_exluding_testing      = round($diff_bat1->d + $diff_bat1->h / 24 + $diff_bat1->i / 1440, 2) +
+                                                        round($diff_bat2->d + $diff_bat2->h / 24 + $diff_bat2->i / 1440, 2) +
+                                                        round($diff_bkn1->d + $diff_bkn1->h / 24 + $diff_bkn1->i / 1440, 2) +
+                                                        round($diff_sco1->d + $diff_sco1->h / 24 + $diff_sco1->i / 1440, 2) +
+                                                        round($diff_rlx1->d + $diff_rlx1->h / 24 + $diff_rlx1->i / 1440, 2) +
+                                                        round($diff_cbl1->d + $diff_cbl1->h / 24 + $diff_cbl1->i / 1440, 2) +
+                                                        round($diff_mat1->d + $diff_mat1->h / 24 + $diff_mat1->i / 1440, 2) +
+                                                        round($diff_pre1->d + $diff_pre1->h / 24 + $diff_pre1->i / 1440, 2) +
+                                                        round($diff_rse1->d + $diff_rse1->h / 24 + $diff_rse1->i / 1440, 2) +
+                                                        round($diff_rse2->d + $diff_rse2->h / 24 + $diff_rse2->i / 1440, 2) +
+                                                        round($diff_shr1->d + $diff_shr1->h / 24 + $diff_shr1->i / 1440, 2) +
+                                                        round($diff_shr2->d + $diff_shr2->h / 24 + $diff_shr2->i / 1440, 2) +
+                                                        round($diff_sue1->d + $diff_sue1->h / 24 + $diff_sue1->i / 1440, 2) +
+                                                        round($diff_sue2->d + $diff_sue2->h / 24 + $diff_sue2->i / 1440, 2) +
+                                                        round($diff_dye1->d + $diff_dye1->h / 24 + $diff_dye1->i / 1440, 2) +
+                                                        round($diff_dye2->d + $diff_dye2->h / 24 + $diff_dye2->i / 1440, 2) +
+                                                        round($diff_dye3->d + $diff_dye3->h / 24 + $diff_dye3->i / 1440, 2) +
+                                                        round($diff_dye4->d + $diff_dye4->h / 24 + $diff_dye4->i / 1440, 2) +
+                                                        round($diff_dye5->d + $diff_dye5->h / 24 + $diff_dye5->i / 1440, 2) +
+                                                        round($diff_dye6->d + $diff_dye6->h / 24 + $diff_dye6->i / 1440, 2) +
+                                                        round($diff_sop1->d + $diff_sop1->h / 24 + $diff_sop1->i / 1440, 2) +
+                                                        round($diff_bld1->d + $diff_bld1->h / 24 + $diff_bld1->i / 1440, 2) +
+                                                        round($diff_blp1->d + $diff_blp1->h / 24 + $diff_blp1->i / 1440, 2) +
+                                                        round($diff_opw1->d + $diff_opw1->h / 24 + $diff_opw1->i / 1440, 2) +
+                                                        round($diff_ovd1->d + $diff_ovd1->h / 24 + $diff_ovd1->i / 1440, 2) +
+                                                        round($diff_ovn1->d + $diff_ovn1->h / 24 + $diff_ovn1->i / 1440, 2) +
+                                                        round($diff_ovn2->d + $diff_ovn2->h / 24 + $diff_ovn2->i / 1440, 2) +
+                                                        round($diff_ovn3->d + $diff_ovn3->h / 24 + $diff_ovn3->i / 1440, 2) +
+                                                        round($diff_cpt1->d + $diff_cpt1->h / 24 + $diff_cpt1->i / 1440, 2) +
+                                                        round($diff_fin1->d + $diff_fin1->h / 24 + $diff_fin1->i / 1440, 2) +
+                                                        round($diff_fnj1->d + $diff_fnj1->h / 24 + $diff_fnj1->i / 1440, 2) +
+                                                        round($diff_stm1->d + $diff_stm1->h / 24 + $diff_stm1->i / 1440, 2) +
+                                                        round($diff_stm2->d + $diff_stm2->h / 24 + $diff_stm2->i / 1440, 2) +
+                                                        round($diff_tdr1->d + $diff_tdr1->h / 24 + $diff_tdr1->i / 1440, 2) +
+                                                        round($diff_shr3->d + $diff_shr3->h / 24 + $diff_shr3->i / 1440, 2) +
+                                                        round($diff_shr4->d + $diff_shr4->h / 24 + $diff_shr4->i / 1440, 2) +
+                                                        round($diff_shr5->d + $diff_shr5->h / 24 + $diff_shr5->i / 1440, 2) +
+                                                        round($diff_sue3->d + $diff_sue3->h / 24 + $diff_sue3->i / 1440, 2) +
+                                                        round($diff_sue4->d + $diff_sue4->h / 24 + $diff_sue4->i / 1440, 2) +
+                                                        round($diff_flt1->d + $diff_flt1->h / 24 + $diff_flt1->i / 1440, 2) +
+                                                        round($diff_ins2->d + $diff_ins2->h / 24 + $diff_ins2->i / 1440, 2) +
+                                                        round($diff_rot1->d + $diff_rot1->h / 24 + $diff_rot1->i / 1440, 2) +
+                                                        round($diff_spt1->d + $diff_spt1->h / 24 + $diff_spt1->i / 1440, 2) +
+                                                        round($diff_sub1->d + $diff_sub1->h / 24 + $diff_sub1->i / 1440, 2) +
+                                                        round($diff_cur1->d + $diff_cur1->h / 24 + $diff_cur1->i / 1440, 2) +
+                                                        round($diff_ins3->d + $diff_ins3->h / 24 + $diff_ins3->i / 1440, 2) +
+                                                        round($diff_qcf4->d + $diff_qcf4->h / 24 + $diff_qcf4->i / 1440, 2) +
+                                                        round($diff_cnp1->d + $diff_cnp1->h / 24 + $diff_cnp1->i / 1440, 2) +
+                                                        round($diff_gkj1->d + $diff_gkj1->h / 24 + $diff_gkj1->i / 1440, 2) +
+                                                        round($diff_ppc4->d + $diff_ppc4->h / 24 + $diff_ppc4->i / 1440, 2);
             // Internal Lead Time Excluding Testing & TOTAL LEADTIME
         ?>
         <tr>
@@ -2737,62 +2713,61 @@
             <td><?= $row_tglpacking['MULAI']; ?></td> <!-- TGL PACKING -->
             <td><?= $row_tglinspect['MULAI']; ?></td> <!-- TGL INS MEJA -->
 
-            <td><?php echo round($diff_int_leadtime_adidas->d+3 + $diff_int_leadtime_adidas->h / 24 + $diff_int_leadtime_adidas->i / 1440, 2); ?></td> <!-- LEAD TIME PRODUKSI -->
-            <td><?php echo round($diff_int_leadtime_adidas->d + $diff_int_leadtime_adidas->h / 24 + $diff_int_leadtime_adidas->i / 1440, 2); ?></td> <!-- Internal Lead Time Adidas -->
-            <td><?php echo round($diff_waktuawal_exluding_testing->d + $diff_waktuawal_exluding_testing->h / 24 + $diff_waktuawal_exluding_testing->i / 1440, 2); ?></td> <!-- Internal Lead Time Excluding Testing -->
+            <td><?php echo $diff_int_leadtime_adidas+3 ?></td> <!-- LEAD TIME PRODUKSI -->
+            <td><?php echo $diff_int_leadtime_adidas; ?></td> <!-- Internal Lead Time Adidas -->
+            <td><?php echo $diff_waktuawal_exluding_testing; ?></td> <!-- Internal Lead Time Excluding Testing -->
 
-            <td><?php echo $diff_bat1->d . ' hari, '; echo $diff_bat1->h . ' jam, '; echo $diff_bat1->i . ' menit '; ?></td> <!-- BAT1 BAGI KAIN -->
-            <td><?php echo $diff_bat2->d . ' hari, '; echo $diff_bat2->h . ' jam, '; echo $diff_bat2->i . ' menit '; ?></td> <!-- BAT2 BUKA KAIN -->
-            <td><?php echo $diff_bkn1->d . ' hari, '; echo $diff_bkn1->h . ' jam, '; echo $diff_bkn1->i . ' menit '; ?></td> <!-- BKN1 BALIK KAIN -->
-            <td><?php echo $diff_sco1->d . ' hari, '; echo $diff_sco1->h . ' jam, '; echo $diff_sco1->i . ' menit '; ?></td> <!-- SCO1 SCOURING -->
-            <td><?php echo $diff_rlx1->d . ' hari, '; echo $diff_rlx1->h . ' jam, '; echo $diff_rlx1->i . ' menit '; ?></td> <!-- RLX1 RELAXING -->
-            <td><?php echo $diff_cbl1->d . ' hari, '; echo $diff_cbl1->h . ' jam, '; echo $diff_cbl1->i . ' menit '; ?></td> <!-- CBL1 CONTINOUS BLEACING -->
-            <td><?php echo $diff_mat1->d . ' hari, '; echo $diff_mat1->h . ' jam, '; echo $diff_mat1->i . ' menit '; ?></td> <!-- MAT1 LAB COLOR MATCH -->
-            <td><?php echo $diff_pre1->d . ' hari, '; echo $diff_pre1->h . ' jam, '; echo $diff_pre1->i . ' menit '; ?></td> <!-- PRE1 PRESET -->
-            <td><?php echo $diff_rse1->d . ' hari, '; echo $diff_rse1->h . ' jam, '; echo $diff_rse1->i . ' menit '; ?></td> <!-- RSE1 RAISING GREIGE FACE -->
-            <td><?php echo $diff_rse2->d . ' hari, '; echo $diff_rse2->h . ' jam, '; echo $diff_rse2->i . ' menit '; ?></td> <!-- RSE2 RAISING GREIGE BACK -->
-            <td><?php echo $diff_shr1->d . ' hari, '; echo $diff_shr1->h . ' jam, '; echo $diff_shr1->i . ' menit '; ?></td> <!-- SHR1 SHEARING GREIGE FACE -->
-            <td><?php echo $diff_shr2->d . ' hari, '; echo $diff_shr2->h . ' jam, '; echo $diff_shr2->i . ' menit '; ?></td> <!-- SHR2 SHEARING GREIGE BACK -->
-            <td><?php echo $diff_sue1->d . ' hari, '; echo $diff_sue1->h . ' jam, '; echo $diff_sue1->i . ' menit '; ?></td> <!-- SUE1 SUEDING GREIGE FACE -->
-            <td><?php echo $diff_sue2->d . ' hari, '; echo $diff_sue2->h . ' jam, '; echo $diff_sue2->i . ' menit '; ?></td> <!-- SUE2 SUEDING GREIGE BACK -->
-            <td><?php echo $diff_dye1->d . ' hari, '; echo $diff_dye1->h . ' jam, '; echo $diff_dye1->i . ' menit '; ?></td> <!-- DYE1 FABRIC DYEING (WHITE/HEATER) -->
-            <td><?php echo $diff_dye2->d . ' hari, '; echo $diff_dye2->h . ' jam, '; echo $diff_dye2->i . ' menit '; ?></td> <!-- DYE2 FABRIC DYEING (POLY) -->
-            <td><?php echo $diff_dye3->d . ' hari, '; echo $diff_dye3->h . ' jam, '; echo $diff_dye3->i . ' menit '; ?></td> <!-- DYE3 FABRIC DYEING (CD) -->
-            <td><?php echo $diff_dye4->d . ' hari, '; echo $diff_dye4->h . ' jam, '; echo $diff_dye4->i . ' menit '; ?></td> <!-- DYE4 FABRIC DYEING (COTTON/RAYON/TENCEL/MODAL) -->
-            <td><?php echo $diff_dye5->d . ' hari, '; echo $diff_dye5->h . ' jam, '; echo $diff_dye6->i . ' menit '; ?></td> <!-- DYE5 FABRIC DYEING (NYLON) -->
-            <td><?php echo $diff_dye6->d . ' hari, '; echo $diff_dye6->h . ' jam, '; echo $diff_dye6->i . ' menit '; ?></td> <!-- DYE6 FABRIC DYEING CVC+TC (POLY+COTTON) -->
-            <td><?php echo $diff_sop1->d . ' hari, '; echo $diff_sop1->h . ' jam, '; echo $diff_sop1->i . ' menit '; ?></td> <!-- SOP1 SOAPING -->
-            <td><?php echo $diff_bld1->d . ' hari, '; echo $diff_bld1->h . ' jam, '; echo $diff_bld1->i . ' menit '; ?></td> <!-- BLD1 BELAH DYEING -->
-            <td><?php echo $diff_blp1->d . ' hari, '; echo $diff_blp1->h . ' jam, '; echo $diff_blp1->i . ' menit '; ?></td> <!-- BLP1 BELAH PRESET -->
-            <td><?php echo $diff_opw1->d . ' hari, '; echo $diff_opw1->h . ' jam, '; echo $diff_opw1->i . ' menit '; ?></td> <!-- OPW1 BELAH CUCI -->
-            <td><?php echo $diff_ovd1->d . ' hari, '; echo $diff_ovd1->h . ' jam, '; echo $diff_ovd1->i . ' menit '; ?></td> <!-- OVD1 OVEN DYEING -->
-            <td><?php echo $diff_ovn1->d . ' hari, '; echo $diff_ovn1->h . ' jam, '; echo $diff_ovn1->i . ' menit '; ?></td> <!-- OVN1 OVEN STENTER -->
-            <td><?php echo $diff_ovn2->d . ' hari, '; echo $diff_ovn2->h . ' jam, '; echo $diff_ovn2->i . ' menit '; ?></td> <!-- OVN2 OVEN KERING -->
-            <td><?php echo $diff_ovn3->d . ' hari, '; echo $diff_ovn3->h . ' jam, '; echo $diff_ovn3->i . ' menit '; ?></td> <!-- OVN3 OVEN TAMBAH OBAT SETELAH PRT -->
-            <td><?php echo $diff_cpt1->d . ' hari, '; echo $diff_cpt1->h . ' jam, '; echo $diff_cpt1->i . ' menit '; ?></td> <!-- CPT1 COMPACT -->
-            <td><?php echo $diff_fin1->d . ' hari, '; echo $diff_fin1->h . ' jam, '; echo $diff_fin1->i . ' menit '; ?></td> <!-- FIN1 FINISHING 1 -->
-            <td><?php echo $diff_fnj1->d . ' hari, '; echo $diff_fnj1->h . ' jam, '; echo $diff_fnj1->i . ' menit '; ?></td> <!-- FNJ1 FINISHING JADI 1 -->
-            <td><?php echo $diff_stm1->d . ' hari, '; echo $diff_stm1->h . ' jam, '; echo $diff_stm1->i . ' menit '; ?></td> <!-- STM1 STEAM FINISHING -->
-            <td><?php echo $diff_stm2->d . ' hari, '; echo $diff_stm2->h . ' jam, '; echo $diff_stm2->i . ' menit '; ?></td> <!-- STM2 STEAM PRINTING -->
-            <td><?php echo $diff_tdr1->d . ' hari, '; echo $diff_tdr1->h . ' jam, '; echo $diff_tdr1->i . ' menit '; ?></td> <!-- TDR1 TUMBLE DRY -->
-            <td><?php echo $diff_shr3->d . ' hari, '; echo $diff_shr3->h . ' jam, '; echo $diff_shr3->i . ' menit '; ?></td> <!-- SHR3 SHEARING FINISHED FACE -->
-            <td><?php echo $diff_shr4->d . ' hari, '; echo $diff_shr4->h . ' jam, '; echo $diff_shr4->i . ' menit '; ?></td> <!-- SHR4 SHEARING FINISHED BACK -->
-            <td><?php echo $diff_shr5->d . ' hari, '; echo $diff_shr5->h . ' jam, '; echo $diff_shr5->i . ' menit '; ?></td> <!-- SHR5 SHEARING FINISHED FACE AFTER PRT -->
-            <td><?php echo $diff_sue3->d . ' hari, '; echo $diff_sue3->h . ' jam, '; echo $diff_sue3->i . ' menit '; ?></td> <!-- SUE3 SUEDING FINISHED FACE -->
-            <td><?php echo $diff_sue4->d . ' hari, '; echo $diff_sue4->h . ' jam, '; echo $diff_sue4->i . ' menit '; ?></td> <!-- SUE4 SUEDING FINISED BACK -->
-            <td><?php echo $diff_flt1->d . ' hari, '; echo $diff_flt1->h . ' jam, '; echo $diff_flt1->i . ' menit '; ?></td> <!-- FLT1 PRINTING FLAT -->
-            <td><?php echo $diff_ins2->d . ' hari, '; echo $diff_ins2->h . ' jam, '; echo $diff_ins2->i . ' menit '; ?></td> <!-- INS2 INSPECTION (PRINTING) -->
-            <td><?php echo $diff_rot1->d . ' hari, '; echo $diff_rot1->h . ' jam, '; echo $diff_rot1->i . ' menit '; ?></td> <!-- ROT1 PRINTING ROTARY -->
-            <td><?php echo $diff_spt1->d . ' hari, '; echo $diff_spt1->h . ' jam, '; echo $diff_spt1->i . ' menit '; ?></td> <!-- SPT1 SOAPING AFTER PRINTING -->
-            <td><?php echo $diff_sub1->d . ' hari, '; echo $diff_sub1->h . ' jam, '; echo $diff_sub1->i . ' menit '; ?></td> <!-- SUB1 PRINTING SUBLIM -->
-            <td><?php echo $diff_cur1->d . ' hari, '; echo $diff_cur1->h . ' jam, '; echo $diff_cur1->i . ' menit '; ?></td> <!-- CUR1 CURING -->
-            <td><?php echo $diff_ins3->d . ' hari, '; echo $diff_ins3->h . ' jam, '; echo $diff_ins3->i . ' menit '; ?></td> <!-- INS3 FINAL INSPECTION -->
-            <td hidden><?php echo $diff_qcf1->d . ' hari, '; echo $diff_qcf1->h . ' jam, '; echo $diff_qcf1->i . ' menit '; ?></td> <!-- QCF1 TEST QUALITY -->
-            <td><?php echo $diff_qcf4->d . ' hari, '; echo $diff_qcf4->h . ' jam, '; echo $diff_qcf4->i . ' menit '; ?></td> <!-- QCF4 QC FINAL -->
-            <td><?php echo $diff_cnp1->d . ' hari, '; echo $diff_cnp1->h . ' jam, '; echo $diff_cnp1->i . ' menit '; ?></td> <!-- CNP1 CUTTING + PACKING -->
-            <td><?php echo $diff_gkj1->d . ' hari, '; echo $diff_gkj1->h . ' jam, '; echo $diff_gkj1->i . ' menit '; ?></td> <!-- GKJ1 MUTASI -->
-            <td><?php echo $diff_ppc4->d . ' hari, '; echo $diff_ppc4->h . ' jam, '; echo $diff_ppc4->i . ' menit '; ?></td> <!-- PPC4 KK OK -->
-            <td><?php echo round($diff_waktuawal_exluding_testing->d+3 + $diff_waktuawal_exluding_testing->h / 24 + $diff_waktuawal_exluding_testing->i / 1440, 2); ?></td> <!-- TOTAL LEADTIME -->
+            <td><?php echo round($diff_bat1->d + $diff_bat1->h / 24 + $diff_bat1->i / 1440, 2); ?></td> <!-- BAT1 BAGI KAIN -->
+            <td><?php echo round($diff_bat2->d + $diff_bat2->h / 24 + $diff_bat2->i / 1440, 2); ?></td> <!-- BAT2 BUKA KAIN -->
+            <td><?php echo round($diff_bkn1->d + $diff_bkn1->h / 24 + $diff_bkn1->i / 1440, 2); ?></td> <!-- BKN1 BALIK KAIN -->
+            <td><?php echo round($diff_sco1->d + $diff_sco1->h / 24 + $diff_sco1->i / 1440, 2); ?></td> <!-- SCO1 SCOURING -->
+            <td><?php echo round($diff_rlx1->d + $diff_rlx1->h / 24 + $diff_rlx1->i / 1440, 2); ?></td> <!-- RLX1 RELAXING -->
+            <td><?php echo round($diff_cbl1->d + $diff_cbl1->h / 24 + $diff_cbl1->i / 1440, 2); ?></td> <!-- CBL1 CONTINOUS BLEACING -->
+            <td><?php echo round($diff_mat1->d + $diff_mat1->h / 24 + $diff_mat1->i / 1440, 2); ?></td> <!-- MAT1 LAB COLOR MATCH -->
+            <td><?php echo round($diff_pre1->d + $diff_pre1->h / 24 + $diff_pre1->i / 1440, 2); ?></td> <!-- PRE1 PRESET -->
+            <td><?php echo round($diff_rse1->d + $diff_rse1->h / 24 + $diff_rse1->i / 1440, 2); ?></td> <!-- RSE1 RAISING GREIGE FACE -->
+            <td><?php echo round($diff_rse2->d + $diff_rse2->h / 24 + $diff_rse2->i / 1440, 2); ?></td> <!-- RSE2 RAISING GREIGE BACK -->
+            <td><?php echo round($diff_shr1->d + $diff_shr1->h / 24 + $diff_shr1->i / 1440, 2); ?></td> <!-- SHR1 SHEARING GREIGE FACE -->
+            <td><?php echo round($diff_shr2->d + $diff_shr2->h / 24 + $diff_shr2->i / 1440, 2); ?></td> <!-- SHR2 SHEARING GREIGE BACK -->
+            <td><?php echo round($diff_sue1->d + $diff_sue1->h / 24 + $diff_sue1->i / 1440, 2); ?></td> <!-- SUE1 SUEDING GREIGE FACE -->
+            <td><?php echo round($diff_sue2->d + $diff_sue2->h / 24 + $diff_sue2->i / 1440, 2); ?></td> <!-- SUE2 SUEDING GREIGE BACK -->
+            <td><?php echo round($diff_dye1->d + $diff_dye1->h / 24 + $diff_dye1->i / 1440, 2); ?></td> <!-- DYE1 FABRIC DYEING (WHITE/HEATER) -->
+            <td><?php echo round($diff_dye2->d + $diff_dye2->h / 24 + $diff_dye2->i / 1440, 2); ?></td> <!-- DYE2 FABRIC DYEING (POLY) -->
+            <td><?php echo round($diff_dye3->d + $diff_dye3->h / 24 + $diff_dye3->i / 1440, 2); ?></td> <!-- DYE3 FABRIC DYEING (CD) -->
+            <td><?php echo round($diff_dye4->d + $diff_dye4->h / 24 + $diff_dye4->i / 1440, 2); ?></td> <!-- DYE4 FABRIC DYEING (COTTON/RAYON/TENCEL/MODAL) -->
+            <td><?php echo round($diff_dye5->d + $diff_dye5->h / 24 + $diff_dye5->i / 1440, 2); ?></td> <!-- DYE5 FABRIC DYEING (NYLON) -->
+            <td><?php echo round($diff_dye6->d + $diff_dye6->h / 24 + $diff_dye6->i / 1440, 2); ?></td> <!-- DYE6 FABRIC DYEING CVC+TC (POLY+COTTON) -->
+            <td><?php echo round($diff_sop1->d + $diff_sop1->h / 24 + $diff_sop1->i / 1440, 2); ?></td> <!-- SOP1 SOAPING -->
+            <td><?php echo round($diff_bld1->d + $diff_bld1->h / 24 + $diff_bld1->i / 1440, 2); ?></td> <!-- BLD1 BELAH DYEING -->
+            <td><?php echo round($diff_blp1->d + $diff_blp1->h / 24 + $diff_blp1->i / 1440, 2); ?></td> <!-- BLP1 BELAH PRESET -->
+            <td><?php echo round($diff_opw1->d + $diff_opw1->h / 24 + $diff_opw1->i / 1440, 2); ?></td> <!-- OPW1 BELAH CUCI -->
+            <td><?php echo round($diff_ovd1->d + $diff_ovd1->h / 24 + $diff_ovd1->i / 1440, 2); ?></td> <!-- OVD1 OVEN DYEING -->
+            <td><?php echo round($diff_ovn1->d + $diff_ovn1->h / 24 + $diff_ovn1->i / 1440, 2); ?></td> <!-- OVN1 OVEN STENTER -->
+            <td><?php echo round($diff_ovn2->d + $diff_ovn2->h / 24 + $diff_ovn2->i / 1440, 2); ?></td> <!-- OVN2 OVEN KERING -->
+            <td><?php echo round($diff_ovn3->d + $diff_ovn3->h / 24 + $diff_ovn3->i / 1440, 2); ?></td> <!-- OVN3 OVEN TAMBAH OBAT SETELAH PRT -->
+            <td><?php echo round($diff_cpt1->d + $diff_cpt1->h / 24 + $diff_cpt1->i / 1440, 2); ?></td> <!-- CPT1 COMPACT -->
+            <td><?php echo round($diff_fin1->d + $diff_fin1->h / 24 + $diff_fin1->i / 1440, 2); ?></td> <!-- FIN1 FINISHING 1 -->
+            <td><?php echo round($diff_fnj1->d + $diff_fnj1->h / 24 + $diff_fnj1->i / 1440, 2); ?></td> <!-- FNJ1 FINISHING JADI 1 -->
+            <td><?php echo round($diff_stm1->d + $diff_stm1->h / 24 + $diff_stm1->i / 1440, 2); ?></td> <!-- STM1 STEAM FINISHING -->
+            <td><?php echo round($diff_stm2->d + $diff_stm2->h / 24 + $diff_stm2->i / 1440, 2); ?></td> <!-- STM2 STEAM PRINTING -->
+            <td><?php echo round($diff_tdr1->d + $diff_tdr1->h / 24 + $diff_tdr1->i / 1440, 2); ?></td> <!-- TDR1 TUMBLE DRY -->
+            <td><?php echo round($diff_shr3->d + $diff_shr3->h / 24 + $diff_shr3->i / 1440, 2); ?></td> <!-- SHR3 SHEARING FINISHED FACE -->
+            <td><?php echo round($diff_shr4->d + $diff_shr4->h / 24 + $diff_shr4->i / 1440, 2); ?></td> <!-- SHR4 SHEARING FINISHED BACK -->
+            <td><?php echo round($diff_shr5->d + $diff_shr5->h / 24 + $diff_shr5->i / 1440, 2); ?></td> <!-- SHR5 SHEARING FINISHED FACE AFTER PRT -->
+            <td><?php echo round($diff_sue3->d + $diff_sue3->h / 24 + $diff_sue3->i / 1440, 2); ?></td> <!-- SUE3 SUEDING FINISHED FACE -->
+            <td><?php echo round($diff_sue4->d + $diff_sue4->h / 24 + $diff_sue4->i / 1440, 2); ?></td> <!-- SUE4 SUEDING FINISED BACK -->
+            <td><?php echo round($diff_flt1->d + $diff_flt1->h / 24 + $diff_flt1->i / 1440, 2); ?></td> <!-- FLT1 PRINTING FLAT -->
+            <td><?php echo round($diff_ins2->d + $diff_ins2->h / 24 + $diff_ins2->i / 1440, 2); ?></td> <!-- INS2 INSPECTION (PRINTING) -->
+            <td><?php echo round($diff_rot1->d + $diff_rot1->h / 24 + $diff_rot1->i / 1440, 2); ?></td> <!-- ROT1 PRINTING ROTARY -->
+            <td><?php echo round($diff_spt1->d + $diff_spt1->h / 24 + $diff_spt1->i / 1440, 2); ?></td> <!-- SPT1 SOAPING AFTER PRINTING -->
+            <td><?php echo round($diff_sub1->d + $diff_sub1->h / 24 + $diff_sub1->i / 1440, 2); ?></td> <!-- SUB1 PRINTING SUBLIM -->
+            <td><?php echo round($diff_cur1->d + $diff_cur1->h / 24 + $diff_cur1->i / 1440, 2); ?></td> <!-- CUR1 CURING -->
+            <td><?php echo round($diff_ins3->d + $diff_ins3->h / 24 + $diff_ins3->i / 1440, 2); ?></td> <!-- INS3 FINAL INSPECTION -->
+            <td><?php echo round($diff_qcf4->d + $diff_qcf4->h / 24 + $diff_qcf4->i / 1440, 2); ?></td> <!-- QCF4 QC FINAL -->
+            <td><?php echo round($diff_cnp1->d + $diff_cnp1->h / 24 + $diff_cnp1->i / 1440, 2); ?></td> <!-- CNP1 CUTTING + PACKING -->
+            <td><?php echo round($diff_gkj1->d + $diff_gkj1->h / 24 + $diff_gkj1->i / 1440, 2); ?></td> <!-- GKJ1 MUTASI -->
+            <td><?php echo round($diff_ppc4->d + $diff_ppc4->h / 24 + $diff_ppc4->i / 1440, 2); ?></td> <!-- PPC4 KK OK -->
+            <td><?php echo $diff_waktuawal_exluding_testing+3; ?></td> <!-- TOTAL LEADTIME -->
         </tr>
         <?php } ?>
     </tbody>
