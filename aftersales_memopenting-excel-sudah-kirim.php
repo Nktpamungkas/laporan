@@ -11,41 +11,23 @@
 <table>
     <thead>
         <tr>
-            <th>TGL BUKA KARTU</th>
+            <th>TGL BUKA BON ORDER</th>
             <th>PELANGGAN</th>
             <th>NO. ORDER</th>
             <th>NO. PO</th>
-            <th>KETERANGAN PRODUCT</th>
-            <th>LEBAR</th>
-            <th>GRAMASI</th>
+            <th>ARTICLE GROUP</th>
+            <th>ARTICLE CODE</th>
             <th>WARNA</th>
-            <th>NO WARNA</th>
-            <th>DELIVERY</th>
-            <th>BAGI KAIN TGL</th>
-            <th>ROLL</th>
-            <th>BRUTO/BAGI KAIN</th>
-            <th title="Sumber data: &#013; 1. Production Order &#013; 2. Reservation &#013; 3. KFF/KGF User Primary Quantity">QTY SALINAN</th>
-            <th>QTY PACKING</th>
-            <th>NETTO(kg)</th>
-            <th>NETTO(yd)</th>
-            <th>TGL SURAT JALAN</th>
-            <th>NO. SURAT JALAN</th>
-            <th>QTY KIRIM (kg)</th>
-            <th>QTY KIRIM (yd)</th>
-            <th>DELAY</th>
-            <th>KODE DEPT</th>
-            <th>STATUS TERAKHIR</th>
-            <th>DELAY PROGRESS STATUS</th>
-            <th>PROGRESS STATUS</th>
-            <th>JAM (IN - OUT)</th>
-            <th>ALUR PROSES</th>
-            <th>LOT</th>
             <th>NO DEMAND</th>
             <th>NO KARTU KERJA</th>
-            <th>CATATAN PO GREIGE</th>
-            <th>TARGET SELESAI</th>
-            <th>KETERANGAN</th>
-            <th>ORIGINAL PD CODE</th>
+            <th>QTY PACKING (KG)</th>
+            <th>QTY PACKING (YD)</th>
+            <th>QTY ORDER(KG) NETTO</th> 
+            <th>QTY ORDER(YD) NETTO</th>
+            <th>TGL SURAT JALAN</th>
+            <th>NO. SURAT JALAN</th>
+            <th>QTY KIRIM (KG)</th>
+            <th>QTY KIRIM (YD)</th>
         </tr>
     </thead>
     <tbody>
@@ -65,8 +47,8 @@
             $article_code2  = $_GET['article_code'];
             $langganan_2    = $_GET['langganan'];
             $warna_2        = $_GET['warna'];
-            $tahun_2        = $_GET['tahun'];
-            $bulan_2        = $_GET['bulan'];
+            $tgl1_orderdate_2 = $_GET['tgl1_orderdate'];
+            $tgl2_orderdate_2 = $_GET['tgl2_orderdate'];
 
             if($prod_order_2){
                 $where_prodorder2    = "NO_KK  = '$prod_order'";
@@ -80,13 +62,13 @@
             }
 
             if($no_order_2){
-                $where_order2            = "NO_ORDER LIKE '%$no_order_2%' AND YEAR(ORDERDATE) = '$tahun_2' AND MONTH(ORDERDATE) = '$bulan_2'";
+                $where_order2            = "NO_ORDER LIKE '%$no_order_2%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
             }else{
-                $where_order2            = "";
+                $where_order2            = "aa";
             }
 
             if($tgl1_2 & $tgl2_2){
-                $where_date2     = "DELIVERY BETWEEN '$tgl1_2' AND '$tgl2_2'";
+                $where_date2     = "DELIVERY BETWEEN '$tgl1_2' AND '$tgl2_2' AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')";
             }else{
                 $where_date2     = "";
             }
@@ -101,19 +83,28 @@
                 $where_article2          = "";
             }
             if($langganan_2){
-                $where_langganan2            = "ORDPRNCUSTOMERSUPPLIERCODE = '$langganan_2' AND YEAR(ORDERDATE) = '$tahun_2' AND MONTH(ORDERDATE) = '$bulan_2'";
+                $where_langganan2            = "ORDPRNCUSTOMERSUPPLIERCODE = '$langganan_2' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND  '$tgl2_orderdate_2'";
             }else{
                 $where_langganan2            = "";
             }
             if($warna_2){
-                $where_warna2            = "NO_WARNA = '$warna_2' AND YEAR(ORDERDATE) = '$tahun_2' AND MONTH(ORDERDATE) = '$bulan_2'";
+                $where_warna2            = "NO_WARNA = '$warna_2' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
             }else{
                 $where_warna2            = "";
+            }
+            if($tgl1_orderdate_2 && $tgl2_orderdate_2){
+                if($no_order_2){
+                    $where_datecreatesalesorder2 = "";
+                }elseif($langganan_2){
+                    $where_datecreatesalesorder2 = "";
+                }else{
+                    $where_datecreatesalesorder2 = "CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2' AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')";
+                }
             }
             if($operation_2){
                 $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc_aftersales WHERE OPERATIONCODE = '$operation_2' AND ACCESS_TO = 'MEMO W OPR' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
             }else{
-                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc_aftersales WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 $where_no_po2 $where_article2 $where_langganan2 $where_warna2 AND ACCESS_TO = 'MEMO AFTERSALES' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
+                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc_aftersales WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 $where_no_po2 $where_article2 $where_langganan2 $where_warna2 $where_datecreatesalesorder2 AND ACCESS_TO = 'MEMO AFTERSALES' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY CREATIONDATETIME_SALESORDER ASC";
             }
             $stmt   = mysqli_query($con_nowprd,$sqlDB2);
             while ($rowdb2 = mysqli_fetch_array($stmt)) {
@@ -384,146 +375,27 @@
                                                         NO_ORDER = '$rowdb2[NO_ORDER]'
                                                         AND LOTCODE = '$rowdb2[NO_KK]'");
             $row_suratjalan = db2_fetch_assoc($q_suratjalan);
-
-            if($row_suratjalan['CODE'] == 'EXPORT'){
-                $q_roll     = db2_exec($conn1, "SELECT
-                                                    ise.ITEMTYPEAFICODE,
-                                                    COUNT(ise.COUNTROLL) AS ROLL,
-                                                    SUM(ise.QTY_KG) AS QTY_SJ_KG,
-                                                    SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD,
-                                                    inpe.PROJECT,
-                                                    ise.ADDRESSEE,
-                                                    ise.BRAND_NM
-                                                FROM
-                                                    ITXVIEW_SURATJALAN_EXIM2 ise 
-                                                LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
-                                                WHERE 
-                                                    ise.PROVISIONALCODE = '$row_suratjalan[PROVISIONALCODE]' AND ise.ITEMTYPEAFICODE = '$row_suratjalan[ITEMTYPEAFICODE]'
-                                                GROUP BY 
-                                                    ise.ITEMTYPEAFICODE,
-                                                    inpe.PROJECT,
-                                                    ise.ADDRESSEE,
-                                                    ise.BRAND_NM");
-                $d_roll     = db2_fetch_assoc($q_roll);
-                if($d_ket_foc['ROLL'] > 0 AND $d_ket_foc['KG'] > 0 AND $d_ket_foc['YARD_MTR'] > 0) { // MENGHITUNG JIKA FOC SEBAGIAN, MAKA ROLL UNTUK FOC DIPISAH DARI KESELURUHAN
-                    echo $d_roll['ROLL'] - $d_ket_foc['ROLL'];
-                }else{
-                    echo $d_roll['ROLL'];
-                }
-            }else{
-                $q_roll     = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
-                                                        SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
-                                                        SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD,
-                                                        LOTCODE
-                                                FROM 
-                                                    ITXVIEWALLOCATION0 
-                                                WHERE 
-                                                    CODE = '$row_suratjalan[CODE]' AND LOTCODE = '$row_suratjalan[LOTCODE]'
-                                                GROUP BY 
-                                                    LOTCODE");
-                $d_roll     = db2_fetch_assoc($q_roll);
-                echo $d_roll['ROLL'];
-            }
         ?>
         <?php if (!empty($row_suratjalan['PROVISIONALCODE'])) : ?>
             <?php if($cek_operation == "MUNCUL" OR $cek_operation == NULL) : ?>
                 <tr>
-                    <td><?= $rowdb2['ORDERDATE']; ?></td> <!-- TGL TERIMA ORDER -->
+                    <td><?= $rowdb2['CREATIONDATETIME_SALESORDER']; ?></td> <!-- TGL BUKA BON ORDER -->
                     <td><?= $rowdb2['PELANGGAN']; ?></td> <!-- PELANGGAN -->
                     <td><?= $rowdb2['NO_ORDER']; ?></td> <!-- NO. ORDER -->
                     <td><?= $rowdb2['NO_PO']; ?></td> <!-- NO. PO -->
-                    <td><?= $rowdb2['KETERANGAN_PRODUCT']; ?></td> <!-- KETERANGAN PRODUCT -->
-                    <td>
-                        <?php
-                            $q_lebar = db2_exec($conn1, "SELECT * FROM ITXVIEWLEBAR WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]' AND ORDERLINE = '$rowdb2[ORDERLINE]'");
-                            $d_lebar = db2_fetch_assoc($q_lebar);
-                        ?>
-                        <?= number_format($d_lebar['LEBAR'], 0); ?>
-                    </td> <!-- LEBAR -->
-                    <td>
-                        <?php
-                            $q_gramasi = db2_exec($conn1, "SELECT * FROM ITXVIEWGRAMASI WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]' AND ORDERLINE = '$rowdb2[ORDERLINE]'");
-                            $d_gramasi = db2_fetch_assoc($q_gramasi);
-                            ?>
-                            <?php
-                            if ($d_gramasi['GRAMASI_KFF']) {
-                                echo $d_gramasi['GRAMASI_KFF'];
-                            } else {
-                                echo $d_gramasi['GRAMASI_FKF'];
-                            }
-                        ?>
-                    </td> <!-- GRAMASI -->
+                    <td><?= $rowdb2['ARTICLE_GROUP']; ?></td> <!-- ARTICLE GROUP -->
+                    <td><?= $rowdb2['ARTICLE_CODE']; ?></td> <!-- ARTICLE CODE -->
                     <td><?= $rowdb2['WARNA']; ?></td> <!-- WARNA -->
-                    <td><?= $rowdb2['NO_WARNA']; ?></td> <!-- NO WARNA -->
-                    <td><?= $rowdb2['DELIVERY']; ?></td> <!-- DELIVERY -->
-                    <td>
-                        <?php
-                            $q_tglbagikain = db2_exec($conn1, "SELECT * FROM ITXVIEW_TGLBAGIKAIN WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'");
-                            $d_tglbagikain = db2_fetch_assoc($q_tglbagikain);
-                        ?>
-                        <?= $d_tglbagikain['TRANSACTIONDATE']; ?>
-                    </td> <!-- BAGI KAIN TGL -->
-                    <td>
-                        <?php
-                            // KK GABUNG
-                            // $q_roll_gabung      = db2_exec($conn1, "SELECT 
-                            //                                     COUNT(*) AS ROLL
-                            //                                 FROM 
-                            //                                     PRODUCTIONDEMAND p 
-                            //                                 LEFT JOIN STOCKTRANSACTION s ON s.ORDERCODE = p.CODE
-                            //                                 WHERE 
-                            //                                     p.RESERVATIONORDERCODE = '$rowdb2[DEMAND]'");
-                            // $d_roll_gabung      = db2_fetch_assoc($q_roll_gabung);
-
-                            // KK TIDAK GABUNG
-                            $q_roll_tdk_gabung  = db2_exec($conn1, "SELECT count(*) AS ROLL, s2.PRODUCTIONORDERCODE
-                                                                        FROM STOCKTRANSACTION s2 
-                                                                        WHERE s2.ITEMTYPECODE ='KGF' AND s2.PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'
-                                                                        GROUP BY s2.PRODUCTIONORDERCODE");
-                            $d_roll_tdk_gabung  = db2_fetch_assoc($q_roll_tdk_gabung);
-
-                            // if(!empty($d_roll_gabung['ROLL'])){
-                                // $roll   = $d_roll_gabung['ROLL'];
-                            // }else{
-                                $roll   = $d_roll_tdk_gabung['ROLL'];
-                            // }
-                        ?>
-                        <?= $roll; ?>
-                    </td> <!-- ROLL -->
-                    <td>
-                        <?php
-                            $q_orig_pd_code     = db2_exec($conn1, "SELECT 
-                                                                        *, a.VALUESTRING AS ORIGINALPDCODE
-                                                                    FROM 
-                                                                        PRODUCTIONDEMAND p 
-                                                                    LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'OriginalPDCode'
-                                                                    WHERE p.CODE = '$rowdb2[DEMAND]'");
-                            $d_orig_pd_code     = db2_fetch_assoc($q_orig_pd_code);
-                        ?>
-                        <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?>
-                            0
-                        <?php else : ?>
-                            <?= number_format($rowdb2['QTY_BAGIKAIN'],2); ?>
-                        <?php endif; ?>
-                    </td> <!-- BRUTO/BAGI KAIN -->
-                    <td>
-                        <?php 
-                            $q_qtysalinan = db2_exec($conn1, "SELECT * FROM PRODUCTIONDEMAND WHERE CODE = '$rowdb2[DEMAND]'");
-                            $d_qtysalinan = db2_fetch_assoc($q_qtysalinan);
-                        ?>
-                        <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?>
-                            <?= number_format($d_qtysalinan['USERPRIMARYQUANTITY'],3) ?>
-                        <?php else : ?>
-                            0
-                        <?php endif; ?>
-                    </td> <!-- QTY SALINAN -->
+                    <td><a target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $rowdb2['DEMAND']; ?>&prod_order=<?= $rowdb2['NO_KK']; ?>">`<?= $rowdb2['DEMAND']; ?></a></td> <!-- DEMAND -->
+                    <td>`<?= $rowdb2['NO_KK']; ?></td> <!-- NO KARTU KERJA -->
                     <td>
                         <?php
                             $q_qtypacking = db2_exec($conn1, "SELECT * FROM ITXVIEW_QTYPACKING WHERE DEMANDCODE = '$rowdb2[DEMAND]'");
                             $d_qtypacking = db2_fetch_assoc($q_qtypacking);
                             echo $d_qtypacking['QTY_PACKING'];
                         ?>
-                    </td> <!-- QTY PACKING -->
+                    </td> <!-- QTY PACKING (KG) -->
+                    <td><?= $d_qtypacking['QTY_PACKING_YARD']; ?></td><!-- QTY PACKING (YD) -->
                     <td><?= number_format($rowdb2['NETTO'], 0); ?></td> <!-- NETTO KG-->
                     <td>
                         <?php 
@@ -534,7 +406,7 @@
                     </td> <!-- NETTO YD-->
                     <td><?= $row_suratjalan['GOODSISSUEDATE']; ?></td> <!-- TGL SURAT JALAN -->
                     <td><?= $row_suratjalan['PROVISIONALCODE']; ?></td> <!-- NO. SURAT JALAN -->
-                    <td><?= number_format($d_roll['QTY_SJ_KG'], 2); ?></td> <!-- QTY KIRIM (kg) -->
+                    <td><?= number_format($d_roll['QTY_SJ_KG'], 2); ?></td> <!-- QTY KIRIM (KG) -->
                     <td>
                         <?php 
                             if($row_suratjalan['PRICEUNITOFMEASURECODE'] == 'm'){
@@ -543,53 +415,7 @@
                                 echo number_format($d_roll['QTY_SJ_YARD'], 2);
                             }
                         ?>
-                    </td> <!-- QTY KIRIM (yd) -->
-                    <td><?= $rowdb2['DELAY']; ?></td> <!-- DELAY -->
-                    <td><?= $kode_dept; ?></td> <!-- KODE DEPT -->
-                    <td><?= $status_terakhir; ?> (<?= $jam_status_terakhir; ?>)</td> <!-- STATUS TERAKHIR -->
-                    <td><?= $delay_progress_status; ?></td> <!-- DELAY PROGRESS STATUS -->
-                    <td><?= $status_operation; ?></td> <!-- PROGRESS STATUS -->
-                    <td>
-                        <?php
-                            session_start();
-                            require_once "koneksi.php";
-                            $q_jam  = db2_exec($conn1, "SELECT
-                                                            iptip.MULAI,
-                                                            iptop.SELESAI
-                                                        FROM 
-                                                            PRODUCTIONDEMANDSTEP p 
-                                                        LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
-                                                        LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
-                                                        LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
-                                                        WHERE
-                                                            p.PRODUCTIONORDERCODE  = '$rowdb2[NO_KK]' AND p.PRODUCTIONDEMANDCODE = '$rowdb2[DEMAND]' AND p.GROUPSTEPNUMBER $groupstep_option
-                                                        ORDER BY p.GROUPSTEPNUMBER ASC LIMIT 1");
-                            $d_jam  = db2_fetch_assoc($q_jam);
-                            if(!empty($d_jam['MULAI'])){
-                                echo $d_jam['MULAI'].' - '.$d_jam['SELESAI'];
-                            }else{
-                                echo '-';
-                            }
-                        ?>
-                    </td><!-- JAM -->
-                    <td></td><!-- ALUR PROSES -->
-                    <td>`<?= $rowdb2['LOT']; ?></td> <!-- LOT -->
-                    <td><a target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $rowdb2['DEMAND']; ?>&prod_order=<?= $rowdb2['NO_KK']; ?>">`<?= $rowdb2['DEMAND']; ?></a></td> <!-- DEMAND -->
-                    <td>`<?= $rowdb2['NO_KK']; ?></td> <!-- NO KARTU KERJA -->
-                    <td>
-                        <?php
-                            $sql_benang_booking_new		= db2_exec($conn1, "SELECT * FROM ITXVIEW_BOOKING_NEW WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]'
-                                                                                                    AND ORDERLINE = '$rowdb2[ORDERLINE]'");
-                            $r_benang_booking_new		= db2_fetch_assoc($sql_benang_booking_new);
-                            $d_benang_booking_new		= $r_benang_booking_new['SALESORDERCODE'];
-
-                        ?>
-                        <!-- <a href="http://online.indotaichen.com/laporan/ppc_catatan_po_greige.php?" target="_blank">Detail</a> -->
-                        <?php if($d_benang_booking_new){ echo $d_benang_booking_new.'. Greige Ready'; } ?>
-                    </td> <!-- CATATAN PO GREIGE -->
-                    <td></td> <!-- TARGET SELESAI -->
-                    <td><?= $rowdb2['KETERANGAN']; ?></td> <!-- KETERANGAN -->
-                    <td><?= $d_orig_pd_code['ORIGINALPDCODE']; ?></td> <!-- ORIGINAL PD CODE -->
+                    </td> <!-- QTY KIRIM (YD) -->
                 </tr>
             <?php endif; ?>
         <?php endif; ?>

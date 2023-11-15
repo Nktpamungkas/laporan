@@ -33,6 +33,7 @@
     <link rel="stylesheet" type="text/css" href="files\bower_components\bootstrap-multiselect\css\bootstrap-multiselect.css">
     <link rel="stylesheet" type="text/css" href="files\bower_components\multiselect\css\multi-select.css">
 </head>
+<?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132') : ?>
 <?php require_once 'header.php'; ?>
 <body>
     <div class="pcoded-content">
@@ -153,39 +154,23 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
-                                                    <h4 class="sub-title">Tahun buat KK</h4>
-                                                    <select class="form-control" name="tahun" id="tahun">
-                                                        <option selected value="">pilih tahun</option>
-                                                        <option value="2022" <?php if($_POST['tahun'] == '2022'){ echo 'SELECTED'; } ?>>2022</option>
-                                                        <option value="2023" <?php if($_POST['tahun'] == '2023'){ echo 'SELECTED'; } ?>>2023</option>
-                                                    </select>
+                                                    <h4 class="sub-title">dari tgl Order Create</h4>
+                                                    <input type="date" name="tgl1_orderdate" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1_orderdate']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
-                                                    <h4 class="sub-title">Bulan buat KK</h4>
-                                                    <select class="form-control" name="bulan" id="bulan">
-                                                        <option selected value="">pilih bulan</option>
-                                                        <option value="1" <?php if($_POST['bulan'] == '1'){ echo 'SELECTED'; } ?>>1</option>
-                                                        <option value="2" <?php if($_POST['bulan'] == '2'){ echo 'SELECTED'; } ?>>2</option>
-                                                        <option value="3" <?php if($_POST['bulan'] == '3'){ echo 'SELECTED'; } ?>>3</option>
-                                                        <option value="4" <?php if($_POST['bulan'] == '4'){ echo 'SELECTED'; } ?>>4</option>
-                                                        <option value="5" <?php if($_POST['bulan'] == '5'){ echo 'SELECTED'; } ?>>5</option>
-                                                        <option value="6" <?php if($_POST['bulan'] == '6'){ echo 'SELECTED'; } ?>>6</option>
-                                                        <option value="7" <?php if($_POST['bulan'] == '7'){ echo 'SELECTED'; } ?>>7</option>
-                                                        <option value="8" <?php if($_POST['bulan'] == '8'){ echo 'SELECTED'; } ?>>8</option>
-                                                        <option value="9" <?php if($_POST['bulan'] == '9'){ echo 'SELECTED'; } ?>>9</option>
-                                                        <option value="10" <?php if($_POST['bulan'] == '10'){ echo 'SELECTED'; } ?>>10</option>
-                                                        <option value="11" <?php if($_POST['bulan'] == '11'){ echo 'SELECTED'; } ?>>11</option>
-                                                        <option value="12" <?php if($_POST['bulan'] == '12'){ echo 'SELECTED'; } ?>>12</option>
-                                                    </select>
+                                                    <h4 class="sub-title">sampai tgl Order Create</h4>
+                                                    <input type="date" name="tgl2_orderdate" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2_orderdate']; } ?>">
+
                                                 </div>
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
                                                     <a class="btn btn-warning" href="aftersales_memopenting_order.php">Reset</a>
                                                     <?php if (isset($_POST['submit'])) : ?>
                                                         <a class="btn btn-mat btn-success" title="Untuk statusnya sudah kirim" 
-                                                            href="aftersales_memopenting-excel-all.php?prod_order=<?= $_POST['prod_order'] ?>&prod_demand=<?= $_POST['prod_demand'] ?>&no_order=<?= $_POST['no_order'] ?>&tgl1=<?= $_POST['tgl1'] ?>&tgl2=<?= $_POST['tgl2'] ?>&no_po=<?= $_POST['no_po'] ?>&article_group=<?= $_POST['article_group'] ?>&article_code=<?= $_POST['article_code'] ?>&langganan=<?= $_POST['langganan']?>&warna=<?= $_POST['warna'] ?>&tahun=<?= $_POST['tahun'] ?>&bulan=<?= $_POST['bulan'] ?>">CETAK EXCEL</a>
+                                                            href="aftersales_memopenting-excel-sudah-kirim.php?prod_order=<?= $_POST['prod_order'] ?>&prod_demand=<?= $_POST['prod_demand'] ?>&no_order=<?= $_POST['no_order'] ?>&tgl1=<?= $_POST['tgl1'] ?>&tgl2=<?= $_POST['tgl2'] ?>&no_po=<?= $_POST['no_po'] ?>&article_group=<?= $_POST['article_group'] ?>&article_code=<?= $_POST['article_code'] ?>&langganan=<?= $_POST['langganan']?>&warna=<?= $_POST['warna'] ?>&tahun=<?= $_POST['tahun'] ?>&bulan=<?= $_POST['bulan'] ?>&tgl1_orderdate=<?= $_POST['tgl1_orderdate'] ?>&tgl2_orderdate=<?= $_POST['tgl2_orderdate'] ?>">CETAK EXCEL</a>
+                                                        
                                                         <a class="btn btn-mat btn-warning" title="Untuk statusnya belum kirim" 
-                                                            href="aftersales_memopenting-excel.php?prod_order=<?= $_POST['prod_order'] ?>&prod_demand=<?= $_POST['prod_demand'] ?>&no_order=<?= $_POST['no_order'] ?>&tgl1=<?= $_POST['tgl1'] ?>&tgl2=<?= $_POST['tgl2'] ?>&no_po=<?= $_POST['no_po'] ?>&article_group=<?= $_POST['article_group'] ?>&article_code=<?= $_POST['article_code'] ?>&langganan=<?= $_POST['langganan']?>&warna=<?= $_POST['warna'] ?>&tahun=<?= $_POST['tahun'] ?>&bulan=<?= $_POST['bulan'] ?>">MEMO PENTING</a>
+                                                            href="aftersales_memopenting-excel-belum-kirim.php?prod_order=<?= $_POST['prod_order'] ?>&prod_demand=<?= $_POST['prod_demand'] ?>&no_order=<?= $_POST['no_order'] ?>&tgl1=<?= $_POST['tgl1'] ?>&tgl2=<?= $_POST['tgl2'] ?>&no_po=<?= $_POST['no_po'] ?>&article_group=<?= $_POST['article_group'] ?>&article_code=<?= $_POST['article_code'] ?>&langganan=<?= $_POST['langganan']?>&warna=<?= $_POST['warna'] ?>&tahun=<?= $_POST['tahun'] ?>&bulan=<?= $_POST['bulan'] ?>&tgl1_orderdate=<?= $_POST['tgl1_orderdate'] ?>&tgl2_orderdate=<?= $_POST['tgl2_orderdate'] ?>">MEMO PENTING</a>
                                                     <?php endif; ?>
                                                     <!-- <p>Warning : Jika melakukan<b>Reset Data</b>, pastikan tidak ada yang menggunakan Memo Penting</p> -->
                                                 </div>
@@ -201,7 +186,7 @@
                                                 <table id="lang-dt" class="table table-striped table-bordered nowrap">
                                                     <thead>
                                                         <tr>
-                                                            <th>TGL BUKA KARTU</th>
+                                                            <th>TGL BUKA BON ORDER</th>
                                                             <th>PELANGGAN</th>
                                                             <th>NO. ORDER</th>
                                                             <th>NO. PO</th>
@@ -241,7 +226,7 @@
                                                     </thead>
                                                     <tbody> 
                                                         <?php 
-                                                            ini_set("error_reporting", 0);
+                                                            ini_set("error_reporting", 1);
                                                             session_start();
                                                             require_once "koneksi.php";
                                                             $prod_order     = $_POST['prod_order'];
@@ -256,8 +241,8 @@
                                                             $langganan      = $_POST['langganan'];
                                                             $warna          = $_POST['warna'];
 
-                                                            $tahun          = $_POST['tahun'];
-                                                            $bulan          = $_POST['bulan'];
+                                                            $tgl1_orderdate = $_POST['tgl1_orderdate'];
+                                                            $tgl2_orderdate = $_POST['tgl2_orderdate'];
 
                                                             if($prod_order){
                                                                 $where_prodorder        = "NO_KK  = '$prod_order'";
@@ -270,7 +255,7 @@
                                                                 $where_proddemand       = "";
                                                             }
                                                             if($no_order){
-                                                                $where_order            = "NO_ORDER LIKE '%$no_order%' AND YEAR(ORDERDATE) = '$tahun' AND MONTH(ORDERDATE) = '$bulan'";
+                                                                $where_order            = "NO_ORDER LIKE '%$no_order%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate' AND '$tgl2_orderdate'";
                                                             }else{
                                                                 $where_order            = "";
                                                             }
@@ -290,14 +275,23 @@
                                                                 $where_article          = "";
                                                             }
                                                             if($langganan){
-                                                                $where_langganan            = "ORDPRNCUSTOMERSUPPLIERCODE = '$langganan' AND YEAR(ORDERDATE) = '$tahun' AND MONTH(ORDERDATE) = '$bulan'";
+                                                                $where_langganan            = "ORDPRNCUSTOMERSUPPLIERCODE = '$langganan' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate' AND '$tgl2_orderdate'";
                                                             }else{
                                                                 $where_langganan            = "";
                                                             }
                                                             if($warna){
-                                                                $where_warna            = "NO_WARNA = '$warna' AND YEAR(ORDERDATE) = '$tahun' AND MONTH(ORDERDATE) = '$bulan'";
+                                                                $where_warna            = "NO_WARNA = '$warna'  AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate' AND '$tgl2_orderdate'";
                                                             }else{
                                                                 $where_warna            = "";
+                                                            }
+                                                            if($tgl1_orderdate && $tgl2_orderdate){
+                                                                if($no_order){
+                                                                    $where_datecreatesalesorder = "";
+                                                                }elseif($langganan){
+                                                                    $where_datecreatesalesorder = "";
+                                                                }else{
+                                                                    $where_datecreatesalesorder = "CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate' AND '$tgl2_orderdate' AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')";
+                                                                }
                                                             }
 
                                                             if($operation){
@@ -331,10 +325,10 @@
                                                                 $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc_aftersales(OPERATIONCODE,ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
                                                             }else{
                                                                 // ITXVIEW_MEMOPENTINGPPC
-                                                                $itxviewmemo    = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article $where_langganan $where_warna ");
-                                                                $num_rows       = db2_num_rows($itxviewmemo);
+                                                                $itxviewmemo    = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article $where_langganan $where_warna $where_datecreatesalesorder");
                                                                 while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
                                                                     $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['CREATIONDATETIME_SALESORDER']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['ORDPRNCUSTOMERSUPPLIERCODE']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['NO_ORDER']))."',"
@@ -360,7 +354,7 @@
                                                                                             ."'".'MEMO AFTERSALES'."')";
                                                                 }
                                                                 $value_itxviewmemo        = implode(',', $r_itxviewmemo);
-                                                                $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc_aftersales(ORDERDATE,ORDPRNCUSTOMERSUPPLIERCODE,PELANGGAN,NO_ORDER,NO_PO,ARTICLE_GROUP,ARTICLE_CODE,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,LOT,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
+                                                                $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc_aftersales(ORDERDATE,CREATIONDATETIME_SALESORDER,ORDPRNCUSTOMERSUPPLIERCODE,PELANGGAN,NO_ORDER,NO_PO,ARTICLE_GROUP,ARTICLE_CODE,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,LOT,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
                                                             }
                                                             
                                                             // --------------------------------------------------------------------------------------------------------------- //
@@ -375,9 +369,8 @@
                                                             $article_code2  = $_POST['article_code'];
                                                             $langganan_2    = $_POST['langganan'];
                                                             $warna_2        = $_POST['warna'];
-
-                                                            $tahun_2        = $_POST['tahun'];
-                                                            $bulan_2        = $_POST['bulan'];
+                                                            $tgl1_orderdate_2 = $_POST['tgl1_orderdate'];
+                                                            $tgl2_orderdate_2 = $_POST['tgl2_orderdate'];
 
                                                             if($prod_order_2){
                                                                 $where_prodorder2    = "NO_KK  = '$prod_order'";
@@ -391,13 +384,13 @@
                                                             }
 
                                                             if($no_order_2){
-                                                                $where_order2            = "NO_ORDER LIKE '%$no_order_2%' AND YEAR(ORDERDATE) = '$tahun_2' AND MONTH(ORDERDATE) = '$bulan_2'";
+                                                                $where_order2            = "NO_ORDER LIKE '%$no_order_2%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
                                                             }else{
                                                                 $where_order2            = "";
                                                             }
 
                                                             if($tgl1_2 & $tgl2_2){
-                                                                $where_date2     = "DELIVERY BETWEEN '$tgl1_2' AND '$tgl2_2'";
+                                                                $where_date2     = "DELIVERY BETWEEN '$tgl1_2' AND '$tgl2_2' AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')";
                                                             }else{
                                                                 $where_date2     = "";
                                                             }
@@ -412,19 +405,28 @@
                                                                 $where_article2          = "";
                                                             }
                                                             if($langganan_2){
-                                                                $where_langganan2            = "ORDPRNCUSTOMERSUPPLIERCODE = '$langganan_2' AND YEAR(ORDERDATE) = '$tahun_2' AND MONTH(ORDERDATE) = '$bulan_2'";
+                                                                $where_langganan2            = "ORDPRNCUSTOMERSUPPLIERCODE = '$langganan_2' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND  '$tgl2_orderdate_2'";
                                                             }else{
                                                                 $where_langganan2            = "";
                                                             }
                                                             if($warna_2){
-                                                                $where_warna2            = "NO_WARNA = '$warna_2' AND YEAR(ORDERDATE) = '$tahun_2' AND MONTH(ORDERDATE) = '$bulan_2'";
+                                                                $where_warna2            = "NO_WARNA = '$warna_2' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
                                                             }else{
                                                                 $where_warna2            = "";
+                                                            }
+                                                            if($tgl1_orderdate_2 && $tgl2_orderdate_2){
+                                                                if($no_order_2){
+                                                                    $where_datecreatesalesorder2 = "";
+                                                                }elseif($langganan_2){
+                                                                    $where_datecreatesalesorder2 = "";
+                                                                }else{
+                                                                    $where_datecreatesalesorder2 = "CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2' AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')";
+                                                                }
                                                             }
                                                             if($operation_2){
                                                                 $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc_aftersales WHERE OPERATIONCODE = '$operation_2' AND ACCESS_TO = 'MEMO W OPR' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
                                                             }else{
-                                                                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc_aftersales WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 $where_no_po2 $where_article2 $where_langganan2 $where_warna2 AND ACCESS_TO = 'MEMO AFTERSALES' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
+                                                                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc_aftersales WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 $where_no_po2 $where_article2 $where_langganan2 $where_warna2 $where_datecreatesalesorder2 AND ACCESS_TO = 'MEMO AFTERSALES' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY CREATIONDATETIME_SALESORDER ASC";
                                                             }
                                                             $stmt   = mysqli_query($con_nowprd,$sqlDB2);
                                                             while ($rowdb2 = mysqli_fetch_array($stmt)) {
@@ -670,50 +672,10 @@
                                                                                                         NO_ORDER = '$rowdb2[NO_ORDER]'
                                                                                                         AND LOTCODE = '$rowdb2[NO_KK]'");
                                                             $row_suratjalan = db2_fetch_assoc($q_suratjalan);
-
-                                                            if($row_suratjalan['CODE'] == 'EXPORT'){
-                                                                $q_roll     = db2_exec($conn1, "SELECT
-                                                                                                    ise.ITEMTYPEAFICODE,
-                                                                                                    COUNT(ise.COUNTROLL) AS ROLL,
-                                                                                                    SUM(ise.QTY_KG) AS QTY_SJ_KG,
-                                                                                                    SUM(ise.QTY_YARDMETER) AS QTY_SJ_YARD,
-                                                                                                    inpe.PROJECT,
-                                                                                                    ise.ADDRESSEE,
-                                                                                                    ise.BRAND_NM
-                                                                                                FROM
-                                                                                                    ITXVIEW_SURATJALAN_EXIM2 ise 
-                                                                                                LEFT JOIN ITXVIEW_NO_PROJECTS_EXIM inpe ON inpe.PROVISIONALCODE = ise.PROVISIONALCODE 
-                                                                                                WHERE 
-                                                                                                    ise.PROVISIONALCODE = '$row_suratjalan[PROVISIONALCODE]' AND ise.ITEMTYPEAFICODE = '$row_suratjalan[ITEMTYPEAFICODE]'
-                                                                                                GROUP BY 
-                                                                                                    ise.ITEMTYPEAFICODE,
-                                                                                                    inpe.PROJECT,
-                                                                                                    ise.ADDRESSEE,
-                                                                                                    ise.BRAND_NM");
-                                                                $d_roll     = db2_fetch_assoc($q_roll);
-                                                                if($d_ket_foc['ROLL'] > 0 AND $d_ket_foc['KG'] > 0 AND $d_ket_foc['YARD_MTR'] > 0) { // MENGHITUNG JIKA FOC SEBAGIAN, MAKA ROLL UNTUK FOC DIPISAH DARI KESELURUHAN
-                                                                    echo $d_roll['ROLL'] - $d_ket_foc['ROLL'];
-                                                                }else{
-                                                                    echo $d_roll['ROLL'];
-                                                                }
-                                                            }else{
-                                                                $q_roll     = db2_exec($conn1, "SELECT COUNT(CODE) AS ROLL,
-                                                                                                        SUM(BASEPRIMARYQUANTITY) AS QTY_SJ_KG,
-                                                                                                        SUM(BASESECONDARYQUANTITY) AS QTY_SJ_YARD,
-                                                                                                        LOTCODE
-                                                                                                FROM 
-                                                                                                    ITXVIEWALLOCATION0 
-                                                                                                WHERE 
-                                                                                                    CODE = '$row_suratjalan[CODE]' AND LOTCODE = '$row_suratjalan[LOTCODE]'
-                                                                                                GROUP BY 
-                                                                                                    LOTCODE");
-                                                                $d_roll     = db2_fetch_assoc($q_roll);
-                                                                echo $d_roll['ROLL'];
-                                                            }
                                                         ?>
                                                         <?php if($cek_operation == "MUNCUL" OR $cek_operation == NULL) : ?>
                                                         <tr>
-                                                            <td><?= $rowdb2['ORDERDATE']; ?></td> <!-- TGL TERIMA ORDER -->
+                                                            <td><?= $rowdb2['CREATIONDATETIME_SALESORDER']; ?></td> <!-- TGL BUKA ORDER -->
                                                             <td><?= $rowdb2['PELANGGAN']; ?></td> <!-- PELANGGAN -->
                                                             <td><?= $rowdb2['NO_ORDER']; ?></td> <!-- NO. ORDER -->
                                                             <td><?= $rowdb2['NO_PO']; ?></td> <!-- NO. PO -->
@@ -885,3 +847,6 @@
     </div>
 </body>
 <?php require_once 'footer.php'; ?>
+<?php else : ?>
+    <h3><center>WEBSITE MASIH DALAM PENGEMBANGAN.</center></h3>
+<?php endif; ?>
