@@ -53,10 +53,7 @@
                                             <div class="row">
                                                 <div class="col-sm-6 col-xl-12 m-b-30">
                                                     <h4 class="sub-title">Production Demand:</h4>
-                                                    <!-- <input type="text" name="demand" class="form-control" placeholder="Wajib di isi" required value="<?php if (isset($_POST['submit'])) {
-                                                                                                                                                                echo $_POST['demand'];
-                                                                                                                                                            } ?>"> -->
-                                                    <input type="text" name="Demand" class="form-control" value="<?php if (isset($_POST['submit'])) {
+                                                        <input type="text" name="Demand" class="form-control" value="<?php if (isset($_POST['submit'])) {
                                                                                                                         echo $_POST['Demand'];
                                                                                                                     } ?>">
                                                 </div>
@@ -71,127 +68,175 @@
                                 <?php if (isset($_POST['submit']) or isset($_GET['demand'])) : ?>
                                     <div class="card">
                                         <div class="card-header">
-                                            <?php
-                                                $hostname="10.0.0.21";
-                                                $database = "NOWPRD";
-                                                $user = "db2admin";
-                                                $passworddb2 = "Sunkam@24809";
-                                                $port="25000";
-                                                $conn_string = "DRIVER={IBM ODBC DB2 DRIVER}; HOSTNAME=$hostname; PORT=$port; PROTOCOL=TCPIP; UID=$user; PWD=$passworddb2; DATABASE=$database;";
-                                                $con = db2_connect($conn_string,'', '');
+                                                <?php
+
+                                                    $hostname="10.0.0.21"; // koneksi
+                                                    $database = "NOWPRD";
+                                                    $user = "db2admin";
+                                                    $passworddb2 = "Sunkam@24809";
+                                                    $port="25000";
+                                                    $conn_string = "DRIVER={IBM ODBC DB2 DRIVER}; HOSTNAME=$hostname; PORT=$port; PROTOCOL=TCPIP; UID=$user; PWD=$passworddb2; DATABASE=$database;";
+                                                    $con = db2_connect($conn_string,'', '');
 
 
-                                                function cekDemand($noDemand) { // 1. cek data
-                                                    global $con;$query = "SELECT
-                                                    TRIM(p.CODE) AS PRODUCTIONDEMANDCODE,
-                                                    RIGHT(a.VALUESTRING, 8) AS ORIGINALPDCODE
-                                                    FROM
-                                                    PRODUCTIONDEMAND p
-                                                    LEFT JOIN ADSTORAGE a ON
-                                                    a.UNIQUEID = p.ABSUNIQUEID
-                                                    AND a.FIELDNAME = 'OriginalPDCode'   
-                                                    WHERE p.CODE = '$noDemand'"; 
+                                                    function cekDemand($noDemand) { // 1. cek data
+                                                        global $con; 
 
-                                                    $stmt=db2_exec($con,$query);
-                                                    $row = db2_fetch_assoc($stmt);
-                                                    return $row ; 
-                                                }
+                                                        $query = "SELECT
+                                                        TRIM(p.CODE) AS PRODUCTIONDEMANDCODE,
+                                                        RIGHT(a.VALUESTRING, 8) AS ORIGINALPDCODE
+                                                        FROM PRODUCTIONDEMAND p
+                                                        LEFT JOIN ADSTORAGE a ON
+                                                        a.UNIQUEID = p.ABSUNIQUEID
+                                                        AND a.FIELDNAME = 'OriginalPDCode'   
+                                                        WHERE p.CODE = '$noDemand'";
 
-                                                function cariRootDemand($noDemand) { // 2. cari root demand
-                                                    global $con; 
-                                                    $query = "SELECT
-                                                    RIGHT(a.VALUESTRING, 8) AS ORIGINALPDCODE
-                                                    FROM
-                                                    PRODUCTIONDEMAND p
-                                                    LEFT JOIN ADSTORAGE a ON
-                                                    a.UNIQUEID = p.ABSUNIQUEID
-                                                    AND a.FIELDNAME = 'OriginalPDCode'   
-                                                    WHERE LEFT(p.CODE,8) = '$noDemand'";
+                                                        $stmt=db2_exec($con,$query);
+                                                        $row = db2_fetch_assoc($stmt);
+                                                        return $row ; 
+                                                    }
 
-                                                    $stmt = db2_exec($con, $query);
-                                                    if ($stmt) {	
+                                                    function cariRootDemand($noDemand) { // 2. cari root demand
+                                                        global $con; 
+
+                                                        $query = "SELECT
+                                                        RIGHT(a.VALUESTRING, 8) AS ORIGINALPDCODE
+                                                        FROM PRODUCTIONDEMAND p
+                                                        LEFT JOIN ADSTORAGE a ON
+                                                        a.UNIQUEID = p.ABSUNIQUEID
+                                                        AND a.FIELDNAME = 'OriginalPDCode'   
+                                                        WHERE LEFT(p.CODE,8) = '$noDemand'";
+
+                                                        $stmt = db2_exec($con, $query);
+                                                        if ($stmt) {	
                                                         $row = db2_fetch_assoc($stmt);	
                                                         if ($row['ORIGINALPDCODE']) {
-                                                            $x = cariRootDemand($row['ORIGINALPDCODE']);     
-                                                            return $x ;
+                                                        $x = cariRootDemand($row['ORIGINALPDCODE']);     
+                                                        return $x ;
                                                         } else {     
-                                                            return $noDemand;
+                                                        return $noDemand;
+                                                        }
+
+                                                        }
+                                                    }
+
+                                                    function mapping($rootDemand, $parent = null) { // 3. mapping demand
+                                                        global $con; 
+
+                                                        $rootDemand = substr($rootDemand, 0, 8);
+
+                                                        $query = "SELECT
+                                                        TRIM(p.CODE) AS PRODUCTIONDEMANDCODE
+                                                        FROM PRODUCTIONDEMAND p
+                                                        LEFT JOIN ADSTORAGE a ON
+                                                        a.UNIQUEID = p.ABSUNIQUEID
+                                                        AND a.FIELDNAME = 'OriginalPDCode'   
+                                                        WHERE  RIGHT(a.VALUESTRING, 8) = '$rootDemand'";
+
+                                                        $stmt = db2_exec($con, $query,array('cursor'=>DB2_SCROLLABLE) );
+
+                                                        $output = [];
+                                                        if (db2_num_rows($stmt) > 0) {
+                                                        while ($row = db2_fetch_assoc($stmt)) {
+
+                                                        $output[] = [$row['PRODUCTIONDEMANDCODE'], $parent];
+                                                        $output = array_merge($output, mapping($row['PRODUCTIONDEMANDCODE'], $row['PRODUCTIONDEMANDCODE']));
+                                                        } 	
+                                                        } 
+                                                        return $output;
+                                                    }
+
+                                                    function konversi($resultArray, $rootDemand, $highlightValue) {
+                                                        $alphabetArray = range('a', 'z');
+                                                    
+                                                        $array_konversi = [];
+                                                        $no = 0;
+                                                    
+                                                        $array_konversi['title']['value'] = '<b>MAPPING NO DEMAND</b>';
+                                                        $array_konversi['title']['parent'] = '';
+                                                    
+                                                        $array_konversi[$rootDemand]['value'] = $rootDemand;
+                                                        $array_konversi[$rootDemand]['parent'] = 'title';
+                                                    
+                                                        foreach ($resultArray as $v1) {
+                                                            $pengait = isset($v1[0]) ? $v1[0] : null;
+                                                    
+                                                            if ($no == 0) {
+                                                                $pengait = $resultArray[$no][0];
+                                                            } else if (array_key_exists($resultArray[$no][0], $array_konversi)) {
+                                                                $pengait = $alphabetArray[$no];
+                                                            } else {
+                                                                $pengait = $resultArray[$no][0];
+                                                            }
+                                                    
+                                                            $value = ($highlightValue == $resultArray[$no][0]) ? '<div style="color:red">' . $resultArray[$no][0] . '</div>' : $resultArray[$no][0];
+                                                    
+                                                            $array_konversi[$pengait]['value'] = $value;
+                                                            $array_konversi[$pengait]['parent'] = isset($resultArray[$no][1]) ? $resultArray[$no][1] : null;
+                                                    
+                                                            $no++;
+                                                        }
+                                                    
+                                                        return $array_konversi;
+                                                    }
+
+
+                                                    $noDemand = $_POST['Demand'];
+                                                    $noDemand = substr($noDemand, 0, 8); 
+                                                    $result   = cekDemand($noDemand);
+
+                                                    if ($result) {
+                                                        
+                                                        if (empty($result['ORIGINALPDCODE'])) { //jika tidak memiliki no salinan
+                                                            echo 'Kartu Belum Pernah Disalin';
+                                                            exit;
                                                         }
                                                         
+                                                        $rootDemand     = cariRootDemand($noDemand);
+                                                        $resultArray    = mapping($rootDemand, $rootDemand);
+                                                        $array_konversi = konversi($resultArray,$rootDemand,$noDemand);
+                                                    ?>
+                                                        <link rel="stylesheet" href="dist/css/treeData.css">
+                                                        <!--TIMPA-->
+                                                    <style> 
+                                                        .tree li a{
+                                                        border: 1px solid #000;
+                                                        padding: 5px 10px;
+                                                        text-decoration: none;
+                                                        color: #000;
+                                                        font-family: arial, verdana, tahoma;
+                                                        font-size: 24px;
+                                                        display: inline-block;
+
+                                                        border-radius: 5px;
+                                                        -webkit-border-radius: 5px;
+                                                        -moz-border-radius: 5px;
+
+                                                        transition: all 0.5s;
+                                                        -webkit-transition: all 0.5s;
+                                                        -moz-transition: all 0.5s;
+                                                        }
+
+                                                        li a.disabled-link {
+                                                        pointer-events: none;
+                                                        color: #999; /* Opsional: Mengubah warna tautan menjadi abu-abu untuk menunjukkan bahwa itu dinonaktifkan */
+                                                        text-decoration: none; /* Opsional: Menghilangkan garis bawah */
+                                                        /* cursor: not-allowed; Opsional: Mengubah ikon kursor menjadi "not allowed" */
+                                                        }
+                                                    </style>
+                                                        
+                                                        <div id="tree" class="center" ></div>
+                                                        <script type="text/javascript" src="dist/js/treeData.js"></script>
+                                                        <script>
+                                                        var tree = <?php echo json_encode($array_konversi); ?>;
+                                                        TreeData(tree, "#tree");
+                                                        </script>
+                                                        
+                                                    <?php } else {
+                                                        echo "PRODUCTIONDEMANDCODE tidak ditemukan.";
                                                     }
-                                                }
 
-                                                function mapping($rootDemand, $parent = null) { // 3. mapping demand
-                                                    global $con; 
-                                                    global $tabel;
-                                                    $rootDemand = substr($rootDemand, 0, 8);
-                                                    $query = "SELECT
-                                                    TRIM(p.CODE) AS PRODUCTIONDEMANDCODE
-                                                    FROM
-                                                    PRODUCTIONDEMAND p
-                                                    LEFT JOIN ADSTORAGE a ON
-                                                    a.UNIQUEID = p.ABSUNIQUEID
-                                                    AND a.FIELDNAME = 'OriginalPDCode'   
-                                                    WHERE  RIGHT(a.VALUESTRING, 8) = '$rootDemand'";
-
-                                                    $stmt = db2_exec($con, $query,array('cursor'=>DB2_SCROLLABLE) );
-                                                $output = [];
-                                                    if (db2_num_rows($stmt) > 0) {
-                                                        while ($row = db2_fetch_assoc($stmt)) {
-                                                            $output[] = [$row['PRODUCTIONDEMANDCODE'], $parent];
-                                                            $output = array_merge($output, mapping($row['PRODUCTIONDEMANDCODE'], $row['PRODUCTIONDEMANDCODE']));
-                                                        } 	
-                                                    } 
-                                                    return $output;
-                                                }
-
-
-                                                $noDemand = $_POST['Demand'];
-                                                $noDemand = substr($noDemand, 0, 8); 
-
-                                                $result = cekDemand($noDemand);
-                                                //$result = 1;
-
-                                                if ($result) {
-                                                    
-                                                
-                                                    $rootDemand = cariRootDemand($noDemand);
-                                                    $resultArray = mapping($rootDemand, $rootDemand);
-                                                    
-                                                    $highlightValue = $noDemand;
-                                                    $resultArray = array_map(function ($row) use ($highlightValue) { // highlight
-                                                    return array_map(function ($value) use ($highlightValue) {
-                                                        return ($value === $highlightValue) ? '<div style="color:red;font-weight:bold;font-size:15px">' . $highlightValue . '</div>' : $value;
-                                                    }, $row);
-                                                    }, $resultArray); ?>
-
-                                                    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-                                                    <script type="text/javascript">
-                                                    google.charts.load('current', { 'packages': ['orgchart'] });
-                                                    google.charts.setOnLoadCallback(drawChart);
-
-                                                    function drawChart() {
-                                                    var data = new google.visualization.DataTable();
-                                                    data.addColumn('string', 'DemandChild');
-                                                    data.addColumn('string', 'DemandParent');
-                                                    //data.addColumn('string', 'ToolTip');
-
-                                                    var phpArray = <?php echo json_encode($resultArray, JSON_UNESCAPED_UNICODE); ?>;
-                                                    var jsData = phpArray.map(function (item) {
-                                                    return [item[0], item[1]]; 
-                                                    });
-                                                    data.addRows(jsData);
-                                                    var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
-                                                    chart.draw(data, { allowHtml: true });
-                                                    }
-                                                    </script>
-                                                <h3>Struktur Mapping No Demand</h3>
-                                                <div id="chart_div" style="border:dotted thin #000;width:100%;padding:10px" ></div>
-
-                                                <?php } else {
-                                                    echo "PRODUCTIONDEMANDCODE tidak ditemukan.";
-                                                }
-                                                ?>
+                                                    ?>
                                             </div>                                         
                                         </div>
                                     </div>
