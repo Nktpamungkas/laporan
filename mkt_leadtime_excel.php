@@ -187,7 +187,7 @@
                                                             LEFT JOIN ITXVIEW_POSISIKK_MUTASI ipm ON ipm.PRODUCTIONORDERCODE = im.NO_KK AND ipm.DEMANDSTEPPRODUCTIONDEMANDCODE = im.DEMAND 
                                                             WHERE
                                                                 ipm.PROGRESSSTARTPROCESSDATE BETWEEN '$tgl1' AND '$tgl2'
-                                                                -- im.NO_KK = '00083693'
+                                                                -- im.NO_KK = '00086233'
                                                                 ");
             while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
                 $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
@@ -229,7 +229,7 @@
                 $where_date2     = "";
             }
             $sqlDB2 = "SELECT DISTINCT * FROM itxview_leadtime WHERE $where_date2 AND ACCESS_TO = 'LEADTIME' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY TGL_MUTASI ASC";
-            // $sqlDB2 = "SELECT DISTINCT * FROM itxview_leadtime WHERE NO_KK = '00083693' AND ACCESS_TO = 'LEADTIME' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC ";
+            // $sqlDB2 = "SELECT DISTINCT * FROM itxview_leadtime WHERE NO_KK = '00086233' AND ACCESS_TO = 'LEADTIME' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC ";
 
             $stmt   = mysqli_query($con_nowprd, $sqlDB2);
             while ($rowdb2 = mysqli_fetch_array($stmt)) {
@@ -411,7 +411,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($q_posisikk_bat1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_bat1_1) >0){
 
                     $row_posisikk_bat1_1      = mysqli_fetch_assoc($q_posisikk_bat1_1);
                     $row_posisikk_bat1_2      = mysqli_fetch_assoc($q_posisikk_bat1_2);
@@ -456,7 +456,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_bat2_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_bat2_1) > 0){
 
                     $row_posisikk_bat2_1      = mysqli_fetch_assoc($q_posisikk_bat2_1);
                     $row_posisikk_bat2_2      = mysqli_fetch_assoc($q_posisikk_bat2_2);
@@ -501,7 +501,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
                 
-                if($row_posisikk_bkn1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_bkn1_1) >0){
 
                     $row_posisikk_bkn1_1      = mysqli_fetch_assoc($q_posisikk_bkn1_1);
                     $row_posisikk_bkn1_2      = mysqli_fetch_assoc($q_posisikk_bkn1_2);
@@ -547,7 +547,7 @@
                                                                             stepnumber DESC LIMIT 1");
                 
 
-                if($row_posisikk_sco1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_sco1_1) >0){
 
                     $row_posisikk_sco1_1      = mysqli_fetch_assoc($q_posisikk_sco1_1);
                     $row_posisikk_sco1_2      = mysqli_fetch_assoc($q_posisikk_sco1_2);
@@ -592,7 +592,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_rlx1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_rlx1_1) >0){
 
                     $row_posisikk_rlx1_1      = mysqli_fetch_assoc($q_posisikk_rlx1_1);
                     $row_posisikk_rlx1_2      = mysqli_fetch_assoc($q_posisikk_rlx1_2);
@@ -637,7 +637,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_cbl1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_cbl1_1) > 0){
 
                     $row_posisikk_cbl1_1      = mysqli_fetch_assoc($q_posisikk_cbl1_1);
                     $row_posisikk_cbl1_2      = mysqli_fetch_assoc($q_posisikk_cbl1_2);
@@ -682,7 +682,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_mat1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_mat1_1) >0){
 
                     $row_posisikk_mat1_1      = mysqli_fetch_assoc($q_posisikk_mat1_1);
                     $row_posisikk_mat1_2      = mysqli_fetch_assoc($q_posisikk_mat1_2);
@@ -727,7 +727,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_pre1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_pre1_1) >0){
 
                     $row_posisikk_pre1_1      = mysqli_fetch_assoc($q_posisikk_pre1_1);
                     $row_posisikk_pre1_2      = mysqli_fetch_assoc($q_posisikk_pre1_2);
@@ -772,7 +772,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_rse1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_rse1_1) > 0){
                     $row_posisikk_rse1_1      = mysqli_fetch_assoc($q_posisikk_rse1_1);
                     $row_posisikk_rse1_2      = mysqli_fetch_assoc($q_posisikk_rse1_2);
 
@@ -816,7 +816,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_rse2_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_rse2_1) > 0){
                     $row_posisikk_rse2_1      = mysqli_fetch_assoc($q_posisikk_rse2_1);
                     $row_posisikk_rse2_2      = mysqli_fetch_assoc($q_posisikk_rse2_2);
 
@@ -860,7 +860,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_shr1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_shr1_1) >0){
                     $row_posisikk_shr1_1      = mysqli_fetch_assoc($q_posisikk_shr1_1);
                     $row_posisikk_shr1_2      = mysqli_fetch_assoc($q_posisikk_shr1_2);
 
@@ -905,7 +905,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_shr2_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_shr2_1) >0){
                     $row_posisikk_shr2_1      = mysqli_fetch_assoc($q_posisikk_shr2_1);
                     $row_posisikk_shr2_2      = mysqli_fetch_assoc($q_posisikk_shr2_2);
 
@@ -949,7 +949,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_sue1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_sue1_1) >0){
                     $row_posisikk_sue1_1      = mysqli_fetch_assoc($q_posisikk_sue1_1);
                     $row_posisikk_sue1_2      = mysqli_fetch_assoc($q_posisikk_sue1_2);
 
@@ -994,7 +994,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_sue2_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_sue2_1) >0){
                     $row_posisikk_sue2_1      = mysqli_fetch_assoc($q_posisikk_sue2_1);
                     $row_posisikk_sue2_2      = mysqli_fetch_assoc($q_posisikk_sue2_2);
 
@@ -1039,7 +1039,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_dye1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_dye1_1) >0){
                     $row_posisikk_dye1_1      = mysqli_fetch_assoc($q_posisikk_dye1_1);
                     $row_posisikk_dye1_2      = mysqli_fetch_assoc($q_posisikk_dye1_2);
 
@@ -1083,7 +1083,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_dye2_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_dye2_1) >0){
                     $row_posisikk_dye2_1      = mysqli_fetch_assoc($q_posisikk_dye2_1);
                     $row_posisikk_dye2_2      = mysqli_fetch_assoc($q_posisikk_dye2_2);
 
@@ -1128,7 +1128,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_dye3_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_dye3_1) >0){
                     $row_posisikk_dye3_1      = mysqli_fetch_assoc($q_posisikk_dye3_1);
                     $row_posisikk_dye3_2      = mysqli_fetch_assoc($q_posisikk_dye3_2);
 
@@ -1173,7 +1173,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_dye4_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_dye4_1) >0){
                     $row_posisikk_dye4_1      = mysqli_fetch_assoc($q_posisikk_dye4_1);
                     $row_posisikk_dye4_2      = mysqli_fetch_assoc($q_posisikk_dye4_2);
 
@@ -1217,7 +1217,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
                 
-                if($row_posisikk_dye5_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_dye5_1) >0){
                 $row_posisikk_dye5_1      = mysqli_fetch_assoc($q_posisikk_dye5_1);
                 $row_posisikk_dye5_2      = mysqli_fetch_assoc($q_posisikk_dye5_2);
 
@@ -1261,7 +1261,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_dye6_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_dye6_1) >0){
                     $row_posisikk_dye6_1      = mysqli_fetch_assoc($q_posisikk_dye6_1);
                     $row_posisikk_dye6_2      = mysqli_fetch_assoc($q_posisikk_dye6_2);
 
@@ -1305,7 +1305,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_sop1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_sop1_1) >0){
                     $row_posisikk_sop1_1      = mysqli_fetch_assoc($q_posisikk_sop1_1);
                     $row_posisikk_sop1_2      = mysqli_fetch_assoc($q_posisikk_sop1_2);
 
@@ -1349,7 +1349,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_bld1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_bld1_1) >0){
                     $row_posisikk_bld1_1      = mysqli_fetch_assoc($q_posisikk_bld1_1);
                     $row_posisikk_bld1_2      = mysqli_fetch_assoc($q_posisikk_bld1_2);
 
@@ -1393,7 +1393,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_blp1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_blp1_1) >0){
                     $row_posisikk_blp1_1      = mysqli_fetch_assoc($q_posisikk_blp1_1);
                     $row_posisikk_blp1_2      = mysqli_fetch_assoc($q_posisikk_blp1_2);
 
@@ -1437,7 +1437,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_opw1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_opw1_1) >0){
                     $row_posisikk_opw1_1      = mysqli_fetch_assoc($q_posisikk_opw1_1);
                     $row_posisikk_opw1_2      = mysqli_fetch_assoc($q_posisikk_opw1_2);
 
@@ -1481,7 +1481,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_ovd1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_ovd1_2) >0){
                     $row_posisikk_ovd1_1      = mysqli_fetch_assoc($q_posisikk_ovd1_1);
                     $row_posisikk_ovd1_2      = mysqli_fetch_assoc($q_posisikk_ovd1_2);
 
@@ -1525,7 +1525,8 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_ovn1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_ovn1_1) >0){
+
                     $row_posisikk_ovn1_1      = mysqli_fetch_assoc($q_posisikk_ovn1_1);
                     $row_posisikk_ovn1_2      = mysqli_fetch_assoc($q_posisikk_ovn1_2);
 
@@ -1569,7 +1570,8 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_ovn2_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_ovn2_1) >0){
+
                     $row_posisikk_ovn2_1      = mysqli_fetch_assoc($q_posisikk_ovn2_1);
                     $row_posisikk_ovn2_2      = mysqli_fetch_assoc($q_posisikk_ovn2_2);
 
@@ -1613,7 +1615,8 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
                 
-                if($row_posisikk_ovn3_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_ovn3_1) >0){
+
                     $row_posisikk_ovn3_1      = mysqli_fetch_assoc($q_posisikk_ovn3_1);
                     $row_posisikk_ovn3_2      = mysqli_fetch_assoc($q_posisikk_ovn3_2);
 
@@ -1657,7 +1660,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_cpt1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_cpt1_1) >0){
                     $row_posisikk_cpt1_1      = mysqli_fetch_assoc($q_posisikk_cpt1_1);
                     $row_posisikk_cpt1_2      = mysqli_fetch_assoc($q_posisikk_cpt1_2);
 
@@ -1701,7 +1704,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_fin1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_fin1_1) >0){
                     $row_posisikk_fin1_1      = mysqli_fetch_assoc($q_posisikk_fin1_1);
                     $row_posisikk_fin1_2      = mysqli_fetch_assoc($q_posisikk_fin1_2);
 
@@ -1745,7 +1748,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_fnj1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_fnj1_1) >0){
                     $row_posisikk_fnj1_1      = mysqli_fetch_assoc($q_posisikk_fnj1_1);
                     $row_posisikk_fnj1_2      = mysqli_fetch_assoc($q_posisikk_fnj1_2);
 
@@ -1789,7 +1792,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_stm1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_stm1_1) >0){
                     $row_posisikk_stm1_1      = mysqli_fetch_assoc($q_posisikk_stm1_1);
                     $row_posisikk_stm1_2      = mysqli_fetch_assoc($q_posisikk_stm1_2);
 
@@ -1833,7 +1836,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_stm2_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_stm2_1) >0){
                     $row_posisikk_stm2_1      = mysqli_fetch_assoc($q_posisikk_stm2_1);
                     $row_posisikk_stm2_2      = mysqli_fetch_assoc($q_posisikk_stm2_2);
 
@@ -1877,7 +1880,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_tdr1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_tdr1_1) >0){
                     $row_posisikk_tdr1_1      = mysqli_fetch_assoc($q_posisikk_tdr1_1);
                     $row_posisikk_tdr1_2      = mysqli_fetch_assoc($q_posisikk_tdr1_2);
 
@@ -1921,7 +1924,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_shr3_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_shr3_1) >0){
                     $row_posisikk_shr3_1      = mysqli_fetch_assoc($q_posisikk_shr3_1);
                     $row_posisikk_shr3_2      = mysqli_fetch_assoc($q_posisikk_shr3_2);
 
@@ -1965,7 +1968,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_shr4_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_shr4_1) >0){
                     $row_posisikk_shr4_1      = mysqli_fetch_assoc($q_posisikk_shr4_1);
                     $row_posisikk_shr4_2      = mysqli_fetch_assoc($q_posisikk_shr4_2);
 
@@ -2009,7 +2012,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_shr5_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_shr5_1) >0){
                     $row_posisikk_shr5_1      = mysqli_fetch_assoc($q_posisikk_shr5_1);
                     $row_posisikk_shr5_2      = mysqli_fetch_assoc($q_posisikk_shr5_2);
 
@@ -2053,7 +2056,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_sue3_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_sue3_1) >0){
                     $row_posisikk_sue3_1      = mysqli_fetch_assoc($q_posisikk_sue3_1);
                     $row_posisikk_sue3_2      = mysqli_fetch_assoc($q_posisikk_sue3_2);
 
@@ -2097,7 +2100,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_sue4_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_sue4_1) >0){
                     $row_posisikk_sue4_1      = mysqli_fetch_assoc($q_posisikk_sue4_1);
                     $row_posisikk_sue4_2      = mysqli_fetch_assoc($q_posisikk_sue4_2);
 
@@ -2141,7 +2144,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_flt1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_flt1_1) >0){
                     $row_posisikk_flt1_1      = mysqli_fetch_assoc($q_posisikk_flt1_1);
                     $row_posisikk_flt1_2      = mysqli_fetch_assoc($q_posisikk_flt1_2);
 
@@ -2185,7 +2188,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_ins2_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_ins2_1) >0){
                     $row_posisikk_ins2_1      = mysqli_fetch_assoc($q_posisikk_ins2_1);
                     $row_posisikk_ins2_2      = mysqli_fetch_assoc($q_posisikk_ins2_2);
 
@@ -2229,7 +2232,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_rot1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_rot1_1) >0){
                     $row_posisikk_rot1_1      = mysqli_fetch_assoc($q_posisikk_rot1_1);
                     $row_posisikk_rot1_2      = mysqli_fetch_assoc($q_posisikk_rot1_2);
 
@@ -2273,7 +2276,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_spt1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_spt1_1) >0){
                     $row_posisikk_spt1_1      = mysqli_fetch_assoc($q_posisikk_spt1_1);
                     $row_posisikk_spt1_2      = mysqli_fetch_assoc($q_posisikk_spt1_2);
 
@@ -2317,7 +2320,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
                 
-                if($row_posisikk_sub1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_sub1_1) >0){
                     $row_posisikk_sub1_1      = mysqli_fetch_assoc($q_posisikk_sub1_1);
                     $row_posisikk_sub1_2      = mysqli_fetch_assoc($q_posisikk_sub1_2);
 
@@ -2361,7 +2364,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_cur1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_cur1_1) >0){
                     $row_posisikk_cur1_1      = mysqli_fetch_assoc($q_posisikk_cur1_1);
                     $row_posisikk_cur1_2      = mysqli_fetch_assoc($q_posisikk_cur1_2);
 
@@ -2421,7 +2424,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_qcf4_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_qcf4_1) >0){
                     $row_posisikk_qcf4_1      = mysqli_fetch_assoc($q_posisikk_qcf4_1);
                     $row_posisikk_qcf4_2      = mysqli_fetch_assoc($q_posisikk_qcf4_2);
 
@@ -2481,7 +2484,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_gkj1_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_gkj1_1) >0){
                     $row_posisikk_gkj1_1      = mysqli_fetch_assoc($q_posisikk_gkj1_1);
                     $row_posisikk_gkj1_2      = mysqli_fetch_assoc($q_posisikk_gkj1_2);
 
@@ -2525,7 +2528,7 @@
                                                                         ORDER BY 
                                                                             stepnumber DESC LIMIT 1");
 
-                if($row_posisikk_ppc4_1->num_rows >0){
+                if(mysqli_num_rows($q_posisikk_ppc4_1) >0){
                     $row_posisikk_ppc4_1      = mysqli_fetch_assoc($q_posisikk_ppc4_1);
                     $row_posisikk_ppc4_2      = mysqli_fetch_assoc($q_posisikk_ppc4_2);
 
