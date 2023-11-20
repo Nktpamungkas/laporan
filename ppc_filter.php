@@ -110,6 +110,7 @@
                                                     <?php if (isset($_POST['submit'])) : ?>
                                                         <a class="btn btn-mat btn-success" href="ppc_memopenting-excel.php?no_order=<?= $_POST['no_order']; ?>&tgl1=<?= $_POST['tgl1']; ?>&tgl2=<?= $_POST['tgl2']; ?>&operation=<?= $_POST['operation']; ?>">CETAK EXCEL</a>
                                                         <a class="btn btn-mat btn-warning" href="ppc_memopenting-libre.php?no_order=<?= $_POST['no_order']; ?>&tgl1=<?= $_POST['tgl1']; ?>&tgl2=<?= $_POST['tgl2']; ?>&operation=<?= $_POST['operation']; ?>">CETAK EXCEL (LIBRE)</a>
+                                                        <a class="btn btn-mat btn-danger" href="ppc_memopenting-excel_qc.php?no_order=<?= $_POST['no_order']; ?>&tgl1=<?= $_POST['tgl1']; ?>&tgl2=<?= $_POST['tgl2']; ?>&operation=<?= $_POST['operation']; ?>">CETAK EXCEL (QC)</a>
                                                     <?php endif; ?>
                                                     <!-- <p>Warning : Jika melakukan<b>Reset Data</b>, pastikan tidak ada yang menggunakan Memo Penting</p> -->
                                                 </div>
