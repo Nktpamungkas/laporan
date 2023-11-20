@@ -33,7 +33,7 @@
     <link rel="stylesheet" type="text/css" href="files\bower_components\bootstrap-multiselect\css\bootstrap-multiselect.css">
     <link rel="stylesheet" type="text/css" href="files\bower_components\multiselect\css\multi-select.css">
 </head>
-<?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132') : ?>
+<?php //if($_SERVER['REMOTE_ADDR'] == '10.0.5.132') : ?>
 <?php require_once 'header.php'; ?>
 <body>
     <div class="pcoded-content">
@@ -90,11 +90,11 @@
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 style="font-size: 12px;" class="sub-title">Nomor PO</h4>
-                                                    <input type="text" name="no_po" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['no_po']; } ?>">
+                                                    <input type="text" name="no_po" class="form-control" onkeyup="this.value = this.value.toUpperCase()" value="<?php if (isset($_POST['submit'])){ echo $_POST['no_po']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-1 m-b-30">
                                                     <h4 style="font-size: 12px;" class="sub-title">Article Group</h4>
-                                                    <input type="text" name="article_group" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['article_group']; } ?>">
+                                                    <input type="text" name="article_group" class="form-control" onkeyup="this.value = this.value.toUpperCase()" value="<?php if (isset($_POST['submit'])){ echo $_POST['article_group']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-1 m-b-30">
                                                     <h4 style="font-size: 12px;" class="sub-title">Article Code</h4>
@@ -102,56 +102,11 @@
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">LANGGANAN</h4>
-                                                    <?php
-                                                        require_once "koneksi.php";
-                                                        $q_langganan    = db2_exec($conn1, "SELECT DISTINCT 
-                                                                                                    ORDPRNCUSTOMERSUPPLIERCODE,
-                                                                                                    LANGGANAN 
-                                                                                                FROM
-                                                                                                    ITXVIEW_PELANGGAN
-                                                                                                ORDER BY 
-                                                                                                    ORDPRNCUSTOMERSUPPLIERCODE ASC");
-                                                    ?>
-                                                    <select class="js-example-basic-single input-xl" name="langganan">
-                                                        <option disabled selected value="">-</option>
-                                                        <?php while ($d_langganan = db2_fetch_assoc($q_langganan)) { ?>
-                                                            <option value="<?= $d_langganan['ORDPRNCUSTOMERSUPPLIERCODE']; ?>" 
-                                                            <?php 
-                                                                if(isset($_POST['submit'])){ 
-                                                                    if($d_langganan['ORDPRNCUSTOMERSUPPLIERCODE'] == $_POST['langganan']){ echo "SELECTED"; }
-                                                                } 
-                                                            ?>><?= $d_langganan['ORDPRNCUSTOMERSUPPLIERCODE'].'- '.$d_langganan['LANGGANAN']; ?></option>
-                                                        <?php } ?>
-                                                    </select>
+                                                    <input type="text" name="langganan" onkeyup="this.value = this.value.toUpperCase()" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['langganan']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">WARNA</h4>
-                                                    <?php
-                                                        require_once "koneksi.php";
-                                                        $q_warna    = db2_exec($conn1, "SELECT  
-                                                                                            ITEMTYPECODE,
-                                                                                            TRIM(SUBCODE05) AS KODE_WARNA,
-                                                                                            WARNA 
-                                                                                        FROM
-                                                                                            ITXVIEWCOLOR
-                                                                                        WHERE
-                                                                                            ITEMTYPECODE = 'KFF' AND NOT WARNA IS NULL
-                                                                                        GROUP BY
-                                                                                            ITEMTYPECODE,
-                                                                                            SUBCODE05,
-                                                                                            WARNA");
-                                                    ?>
-                                                    <select class="js-example-basic-single input-xl" name="warna" id="warna">
-                                                        <option disabled selected value="">-</option>
-                                                        <?php while ($d_warna = db2_fetch_assoc($q_warna)) { ?>
-                                                            <option value="<?= $d_warna['KODE_WARNA']; ?>" 
-                                                            <?php 
-                                                                if(isset($_POST['submit'])){ 
-                                                                    if($d_warna['KODE_WARNA'] == $_POST['warna']){ echo "SELECTED"; }
-                                                                } 
-                                                            ?>><?= $d_warna['KODE_WARNA']; ?> - <b><?= $d_warna['WARNA']; ?></b></option>
-                                                        <?php } ?>
-                                                    </select>
+                                                    <input type="text" name="warna" onkeyup="this.value = this.value.toUpperCase()" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['warna']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">dari tgl Order Create</h4>
@@ -167,7 +122,7 @@
                                                     <a class="btn btn-warning" href="aftersales_memopenting_order.php">Reset</a>
                                                     <?php if (isset($_POST['submit'])) : ?>
                                                         <a class="btn btn-mat btn-success" title="Untuk statusnya sudah kirim" 
-                                                            href="aftersales_memopenting-excel-sudah-kirim.php?prod_order=<?= $_POST['prod_order'] ?>&prod_demand=<?= $_POST['prod_demand'] ?>&no_order=<?= $_POST['no_order'] ?>&tgl1=<?= $_POST['tgl1'] ?>&tgl2=<?= $_POST['tgl2'] ?>&no_po=<?= $_POST['no_po'] ?>&article_group=<?= $_POST['article_group'] ?>&article_code=<?= $_POST['article_code'] ?>&langganan=<?= $_POST['langganan']?>&warna=<?= $_POST['warna'] ?>&tahun=<?= $_POST['tahun'] ?>&bulan=<?= $_POST['bulan'] ?>&tgl1_orderdate=<?= $_POST['tgl1_orderdate'] ?>&tgl2_orderdate=<?= $_POST['tgl2_orderdate'] ?>">CETAK EXCEL</a>
+                                                            href="aftersales_memopenting-excel-sudah-kirim.php?prod_order=<?= $_POST['prod_order'] ?>&prod_demand=<?= $_POST['prod_demand'] ?>&no_order=<?= $_POST['no_order'] ?>&tgl1=<?= $_POST['tgl1'] ?>&tgl2=<?= $_POST['tgl2'] ?>&no_po=<?= $_POST['no_po'] ?>&article_group=<?= $_POST['article_group'] ?>&article_code=<?= $_POST['article_code'] ?>&langganan=<?= $_POST['langganan']?>&warna=<?= $_POST['warna'] ?>&tahun=<?= $_POST['tahun'] ?>&bulan=<?= $_POST['bulan'] ?>&tgl1_orderdate=<?= $_POST['tgl1_orderdate'] ?>&tgl2_orderdate=<?= $_POST['tgl2_orderdate'] ?>">MEMO (SUDAH KIRIM)</a>
                                                         
                                                         <a class="btn btn-mat btn-warning" title="Untuk statusnya belum kirim" 
                                                             href="aftersales_memopenting-excel-belum-kirim.php?prod_order=<?= $_POST['prod_order'] ?>&prod_demand=<?= $_POST['prod_demand'] ?>&no_order=<?= $_POST['no_order'] ?>&tgl1=<?= $_POST['tgl1'] ?>&tgl2=<?= $_POST['tgl2'] ?>&no_po=<?= $_POST['no_po'] ?>&article_group=<?= $_POST['article_group'] ?>&article_code=<?= $_POST['article_code'] ?>&langganan=<?= $_POST['langganan']?>&warna=<?= $_POST['warna'] ?>&tahun=<?= $_POST['tahun'] ?>&bulan=<?= $_POST['bulan'] ?>&tgl1_orderdate=<?= $_POST['tgl1_orderdate'] ?>&tgl2_orderdate=<?= $_POST['tgl2_orderdate'] ?>">MEMO PENTING</a>
@@ -226,7 +181,7 @@
                                                     </thead>
                                                     <tbody> 
                                                         <?php 
-                                                            ini_set("error_reporting", 1);
+                                                            ini_set("error_reporting", 0);
                                                             session_start();
                                                             require_once "koneksi.php";
                                                             $prod_order     = $_POST['prod_order'];
@@ -260,27 +215,39 @@
                                                                 $where_order            = "";
                                                             }
                                                             if($tgl1 & $tgl2){
-                                                                $where_date             = "DELIVERY BETWEEN '$tgl1' AND '$tgl2' AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')";
+                                                                $where_date             = "DELIVERY BETWEEN '$tgl1' AND '$tgl2'";
                                                             }else{
                                                                 $where_date             = "";
                                                             }
                                                             if($no_po){
-                                                                $where_no_po            = "NO_PO = '$no_po'";
+                                                                $where_no_po            = "NO_PO LIKE '%$no_po%'";
                                                             }else{
                                                                 $where_no_po            = "";
                                                             }
-                                                            if($article_group & $article_code){
+                                                            if(!empty($article_group) & !empty($article_code)){
                                                                 $where_article          = "SUBCODE02 = '$article_group' AND SUBCODE03 = '$article_code'";
+                                                            }elseif(empty($article_group) & !empty($article_code)){
+                                                                $where_article          = "SUBCODE03 = '$article_code'";
+                                                            }elseif(!empty($article_group) & empty($article_code)){
+                                                                $where_article          = "SUBCODE02 = '$article_group'";
                                                             }else{
                                                                 $where_article          = "";
                                                             }
                                                             if($langganan){
-                                                                $where_langganan            = "ORDPRNCUSTOMERSUPPLIERCODE = '$langganan' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate' AND '$tgl2_orderdate'";
+                                                                if($tgl1_orderdate & $tgl2_orderdate){
+                                                                    $where_langganan            = "LANGGANAN LIKE '%$langganan%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate' AND '$tgl2_orderdate'";
+                                                                }else{
+                                                                    $where_langganan            = "LANGGANAN LIKE '%$langganan%'";
+                                                                }
                                                             }else{
                                                                 $where_langganan            = "";
                                                             }
                                                             if($warna){
-                                                                $where_warna            = "NO_WARNA = '$warna'  AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate' AND '$tgl2_orderdate'";
+                                                                if($tgl1_orderdate & $tgl2_orderdate){
+                                                                    $where_warna            = "WARNA LIKE '%$warna%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate' AND '$tgl2_orderdate'";
+                                                                }else{
+                                                                    $where_warna            = "WARNA LIKE '%$warna%'";
+                                                                }
                                                             }else{
                                                                 $where_warna            = "";
                                                             }
@@ -289,8 +256,10 @@
                                                                     $where_datecreatesalesorder = "";
                                                                 }elseif($langganan){
                                                                     $where_datecreatesalesorder = "";
+                                                                }elseif($warna){
+                                                                    $where_datecreatesalesorder = "";
                                                                 }else{
-                                                                    $where_datecreatesalesorder = "CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate' AND '$tgl2_orderdate' AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')";
+                                                                    $where_datecreatesalesorder = "CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate' AND '$tgl2_orderdate'";
                                                                 }
                                                             }
 
@@ -325,7 +294,8 @@
                                                                 $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc_aftersales(OPERATIONCODE,ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
                                                             }else{
                                                                 // ITXVIEW_MEMOPENTINGPPC
-                                                                $itxviewmemo    = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article $where_langganan $where_warna $where_datecreatesalesorder");
+                                                                // echo "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article $where_langganan $where_warna $where_datecreatesalesorder AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')";
+                                                                $itxviewmemo    = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article $where_langganan $where_warna $where_datecreatesalesorder AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')");
                                                                 while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
                                                                     $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['CREATIONDATETIME_SALESORDER']))."',"
@@ -390,44 +360,63 @@
                                                             }
 
                                                             if($tgl1_2 & $tgl2_2){
-                                                                $where_date2     = "DELIVERY BETWEEN '$tgl1_2' AND '$tgl2_2' AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')";
+                                                                $where_date2     = "DELIVERY BETWEEN '$tgl1_2' AND '$tgl2_2'";
                                                             }else{
                                                                 $where_date2     = "";
                                                             }
                                                             if($no_po2){
-                                                                $where_no_po2            = "NO_PO = '$no_po'";
+                                                                $where_no_po2            = "NO_PO LIKE '%$no_po2%'";
                                                             }else{
                                                                 $where_no_po2            = "";
                                                             }
-                                                            if($article_group2 & $article_code2){
+
+                                                            if(!empty($article_group2) & !empty($article_code2)){
                                                                 $where_article2          = "ARTICLE_GROUP = '$article_group2' AND ARTICLE_CODE = '$article_code2'";
+                                                            }elseif(empty($article_group2) & !empty($article_code2)){
+                                                                $where_article2          = "ARTICLE_CODE = '$article_code2'";
+                                                            }elseif(!empty($article_group2) & empty($article_code2)){
+                                                                $where_article2          = "ARTICLE_GROUP = '$article_group2'";
                                                             }else{
                                                                 $where_article2          = "";
                                                             }
+
                                                             if($langganan_2){
-                                                                $where_langganan2            = "ORDPRNCUSTOMERSUPPLIERCODE = '$langganan_2' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND  '$tgl2_orderdate_2'";
+                                                                if($tgl1_orderdate_2 & $tgl2_orderdate_2){
+                                                                    $where_langganan2            = "PELANGGAN LIKE '%$langganan_2%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
+                                                                }else{
+                                                                    $where_langganan2            = "PELANGGAN LIKE '%$langganan_2%'";
+                                                                }
                                                             }else{
                                                                 $where_langganan2            = "";
                                                             }
+
                                                             if($warna_2){
-                                                                $where_warna2            = "NO_WARNA = '$warna_2' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
+                                                                if($tgl1_orderdate_2 & $tgl2_orderdate_2){
+                                                                    $where_warna2            = "WARNA LIKE '%$warna_2%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
+                                                                }else{
+                                                                    $where_warna2            = "WARNA LIKE '%$warna_2%'";
+                                                                }
                                                             }else{
                                                                 $where_warna2            = "";
                                                             }
+
                                                             if($tgl1_orderdate_2 && $tgl2_orderdate_2){
                                                                 if($no_order_2){
                                                                     $where_datecreatesalesorder2 = "";
                                                                 }elseif($langganan_2){
                                                                     $where_datecreatesalesorder2 = "";
+                                                                }elseif($warna_2){
+                                                                    $where_datecreatesalesorder2 = "";
                                                                 }else{
-                                                                    $where_datecreatesalesorder2 = "CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2' AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')";
+                                                                    $where_datecreatesalesorder2 = "CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
                                                                 }
                                                             }
                                                             if($operation_2){
                                                                 $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc_aftersales WHERE OPERATIONCODE = '$operation_2' AND ACCESS_TO = 'MEMO W OPR' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
                                                             }else{
-                                                                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc_aftersales WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 $where_no_po2 $where_article2 $where_langganan2 $where_warna2 $where_datecreatesalesorder2 AND ACCESS_TO = 'MEMO AFTERSALES' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY CREATIONDATETIME_SALESORDER ASC";
+                                                                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc_aftersales WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 $where_no_po2 $where_article2 $where_langganan2 $where_warna2 $where_datecreatesalesorder2 AND ACCESS_TO = 'MEMO AFTERSALES' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP') ORDER BY CREATIONDATETIME_SALESORDER ASC";
                                                             }
+                                                            // echo $sqlDB2;
                                                             $stmt   = mysqli_query($con_nowprd,$sqlDB2);
                                                             while ($rowdb2 = mysqli_fetch_array($stmt)) {
                                                         ?>
@@ -847,6 +836,6 @@
     </div>
 </body>
 <?php require_once 'footer.php'; ?>
-<?php else : ?>
-    <h3><center>WEBSITE MASIH DALAM PENGEMBANGAN.</center></h3>
-<?php endif; ?>
+<?php //else : ?>
+    <!-- <h3><center>WEBSITE MASIH DALAM PENGEMBANGAN.</center></h3> -->
+<?php //endif; ?>

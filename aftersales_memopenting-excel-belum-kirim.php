@@ -8,7 +8,14 @@
         mso-number-format: \@;
     }
 </style>
-<table>
+<style>
+  #table td{
+    width: auto;
+    overflow: hidden;
+    word-wrap: break-word;
+  }
+</style>
+<table style="max-width: 2480px; width:100%;">
     <thead>
         <tr>
             <th>TGL BUKA BON ORDER</th>
@@ -66,31 +73,43 @@
             if($no_order_2){
                 $where_order2            = "NO_ORDER LIKE '%$no_order_2%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
             }else{
-                $where_order2            = "aa";
+                $where_order2            = "";
             }
 
             if($tgl1_2 & $tgl2_2){
-                $where_date2     = "DELIVERY BETWEEN '$tgl1_2' AND '$tgl2_2' AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')";
+                $where_date2     = "DELIVERY BETWEEN '$tgl1_2' AND '$tgl2_2'";
             }else{
                 $where_date2     = "";
             }
             if($no_po2){
-                $where_no_po2            = "NO_PO = '$no_po'";
+                $where_no_po2            = "NO_PO LIKE '%$no_po2%'";
             }else{
                 $where_no_po2            = "";
             }
-            if($article_group2 & $article_code2){
+            if(!empty($article_group2) & !empty($article_code2)){
                 $where_article2          = "ARTICLE_GROUP = '$article_group2' AND ARTICLE_CODE = '$article_code2'";
+            }elseif(empty($article_group2) & !empty($article_code2)){
+                $where_article2          = "ARTICLE_CODE = '$article_code2'";
+            }elseif(!empty($article_group2) & empty($article_code2)){
+                $where_article2          = "ARTICLE_GROUP = '$article_group2'";
             }else{
                 $where_article2          = "";
             }
             if($langganan_2){
-                $where_langganan2            = "ORDPRNCUSTOMERSUPPLIERCODE = '$langganan_2' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND  '$tgl2_orderdate_2'";
+                if($tgl1_orderdate_2 & $tgl2_orderdate_2){
+                    $where_langganan2            = "PELANGGAN LIKE '%$langganan_2%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
+                }else{
+                    $where_langganan2            = "PELANGGAN LIKE '%$langganan_2%'";
+                }
             }else{
                 $where_langganan2            = "";
             }
             if($warna_2){
-                $where_warna2            = "NO_WARNA = '$warna_2' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
+                if($tgl1_orderdate_2 & $tgl2_orderdate_2){
+                    $where_warna2            = "WARNA LIKE '%$warna_2%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
+                }else{
+                    $where_warna2            = "WARNA LIKE '%$warna_2%'";
+                }
             }else{
                 $where_warna2            = "";
             }
@@ -99,14 +118,16 @@
                     $where_datecreatesalesorder2 = "";
                 }elseif($langganan_2){
                     $where_datecreatesalesorder2 = "";
+                }elseif($warna_2){
+                    $where_datecreatesalesorder2 = "";
                 }else{
-                    $where_datecreatesalesorder2 = "CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2' AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')";
+                    $where_datecreatesalesorder2 = "CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
                 }
             }
             if($operation_2){
                 $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc_aftersales WHERE OPERATIONCODE = '$operation_2' AND ACCESS_TO = 'MEMO W OPR' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
             }else{
-                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc_aftersales WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 $where_no_po2 $where_article2 $where_langganan2 $where_warna2 $where_datecreatesalesorder2 AND ACCESS_TO = 'MEMO AFTERSALES' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY CREATIONDATETIME_SALESORDER ASC";
+                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc_aftersales WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 $where_no_po2 $where_article2 $where_langganan2 $where_warna2 $where_datecreatesalesorder2 AND ACCESS_TO = 'MEMO AFTERSALES' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP') ORDER BY CREATIONDATETIME_SALESORDER ASC";
             }
             $stmt   = mysqli_query($con_nowprd,$sqlDB2);
             while ($rowdb2 = mysqli_fetch_array($stmt)) {

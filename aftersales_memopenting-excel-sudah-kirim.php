@@ -64,7 +64,7 @@
             if($no_order_2){
                 $where_order2            = "NO_ORDER LIKE '%$no_order_2%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
             }else{
-                $where_order2            = "aa";
+                $where_order2            = "";
             }
 
             if($tgl1_2 & $tgl2_2){
@@ -73,22 +73,34 @@
                 $where_date2     = "";
             }
             if($no_po2){
-                $where_no_po2            = "NO_PO = '$no_po'";
+                $where_no_po2            = "NO_PO LIKE '%$no_po2%'";
             }else{
                 $where_no_po2            = "";
             }
-            if($article_group2 & $article_code2){
+            if(!empty($article_group2) & !empty($article_code2)){
                 $where_article2          = "ARTICLE_GROUP = '$article_group2' AND ARTICLE_CODE = '$article_code2'";
+            }elseif(empty($article_group2) & !empty($article_code2)){
+                $where_article2          = "ARTICLE_CODE = '$article_code2'";
+            }elseif(!empty($article_group2) & empty($article_code2)){
+                $where_article2          = "ARTICLE_GROUP = '$article_group2'";
             }else{
                 $where_article2          = "";
             }
             if($langganan_2){
-                $where_langganan2            = "ORDPRNCUSTOMERSUPPLIERCODE = '$langganan_2' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND  '$tgl2_orderdate_2'";
+                if($tgl1_orderdate_2 & $tgl2_orderdate_2){
+                    $where_langganan2            = "PELANGGAN LIKE '%$langganan_2%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
+                }else{
+                    $where_langganan2            = "PELANGGAN LIKE '%$langganan_2%'";
+                }
             }else{
                 $where_langganan2            = "";
             }
             if($warna_2){
-                $where_warna2            = "NO_WARNA = '$warna_2' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
+                if($tgl1_orderdate_2 & $tgl2_orderdate_2){
+                    $where_warna2            = "WARNA LIKE '%$warna_2%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
+                }else{
+                    $where_warna2            = "WARNA LIKE '%$warna_2%'";
+                }
             }else{
                 $where_warna2            = "";
             }
@@ -96,6 +108,8 @@
                 if($no_order_2){
                     $where_datecreatesalesorder2 = "";
                 }elseif($langganan_2){
+                    $where_datecreatesalesorder2 = "";
+                }elseif($warna_2){
                     $where_datecreatesalesorder2 = "";
                 }else{
                     $where_datecreatesalesorder2 = "CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2' AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')";
