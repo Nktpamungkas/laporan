@@ -1,3 +1,9 @@
+<?php
+    session_start();
+    require_once "koneksi.php";
+    $datenow = date('Y-m-d H:i:s');
+    mysqli_query($con_nowprd, "INSERT INTO log_history(KET,PRODUCTIONORDER,IPADDRESS,CREATEDATETIME) VALUES('HISTORI KK', '', '$_SERVER[REMOTE_ADDR]', '$datenow')");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,7 +82,6 @@
                                             $port="25000";
                                             $conn_string = "DRIVER={IBM ODBC DB2 DRIVER}; HOSTNAME=$hostname; PORT=$port; PROTOCOL=TCPIP; UID=$user; PWD=$passworddb2; DATABASE=$database;";
                                             $con = db2_connect($conn_string,'', '');
-
 
                                             function cekDemand($noDemand) { // 1. cek data
                                                 global $con; 
