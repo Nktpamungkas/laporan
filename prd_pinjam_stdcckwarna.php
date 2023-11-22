@@ -227,7 +227,7 @@
                                                 <button type="submit" name="submit" class="btn btn-success btn-sm">Fetch Data</button>
                                                 <button type="submit" name="lihatdata" class="btn btn-warning btn-sm">Lihat semua data</button>
                                                 <button type="submit" name="lihatdata_bergerak" class="btn btn-danger btn-sm">Lihat data</button>
-                                                <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132' OR $_SERVER['REMOTE_ADDR'] == '10.0.7.90') : ?>
+                                                <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132' OR $_SERVER['REMOTE_ADDR'] == '10.0.7.90' OR $_SERVER['REMOTE_ADDR'] == '10.0.7.106') : ?>
                                                     <button type="submit" name="lihatdata_arsip" class="btn btn-inverse btn-sm"><i class="icofont icofont-ui-file"></i>Lihat Arsip</button>
                                                 <?php endif; ?>
                                                 <?php if (isset($_POST['lihatdata'])) : ?>
