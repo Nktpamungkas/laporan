@@ -328,24 +328,6 @@
                                     </li>
                                 </ul>
                             </li>
-                            <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132' OR $_SERVER['REMOTE_ADDR'] == '10.0.7.190') : ?>
-                                <li class="pcoded-hasmenu">
-                                    <a href="javascript:void(0)">
-                                        <span class="pcoded-micon"><i class="feather icon-box"></i></span>
-                                        <span class="pcoded-mtext">Test DIT</span>
-                                        <span class="pcoded-mcaret"></span>
-                                    </a>
-                                    <ul class="pcoded-submenu">
-                                        <li class=" ">
-                                            <a href="qc_2_asep.php" data-i18n="nav.animations.main">
-                                                <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                                <span class="pcoded-mtext">Test Asep</span>
-                                                <span class="pcoded-mcaret"></span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            <?php endif; ?>
                         </ul>
                     </div>
                 </nav>
