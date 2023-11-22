@@ -8,7 +8,7 @@
         mso-number-format: \@;
     }
 </style>
-<table>
+<table border="1">
     <thead>
         <tr>
             <th>TGL BUKA BON ORDER</th>

@@ -15,7 +15,7 @@
     word-wrap: break-word;
   }
 </style>
-<table style="max-width: 2480px; width:100%;">
+<table style="max-width: 2480px; width:100%;" border="1">
     <thead>
         <tr>
             <th>TGL BUKA BON ORDER</th>
