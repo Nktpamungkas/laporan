@@ -273,7 +273,7 @@
                                                             <select name="no_warna" id="no_warna" onchange="cari_no_warna()" class="js-example-basic-single col-sm-2">
                                                                 <option value="" disabled selected>Pilih</option>
                                                                 <?php
-                                                                    $q_usergeneric = mysqli_query($con_db_lab, "SELECT no_warna FROM `tbl_matching` WHERE not recipe_code = ''");
+                                                                    $q_usergeneric = mysqli_query($con_db_lab, "SELECT DISTINCT no_warna FROM `tbl_matching` WHERE not recipe_code = ''");
                                                                     while ($row_usergeneric = mysqli_fetch_array($q_usergeneric)) { 
                                                                 ?>
                                                                     <option value="<?= TRIM($row_usergeneric['no_warna']); ?>"><?= TRIM($row_usergeneric['no_warna']); ?></option>
