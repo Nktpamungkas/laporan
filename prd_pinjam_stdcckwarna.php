@@ -145,6 +145,7 @@
     <link rel="stylesheet" type="text/css" href="files\assets\icon\themify-icons\themify-icons.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\icofont\css\icofont.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\feather\css\feather.css">
+    <link rel="stylesheet" href="files\bower_components\select2\css\select2.min.css">
     <link rel="stylesheet" type="text/css" href="files\assets\pages\prism\prism.css">
     <link rel="stylesheet" type="text/css" href="files\assets\css\style.css">
     <link rel="stylesheet" type="text/css" href="files\assets\css\jquery.mCustomScrollbar.css">
@@ -180,6 +181,14 @@
 		});
 	}
 
+    function cari_no_warna(){
+		var no_warna		= document.getElementById("no_warna").value;
+
+        $.get("api_usergenericcode.php?no_warna="+no_warna,function(data){
+			document.getElementById("muncul_longdescription").value = data.LONGDESCRIPTION;
+		});
+    }
+
 </script>
 <?php require_once 'header.php'; ?>
 <body>
@@ -194,7 +203,7 @@
                                     <div class="card-header">
                                         <h5>Form Pinjam Buku</h5>
                                     </div>
-                                    <div class="card-block" <?php if (isset($_POST['tambah'])) : ?> hidden <?php else : ?> show <?php endif; ?>>
+                                    <div class="card-block" <?php if (isset($_POST['tambah']) OR $_GET['tambah'] == '1') : ?> hidden <?php else : ?> show <?php endif; ?>>
                                         <form action="" method="post">
                                             <div class="form-group row">
                                                 <label class="col-sm-2 col-form-label">Scan Barcode</label>
@@ -231,6 +240,10 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-xl-12 m-b-30">
+                                                <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132') : ?>
+                                                    <button type="submit" name="update_warna" class="btn btn-primary btn-sm"><i class="icofont icofont-save"></i> Update Warna</button>
+                                                <?php endif; ?>
+
                                                 <button type="submit" name="simpan" class="btn btn-primary btn-sm"><i class="icofont icofont-save"></i> Simpan</button>
                                                 <button type="submit" name="submit" class="btn btn-success btn-sm"><i class="icofont icofont-exchange"></i> Fetch Data</button>
                                                 <button type="submit" name="lihatdata" class="btn btn-warning btn-sm"><i class="icofont icofont-eye"></i> Lihat semua data</button>
@@ -247,29 +260,57 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <?php if (isset($_POST['tambah'])) : ?>
+                                    <?php if (isset($_POST['tambah']) OR $_GET['tambah'] == '1') : ?>
                                         <div class="card-block">
                                             <form action="" method="post">
                                                 <div class="form-group row">
-                                                    <label class="col-sm-2 col-form-label">No Warna</label>
+                                                    <?php 
+                                                        $kode = $_GET['kode']; 
+                                                        if($kode == 'DL'){ 
+                                                    ?>
+                                                        <label class="col-sm-2 col-form-label">No Warna</label>
+                                                        <div class="col-sm-2">
+                                                            <select name="no_warna" id="no_warna" onchange="cari_no_warna()" class="js-example-basic-single col-sm-2">
+                                                                <option value="" disabled selected>Pilih</option>
+                                                                <?php
+                                                                    $q_usergeneric = mysqli_query($con_db_lab, "SELECT no_warna FROM `tbl_matching` WHERE not recipe_code = ''");
+                                                                    while ($row_usergeneric = mysqli_fetch_array($q_usergeneric)) { 
+                                                                ?>
+                                                                    <option value="<?= TRIM($row_usergeneric['no_warna']); ?>"><?= TRIM($row_usergeneric['no_warna']); ?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                        </div>
+                                                    <?php }elseif($kode == 'RC'){ ?>
+                                                        <label class="col-sm-2 col-form-label">Standart Cocok Warna</label>
+                                                        <div class="col-sm-2">
+                                                            <select name="no_warna" id="no_warna" onchange="cari_no_warna()" class="js-example-basic-single col-sm-2">
+                                                                <option value="" disabled selected>Pilih</option>
+                                                                <?php
+                                                                    $q_usergeneric = db2_exec($conn1, "SELECT * FROM USERGENERICGROUP WHERE USERGENERICGROUPTYPECODE = 'CL1' ORDER BY CODE ASC");
+                                                                    while ($row_usergeneric = db2_fetch_assoc($q_usergeneric)) { 
+                                                                ?>
+                                                                    <option value="<?= TRIM($row_usergeneric['CODE']); ?>"><?= TRIM($row_usergeneric['CODE']); ?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                        </div>
+                                                    <?php } ?>
+                                                            
                                                     <div class="col-sm-2">
-                                                        <input type="text" class="form-control input-sm" name="no_warna" placeholder="No Warna..." autofocus required>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                        <input type="text" class="form-control input-sm" name="long_description" placeholder="Nama Warna..." required>
+                                                        <input type="text" class="form-control input-sm" name="long_description" id="muncul_longdescription" placeholder="Nama Warna..." required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-2 col-form-label">Kode</label>
                                                     <div class="col-sm-2">
-                                                        <select name="kode" class="form-control" required>
-                                                            <option value="DL">DL - Dye Lot Card</option>
-                                                            <option value="RC">RC - Recipe Card</option>
-                                                            <option value="OR">OR - Original</option>
-                                                            <option value="LD">LD - Lab Dip</option>
-                                                            <option value="SL">SL - Sample L/D</option>
-                                                            <option value="TE">TE - Tempelan Sample Celup</option>
-                                                            <option value="FL">FL - Frist Lot</option>
+                                                        <select name="kode" class="form-control" id="kode" onchange="window.location='prd_pinjam_stdcckwarna.php?kode='+this.value+'&tambah=1'" required>
+                                                            <option value="" disabled selected>Pilih</option>
+                                                            <option value="DL" <?php if($kode == 'DL'){ echo "SELECTED"; } ?>>DL - Dye Lot Card</option>
+                                                            <option value="RC" <?php if($kode == 'RC'){ echo "SELECTED"; } ?>>RC - Recipe Card</option>
+                                                            <option value="OR" <?php if($kode == 'OR'){ echo "SELECTED"; } ?>>OR - Original</option>
+                                                            <option value="LD" <?php if($kode == 'LD'){ echo "SELECTED"; } ?>>LD - Lab Dip</option>
+                                                            <option value="SL" <?php if($kode == 'SL'){ echo "SELECTED"; } ?>>SL - Sample L/D</option>
+                                                            <option value="TE" <?php if($kode == 'TE'){ echo "SELECTED"; } ?>>TE - Tempelan Sample Celup</option>
+                                                            <option value="FL" <?php if($kode == 'FL'){ echo "SELECTED"; } ?>>FL - Frist Lot</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-sm-2">
@@ -284,7 +325,7 @@
                                                 </div>
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
                                                     <button type="submit" name="simpan_tambah" class="btn btn-primary btn-sm"><i class="icofont icofont-save"></i> Simpan</button>
-                                                    <button type="submit" name="kembali" class="btn btn-default btn-sm"><i class="icofont icofont-undo"></i> Kembali</button>
+                                                    <a href="prd_pinjam_stdcckwarna.php" class="btn btn-info btn-sm"><i class="icofont icofont-undo"></i> Kembali</a>
                                                 </div>
                                             </form>
                                         </div>
