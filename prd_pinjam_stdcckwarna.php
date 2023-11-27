@@ -241,9 +241,10 @@
                                             </div>
                                             <div class="col-sm-12 col-xl-12 m-b-30">
                                                 <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132') : ?>
-                                                    <button type="submit" name="update_warna" class="btn btn-primary btn-sm"><i class="icofont icofont-save"></i> Update Warna</button>
+                                                    <!-- <button type="submit" name="update_warna" class="btn btn-primary btn-sm"><i class="icofont icofont-save"></i> Update Warna</button> -->
                                                 <?php endif; ?>
 
+                                                <button type="submit" style="background-color: transparent; background-repeat: no-repeat; border: none; cursor: pointer;overflow: hidden;outline: none;"></button>
                                                 <button type="submit" name="simpan" class="btn btn-primary btn-sm"><i class="icofont icofont-save"></i> Simpan</button>
                                                 <button type="submit" name="submit" class="btn btn-success btn-sm"><i class="icofont icofont-exchange"></i> Fetch Data</button>
                                                 <button type="submit" name="lihatdata" class="btn btn-warning btn-sm"><i class="icofont icofont-eye"></i> Lihat semua data</button>
@@ -293,8 +294,12 @@
                                                                 <?php } ?>
                                                             </select>
                                                         </div>
+                                                    <?php } else { ?>
+                                                        <label class="col-sm-2 col-form-label">Silahkan Pilih Kode Terlebih dahulu</label>
+                                                        <div class="col-sm-2">
+                                                            <input type="text" class="form-control input-sm" disabled>
+                                                        </div>
                                                     <?php } ?>
-                                                            
                                                     <div class="col-sm-2">
                                                         <input type="text" class="form-control input-sm" name="long_description" id="muncul_longdescription" placeholder="Nama Warna..." required>
                                                     </div>
