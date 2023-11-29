@@ -65,8 +65,8 @@
                     <?php while ($row_data = mysqli_fetch_array($q_pinjambuku)) { ?>
                         <td align="left" valign="top" style="height: 1.6in;"><table width="100%" border="0" class="table-list1" style="width: 2.3in;">
                             <tr>
-                                <!-- <img src="barcode.php?text=<?= sprintf("%'.06d\n", $row_data['id']); ?>&print=true&size=60" width="160px"> -->
-                                <img src='https://barcode.tec-it.com/barcode.ashx?data=<?= sprintf("%'.06d\n", $row_data['id']); ?>&code=Code128&translate-esc=on'/>
+                                <img src="barcode.php?text=<?= sprintf("%'.06d\n", $row_data['id']); ?>&print=true&size=60" width="160px">
+                                <!-- <img src='https://barcode.tec-it.com/barcode.ashx?data=<?= sprintf("%'.06d\n", $row_data['id']); ?>&code=Code128&translate-esc=on'/> -->
                             </tr>
                             </table>
                         </td>

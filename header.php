@@ -30,51 +30,37 @@
                                 <ul class="pcoded-submenu">
                                     <li class=" ">
                                         <a href="ppc_filter.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Memo Penting</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Memo Penting
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="ppc_filter_order_perminggu.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Laporan Order</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Laporan Order
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="ppc_filter_persediaan_kain_jadi.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Lap. Persediaan Kain Jadi</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Lap. Persediaan Kain Jadi
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="ppc_filter_poselesai.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Laporan PO Selesai</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Laporan PO Selesai
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="ppc_filter_steps.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Posisi KK</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Posisi KK
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="ppc_filter_qty_knt.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Laporan QTY Rajut KNT</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Laporan QTY Rajut KNT
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="ppc_pengiriman.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Laporan Pengiriman PPC</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Laporan Pengiriman PPC
                                         </a>
                                     </li>
                                 </ul>
@@ -88,16 +74,12 @@
                                 <ul class="pcoded-submenu">
                                     <li class=" ">
                                         <a href="fin_filter_cetaklabel.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Cetak Label</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Cetak Label
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="fin_bpp.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Laporan Pembelian</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Laporan Pembelian
                                         </a>
                                     </li>
                                 </ul>
@@ -111,9 +93,7 @@
                                 <ul class="pcoded-submenu">
                                     <li class=" ">
                                         <a href="brs_filter_cetaklabel.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Cetak Label</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Cetak Label
                                         </a>
                                     </li>
                                 </ul>
@@ -127,9 +107,7 @@
                                 <ul class="pcoded-submenu">
                                     <li class=" ">
                                         <a href="dye_pemakaian_obat.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Laporan pemakaian obat</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Laporan pemakaian obat
                                         </a>
                                     </li>
                                 </ul>
@@ -143,51 +121,37 @@
                                 <ul class="pcoded-submenu">
                                     <li class=" ">
                                         <a href="dye_pemakaian_obat.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Laporan pemakaian obat</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Laporan pemakaian obat
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="dye_filter_LA.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Laporan Hasil Aktual (LA)</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Laporan Hasil Aktual (LA)
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="dye_filter_bon_reservation.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Lap. Bon Resep Reservation</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Lap. Bon Resep Reservation
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="dye_kk_bysuffix.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Search Recipe Code & Suffix</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Search Recipe Code & Suffix
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="dye_greigewhiteness.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Greige & Whiteness</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Greige & Whiteness
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="dye_kk_bysuffix.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Kartu Kerja By Suffix</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Kartu Kerja By Suffix
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="dye_lab_rcode.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Cek RCode Dyeing dan Laborat</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Cek RCode Dyeing dan Laborat
                                         </a>
                                     </li>
                                 </ul>
@@ -201,9 +165,7 @@
                                 <ul class="pcoded-submenu">
                                     <li class=" ">
                                         <a href="pcs_filter.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">PCS - History Pembelian Barang</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            History Pembelian Barang
                                         </a>
                                     </li>
                                 </ul>
@@ -217,37 +179,27 @@
                                 <ul class="pcoded-submenu">
                                     <li class=" ">
                                         <a href="mkt_sales_report.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Sales Report</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Sales Report
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="mkt_update_invoicenow.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Update Invoice NOW</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Update Invoice NOW
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="mkt_sales_register_buyer.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Sales Register Buyer</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Sales Register Buyer
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="mkt_terima_order.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Laporan Terima Order</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Laporan Terima Order
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="mkt_leadtime.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Laporan Internal Lead Team</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Laporan Internal Lead Team
                                         </a>
                                     </li>
                                 </ul>
@@ -261,37 +213,37 @@
                                 <ul class="pcoded-submenu">
                                     <li class="">
                                         <a href="prd_detail_demand_step.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Detail Demand Step</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Detail Demand Step
                                         </a>
                                     </li>
                                     <li class="">
                                         <a href="prd_analisaKK.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Analisa Kartu Kerja</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Analisa Kartu Kerja
                                         </a>
                                     </li>
                                     <li class="">
                                         <a href="prd_pinjam_stdcckwarna.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Pinjam Std Cck Warna</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Pinjam Std Cck Warna RC
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="prd_pinjam_stdcckwarna_ld.php" data-i18n="nav.animations.main">
+                                            Pinjam Std Cck Warna LD
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="prd_pinjam_stdcckwarna_le.php" data-i18n="nav.animations.main" style="pointer-events: none; cursor: default;">
+                                            Pinjam Std Cck Warna TE
                                         </a>
                                     </li>
                                     <li class="">
                                         <a href="prd_openticketMTC.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">View Openticket MTC</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            View Openticket MTC
                                         </a>
                                     </li>
                                     <li class=" ">
                                         <a href="prd_histori_kk.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Riwayat Salin No. Demand</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Riwayat Salin No. Demand
                                         </a>
                                     </li>
                                 </ul>
@@ -305,9 +257,7 @@
                                 <ul class="pcoded-submenu">
                                     <li class=" ">
                                         <a href="prt_pemakaian_obat.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">Laporan pemakaian obat</span>
-                                            <span class="pcoded-mcaret"></span>
+                                            Laporan pemakaian obat
                                         </a>
                                     </li>
                                 </ul>
@@ -321,9 +271,7 @@
                                 <ul class="pcoded-submenu">
                                     <li class=" ">
                                         <a href="aftersales_memopenting_order.php" data-i18n="nav.animations.main">
-                                            <span class="pcoded-micon"><i class="ti-reload rotate-refresh"></i></span>
-                                            <span class="pcoded-mtext">MEMO PENTING ORDER REPLACEMENT DAN RETUR </span>
-                                            <span class="pcoded-mcaret"></span>
+                                            MEMO PENTING ORDER REPLACEMENT DAN RETUR 
                                         </a>
                                     </li>
                                 </ul>

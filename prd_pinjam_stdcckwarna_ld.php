@@ -2,53 +2,7 @@
     ini_set("error_reporting", 1);
     session_start();
     require_once "koneksi.php"; 
-    if (isset($_POST['submit'])) {
-        $qry_usergeneric    = "SELECT
-                                    CODE,
-                                    LONGDESCRIPTION,
-                                    VALUESTRING AS IDCUSTOMER,
-                                    LEGALNAME1 AS CUSTOMER
-                                FROM
-                                    USERGENERICGROUP u 
-                                LEFT JOIN ADSTORAGE a ON a.UNIQUEID = u.ABSUNIQUEID AND a.FIELDNAME = 'OriginalCustomerCode'
-                                LEFT JOIN ORDERPARTNER o ON o.CUSTOMERSUPPLIERCODE = a.VALUESTRING 
-                                LEFT JOIN BUSINESSPARTNER b ON b.NUMBERID = o.ORDERBUSINESSPARTNERNUMBERID
-                                WHERE
-                                    u.USERGENERICGROUPTYPECODE = 'CL1'";
-        $usergenericgroup           = db2_exec($conn1, $qry_usergeneric);
-
-        while ($row_usergenericgroup   = db2_fetch_assoc($usergenericgroup)) {
-            $cekusergeneric_mysqli      = mysqli_query($con_nowprd, "SELECT COUNT(*) AS hasildata FROM buku_pinjam WHERE no_warna = '$row_usergenericgroup[CODE]'");
-            $hasil_cek_mysqli           = mysqli_fetch_assoc($cekusergeneric_mysqli);
-
-            if($hasil_cek_mysqli['hasildata'] == 0){
-                $r_usergenericgroup[]      = "('".TRIM(addslashes($row_usergenericgroup['CODE']))."',"
-                                            ."'".TRIM(addslashes($row_usergenericgroup['LONGDESCRIPTIONv']))."',"
-                                            ."'RC',"
-                                            ."'".TRIM(addslashes($row_usergenericgroup['IDCUSTOMER']))."',"
-                                            ."'".TRIM(addslashes($row_usergenericgroup['CUSTOMER']))."',"
-                                            ."'".$_SERVER['REMOTE_ADDR']."',"
-                                            ."'".date('Y-m-d H:i:s')."')";
-            }
-        }
-        if(!empty($r_usergenericgroup)){
-            $value_usergenericgroup        = implode(',', $r_usergenericgroup);
-            $fetch_data_rc = mysqli_query($con_nowprd, "INSERT INTO buku_pinjam(no_warna,long_description,kode,idcustomer,customer,IPADDRESS,CREATEDATETIME) VALUES $value_usergenericgroup");
-        }
-
-        if($fetch_data_rc){
-            echo '<script language="javascript">';
-            echo 'let text = "Sync RC data berhasil !";
-                    if (confirm(text) == true) {
-                        document.location.href = "prd_pinjam_stdcckwarna.php";
-                    } else {
-                        document.location.href = "prd_pinjam_stdcckwarna.php";
-                    }';
-            echo '</script>';
-        }
-
-        header("Location: prd_pinjam_stdcckwarna.php");
-    }elseif (isset($_POST['simpan'])) {
+    if (isset($_POST['simpan'])) {
         $id         = sprintf("%'.00d\n", $_POST['id']);
         $no_absen   = $_POST['no_absen'];
         $ket        = $_POST['ket'];
@@ -264,7 +218,7 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Form Pinjam Buku RC</h5>
+                                        <h5>Form Pinjam Buku LD</h5>
                                     </div>
                                     <form action="" method="post">
                                         <div class="card-block" <?php if (isset($_POST['tambah']) OR $_GET['tambah'] == '1') : ?> hidden <?php else : ?> show <?php endif; ?>>
@@ -308,35 +262,49 @@
                                                 <?php endif; ?>
 
                                                 <button type="submit" style="background-color: transparent; background-repeat: no-repeat; border: none; cursor: pointer;overflow: hidden;outline: none;"></button>
-                                                <button type="submit" name="simpan" class="btn btn-primary btn-sm"><i class="icofont icofont-save"></i> Simpan RC</button>
-                                                <button type="submit" name="submit" class="btn btn-success btn-sm"><i class="icofont icofont-save"></i> Fetch Data RC</button>
-                                                <button type="submit" name="lihatdata" class="btn btn-warning btn-sm"><i class="icofont icofont-save"></i> Lihat Semua Data RC</button>
-                                                <button type="submit" name="lihatdata_bergerak" class="btn btn-danger btn-sm"><i class="icofont icofont-external"></i> Lihat data transaksi RC</button>
-                                                <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132' OR $_SERVER['REMOTE_ADDR'] == '10.0.7.90' OR $_SERVER['REMOTE_ADDR'] == '10.0.7.106') : ?>
-                                                    <button type="submit" name="lihatdata_arsip" class="btn btn-inverse btn-sm"><i class="icofont icofont-ui-file"></i>Lihat arsip RC</button>
-                                                <?php endif; ?>
-                                                <?php if (isset($_POST['lihatdata'])) : ?>
-                                                    <a href="prd_prd_pinjam_stdcckwarna_excel.php?arsip=0" class="btn btn-info btn-sm"><i class="icofont icofont-file-excel"></i>Export Excel</a>
-                                                <?php elseif (isset($_POST['lihatdata_arsip'])) : ?>
-                                                    <a href="prd_prd_pinjam_stdcckwarna_excel.php?arsip=1" class="btn btn-info btn-sm"><i class="icofont icofont-file-excel"></i>Export Excel</a>
-                                                <?php endif; ?>
+                                                <button type="submit" name="simpan" class="btn btn-primary btn-sm"><i class="icofont icofont-save"></i> Simpan</button>
+                                                <button type="submit" name="lihatdata_ld" class="btn btn-warning btn-sm"><i class="icofont icofont-save"></i> Lihat semua data LD</button>
+                                                <button type="submit" name="lihatdata_bergerak" class="btn btn-danger btn-sm"><i class="icofont icofont-external"></i> Lihat data transaksi LD</button>
+                                                <button type="submit" name="lihatdata_arsip" class="btn btn-inverse btn-sm"><i class="icofont icofont-ui-file"></i>Lihat arsip LD</button>
                                                 <button type="submit" name="tambah" class="btn btn-default btn-sm"><i class="icofont icofont-ui-add"></i> Tambah Baru</button>
                                             </div>
+                                            <!-- 
+                                                <div class="card-header">
+                                                    <h5>Filter Pencarian</h5>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2 col-form-label">No Warna</label>
+                                                    <div class="col-sm-2">
+                                                        <select class="js-example-basic-multiple-limit col-sm-2" name='no_warna'>
+                                                            <option value="-" disabled selected>Pilih</option>
+                                                            <?php
+                                                                $q_buku_pinjam  = mysqli_query($con_nowprd, "SELECT DISTINCT no_warna, long_description FROM `buku_pinjam` ORDER BY id DESC");
+                                                            ?>
+                                                            <?php while($row_buku_pinjam = mysqli_fetch_array($q_buku_pinjam)) { ?>
+                                                                <option value="<?= $row_buku_pinjam['no_warna']; ?>"><?= $row_buku_pinjam['no_warna']; ?> | <?= $row_buku_pinjam['long_description']; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button type="submit" name="cari_data" class="btn btn-danger btn-xl"><i class="icofont icofont-ui-search"></i> Cari data</button>
+                                                    </div>
+                                                </div>
+                                            -->
                                         </div>
                                     </form>
                                     <?php if (isset($_POST['tambah']) OR $_GET['tambah'] == '1') : ?>
                                         <div class="card-block">
                                             <form action="" method="post">
                                                 <div class="form-group row">
-                                                    <label class="col-sm-2 col-form-label">No Warna </label>
+                                                    <label class="col-sm-2 col-form-label">Standart Cocok Warna</label>
                                                     <div class="col-sm-2">
-                                                        <select name="no_warna" id="no_warna" onchange="cari_no_warna()" class="js-example-basic-single col-sm-2">
+                                                        <select  name="no_warna" id="no_warna" onchange="cari_std_cck_warna()" class="js-example-basic-single col-sm-2">
                                                             <option value="" disabled selected>Pilih</option>
                                                             <?php
-                                                                $q_usergeneric = db2_exec($conn1, "SELECT * FROM USERGENERICGROUP WHERE USERGENERICGROUPTYPECODE = 'CL1' ORDER BY CODE ASC");
-                                                                while ($row_usergeneric = db2_fetch_assoc($q_usergeneric)) { 
+                                                                $q_usergeneric = mysqli_query($con_db_lab, "SELECT DISTINCT no_warna FROM `tbl_matching` WHERE not recipe_code = ''");
+                                                                while ($row_usergeneric = mysqli_fetch_array($q_usergeneric)) { 
                                                             ?>
-                                                                <option value="<?= TRIM($row_usergeneric['CODE']); ?>"><?= TRIM($row_usergeneric['CODE']); ?></option>
+                                                                <option value="<?= TRIM($row_usergeneric['no_warna']); ?>"><?= TRIM($row_usergeneric['no_warna']); ?></option>
                                                             <?php } ?>
                                                         </select>
                                                     </div>
@@ -356,9 +324,9 @@
                                                     <div class="col-sm-2">
                                                         <select name="kode" class="form-control" id="kode" onchange="window.location='prd_pinjam_stdcckwarna.php?kode='+this.value+'&tambah=1'" required>
                                                             <!-- <option value="DL" <?php if($kode == 'DL'){ echo "SELECTED"; } ?>>DL - Dye Lot Card</option> -->
-                                                            <option value="RC" selected>RC - Recipe Card</option>
+                                                            <!-- <option value="RC" <?php if($kode == 'RC'){ echo "SELECTED"; } ?>>RC - Recipe Card</option> -->
                                                             <!-- <option value="OR" <?php if($kode == 'OR'){ echo "SELECTED"; } ?>>OR - Original</option> -->
-                                                            <!-- <option value="LD" <?php if($kode == 'LD'){ echo "SELECTED"; } ?>>LD - Lab Dip</option> -->
+                                                            <option value="LD" selected>LD - Lab Dip</option>
                                                             <!-- <option value="SL" <?php if($kode == 'SL'){ echo "SELECTED"; } ?>>SL - Sample L/D</option> -->
                                                             <!-- <option value="TE" <?php if($kode == 'TE'){ echo "SELECTED"; } ?>>TE - Tempelan Sample Celup</option> -->
                                                             <!-- <option value="FL" <?php if($kode == 'FL'){ echo "SELECTED"; } ?>>FL - Frist Lot</option> -->
@@ -376,22 +344,20 @@
                                                 </div>
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
                                                     <button type="submit" name="simpan_tambah" class="btn btn-primary btn-sm"><i class="icofont icofont-save"></i> Simpan</button>
-                                                    <a href="prd_pinjam_stdcckwarna.php" class="btn btn-info btn-sm"><i class="icofont icofont-undo"></i> Kembali</a>
+                                                    <a href="prd_pinjam_stdcckwarna_ld.php" class="btn btn-info btn-sm"><i class="icofont icofont-undo"></i> Kembali</a>
                                                 </div>
                                             </form>
                                         </div>
                                     <?php endif; ?>
                                 </div>
-                                <?php if (isset($_POST['lihatdata']) OR isset($_POST['lihatdata_arsip']) OR isset($_POST['lihatdata_bergerak'])) : ?>
+                                <?php if (isset($_POST['lihatdata_ld']) OR isset($_POST['lihatdata_bergerak']) OR isset($_POST['lihatdata_arsip'])) : ?>
                                     <div class="card">
                                         <form action="printbarcode_bukupinjam.php" method="POST" target="_blank">
                                             <div class="card-header text-right">
-                                                <?php if (isset($_POST['lihatdata'])) : ?>
+                                                <?php if (isset($_POST['lihatdata_ld']) OR isset($_POST['lihatdata_bergerak'])) : ?>
                                                     <button type="submit" name="print_select" class="btn btn-primary btn-sm">Print Barcode</button>
                                                     <button type="submit" name="arsip_select" class="btn btn-inverse btn-sm">Arsipkan</button>
                                                     <span>Maks. 3 Barcode untuk dipilih</span>
-                                                <?php elseif (isset($_POST['lihatdata_arsip'])) : ?>
-                                                    <button type="submit" name="batalkan_arsip" class="btn btn-inverse btn-sm">Batalkan Arsip</button>
                                                 <?php endif; ?>
                                             </div>
                                             <div class="card-block">
@@ -401,7 +367,7 @@
                                                         <thead>
                                                             <th align="center" width="3%">#</th>
                                                             <th style="width:4%">No Barcode</th>
-                                                            <th style="width:3%">No Warna</th>
+                                                            <th style="width:3%">Std Cck Warna</th>
                                                             <th style="width:5%">Warna</th>
                                                             <th style="width:3%">Kode</th>
                                                             <th>Note</th>
@@ -412,20 +378,18 @@
                                                         </thead>
                                                         <tbody>
                                                             <?php
-                                                                if (isset($_POST['lihatdata'])){
-                                                                    $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE status_file IS NULL AND kode = 'RC' ORDER BY id DESC LIMIT 10000");
+                                                                if (isset($_POST['lihatdata_bergerak'])){
+                                                                    $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE (tgl_in IS NOT NULL OR tgl_out IS NOT NULL) AND kode = 'LD' ORDER BY id DESC LIMIT 10000");
                                                                 }elseif (isset($_POST['lihatdata_arsip'])){
-                                                                    $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE status_file = 'Arsip' AND kode = 'RC'  ORDER BY id DESC LIMIT 10000");
-                                                                }elseif (isset($_POST['lihatdata_bergerak'])){
-                                                                    $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE (tgl_in IS NOT NULL OR tgl_out IS NOT NULL) AND kode = 'RC' ORDER BY id DESC LIMIT 10000");
+                                                                    $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE kode = 'LD' AND archive = 'Diarsipkan' ORDER BY id DESC LIMIT 10000");
+                                                                }elseif (isset($_POST['lihatdata_ld'])){
+                                                                    $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE kode = 'LD' ORDER BY id DESC LIMIT 10000");
                                                                 }
                                                             ?>
                                                             <?php while ($row_bukupinjam = mysqli_fetch_array($q_bukupinjam)) { ?>
                                                                 <tr>
                                                                     <td align="center">
-                                                                        <?php if (isset($_POST['lihatdata'])) : ?>
-                                                                            <input type="checkbox" name="id_barcode[]" value="<?= sprintf("%'.06d\n", $row_bukupinjam['id']); ?>">
-                                                                        <?php elseif (isset($_POST['lihatdata_arsip'])) : ?>
+                                                                        <?php if (isset($_POST['lihatdata_ld'])) : ?>
                                                                             <input type="checkbox" name="id_barcode[]" value="<?= sprintf("%'.06d\n", $row_bukupinjam['id']); ?>">
                                                                         <?php endif; ?>
                                                                     </td>
@@ -461,13 +425,9 @@
                                                                         ?>
                                                                     </td>
                                                                     <td>
-                                                                        <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132' OR $_SERVER['REMOTE_ADDR'] == '10.0.7.90' OR $_SERVER['REMOTE_ADDR'] == '10.0.7.106') : ?>
-                                                                            <a data-pk="<?= $row_bukupinjam['id'] ?>" data-value="<?= $row_bukupinjam['archive'] ?>" class="archive_edit" href="javascipt:void(0)">
-                                                                                <?= $row_bukupinjam['archive']; ?>
-                                                                            </a>
-                                                                        <?php else : ?>
+                                                                        <a data-pk="<?= $row_bukupinjam['id'] ?>" data-value="<?= $row_bukupinjam['archive'] ?>" class="archive_edit" href="javascipt:void(0)">
                                                                             <?= $row_bukupinjam['archive']; ?>
-                                                                        <?php endif; ?>
+                                                                        </a>
                                                                     </td>
                                                                     <td>
                                                                         <a href="prd_prd_pinjam_stdcckwarna_history.php?id=<?= $row_bukupinjam['id'] ?>" target="_blank" class="btn btn-primary btn-round btn-sm"><i class="icofont icofont-history"></i>History</a>

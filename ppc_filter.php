@@ -337,10 +337,16 @@
                                                                     // mendeteksi statusnya close
                                                                     $q_deteksi_status_close = db2_exec($conn1, "SELECT 
                                                                                                                     p.PRODUCTIONORDERCODE AS PRODUCTIONORDERCODE, 
-                                                                                                                    p.GROUPSTEPNUMBER AS GROUPSTEPNUMBER,
+                                                                                                                    -- CASE
+                                                                                                                    --     WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER
+                                                                                                                    --     WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                                                    --     ELSE p.GROUPSTEPNUMBER
+                                                                                                                    -- END AS GROUPSTEPNUMBER,
+                                                                                                                    TRIM(p.GROUPSTEPNUMBER) AS GROUPSTEPNUMBER,
                                                                                                                     TRIM(p.PROGRESSSTATUS) AS PROGRESSSTATUS
                                                                                                                 FROM 
                                                                                                                     VIEWPRODUCTIONDEMANDSTEP p
+                                                                                                                -- LEFT JOIN PRODUCTIONDEMANDSTEP p2 ON p2.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND p2.STEPTYPE = p.STEPTYPE AND p2.OPERATIONCODE = p.OPERATIONCODE 
                                                                                                                 WHERE
                                                                                                                     p.PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' AND
                                                                                                                     (p.PROGRESSSTATUS = '3' OR p.PROGRESSSTATUS = '2') ORDER BY p.GROUPSTEPNUMBER DESC LIMIT 1");
@@ -350,12 +356,17 @@
                                                                         if($row_status_close['PROGRESSSTATUS'] == '2'){ // KALAU PROGRESS STATUSNYA ENTERED
                                                                             $q_delay_progress_selesai   = db2_exec($conn1, "SELECT 
                                                                                                                                 p.PRODUCTIONORDERCODE AS PRODUCTIONORDERCODE, 
-                                                                                                                                p.GROUPSTEPNUMBER AS GROUPSTEPNUMBER,
+                                                                                                                                CASE
+                                                                                                                                    WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER
+                                                                                                                                    WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                                                                    ELSE p.GROUPSTEPNUMBER
+                                                                                                                                END AS GROUPSTEPNUMBER,
                                                                                                                                 iptip.MULAI,
                                                                                                                                 DAYS(CURRENT DATE) - DAYS(iptip.MULAI) AS DELAY_PROGRESSSTATUS,
                                                                                                                                 p.PROGRESSSTATUS AS PROGRESSSTATUS
                                                                                                                             FROM 
                                                                                                                                 PRODUCTIONDEMANDSTEP p
+                                                                                                                            LEFT JOIN PRODUCTIONDEMANDSTEP p2 ON p2.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND p2.STEPTYPE = p.STEPTYPE AND p2.OPERATIONCODE = p.OPERATIONCODE 
                                                                                                                             LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                                             WHERE
                                                                                                                                 p.PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' AND p.PROGRESSSTATUS = '2' ORDER BY p.GROUPSTEPNUMBER DESC LIMIT 1");
@@ -365,13 +376,24 @@
                                                                         }elseif($row_status_close['PROGRESSSTATUS'] == '3'){ // KALAU PROGRESS STATUSNYA PROGRESS
                                                                             $q_delay_progress_mulai   = db2_exec($conn1, "SELECT 
                                                                                                                                 p.PRODUCTIONORDERCODE AS PRODUCTIONORDERCODE, 
-                                                                                                                                p.GROUPSTEPNUMBER AS GROUPSTEPNUMBER,
+                                                                                                                                CASE
+                                                                                                                                    WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER
+                                                                                                                                    WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                                                                    ELSE p.GROUPSTEPNUMBER
+                                                                                                                                END AS GROUPSTEPNUMBER,
                                                                                                                                 iptop.SELESAI,
                                                                                                                                 DAYS(CURRENT DATE) - DAYS(iptop.SELESAI) AS DELAY_PROGRESSSTATUS,
                                                                                                                                 p.PROGRESSSTATUS AS PROGRESSSTATUS
                                                                                                                             FROM 
                                                                                                                                 VIEWPRODUCTIONDEMANDSTEP p
-                                                                                                                            LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.GROUPSTEPNUMBER
+                                                                                                                            LEFT JOIN PRODUCTIONDEMANDSTEP p2 ON p2.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND p2.STEPTYPE = p.STEPTYPE AND p2.OPERATIONCODE = p.OPERATIONCODE
+                                                                                                                            LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE 
+                                                                                                                                                                                AND iptop.DEMANDSTEPSTEPNUMBER = 
+                                                                                                                                                                                    CASE
+                                                                                                                                                                                        WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER
+                                                                                                                                                                                        WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                                                                                                                        ELSE p.GROUPSTEPNUMBER
+                                                                                                                                                                                    END
                                                                                                                             WHERE
                                                                                                                                 p.PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' AND p.PROGRESSSTATUS = '3' ORDER BY p.GROUPSTEPNUMBER DESC LIMIT 1");
                                                                             $d_delay_progress_mulai   = db2_fetch_assoc($q_delay_progress_mulai);
@@ -380,7 +402,6 @@
                                                                         }else{
                                                                             $jam_status_terakhir      = '';
                                                                             $delay_progress_status    = '';
-
                                                                         }
                                                                     // UNTUK DELAY PROGRESS STATUS PERMINTAAN MS. AMY
 
@@ -525,7 +546,7 @@
                                                                                                                     wc.LONGDESCRIPTION AS DEPT, 
                                                                                                                     p.WORKCENTERCODE
                                                                                                                 FROM 
-                                                                                                                    VIEWPRODUCTIONDEMANDSTEP p                                                                                                        -- p.PRODUCTIONDEMANDCODE = '$rowdb2[DEMAND]' AND
+                                                                                                                    VIEWPRODUCTIONDEMANDSTEP p
                                                                                                                 LEFT JOIN WORKCENTER wc ON wc.CODE = p.WORKCENTERCODE
                                                                                                                 LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE
                                                                                                                 WHERE 
@@ -660,8 +681,17 @@
                                                             </td> <!-- NETTO YD-->
                                                             <td><?= $rowdb2['DELAY']; ?></td> <!-- DELAY -->
                                                             <td><?= $kode_dept; ?></td> <!-- KODE DEPT -->
-                                                            <td><?= $status_terakhir; ?> <?php if($status_operation != 'KK Oke') : ?> (<?= $jam_status_terakhir; ?>) <?php endif; ?></td> <!-- STATUS TERAKHIR -->
-                                                            <td> <?php if($status_operation != 'KK Oke') : ?><?= $delay_progress_status; ?><?php endif; ?></td> <!-- DELAY PROGRESS STATUS -->
+                                                            <td>
+                                                                <?= $status_terakhir; ?> 
+                                                                <?php if($status_operation != 'KK Oke') : ?> 
+                                                                    (<?= $jam_status_terakhir; ?>) 
+                                                                <?php endif; ?>
+                                                            </td> <!-- STATUS TERAKHIR -->
+                                                            <td>
+                                                                <?php if($status_operation != 'KK Oke') : ?>
+                                                                    <?= $delay_progress_status; ?>
+                                                                <?php endif; ?>
+                                                            </td> <!-- DELAY PROGRESS STATUS -->
                                                             <td><?= $status_operation; ?></td> <!-- PROGRESS STATUS -->
                                                             <td><?= $rowdb2['LOT']; ?></td> <!-- LOT -->
                                                             <td><a target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $rowdb2['DEMAND']; ?>&prod_order=<?= $rowdb2['NO_KK']; ?>">`<?= $rowdb2['DEMAND']; ?></a></td> <!-- DEMAND -->
