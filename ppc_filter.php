@@ -148,6 +148,7 @@
                                                             <th>STATUS TERAKHIR</th>
                                                             <th>DELAY PROGRESS STATUS</th>
                                                             <th>PROGRESS STATUS</th>
+                                                            <th>TOTAL HARI BAGI KAIN</th>
                                                             <th>LOT</th>
                                                             <th>NO DEMAND</th>
                                                             <th>NO KARTU KERJA</th>
@@ -693,6 +694,16 @@
                                                                 <?php endif; ?>
                                                             </td> <!-- DELAY PROGRESS STATUS -->
                                                             <td><?= $status_operation; ?></td> <!-- PROGRESS STATUS -->
+                                                            <td>
+                                                                <?php
+                                                                    $tgl_bagikain   = date_create($d_tglbagikain['TRANSACTIONDATE']);
+                                                                    $tglsekarang    = date_create(date('Y-m-d H:i:s'));
+                                                                    
+                                                                    $diff_totalharibagikain = date_diff($tgl_bagikain, $tglsekarang);
+
+                                                                    echo $diff_totalharibagikain->m. ' Bulan, '.$diff_totalharibagikain->d. ' Hari';
+                                                                ?>
+                                                            </td> <!-- TOTAL HARI BAGI KAIN -->
                                                             <td><?= $rowdb2['LOT']; ?></td> <!-- LOT -->
                                                             <td><a target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $rowdb2['DEMAND']; ?>&prod_order=<?= $rowdb2['NO_KK']; ?>">`<?= $rowdb2['DEMAND']; ?></a></td> <!-- DEMAND -->
                                                             <td>`<?= $rowdb2['NO_KK']; ?></td> <!-- NO KARTU KERJA -->

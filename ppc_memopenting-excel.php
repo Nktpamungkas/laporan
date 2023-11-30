@@ -33,6 +33,7 @@ header('Cache-Control: max-age=0');
             <th>STATUS TERAKHIR</th>
             <th>DELAY PROGRESS STATUS</th>
             <th>PROGRESS STATUS</th>
+            <th>TOTAL HARI BAGI KAIN</th>
             <th>JAM (IN - OUT)</th>
             <th>ALUR PROSES</th>
             <th>LOT</th>
@@ -437,6 +438,16 @@ header('Cache-Control: max-age=0');
                     <td><?= $status_terakhir; ?> (<?= $jam_status_terakhir; ?>)</td> <!-- STATUS TERAKHIR -->
                     <td><?= $delay_progress_status; ?></td> <!-- DELAY PROGRESS STATUS -->
                     <td><?= $status_operation; ?></td> <!-- PROGRESS STATUS -->
+                    <td>
+                        <?php
+                            $tgl_bagikain   = date_create($d_tglbagikain['TRANSACTIONDATE']);
+                            $tglsekarang    = date_create(date('Y-m-d H:i:s'));
+                            
+                            $diff_totalharibagikain = date_diff($tgl_bagikain, $tglsekarang);
+
+                            echo $diff_totalharibagikain->m. ' Bulan, '.$diff_totalharibagikain->d. ' Hari';
+                        ?>
+                    </td> <!-- TOTAL HARI BAGI KAIN -->
                     <td>
                         <?php
                             session_start();
