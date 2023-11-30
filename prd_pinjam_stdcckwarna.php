@@ -59,7 +59,8 @@
             $in             = mysqli_query($con_nowprd, "UPDATE buku_pinjam 
                                                             SET absen_in = '$no_absen',
                                                                 tgl_in = '$tgl',
-                                                                ket = '$ket'
+                                                                ket = '$ket',
+                                                                archive = 'Belum_Diarsipkan'
                                                             WHERE
                                                                 id = '$id'");
             $in_history     = mysqli_query($con_nowprd, "INSERT INTO buku_pinjam_history(id_buku_pinjam,no_absen,tgl_in,ket)VALUES('$id','$no_absen', '$tgl', '$ket')");
@@ -107,7 +108,7 @@
         $tgl                = date('Y-m-d H:i:s');
         $ip                 = $_SERVER['REMOTE_ADDR'];
 
-        $buku_pinjam     = mysqli_query($con_nowprd, "INSERT INTO buku_pinjam(no_warna,long_description,kode,note,customer,IPADDRESS,CREATEDATETIME)VALUES('$no_warna','$long_description','$kode','$note','$customer','$tgl','$ip')");
+        $buku_pinjam     = mysqli_query($con_nowprd, "INSERT INTO buku_pinjam(no_warna,long_description,kode,note,customer,IPADDRESS,CREATEDATETIME)VALUES('$no_warna','$long_description','$kode','$note','$customer','$ip','$tgl')");
         if($buku_pinjam){
             echo '<script language="javascript">';
             echo 'let text = "Berhasil menyimpan data !";

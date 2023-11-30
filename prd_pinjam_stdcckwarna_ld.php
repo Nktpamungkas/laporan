@@ -13,7 +13,8 @@
             $in             = mysqli_query($con_nowprd, "UPDATE buku_pinjam 
                                                             SET absen_in = '$no_absen',
                                                                 tgl_in = '$tgl',
-                                                                ket = '$ket'
+                                                                ket = '$ket',
+                                                                archive = 'Belum_Diarsipkan'
                                                             WHERE
                                                                 id = '$id'");
             $in_history     = mysqli_query($con_nowprd, "INSERT INTO buku_pinjam_history(id_buku_pinjam,no_absen,tgl_in,ket)VALUES('$id','$no_absen', '$tgl', '$ket')");
@@ -21,9 +22,9 @@
                 echo '<script language="javascript">';
                 echo 'let text = "Berhasil menyimpan data !";
                         if (confirm(text) == true) {
-                            document.location.href = "prd_pinjam_stdcckwarna.php";
+                            document.location.href = "prd_pinjam_stdcckwarna_ld.php";
                         } else {
-                            document.location.href = "prd_pinjam_stdcckwarna.php";
+                            document.location.href = "prd_pinjam_stdcckwarna_ld.php";
                         }';
                 echo '</script>';
 
@@ -40,9 +41,9 @@
                 echo '<script language="javascript">';
                 echo 'let text = "Berhasil menyimpan data !";
                         if (confirm(text) == true) {
-                            document.location.href = "prd_pinjam_stdcckwarna.php";
+                            document.location.href = "prd_pinjam_stdcckwarna_ld.php";
                         } else {
-                            document.location.href = "prd_pinjam_stdcckwarna.php";
+                            document.location.href = "prd_pinjam_stdcckwarna_ld.php";
                         }';
                 echo '</script>';
             }
@@ -61,14 +62,14 @@
         $tgl                = date('Y-m-d H:i:s');
         $ip                 = $_SERVER['REMOTE_ADDR'];
 
-        $buku_pinjam     = mysqli_query($con_nowprd, "INSERT INTO buku_pinjam(no_warna,long_description,kode,note,customer,IPADDRESS,CREATEDATETIME)VALUES('$no_warna','$long_description','$kode','$note','$customer','$tgl','$ip')");
+        $buku_pinjam     = mysqli_query($con_nowprd, "INSERT INTO buku_pinjam(no_warna,long_description,kode,note,customer,IPADDRESS,CREATEDATETIME)VALUES('$no_warna','$long_description','$kode','$note','$customer','$ip','$tgl')");
         if($buku_pinjam){
             echo '<script language="javascript">';
             echo 'let text = "Berhasil menyimpan data !";
                     if (confirm(text) == true) {
-                        document.location.href = "prd_pinjam_stdcckwarna.php";
+                        document.location.href = "prd_pinjam_stdcckwarna_ld.php";
                     } else {
-                        document.location.href = "prd_pinjam_stdcckwarna.php";
+                        document.location.href = "prd_pinjam_stdcckwarna_ld.php";
                     }';
             echo '</script>';
         }
@@ -91,9 +92,9 @@
             echo '<script language="javascript">';
             echo 'let text = "update nama warna data berhasil !";
                     if (confirm(text) == true) {
-                        document.location.href = "prd_pinjam_stdcckwarna.php";
+                        document.location.href = "prd_pinjam_stdcckwarna_ld.php";
                     } else {
-                        document.location.href = "prd_pinjam_stdcckwarna.php";
+                        document.location.href = "prd_pinjam_stdcckwarna_ld.php";
                     }';
             echo '</script>';
         }
@@ -118,9 +119,9 @@
         //             echo '<script language="javascript">';
         //             echo 'let text = "Arsip berhasil di batalkan !";
         //                     if (confirm(text) == true) {
-        //                         document.location.href = "prd_pinjam_stdcckwarna.php";
+        //                         document.location.href = "prd_pinjam_stdcckwarna_ld.php";
         //                     } else {
-        //                         document.location.href = "prd_pinjam_stdcckwarna.php";
+        //                         document.location.href = "prd_pinjam_stdcckwarna_ld.php";
         //                     }';
         //             echo '</script>';
 
@@ -322,7 +323,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-2 col-form-label">Kode</label>
                                                     <div class="col-sm-2">
-                                                        <select name="kode" class="form-control" id="kode" onchange="window.location='prd_pinjam_stdcckwarna.php?kode='+this.value+'&tambah=1'" required>
+                                                        <select name="kode" class="form-control" id="kode" onchange="window.location='prd_pinjam_stdcckwarna_ld.php?kode='+this.value+'&tambah=1'" required>
                                                             <!-- <option value="DL" <?php if($kode == 'DL'){ echo "SELECTED"; } ?>>DL - Dye Lot Card</option> -->
                                                             <!-- <option value="RC" <?php if($kode == 'RC'){ echo "SELECTED"; } ?>>RC - Recipe Card</option> -->
                                                             <!-- <option value="OR" <?php if($kode == 'OR'){ echo "SELECTED"; } ?>>OR - Original</option> -->
