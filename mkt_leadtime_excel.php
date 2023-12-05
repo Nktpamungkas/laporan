@@ -1714,8 +1714,8 @@
                 $row_posisikk_stm1_2      = mysqli_fetch_assoc($q_posisikk_stm1_2);
 
                 if($row_posisikk_stm1_1['mulai'] == '0000-00-00 00:00:00'){
-                    $waktuawal_fin1         = date_create($row_posisikk_fin1_2['mulai']);
-                    $waktuakhir_fin1        = date_create($row_posisikk_fin1_2['selesai']);
+                    $waktuawal_stm1         = date_create($row_posisikk_stm1_2['mulai']);
+                    $waktuakhir_stm1        = date_create($row_posisikk_stm1_2['selesai']);
                 }elseif($row_posisikk_stm1_2['selesai'] == '0000-00-00 00:00:00'){
                     $waktuawal_stm1         = date_create($row_posisikk_stm1_1['mulai']);
                     $waktuakhir_stm1        = date_create($row_posisikk_stm1_1['mulai']);
