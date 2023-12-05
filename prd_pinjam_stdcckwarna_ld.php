@@ -356,6 +356,7 @@
                                         <form action="printbarcode_bukupinjam.php" method="POST" target="_blank">
                                             <div class="card-header text-right">
                                                 <?php if (isset($_POST['lihatdata_ld']) OR isset($_POST['lihatdata_bergerak'])) : ?>
+                                                    <a class="btn btn-mat btn-success btn-sm" href="prd_pinjam_stdcckwarna_ld_excel.php">Export Excel</a>
                                                     <button type="submit" name="print_select" class="btn btn-primary btn-sm">Print Barcode</button>
                                                     <button type="submit" name="arsip_select" class="btn btn-inverse btn-sm">Arsipkan</button>
                                                     <span>Maks. 3 Barcode untuk dipilih</span>
