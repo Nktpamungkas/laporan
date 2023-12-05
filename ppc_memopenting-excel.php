@@ -33,7 +33,7 @@ header('Cache-Control: max-age=0');
             <th>STATUS TERAKHIR</th>
             <th>DELAY PROGRESS STATUS</th>
             <th>PROGRESS STATUS</th>
-            <th>TOTAL HARI BAGI KAIN</th>
+            <th>TOTAL HARI </th>
             <th>JAM (IN - OUT)</th>
             <th>ALUR PROSES</th>
             <th>LOT</th>

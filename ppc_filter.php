@@ -148,7 +148,7 @@
                                                             <th>STATUS TERAKHIR</th>
                                                             <th>DELAY PROGRESS STATUS</th>
                                                             <th>PROGRESS STATUS</th>
-                                                            <th>TOTAL HARI BAGI KAIN</th>
+                                                            <th>TOTAL HARI</th>
                                                             <th>LOT</th>
                                                             <th>NO DEMAND</th>
                                                             <th>NO KARTU KERJA</th>
