@@ -397,14 +397,13 @@
                                             </div>
                                             <div class="card-block">
                                                 <div class="dt-responsive table-responsive">
-                                                    <table id="scr-vrt-dt" class="table table-striped table-bordered nowrap">
-                                                    <!-- <table id="simpletable" style="width: 100%;" class="table table-striped table-bordered nowrap"> -->
+                                                    <table class="table table-striped table-bordered nowrap" id="example2" style="width:100%">
                                                         <thead>
-                                                            <th align="center" width="3%">#</th>
-                                                            <th style="width:4%">No Barcode</th>
-                                                            <th style="width:3%">No Warna</th>
-                                                            <th style="width:5%">Warna</th>
-                                                            <th style="width:3%">Kode</th>
+                                                            <th align="center">#</th>
+                                                            <th>No Barcode</th>
+                                                            <th>No Warna</th>
+                                                            <th>Warna</th>
+                                                            <th>Kode</th>
                                                             <th>Note</th>
                                                             <th>Customer</t>
                                                             <th>Status Pinjam</th>
@@ -491,3 +490,13 @@
     </div>
 </body>
 <?php require_once 'footer.php'; ?>
+<script>
+    $(function() {
+	    $('#example2').DataTable({
+            'searching': true
+        });
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+    })
+</script>
