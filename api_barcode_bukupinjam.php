@@ -1,7 +1,7 @@
 <?php
     include 'koneksi.php';
 
-    $id    = sprintf("%'.00d\n", $_GET['id']);
+    $id    = sprintf("%'.06d\n", $_GET['id']);
     // Syntax MySql untuk melihat semua record yang
     $sql = "SELECT * FROM buku_pinjam WHERE id = '$id'";
 

@@ -3,7 +3,7 @@
     session_start();
     require_once "koneksi.php"; 
     if (isset($_POST['simpan'])) {
-        $id         = sprintf("%'.00d\n", $_POST['id']);
+        $id         = TRIM(sprintf("%'.06d\n", $_POST['id']));
         $no_absen   = $_POST['no_absen'];
         $ket        = $_POST['ket'];
         $status     = $_POST['status'];
@@ -14,9 +14,8 @@
                                                             SET absen_in = '$no_absen',
                                                                 tgl_in = '$tgl',
                                                                 ket = '$ket',
-                                                                absen_out = '',
-                                                                tgl_out = '',
-                                                                keterangan = '',
+                                                                absen_out = null,
+                                                                tgl_out = null,
                                                                 archive = 'Belum_Diarsipkan'
                                                             WHERE
                                                                 id = '$id'");
@@ -30,7 +29,6 @@
                             document.location.href = "prd_pinjam_stdcckwarna_ld.php";
                         }';
                 echo '</script>';
-
             }
         }else{
             $out            = mysqli_query($con_nowprd, "UPDATE buku_pinjam 
@@ -102,35 +100,6 @@
             echo '</script>';
         }
     }
-    // if(isset($_POST['batalkan_arsip'])){
-        //     require_once "koneksi.php";
-        //     $id_generate = $_POST['id_barcode'];
-        //     if (empty($id_generate)) {
-        //         echo ("You didn't select anything");
-        //     } else {
-        //         $total_selected = count($id_generate);
-        
-        //         for ($i = 0 ; $i < 3; $i++) {
-        //             $value_generate[]   =  "'".$id_generate[$i]."'";
-        //         }
-        //         $where_value    = implode(', ', $value_generate);
-        
-        //         $q_pinjambuku   = mysqli_query($con_nowprd, "UPDATE buku_pinjam 
-        //                                                         SET status_file = null 
-        //                                                         WHERE id IN ($where_value)");
-        //         if($q_pinjambuku){
-        //             echo '<script language="javascript">';
-        //             echo 'let text = "Arsip berhasil di batalkan !";
-        //                     if (confirm(text) == true) {
-        //                         document.location.href = "prd_pinjam_stdcckwarna_ld.php";
-        //                     } else {
-        //                         document.location.href = "prd_pinjam_stdcckwarna_ld.php";
-        //                     }';
-        //             echo '</script>';
-
-        //         }
-        //     }
-    // }
 ?>
 <!DOCTYPE html>
 <html lang="en">

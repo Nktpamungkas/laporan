@@ -3,7 +3,7 @@
     session_start();
     require_once "koneksi.php"; 
     if (isset($_POST['simpan'])) {
-        $id         = sprintf("%'.00d\n", $_POST['id']);
+        $id         = TRIM(sprintf("%'.06d\n", $_POST['id']));
         $no_absen   = $_POST['no_absen'];
         $ket        = $_POST['ket'];
         $status     = $_POST['status'];
@@ -14,8 +14,8 @@
                                                                 SET absen_in = '$no_absen',
                                                                     tgl_in = '$tgl',
                                                                     keterangan = '$ket',
-                                                                    absen_out = '',
-                                                                    tgl_out = '',
+                                                                    absen_out = null,
+                                                                    tgl_out = null,
                                                                     archive = 'Belum_Diarsipkan'
                                                                 WHERE
                                                                     id = '$id'");
