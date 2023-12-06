@@ -237,6 +237,11 @@
                                         </a>
                                     </li>
                                     <li class="">
+                                        <a href="prd_pinjam_stdcckwarna_dl.php" data-i18n="nav.animations.main">
+                                            Pinjam Std Cck Warna DL
+                                        </a>
+                                    </li>
+                                    <li class="">
                                         <a href="prd_openticketMTC.php" data-i18n="nav.animations.main">
                                             View Openticket MTC
                                         </a>
