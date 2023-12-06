@@ -232,7 +232,7 @@
                                         </a>
                                     </li>
                                     <li class="">
-                                        <a href="prd_pinjam_stdcckwarna_le.php" data-i18n="nav.animations.main" style="pointer-events: none; cursor: default;">
+                                        <a href="prd_pinjam_stdcckwarna_te.php" data-i18n="nav.animations.main">
                                             Pinjam Std Cck Warna TE
                                         </a>
                                     </li>

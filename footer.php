@@ -88,6 +88,17 @@
                 {value: "Diarsipkan", text: "Diarsipkan"},
                 {value: "Belum_Diarsipkan", text: "Belum Diarsipkan"}]
       });
+      $('.archive_edit_te').editable({
+        type: 'select',
+        showbuttons : false,
+        url: 'editable/editable_archive_te.php',
+        disabled : false,
+        showbuttons : false,
+        source:[{value: "", text: ""}, 
+                {value: "Diarsipkan LAB", text: "Diarsipkan LAB"},
+                {value: "Diarsipkan", text: "Diarsipkan"},
+                {value: "Belum_Diarsipkan", text: "Belum Diarsipkan"}]
+      });
     })
 </script>
 <script>

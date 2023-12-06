@@ -60,6 +60,9 @@
                                                             SET absen_in = '$no_absen',
                                                                 tgl_in = '$tgl',
                                                                 ket = '$ket',
+                                                                absen_out = '',
+                                                                tgl_out = '',
+                                                                keterangan = '',
                                                                 archive = 'Belum_Diarsipkan'
                                                             WHERE
                                                                 id = '$id'");
