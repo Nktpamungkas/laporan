@@ -16,7 +16,6 @@
                                                                     keterangan = '$ket',
                                                                     absen_out = '',
                                                                     tgl_out = '',
-                                                                    keterangan = '',
                                                                     archive = 'Belum_Diarsipkan'
                                                                 WHERE
                                                                     id = '$id'");
@@ -159,6 +158,7 @@
                                                             <th>No Warna</t>
                                                             <th>Warna</t>
                                                             <th>Status Pinjam</th>
+                                                            <th>Keterangan</th>
                                                             <th>Archive</th>
                                                             <th>Opsi</th>
                                                         </thead>
@@ -174,7 +174,8 @@
                                                                                                                     a.absen_in,
                                                                                                                     a.tgl_in,
                                                                                                                     a.tgl_out,
-                                                                                                                    a.archive
+                                                                                                                    a.archive,
+                                                                                                                    a.keterangan
                                                                                                                 FROM
                                                                                                                     tbl_montemp a
                                                                                                                 LEFT JOIN tbl_schedule b ON b.id = a.id_schedule
@@ -208,6 +209,7 @@
                                                                             }
                                                                         ?>
                                                                     </td>
+                                                                    <td><?= $row_bukupinjam['keterangan']; ?></td>
                                                                     <td>
                                                                         <a data-pk="<?= $row_bukupinjam['id'] ?>" data-value="<?= $row_bukupinjam['archive'] ?>" class="archive_edit_te" href="javascipt:void(0)">
                                                                             <?= $row_bukupinjam['archive']; ?>
