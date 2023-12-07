@@ -321,11 +321,7 @@
                                                                     <td><?= sprintf("%'.06d\n", $row_bukupinjam['id']); ?></td>
                                                                     <td><?= $row_bukupinjam['no_warna']; ?></td>
                                                                     <td><?= $row_bukupinjam['long_description']; ?></td>
-                                                                    <td>
-                                                                        <a style="border-bottom:1px dashed green;" data-pk="<?= $row_bukupinjam['id'] ?>" data-value="<?= $row_bukupinjam['kode'] ?>" class="kode_edit">
-                                                                            <?= $row_bukupinjam['kode']; ?>
-                                                                        </a>
-                                                                    </td>
+                                                                    <td><?= $row_bukupinjam['kode']; ?></td>
                                                                     <td>
                                                                         <a data-pk="<?= $row_bukupinjam['id'] ?>" data-value="<?= $row_bukupinjam['note'] ?>" class="note_edit" href="javascipt:void(0)">
                                                                             <?= $row_bukupinjam['note'] ?>
