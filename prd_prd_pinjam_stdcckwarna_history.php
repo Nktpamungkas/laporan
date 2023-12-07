@@ -38,7 +38,13 @@
                 ini_set("error_reporting", 1);
                 session_start();
                 require_once "koneksi.php"; 
-                $q_history  = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam_history WHERE id_buku_pinjam = '$_GET[id]'");
+                $kode = $_GET['kode'];
+                if(!empty($kode)){
+                    $where = "AND kode = 'te'";
+                }else{
+                    $where = "";
+                }
+                $q_history  = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam_history WHERE id_buku_pinjam = '$_GET[id]' $where");
                 while ($row_history = mysqli_fetch_array($q_history)) {
                     $no_absen    = ltrim($row_history['no_absen'], '0');
                     $cari_nama_in = mysqli_query($con_hrd, "SELECT * FROM tbl_makar WHERE no_scan = '$no_absen'");

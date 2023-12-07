@@ -19,7 +19,7 @@
                                                                     archive = 'Belum_Diarsipkan'
                                                                 WHERE
                                                                     id = '$id'");
-            $in_history     = mysqli_query($con_nowprd, "INSERT INTO buku_pinjam_history(id_buku_pinjam,no_absen,tgl_in,ket)VALUES('$id','$no_absen', '$tgl', '$ket')");
+            $in_history     = mysqli_query($con_nowprd, "INSERT INTO buku_pinjam_history(id_buku_pinjam,kode,no_absen,tgl_in,ket)VALUES('$id','te','$no_absen', '$tgl', '$ket')");
             if($in_history){
                 echo '<script language="javascript">';
                 echo 'let text = "Berhasil menyimpan data !";
@@ -38,7 +38,7 @@
                                                                     keterangan = '$ket'
                                                                 WHERE
                                                                     id = '$id'");
-            $out_history    = mysqli_query($con_nowprd, "INSERT INTO buku_pinjam_history(id_buku_pinjam,no_absen,tgl_out,ket)VALUES('$id','$no_absen', '$tgl', '$ket')");
+            $out_history    = mysqli_query($con_nowprd, "INSERT INTO buku_pinjam_history(id_buku_pinjam,kode,no_absen,tgl_out,ket)VALUES('$id','te','$no_absen', '$tgl', '$ket')");
             if($out_history){
                 echo '<script language="javascript">';
                 echo 'let text = "Berhasil menyimpan data !";
@@ -216,7 +216,7 @@
                                                                         </a>
                                                                     </td>
                                                                     <td>
-                                                                        <a href="prd_prd_pinjam_stdcckwarna_history.php?id=<?= $row_bukupinjam['id'] ?>" target="_blank" class="btn btn-primary btn-round btn-sm"><i class="icofont icofont-history"></i>History</a>
+                                                                        <a href="prd_prd_pinjam_stdcckwarna_history.php?id=<?= $row_bukupinjam['id'] ?>&kode=te" target="_blank" class="btn btn-primary btn-round btn-sm"><i class="icofont icofont-history"></i>History</a>
                                                                     </td>
                                                                 </tr>
                                                             <?php } ?>
