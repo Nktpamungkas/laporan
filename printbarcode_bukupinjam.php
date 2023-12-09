@@ -1,3 +1,41 @@
+<?php if(isset($_POST['print_select_zebra'])) : ?>
+    <style>
+        @page {
+            size: 6cm 3cm;
+            margin: 0.21cm;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 6cm;
+            height: 3cm;
+        }
+    </style>
+    <?php
+        require_once "koneksi.php";
+        $id_generate = $_POST['id_barcode'];
+        if (empty($id_generate)) {
+            echo ("You didn't select anything");
+        } else {
+            $total_selected = count($id_generate);
+
+            for ($i = 0 ; $i < 100; $i++) {
+                $value_generate[]   =  "'".$id_generate[$i]."'";
+            }
+            $where_value    = implode(', ', $value_generate);
+
+            $q_pinjambuku   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE id IN ($where_value)");
+        }
+    ?>
+    <?php if (!empty($id_generate)) { ?>
+        <?php while ($row_data = mysqli_fetch_array($q_pinjambuku)) { ?>
+            <!-- <p> -->
+                <img src="barcode.php?text=<?= sprintf("%'.06d\n", $row_data['id']); ?>&print=true" width="210" height="106">
+            <!-- </p> -->
+        <?php } ?>
+    <?php } ?>
+<?php else : ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -17,7 +55,7 @@
 	}
 	</style>
 </head>
-<body>
+<body onload="print();">
 <?php if(isset($_POST['print_select'])){
         require_once "koneksi.php";
         $id_generate = $_POST['id_barcode'];
@@ -136,3 +174,4 @@
 } ?>
 </body>
 </html>
+<?php endif; ?>

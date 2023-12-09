@@ -390,9 +390,11 @@
                                         <form action="printbarcode_bukupinjam.php" method="POST" target="_blank">
                                             <div class="card-header text-right">
                                                 <?php if (isset($_POST['lihatdata'])) : ?>
+                                                    <button type="submit" name="print_select_zebra" class="btn btn-danger btn-sm">Print Barcode (Zebra)</button>
                                                     <button type="submit" name="print_select" class="btn btn-primary btn-sm">Print Barcode</button>
                                                     <button type="submit" name="arsip_select" class="btn btn-inverse btn-sm">Arsipkan</button>
                                                     <span>Maks. 3 Barcode untuk dipilih</span>
+                                                    <span>Untuk Print Barcode Zebra tidak ada batas maksimal.</span>
                                                 <?php elseif (isset($_POST['lihatdata_arsip'])) : ?>
                                                     <button type="submit" name="batalkan_arsip" class="btn btn-inverse btn-sm">Batalkan Arsip</button>
                                                 <?php endif; ?>
