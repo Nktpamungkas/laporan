@@ -54,7 +54,7 @@
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2">
                                                     <h4 class="sub-title">&nbsp;</h4>
-                                                    <button type="submit" name="submit" class="btn btn-primary btn-sm">Cari data</button>
+                                                    <button type="submit" name="submit" class="btn btn-primary btn-sm"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
                                                 </div>
                                             </div>
                                         </form>

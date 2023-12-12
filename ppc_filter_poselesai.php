@@ -85,11 +85,11 @@
                                                     <input type="date" name="tgl1_kirim" class="form-control" id="tgl1_kirim" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1_kirim']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
-                                                    <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
-                                                    <a class="btn btn-warning" href="ppc_filter_poselesai.php">Reset</a>
+                                                    <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
+                                                    <a class="btn btn-warning" href="ppc_filter_poselesai.php"><i class="icofont icofont-refresh"></i> Reset</a>
                                                 </div>
                                             </div>
-                                            <p>*Note : Jika data terasa mulai <b>lambat</b> cobalah untuk klik tombol <b>Reset</b> untuk menghapus semua history pencarian.</p>
+                                            <p>*Note : Jika data terasa mulai <b>lambat</b> cobalah untuk klik tombol <b><i class="icofont icofont-refresh"></i> Reset</b> untuk menghapus semua history pencarian.</p>
                                         </form>
                                     </div>
                                 </div>
@@ -1113,7 +1113,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                <?php elseif(isset($_POST['reset'])) : ?>
+                                <?php elseif(isset($_POST['<i class="icofont icofont-refresh"></i> Reset'])) : ?>
                                     <?php
                                         ini_set("error_reporting", 1);
                                         session_start();

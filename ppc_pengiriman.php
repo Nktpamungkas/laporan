@@ -48,7 +48,7 @@
                                                     <input type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
-                                                    <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
+                                                    <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
                                                     <?php if (isset($_POST['submit'])) : ?>
                                                         <a class="btn btn-mat btn-warning" target="_blank" href="ppc_pengiriman-excel.php?tgl1=<?= $_POST['tgl1']; ?>&no_order=<?= $_POST['no_order']; ?>">CETAK EXCEL</a>
                                                     <?php endif; ?>

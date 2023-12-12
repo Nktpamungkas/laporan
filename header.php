@@ -68,7 +68,7 @@
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
                                     <span class="pcoded-micon"><i class="feather icon-box"></i></span>
-                                    <span class="pcoded-mtext">FINISHING</span>
+                                    <span class="pcoded-mtext">FIN</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
                                 <ul class="pcoded-submenu">
@@ -87,7 +87,7 @@
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
                                     <span class="pcoded-micon"><i class="feather icon-box"></i></span>
-                                    <span class="pcoded-mtext">BRUSHING</span>
+                                    <span class="pcoded-mtext">BRS</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
                                 <ul class="pcoded-submenu">
@@ -115,7 +115,7 @@
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
                                     <span class="pcoded-micon"><i class="feather icon-box"></i></span>
-                                    <span class="pcoded-mtext">DYEING</span>
+                                    <span class="pcoded-mtext">DYE</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
                                 <ul class="pcoded-submenu">
@@ -159,7 +159,7 @@
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
                                     <span class="pcoded-micon"><i class="feather icon-box"></i></span>
-                                    <span class="pcoded-mtext">PURCHASING</span>
+                                    <span class="pcoded-mtext">PCS</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
                                 <ul class="pcoded-submenu">
@@ -173,7 +173,7 @@
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
                                     <span class="pcoded-micon"><i class="feather icon-box"></i></span>
-                                    <span class="pcoded-mtext">MARKETING</span>
+                                    <span class="pcoded-mtext">MKT</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
                                 <ul class="pcoded-submenu">
@@ -207,7 +207,7 @@
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
                                     <span class="pcoded-micon"><i class="feather icon-box"></i></span>
-                                    <span class="pcoded-mtext">PRODUKSI</span>
+                                    <span class="pcoded-mtext">PRD</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
                                 <ul class="pcoded-submenu">
@@ -256,7 +256,7 @@
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
                                     <span class="pcoded-micon"><i class="feather icon-box"></i></span>
-                                    <span class="pcoded-mtext">PRINTING</span>
+                                    <span class="pcoded-mtext">PRT</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
                                 <ul class="pcoded-submenu">
@@ -270,7 +270,7 @@
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
                                     <span class="pcoded-micon"><i class="feather icon-box"></i></span>
-                                    <span class="pcoded-mtext">AFTER SALES SERVICES</span>
+                                    <span class="pcoded-mtext">AFTER-SALES SERVICES</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
                                 <ul class="pcoded-submenu">

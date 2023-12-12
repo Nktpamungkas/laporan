@@ -259,7 +259,7 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-sm-2">
-                                                        <button type="submit" name="cari_data" class="btn btn-danger btn-xl"><i class="icofont icofont-ui-search"></i> Cari data</button>
+                                                        <button type="submit" name="cari_data" class="btn btn-danger btn-xl"><i class="icofont icofont-ui-search"></i> <i class="icofont icofont-search-alt-1"></i> Cari data</button>
                                                     </div>
                                                 </div>
                                             -->

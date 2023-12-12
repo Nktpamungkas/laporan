@@ -105,7 +105,7 @@
             <td>RELAXING</td>
             <td>CONTINOUS BLEACING</td>
             <td>LAB COLOR MATCH</td>
-            <td>PRESET</td>
+            <td>P<i class="icofont icofont-refresh"></i> Reset</td>
             <td>RAISING GREIGE FACE</td>
             <td>RAISING GREIGE BACK</td>
             <td>SHEARING GREIGE FACE</td>
@@ -120,7 +120,7 @@
             <td>FABRIC DYEING CVC+TC (POLY+COTTON)</td>
             <td>SOAPING</td>
             <td>BELAH DYEING</td>
-            <td>BELAH PRESET</td>
+            <td>BELAH P<i class="icofont icofont-refresh"></i> Reset</td>
             <td>BELAH CUCI</td>
             <td>OVEN DYEING</td>
             <td>OVEN STENTER</td>
@@ -2605,7 +2605,7 @@
             <td><?php echo round($diff_rlx1->d + $diff_rlx1->h / 24 + $diff_rlx1->i / 1440, 2); ?></td> <!-- RLX1 RELAXING -->
             <td><?php echo round($diff_cbl1->d + $diff_cbl1->h / 24 + $diff_cbl1->i / 1440, 2); ?></td> <!-- CBL1 CONTINOUS BLEACING -->
             <td><?php echo round($diff_mat1->d + $diff_mat1->h / 24 + $diff_mat1->i / 1440, 2); ?></td> <!-- MAT1 LAB COLOR MATCH -->
-            <td><?php echo round($diff_pre1->d + $diff_pre1->h / 24 + $diff_pre1->i / 1440, 2); ?></td> <!-- PRE1 PRESET -->
+            <td><?php echo round($diff_pre1->d + $diff_pre1->h / 24 + $diff_pre1->i / 1440, 2); ?></td> <!-- PRE1 P<i class="icofont icofont-refresh"></i> Reset -->
             <td><?php echo round($diff_rse1->d + $diff_rse1->h / 24 + $diff_rse1->i / 1440, 2); ?></td> <!-- RSE1 RAISING GREIGE FACE -->
             <td><?php echo round($diff_rse2->d + $diff_rse2->h / 24 + $diff_rse2->i / 1440, 2); ?></td> <!-- RSE2 RAISING GREIGE BACK -->
             <td><?php echo round($diff_shr1->d + $diff_shr1->h / 24 + $diff_shr1->i / 1440, 2); ?></td> <!-- SHR1 SHEARING GREIGE FACE -->
@@ -2620,7 +2620,7 @@
             <td><?php echo round($diff_dye6->d + $diff_dye6->h / 24 + $diff_dye6->i / 1440, 2); ?></td> <!-- DYE6 FABRIC DYEING CVC+TC (POLY+COTTON) -->
             <td><?php echo round($diff_sop1->d + $diff_sop1->h / 24 + $diff_sop1->i / 1440, 2); ?></td> <!-- SOP1 SOAPING -->
             <td><?php echo round($diff_bld1->d + $diff_bld1->h / 24 + $diff_bld1->i / 1440, 2); ?></td> <!-- BLD1 BELAH DYEING -->
-            <td><?php echo round($diff_blp1->d + $diff_blp1->h / 24 + $diff_blp1->i / 1440, 2); ?></td> <!-- BLP1 BELAH PRESET -->
+            <td><?php echo round($diff_blp1->d + $diff_blp1->h / 24 + $diff_blp1->i / 1440, 2); ?></td> <!-- BLP1 BELAH P<i class="icofont icofont-refresh"></i> Reset -->
             <td><?php echo round($diff_opw1->d + $diff_opw1->h / 24 + $diff_opw1->i / 1440, 2); ?></td> <!-- OPW1 BELAH CUCI -->
             <td><?php echo round($diff_ovd1->d + $diff_ovd1->h / 24 + $diff_ovd1->i / 1440, 2); ?></td> <!-- OVD1 OVEN DYEING -->
             <td><?php echo round($diff_ovn1->d + $diff_ovn1->h / 24 + $diff_ovn1->i / 1440, 2); ?></td> <!-- OVN1 OVEN STENTER -->

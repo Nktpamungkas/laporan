@@ -69,7 +69,7 @@
                                                     <input type="text" name="demand" placeholder="Wajib di isi" class="form-control" required value="<?php if(isset($_POST['submit'])){ echo $_POST['demand']; }elseif(isset($_GET['demand'])){ echo $_GET['demand']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
-                                                    <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
+                                                    <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
                                                     <?php if (isset($_POST['submit'])) : ?>
                                                         <a class="btn btn-mat btn-success" target="_blank" href="prd_detail_demand_step_cetak.php?prod_order=<?= $_POST['prod_order']; ?>&demand=<?= $_POST['demand']; ?>">CETAK</a>
                                                     <?php endif; ?>

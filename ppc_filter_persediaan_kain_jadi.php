@@ -61,7 +61,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
-                                                    <button type="submit" name="cari_tahun" class="btn btn-primary">Cari data</button>
+                                                    <button type="submit" name="cari_tahun" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
                                                 </div>
                                             </div>
                                         </form>

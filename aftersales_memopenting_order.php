@@ -118,8 +118,8 @@
 
                                                 </div>
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
-                                                    <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
-                                                    <a class="btn btn-warning" href="aftersales_memopenting_order.php">Reset</a>
+                                                    <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> <i class="icofont icofont-search-alt-1"></i> Cari data</button>
+                                                    <a class="btn btn-warning" href="aftersales_memopenting_order.php"><i class="icofont icofont-refresh"></i> Reset</a>
                                                     <?php if (isset($_POST['submit'])) : ?>
                                                         <a class="btn btn-mat btn-success" title="Untuk statusnya sudah kirim" 
                                                             href="aftersales_memopenting-excel-sudah-kirim.php?prod_order=<?= $_POST['prod_order'] ?>&prod_demand=<?= $_POST['prod_demand'] ?>&no_order=<?= $_POST['no_order'] ?>&tgl1=<?= $_POST['tgl1'] ?>&tgl2=<?= $_POST['tgl2'] ?>&no_po=<?= $_POST['no_po'] ?>&article_group=<?= $_POST['article_group'] ?>&article_code=<?= $_POST['article_code'] ?>&langganan=<?= $_POST['langganan']?>&warna=<?= $_POST['warna'] ?>&tahun=<?= $_POST['tahun'] ?>&bulan=<?= $_POST['bulan'] ?>&tgl1_orderdate=<?= $_POST['tgl1_orderdate'] ?>&tgl2_orderdate=<?= $_POST['tgl2_orderdate'] ?>">MEMO (SUDAH KIRIM)</a>
@@ -127,10 +127,10 @@
                                                         <a class="btn btn-mat btn-warning" title="Untuk statusnya belum kirim" 
                                                             href="aftersales_memopenting-excel-belum-kirim.php?prod_order=<?= $_POST['prod_order'] ?>&prod_demand=<?= $_POST['prod_demand'] ?>&no_order=<?= $_POST['no_order'] ?>&tgl1=<?= $_POST['tgl1'] ?>&tgl2=<?= $_POST['tgl2'] ?>&no_po=<?= $_POST['no_po'] ?>&article_group=<?= $_POST['article_group'] ?>&article_code=<?= $_POST['article_code'] ?>&langganan=<?= $_POST['langganan']?>&warna=<?= $_POST['warna'] ?>&tahun=<?= $_POST['tahun'] ?>&bulan=<?= $_POST['bulan'] ?>&tgl1_orderdate=<?= $_POST['tgl1_orderdate'] ?>&tgl2_orderdate=<?= $_POST['tgl2_orderdate'] ?>">MEMO PENTING</a>
                                                     <?php endif; ?>
-                                                    <!-- <p>Warning : Jika melakukan<b>Reset Data</b>, pastikan tidak ada yang menggunakan Memo Penting</p> -->
+                                                    <!-- <p>Warning : Jika melakukan<b><i class="icofont icofont-refresh"></i> Reset Data</b>, pastikan tidak ada yang menggunakan Memo Penting</p> -->
                                                 </div>
                                             </div>
-                                            <p>*Note : Jika data terasa mulai <b>lambat</b> cobalah untuk klik tombol <b>Reset</b> untuk menghapus semua history pencarian.</p>
+                                            <p>*Note : Jika data terasa mulai <b>lambat</b> cobalah untuk klik tombol <b><i class="icofont icofont-refresh"></i> Reset</b> untuk menghapus semua history pencarian.</p>
                                         </form>
                                     </div>
                                 </div>
@@ -818,7 +818,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                <?php elseif(isset($_POST['reset'])) : ?>
+                                <?php elseif(isset($_POST['<i class="icofont icofont-refresh"></i> Reset'])) : ?>
                                     <?php
                                         ini_set("error_reporting", 1);
                                         session_start();

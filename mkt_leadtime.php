@@ -63,15 +63,15 @@
                                                     <input type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
-                                                    <button type="submit" name="submit" class="btn btn-primary">Cari data</button>
-                                                    <a class="btn btn-warning" href="mkt_leadtime.php">Reset</a>
+                                                    <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
+                                                    <a class="btn btn-warning" href="mkt_leadtime.php"><i class="icofont icofont-refresh"></i> Reset</a>
                                                 </div>
                                             </div>
-                                            <p>*Note : Jika data terasa mulai <b>lambat</b> cobalah untuk klik tombol <b>Reset</b> untuk menghapus semua history pencarian.</p>
+                                            <p>*Note : Jika data terasa mulai <b>lambat</b> cobalah untuk klik tombol <b><i class="icofont icofont-refresh"></i> Reset</b> untuk menghapus semua history pencarian.</p>
                                         </form>
                                     </div>
                                 </div>
-                                <?php if(isset($_POST['reset'])) : ?>
+                                <?php if(isset($_POST['<i class="icofont icofont-refresh"></i> Reset'])) : ?>
                                     <?php
                                         ini_set("error_reporting", 1);
                                         session_start();
