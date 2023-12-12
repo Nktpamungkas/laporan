@@ -1,3 +1,8 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="files\assets\icon\themify-icons\themify-icons.css">
+    <link rel="stylesheet" type="text/css" href="files\assets\icon\icofont\css\icofont.css">
+    <link rel="stylesheet" type="text/css" href="files\assets\icon\feather\css\feather.css"
+</head>
 <body>
     <div class="">
         <div class="ball-scale">
@@ -23,7 +28,7 @@
                         <ul class="pcoded-item pcoded-left-item">
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
-                                    <span class="pcoded-micon"><i class="feather icon-box"></i></span>
+                                    <span class="pcoded-micon"><i class="ti-layout-media-right-alt"></i></span>
                                     <span class="pcoded-mtext">PPC</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
@@ -67,7 +72,7 @@
                             </li>
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
-                                    <span class="pcoded-micon"><i class="feather icon-box"></i></span>
+                                    <span class="pcoded-micon"><i class="ti-infinite"></i></span>
                                     <span class="pcoded-mtext">FIN</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
@@ -86,7 +91,7 @@
                             </li>
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
-                                    <span class="pcoded-micon"><i class="feather icon-box"></i></span>
+                                    <span class="pcoded-micon"><i class="ti-infinite"></i></span>
                                     <span class="pcoded-mtext">BRS</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
@@ -100,7 +105,7 @@
                             </li>
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
-                                    <span class="pcoded-micon"><i class="feather icon-box"></i></span>
+                                    <span class="pcoded-micon"><i class="icofont icofont-laboratory"></i></span>
                                     <span class="pcoded-mtext">LAB</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
@@ -114,7 +119,7 @@
                             </li>
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
-                                    <span class="pcoded-micon"><i class="feather icon-box"></i></span>
+                                    <span class="pcoded-micon"><i class="ti-paint-bucket"></i></span>
                                     <span class="pcoded-mtext">DYE</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
@@ -158,7 +163,7 @@
                             </li>
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
-                                    <span class="pcoded-micon"><i class="feather icon-box"></i></span>
+                                    <span class="pcoded-micon"><i class="icofont icofont-basket"></i></span>
                                     <span class="pcoded-mtext">PCS</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
@@ -172,7 +177,7 @@
                             </li>
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
-                                    <span class="pcoded-micon"><i class="feather icon-box"></i></span>
+                                    <span class="pcoded-micon"><i class="icofont icofont-chart-histogram"></i></span>
                                     <span class="pcoded-mtext">MKT</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
@@ -206,7 +211,7 @@
                             </li>
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
-                                    <span class="pcoded-micon"><i class="feather icon-box"></i></span>
+                                    <span class="pcoded-micon"><i class="icofont icofont-industries-alt-3"></i></span>
                                     <span class="pcoded-mtext">PRD</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
@@ -255,7 +260,7 @@
                             </li>
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
-                                    <span class="pcoded-micon"><i class="feather icon-box"></i></span>
+                                    <span class="pcoded-micon"><i class="icofont icofont-picture"></i></span>
                                     <span class="pcoded-mtext">PRT</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
@@ -269,7 +274,7 @@
                             </li>
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
-                                    <span class="pcoded-micon"><i class="feather icon-box"></i></span>
+                                    <span class="pcoded-micon"><i class="icofont icofont-support"></i></span>
                                     <span class="pcoded-mtext">AFTER-SALES SERVICES</span>
                                     <span class="pcoded-mcaret"></span>
                                 </a>
