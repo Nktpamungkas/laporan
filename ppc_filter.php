@@ -696,7 +696,7 @@
                                                             <td><?= $status_operation; ?></td> <!-- PROGRESS STATUS -->
                                                             <td>
                                                                 <?php
-                                                                    $tgl_bagikain   = date_create($d_tglbagikain['TRANSACTIONDATE']);
+                                                                    $tgl_bagikain   = date_create(substr($d_tglbagikain['TRANSACTIONDATE'], 0, 10));
                                                                     $tglsekarang    = date_create(date('Y-m-d H:i:s'));
                                                                     
                                                                     $diff_totalharibagikain = date_diff($tgl_bagikain, $tglsekarang);
