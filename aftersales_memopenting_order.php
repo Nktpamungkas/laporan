@@ -118,7 +118,7 @@
 
                                                 </div>
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
-                                                    <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> <i class="icofont icofont-search-alt-1"></i> Cari data</button>
+                                                    <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
                                                     <a class="btn btn-warning" href="aftersales_memopenting_order.php"><i class="icofont icofont-refresh"></i> Reset</a>
                                                     <?php if (isset($_POST['submit'])) : ?>
                                                         <a class="btn btn-mat btn-success" title="Untuk statusnya sudah kirim" 
