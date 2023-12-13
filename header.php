@@ -286,6 +286,26 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="pcoded-hasmenu">
+                                <a href="javascript:void(0)">
+                                    <span class="pcoded-micon"><i class="icofont icofont-paper"></i></span>
+                                    <span class="pcoded-mtext">DIT</span>
+                                    <span class="pcoded-mcaret"></span>
+                                </a>
+                                <ul class="pcoded-submenu">
+                                    <li class=" ">
+                                        <a href="dit_KartuStock.php" data-i18n="nav.animations.main">
+                                            KARTU STOCK 
+                                        </a>
+                                        <a href="dit_KartuRiwayatMesinDanPrasarana.php" data-i18n="nav.animations.main">
+                                            KARTU RIWAYAT MESIN DAN PRASARANA 
+                                        </a>
+                                        <a href="dit_FormPemakaianSparePart.php" data-i18n="nav.animations.main">
+                                            FORM PEMAKAIAN SPARE PART DIT 
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                 </nav>
