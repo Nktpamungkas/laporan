@@ -104,8 +104,8 @@
                                                     <input type="text" name="article_code" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['article_code']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
-                                                    <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> <i class="icofont icofont-search-alt-1"></i> Cari data</button>
-                                                    <a class="btn btn-warning" href="ppc_filter.php"><i class="icofont icofont-refresh"></i> <i class="icofont icofont-refresh"></i> Reset</a>
+                                                    <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
+                                                    <a class="btn btn-warning" href="ppc_filter.php"><i class="icofont icofont-refresh"></i> Reset</a>
                                                     <!-- <button type="submit" name="<i class="icofont icofont-refresh"></i> Reset" class="btn btn-warning"><i class="icofont icofont-refresh"></i> Reset Data</button> -->
                                                     <?php if (isset($_POST['submit'])) : ?>
                                                         <a class="btn btn-mat btn-success" href="ppc_memopenting-excel.php?no_order=<?= $_POST['no_order']; ?>&tgl1=<?= $_POST['tgl1']; ?>&tgl2=<?= $_POST['tgl2']; ?>&operation=<?= $_POST['operation']; ?>">CETAK EXCEL</a>
@@ -696,12 +696,19 @@
                                                             <td><?= $status_operation; ?></td> <!-- PROGRESS STATUS -->
                                                             <td>
                                                                 <?php
-                                                                    $tgl_bagikain   = date_create(substr($d_tglbagikain['TRANSACTIONDATE'], 0, 10));
-                                                                    $tglsekarang    = date_create(date('Y-m-d H:i:s'));
-                                                                    
-                                                                    $diff_totalharibagikain = date_diff($tgl_bagikain, $tglsekarang);
+                                                                    if(!empty($d_tglbagikain['TRANSACTIONDATE'])){
+                                                                        $tgl_bagikain   = date_create(substr($d_tglbagikain['TRANSACTIONDATE'], 0, 10));
+                                                                        $tglsekarang    = date_create(date('Y-m-d H:i:s'));
+                                                                        $diff_totalharibagikain = date_diff($tgl_bagikain, $tglsekarang);
 
-                                                                    echo $diff_totalharibagikain->m. ' Bulan, '.$diff_totalharibagikain->d. ' Hari';
+                                                                        echo $diff_totalharibagikain->m. ' Bulan, '.$diff_totalharibagikain->d. ' Hari';
+                                                                    }else{
+                                                                        $tgl_buka_kartu   = date_create(substr($rowdb2['ORDERDATE'], 0, 10));
+                                                                        $tglsekarang    = date_create(date('Y-m-d H:i:s'));
+                                                                        $diff_totalharibagikain = date_diff($tgl_buka_kartu, $tglsekarang);
+
+                                                                        echo $diff_totalharibagikain->m. ' Bulan, '.$diff_totalharibagikain->d. ' Hari';
+                                                                    }
                                                                 ?>
                                                             </td> <!-- TOTAL HARI BAGI KAIN -->
                                                             <td><?= $rowdb2['LOT']; ?></td> <!-- LOT -->

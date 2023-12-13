@@ -440,12 +440,19 @@ header('Cache-Control: max-age=0');
                     <td><?= $status_operation; ?></td> <!-- PROGRESS STATUS -->
                     <td>
                         <?php
-                            $tgl_bagikain   = date_create(substr($d_tglbagikain['TRANSACTIONDATE'], 0, 10));
-                            $tglsekarang    = date_create(date('Y-m-d H:i:s'));
-                            
-                            $diff_totalharibagikain = date_diff($tgl_bagikain, $tglsekarang);
+                            if(!empty($d_tglbagikain['TRANSACTIONDATE'])){
+                                $tgl_bagikain   = date_create(substr($d_tglbagikain['TRANSACTIONDATE'], 0, 10));
+                                $tglsekarang    = date_create(date('Y-m-d H:i:s'));
+                                $diff_totalharibagikain = date_diff($tgl_bagikain, $tglsekarang);
 
-                            echo $diff_totalharibagikain->m. ' Bulan, '.$diff_totalharibagikain->d. ' Hari';
+                                echo $diff_totalharibagikain->m. ' Bulan, '.$diff_totalharibagikain->d. ' Hari';
+                            }else{
+                                $tgl_buka_kartu   = date_create(substr($rowdb2['ORDERDATE'], 0, 10));
+                                $tglsekarang    = date_create(date('Y-m-d H:i:s'));
+                                $diff_totalharibagikain = date_diff($tgl_buka_kartu, $tglsekarang);
+
+                                echo $diff_totalharibagikain->m. ' Bulan, '.$diff_totalharibagikain->d. ' Hari';
+                            }
                         ?>
                     </td> <!-- TOTAL HARI BAGI KAIN -->
                     <td>
