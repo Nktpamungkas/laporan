@@ -294,6 +294,25 @@
                                                     <td>&nbsp;&nbsp;&nbsp; : &nbsp;</td>
                                                     <td><?= $d_demand['DESCRIPTION']; ?></td>
                                                 </tr>
+                                                <?php 
+                                                    $sql_lebargramasi	= db2_exec($conn1, "SELECT i.LEBAR,
+                                                                                            CASE
+                                                                                                WHEN i2.GRAMASI_KFF IS NULL THEN i2.GRAMASI_FKF
+                                                                                                ELSE i2.GRAMASI_KFF
+                                                                                            END AS GRAMASI 
+                                                                                            FROM 
+                                                                                                ITXVIEWLEBAR i 
+                                                                                            LEFT JOIN ITXVIEWGRAMASI i2 ON i2.SALESORDERCODE = '$d_ITXVIEWKK[PROJECTCODE]' 
+                                                                                            AND i2.ORDERLINE = '$d_ITXVIEWKK[ORIGDLVSALORDERLINEORDERLINE]'
+                                                                                            WHERE 
+                                                                                            i.SALESORDERCODE = '$d_ITXVIEWKK[PROJECTCODE]' AND i.ORDERLINE = '$d_ITXVIEWKK[ORIGDLVSALORDERLINEORDERLINE]'");
+                                                    $dt_lg				= db2_fetch_assoc($sql_lebargramasi);
+                                                ?>
+                                                <tr>
+                                                    <td>Lebar x Gramasi</td>
+                                                    <td>&nbsp;&nbsp;&nbsp; : &nbsp;</td>
+                                                    <td><?= floor($dt_lg['LEBAR']); ?> x <?= floor($dt_lg['GRAMASI']); ?></td>
+                                                </tr>
                                                 <tr rowspan='5'>
                                                     <td>KETERANGAN</td>
                                                     <td>&nbsp;&nbsp;&nbsp; : &nbsp;</td>
