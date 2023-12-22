@@ -2,7 +2,9 @@
     //ini wajib dipanggil paling atas
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
-    
+
+    header("refresh: 5");
+
     if($_SERVER['REMOTE_ADDR'] == '10.0.5.178' OR $_SERVER['REMOTE_ADDR'] == '10.0.5.132'){
         //ini sesuaikan foldernya ke file 3 ini
         require 'PHPMailer/src/Exception.php';
