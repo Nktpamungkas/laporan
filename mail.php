@@ -24,6 +24,82 @@
         $mail->SMTPSecure = 'ssl';
         $mail->Port       = 465;
 
+        // START 1. MTC
+            require_once "koneksi.php"; 
+            $q_opentiket_mtc    = db2_exec($conn1, "SELECT 
+                                                        VARCHAR_FORMAT(IDENTIFIEDDATE, 'YYYY-MM-DD hh:ii:ss') AS IDENTIFIEDDATE,
+                                                        TRIM(p.CODE) AS CODE,
+                                                        p.SYMPTOM AS GEJALA,
+                                                        TRIM(p.CREATIONUSER) AS CREATIONUSER,
+                                                        TRIM(d.LONGDESCRIPTION) AS DEPT,
+                                                        TRIM(p2.CODE) AS KODE_MESIN,
+                                                        TRIM(p2.LONGDESCRIPTION) AS NAMA_MESIN,
+                                                        TRIM(p2.GENERICDATA1) || ' ' || TRIM(p2.GENERICDATA2) || ' ' || TRIM(p2.GENERICDATA3) || ' ' || TRIM(p2.GENERICDATA4) AS DESC_MESIN 
+                                                    FROM
+                                                        PMBREAKDOWNENTRY p
+                                                    LEFT JOIN DEPARTMENT d ON d.CODE = p.DEPARTMENTCODE
+                                                    LEFT JOIN PMBOM p2 ON p2.CODE = p.PMBOMCODE 
+                                                    WHERE
+                                                        (p.BREAKDOWNTYPE = '002'
+                                                        OR p.BREAKDOWNTYPE = '003')
+                                                        AND VARCHAR_FORMAT(IDENTIFIEDDATE, 'YYYY-MM-DD') = VARCHAR_FORMAT(CURRENT_DATE, 'YYYY-MM-DD')");
+            $no = 1;
+            while ($row_opentiket_mtc   = db2_fetch_assoc($q_opentiket_mtc)) {
+                $q_cektiket     = mysqli_query($con_nowprd, "SELECT COUNT(*) AS jumlah 
+                                                                    FROM email_auth 
+                                                                    WHERE code = '$row_opentiket_mtc[CODE]' 
+                                                                        AND `status` = '1. Email Terkirim ke MTC Mekanikal & Utility'");
+                $row_cektiket   = mysqli_fetch_assoc($q_cektiket);
+
+                if($row_cektiket['jumlah'] == '0'){            
+                    // Menambahkan penerima
+                    $q_email_support    = db2_exec($conn1, "SELECT
+                                                                FULLNAME,
+                                                                TRIM(a.SENDEREMAIL) AS EMAIL
+                                                            FROM
+                                                                ABSUSERDEF a
+                                                            WHERE
+                                                                (TRIM(a.CUSTOMCSS) = 'MTC') AND NOT a.SENDEREMAIL IS NULL");
+                    while ($row_email_support   = db2_fetch_assoc($q_email_support)) {
+                        $mail->AddAddress($row_email_support['EMAIL']);
+                        $mail->AddAddress('nktpamungkas28@gmail.com');
+                    }
+                    $mail->setFrom('dept.it@indotaichen.com', 'Openticket MTC'); // Pengirim
+                    $mail->addReplyTo('dept.it@indotaichen.com', 'Openticket MTC'); //jka emailnya dibalas otomatis balas ke email ini dan judulnya
+
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Open Ticket NOW';
+                    $mail->Body    = "<html>
+                                        <head>
+                                        </head>
+                                        <body>
+                                            <h2>Hi, MAINTENANCE</h2>
+                                            silahkan <b>CREATE work order</b> untuk menugaskan ticket kepada team!<br>
+                                            Nomor Ticket             : $row_opentiket_mtc[CODE] created <br><br>
+                                            <pre>Tanggal Openticket  : $row_opentiket_mtc[IDENTIFIEDDATE]</pre> 
+                                            <pre>Nomor Tag/Mesin     : $row_opentiket_mtc[KODE_MESIN]</pre> 
+                                            <pre>Nama Mesin          : $row_opentiket_mtc[NAMA_MESIN]</pre> 
+                                            <pre>Deskripsi Mesin     : $row_opentiket_mtc[DESC_MESIN]</pre> 
+                                            <pre>From                : $row_opentiket_mtc[CREATIONUSER] </pre>
+                                            <pre>Department          : $row_opentiket_mtc[DEPT]</pre> 
+                                            <pre>Gejala              : $row_opentiket_mtc[GEJALA]</pre> 
+                                        </body>
+                                    </html>";
+                    $mail->AltBody = '';
+                    $kirim = $mail->send();
+                    if($kirim){
+                        // JIKA EMAIL BERHASIL TERKIRIM MAKA SIMPAN LOG ke MYSQLI
+                        $q_simpan_log = mysqli_query($con_nowprd, "INSERT INTO email_auth (code, gejala, dept, `status`)
+                                                                            VALUES ('$row_opentiket_mtc[CODE]',
+                                                                                    '$row_opentiket_mtc[GEJALA]',
+                                                                                    '$row_opentiket_mtc[DEPT]',
+                                                                                    '1. Email Terkirim ke MTC Mekanikal & Utility');");
+                        echo "Log saved";
+                    }
+                }
+            }
+        // END
+
         // START 1. Email pertama kali openticket untuk pemberitahuan ke staff atau spv IT SUPPORT/PROGRAMMER untuk membuatkan work order.
             // START IT SUPPORT
                 require_once "koneksi.php"; 
@@ -71,7 +147,8 @@
                                             <head>
                                             </head>
                                             <body>
-                                                <h2>Hi, IT SUPPORT</h2><br>
+                                                <h2>Hi, IT SUPPORT</h2>
+                                                silahkan <b>CREATE work order</b> untuk menugaskan ticket kepada team!<br>
                                                 Nomor Ticket             : $row_opentiket_support[CODE] created <br><br>
                                                 <pre>Nomor Tag/Mesin     : $row_opentiket_support[KODE_MESIN]</pre> 
                                                 <pre>Nama Mesin          : $row_opentiket_support[NAMA_MESIN]</pre> 
@@ -165,7 +242,6 @@
                 }
             // END 
         // END
-        
 
         // START 2. Email kedua setelah staff atau spv sudah membuat work order > email ke staff yang di tuju.
             // START IT SUPPORT 2
