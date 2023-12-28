@@ -151,7 +151,7 @@
                         <table bgcolor="#0073AA" border="0" cellspacing="0" cellpadding="0" class="buttonwrapper">
                             <tr>
                                 <form action="" method="post">
-                                    <td align="center" height="50" style=" padding: 0 25px 0 25px; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;" class="button">
+                                    <p>
                                         <select class="form-control" name="nama" required>
                                             <option value="" disabled selected>Select Your Name</option>
                                             <?php
@@ -161,7 +161,7 @@
                                                 <option value="<?= $row_user_DIT['CODE'] ?>"><?= $row_user_DIT['LONGDESCRIPTION'] ?></option>
                                             <?php } ?>
                                         </select>
-                                    </td>
+                                    </p>
                                     <td align="center" height="50" style=" padding: 0 25px 0 25px; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;" class="button">
                                         <button type="submit" name="submit" class="btn-link"> Approved Form</button>
                                     </td>

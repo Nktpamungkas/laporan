@@ -118,7 +118,7 @@
                                                                 PMBREAKDOWNENTRY p
                                                             RIGHT JOIN PMWORKORDER p3 ON p3.PMBREAKDOWNENTRYCODE = p.CODE AND NOT p3.ASSIGNEDTOUSERID IS NULL
                                                             WHERE
-                                                                p3.ABSUNIQUEID = '65189806'");
+                                                                p3.ABSUNIQUEID = '$_GET[UNIQUEID]'");
                     $r_cekWaktu_tiket   = db2_fetch_assoc($q_cekWaktu_tiket);
 
                     $mulai      = date_create($r_cekWaktu_tiket['MULAI_OPENTIKET']);
@@ -131,7 +131,7 @@
                     <td align="left" bgcolor="#ffffff" style="padding: 75px 20px 40px 20px; color: #555555; font-family: Arial, sans-serif; font-size: 20px; line-height: 30px; border-bottom: 1px solid #f6f6f6;">
                         By closing this ticket you confirm that it has been completed following the guidelines defined in your policy and procedures for resolving a user issue
                         <br><br>
-                        <li>Amount of time against this ticket : <b><?= $total_pengerjaan->d . ' Hari, ' . $total_pengerjaan->h . ' Jam, ' . $total_pengerjaan->i . ' Menit '; ?></b></li>
+                        <li>Amount of time against this ticket : <b><?= $total_pengerjaan->d . ' Hari ' . $total_pengerjaan->h . ' Jam ' . $total_pengerjaan->i . ' Menit '; ?></b></li>
                     </td>
                 </tr>
                 <tr>
@@ -139,7 +139,7 @@
                         <table bgcolor="#0073AA" border="0" cellspacing="0" cellpadding="0" class="buttonwrapper">
                             <tr>
                                 <form action="" method="post">
-                                    <td align="center" height="50" style=" padding: 0 25px 0 25px; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;" class="button">
+                                    <p>
                                         <select class="form-control" name="nama" required>
                                             <option value="" disabled selected>Select Your Name</option>
                                             <?php
@@ -149,7 +149,7 @@
                                                 <option value="<?= $row_user_DIT['CODE'] ?>"><?= $row_user_DIT['LONGDESCRIPTION'] ?></option>
                                             <?php } ?>
                                         </select>
-                                    </td>
+                                    </p>
                                     <td align="center" height="50" style=" padding: 0 25px 0 25px; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;" class="button">
                                         <button type="submit" name="submit" class="btn-link"> Approved Form</button>
                                     </td>
