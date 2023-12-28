@@ -94,6 +94,7 @@
                                                                                     '$row_opentiket_mtc[DEPT]',
                                                                                     '1. Email Terkirim ke MTC Mekanikal & Utility');");
                         echo "Log saved";
+                        $mailer->clearAllRecipients();
                     }
                 }
             }
@@ -167,6 +168,7 @@
                                                                                         '$row_opentiket_support[DEPT]',
                                                                                         '1. Email Terkirim ke Support');");
                             echo "Log saved";
+                            $mailer->clearAllRecipients();
                         }
                     }
                 }
@@ -236,6 +238,7 @@
                                                                                         '$row_opentiket_support_2[DEPT]',
                                                                                         '2. Email Terkirim ke Staff Support yang di tugaskan');");
                             echo "Log saved";
+                            $mailer->clearAllRecipients();
                         }
                     }
                 }
