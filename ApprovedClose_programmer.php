@@ -30,7 +30,7 @@
                                                                         VALUETIMESTAMP,
                                                                         ABSUNIQUEID)
                                                     VALUES ('$_GET[UNIQUEID]', 
-                                                            'PMBreakDownEntry',
+                                                            'PMWorkOrder',
                                                             'ApprovalDeptDIT',
                                                             'ApprovalDeptDITCode',
                                                             '1',
@@ -40,38 +40,6 @@
                                                             '0',
                                                             '0',
                                                             null,
-                                                            NULL,
-                                                            '0',
-                                                            NULL,
-                                                            NULL,
-                                                            0)");
-        $update_approved1_date   = db2_exec($conn1, "INSERT INTO ADSTORAGE (UNIQUEID,
-                                                                        NAMEENTITYNAME,
-                                                                        NAMENAME,
-                                                                        FIELDNAME,
-                                                                        KEYSEQUENCE,
-                                                                        SHARED,
-                                                                        DATATYPE,
-                                                                        VALUESTRING,
-                                                                        VALUEINT,
-                                                                        VALUEBOOLEAN,
-                                                                        VALUEDATE,
-                                                                        VALUEDECIMAL,
-                                                                        VALUELONG,
-                                                                        VALUETIME,
-                                                                        VALUETIMESTAMP,
-                                                                        ABSUNIQUEID)
-                                                    VALUES ('$_GET[UNIQUEID]', 
-                                                            'PMBreakDownEntry',
-                                                            'TglApprvDeptDIT',
-                                                            'TglApprvDeptDIT',
-                                                            '0',
-                                                            '0',
-                                                            '3',
-                                                            NULL,
-                                                            '0',
-                                                            '0',
-                                                            '$tgl_sekarang',
                                                             NULL,
                                                             '0',
                                                             NULL,
@@ -136,14 +104,34 @@
             </tr>
             <tr>
                 <td align="center" bgcolor="#0073AA " style="padding: 20px 20px 20px 20px; color: #ffffff; font-family: Arial, sans-serif; font-size: 36px; font-weight: bold;">
-                    <img src="img\proui_logo.png" alt="ProUI Logo" width="152" height="152" style="display:block;">
+                    <h3><b>Confirm closure</b></h3>
                 </td>
             </tr>
             <?php if(empty($row_approved1['LONGDESCRIPTION'])){ ?>
+                <?php
+                    $q_cekWaktu_tiket   = db2_exec($conn1, "SELECT 
+                                                                TRIM(p.CODE) AS CODE,
+                                                                p.CREATIONDATETIME AS MULAI_OPENTIKET,
+                                                                TRIM(p.CREATIONUSER) AS CREATIONUSER,
+                                                                p3.ENDDATE AS SELESAI_OPENTIKET
+                                                            FROM
+                                                                PMBREAKDOWNENTRY p
+                                                            RIGHT JOIN PMWORKORDER p3 ON p3.PMBREAKDOWNENTRYCODE = p.CODE AND NOT p3.ASSIGNEDTOUSERID IS NULL
+                                                            WHERE
+                                                                p3.ABSUNIQUEID = '65189806'");
+                    $r_cekWaktu_tiket   = db2_fetch_assoc($q_cekWaktu_tiket);
+
+                    $mulai      = date_create($r_cekWaktu_tiket['MULAI_OPENTIKET']);
+                    $selesai    = date_create($r_cekWaktu_tiket['SELESAI_OPENTIKET']);
+
+                    $total_pengerjaan   = date_diff($mulai, $selesai);
+                     
+                ?>
                 <tr>
-                    <td align="center" bgcolor="#ffffff" style="padding: 75px 20px 40px 20px; color: #555555; font-family: Arial, sans-serif; font-size: 20px; line-height: 30px; border-bottom: 1px solid #f6f6f6;">
-                        <b>Just one more step...</b><br>
-                        Select your account and click the big button below to approved your account.
+                    <td align="left" bgcolor="#ffffff" style="padding: 75px 20px 40px 20px; color: #555555; font-family: Arial, sans-serif; font-size: 20px; line-height: 30px; border-bottom: 1px solid #f6f6f6;">
+                        By closing this ticket you confirm that it has been completed following the guidelines defined in your policy and procedures for resolving a user issue
+                        <br><br>
+                        <li>Amount of time against this ticket : <b><?= $total_pengerjaan->d . ' Hari, ' . $total_pengerjaan->h . ' Jam, ' . $total_pengerjaan->i . ' Menit '; ?></b></li>
                     </td>
                 </tr>
                 <tr>
