@@ -321,6 +321,7 @@
                                                                                         '$row_opentiket_head_programmer[DEPT]',
                                                                                         '1. Email Terkirim ke Manager dan Ast. Manager');");
                             echo "Log saved";
+                            $mailer->clearAllRecipients();
                         }
                     }
                 }
@@ -401,6 +402,7 @@
                                                                                         '$row_opentiket_programmer[DEPT]',
                                                                                         '2. Email Terkirim ke IT PROGRAMMER');");
                             echo "Log saved";
+                            $mailer->clearAllRecipients();
                         }
                     }
                 }
@@ -468,6 +470,7 @@
                                                                                         '$row_opentiket_programmer_3[DEPT]',
                                                                                         '3. Email Terkirim ke Staff Programmer yang di tugaskan');");
                             echo "Log saved";
+                            $mailer->clearAllRecipients();
                         }
                     }
                 }
@@ -556,6 +559,7 @@
                                                                                         '$row_opentiket_head_programmer_close[DEPT]',
                                                                                         '4. Email Terkirim ke Manager dan Ast. Manager Untuk Approved Closed');");
                             echo "Log saved";
+                            $mailer->clearAllRecipients();
                         }
                     }
                 }
