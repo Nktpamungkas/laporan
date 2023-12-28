@@ -512,31 +512,57 @@
                                                                 <td align="center">
                                                                     <?php if($rowdb2['OPERATIONCODE'] == 'INS3') : ?>
                                                                         <?php
-                                                                            $q_mulai_ins3   = mysqli_query($con_nowprd, "SELECT
-                                                                                                                                * 
+                                                                            // periksa jika hanya 1 data, maka 1 data tersebut untuk jam mulai saja
+                                                                            $q_cek_ins3     = mysqli_query($con_nowprd, "SELECT
+                                                                                                                                count(*) AS jml
                                                                                                                             FROM
                                                                                                                                 `itxview_posisikk_tgl_in_prodorder_ins3` 
                                                                                                                             WHERE
                                                                                                                                 productionordercode = '$prod_order' 
-                                                                                                                                AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
-                                                                                                                            ORDER BY
-                                                                                                                                MULAI DESC LIMIT 1");
-                                                                            $d_selesai_ins3   = mysqli_fetch_assoc($q_mulai_ins3);
-                                                                            echo $d_selesai_ins3['MULAI'];
+                                                                                                                                AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'");
+                                                                            $row_cek_ins3   = mysqli_fetch_assoc($q_cek_ins3);
+                                                                            if($row_cek_ins3['jml'] == '1'){
+                                                                                echo '';
+                                                                            }else{
+                                                                                $q_mulai_ins3   = mysqli_query($con_nowprd, "SELECT
+                                                                                                                                    * 
+                                                                                                                                FROM
+                                                                                                                                    `itxview_posisikk_tgl_in_prodorder_ins3` 
+                                                                                                                                WHERE
+                                                                                                                                    productionordercode = '$prod_order' 
+                                                                                                                                    AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                                ORDER BY
+                                                                                                                                    MULAI DESC LIMIT 1");
+                                                                                $d_selesai_ins3   = mysqli_fetch_assoc($q_mulai_ins3);
+                                                                                echo $d_selesai_ins3['MULAI'];
+                                                                            }
                                                                         ?>
                                                                     <?php elseif($rowdb2['OPERATIONCODE'] == 'CNP1') : ?>
                                                                         <?php
-                                                                            $q_mulai_cnp1   = mysqli_query($con_nowprd, "SELECT
-                                                                                                                                * 
+                                                                            // periksa jika hanya 1 data, maka 1 data tersebut untuk jam mulai saja
+                                                                            $q_cek_cnp1     = mysqli_query($con_nowprd, "SELECT
+                                                                                                                                count(*) AS jml
                                                                                                                             FROM
                                                                                                                                 `itxview_posisikk_tgl_in_prodorder_cnp1` 
                                                                                                                             WHERE
-                                                                                                                                productionordercode = '$prod_order'
-                                                                                                                                AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
-                                                                                                                            ORDER BY
-                                                                                                                                MULAI DESC LIMIT 1");
-                                                                            $d_selesai_cnp1   = mysqli_fetch_assoc($q_mulai_cnp1);
-                                                                            echo $d_selesai_cnp1['MULAI'];
+                                                                                                                                productionordercode = '$prod_order' 
+                                                                                                                                AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'");
+                                                                            $row_cek_cnp1   = mysqli_fetch_assoc($q_cek_cnp1);
+                                                                            if($row_cek_cnp1['jml'] == '1'){
+                                                                                echo '';
+                                                                            }else{
+                                                                                $q_mulai_cnp1   = mysqli_query($con_nowprd, "SELECT
+                                                                                                                                    * 
+                                                                                                                                FROM
+                                                                                                                                    `itxview_posisikk_tgl_in_prodorder_cnp1` 
+                                                                                                                                WHERE
+                                                                                                                                    productionordercode = '$prod_order'
+                                                                                                                                    AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
+                                                                                                                                ORDER BY
+                                                                                                                                    MULAI DESC LIMIT 1");
+                                                                                $d_selesai_cnp1   = mysqli_fetch_assoc($q_mulai_cnp1);
+                                                                                echo $d_selesai_cnp1['MULAI'];
+                                                                            }
                                                                         ?>
                                                                     <?php else : ?>
                                                                         <?php if($rowdb2['SELESAI']) : ?>
@@ -577,11 +603,12 @@
                                                                 <td 
                                                                     <?php 
                                                                         if($rowdb2['STATUS_OPERATION'] == 'Closed'){ 
-                                                                            echo 'style="background-color:#FB4A4A; color:#F7F7F7;"'; 
+                                                                            echo 'style="background-color:#DC526E; color:#F7F7F7;"'; 
+                                                                            
                                                                         }elseif($rowdb2['STATUS_OPERATION'] == 'Progress'){ 
                                                                             echo 'style="background-color:#41CC11;"'; 
                                                                         }else{ 
-                                                                            echo 'style="background-color:#ECECEC;"'; 
+                                                                            echo 'style="background-color:#CECECE;"'; 
                                                                         } 
                                                                     ?>>
                                                                     <center><?= $rowdb2['STATUS_OPERATION']; ?></center>
@@ -589,22 +616,22 @@
                                                                 <td><?= $rowdb2['PRODUCTIONORDERCODE']; ?></td>
                                                                 <td><?= $rowdb2['PRODUCTIONDEMANDCODE']; ?></td>
                                                                 <td>
-                                                                <?php if($rowdb2['OPERATIONCODE'] == 'INS3') : ?>
-                                                                    <?= $d_mulai_ins3['OP']; ?>
-                                                                <?php elseif($rowdb2['OPERATIONCODE'] == 'CNP1') : ?>
-                                                                    <?= $d_mulai_cnp1['OP']; ?>
-                                                                <?php else : ?>
-                                                                    <?= $rowdb2['OP1']; ?>
-                                                                <?php endif; ?>
+                                                                    <?php if($rowdb2['OPERATIONCODE'] == 'INS3') : ?>
+                                                                        <?= $d_mulai_ins3['OP']; ?>
+                                                                    <?php elseif($rowdb2['OPERATIONCODE'] == 'CNP1') : ?>
+                                                                        <?= $d_mulai_cnp1['OP']; ?>
+                                                                    <?php else : ?>
+                                                                        <?= $rowdb2['OP1']; ?>
+                                                                    <?php endif; ?>
                                                                 </td>
                                                                 <td>
-                                                                <?php if($rowdb2['OPERATIONCODE'] == 'INS3') : ?>
-                                                                    <?= $d_selesai_ins3['OP']; ?>
-                                                                <?php elseif($rowdb2['OPERATIONCODE'] == 'CNP1') : ?>
-                                                                    <?= $d_selesai_cnp1['OP']; ?>
-                                                                <?php else : ?>
-                                                                    <?= $rowdb2['OP2']; ?>
-                                                                <?php endif; ?>
+                                                                    <?php if($rowdb2['OPERATIONCODE'] == 'INS3') : ?>
+                                                                        <?= $d_selesai_ins3['OP']; ?>
+                                                                    <?php elseif($rowdb2['OPERATIONCODE'] == 'CNP1') : ?>
+                                                                        <?= $d_selesai_cnp1['OP']; ?>
+                                                                    <?php else : ?>
+                                                                        <?= $rowdb2['OP2']; ?>
+                                                                    <?php endif; ?>
                                                                 </td>
                                                             </tr>
                                                             <div id="confirm-note<?= $rowdb2['STEPNUMBER']; ?>" class="modal fade" role="dialog">
