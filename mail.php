@@ -260,7 +260,7 @@
                 }
             // END 
 
-            // START 3.  Email ketiga untuk admin DIT supaya dapat nomor internal document untuk mengshipped kan form pemakaian spare parts
+            // START 3. Email ketiga untuk admin DIT supaya dapat nomor internal document untuk mengshipped kan form pemakaian spare parts
                 require_once "koneksi.php"; 
 
                 $q_opentiket_admin_DIT    = db2_exec($conn1, "SELECT 
@@ -487,6 +487,7 @@
                                                 <pre>Gejala             : $row_opentiket_head_user[GEJALA]</pre>
                                                 <pre>Penyelesaian       : $row_opentiket_head_user[REMARKS]</pre>
                                                 <pre>Deskripsi Barang   : $row_opentiket_head_user[DESKRIPSI_BARANG]</pre>
+                                                <pre>Link               : online.indotaichen.com/laporan/Approved_hed_user.php?UNIQUEID=$row_opentiket_head_user[ABSUNIQUEID]&dept=$kode_hed_mail</pre>
                                                 <h3>Barang tersebut sudah keluar dari stok Departement DIT dan sudah terpasang pada $row_opentiket_head_user[NAMA_MESIN].</h3>
                                                 <h4>Best Regards,<br>IT SUPPORT - DEPARTEMEN DIT</h4>
                                                 
@@ -576,6 +577,7 @@
                                                 <pre>From               : $row_opentiket_head_programmer[CREATIONUSER] </pre>
                                                 <pre>Department         : $row_opentiket_head_programmer[DEPT]</pre> 
                                                 <pre>Gejala             : $row_opentiket_head_programmer[GEJALA]</pre>
+                                                <pre>Link               : online.indotaichen.com/laporan/Approved1.php?UNIQUEID=$row_opentiket_head_programmer[ABSUNIQUEID]</pre>
                                             </body>
                                         </html>";
                         $mail->AltBody = '';
@@ -810,7 +812,8 @@
                                                 <pre>Programmer 	    : $row_opentiket_head_programmer_close[DITUGASKAN_KPD]</pre>
                                                 <pre>Department         : $row_opentiket_head_programmer_close[DEPT]</pre> 
                                                 <pre>Gejala             : $row_opentiket_head_programmer_close[GEJALA]</pre><br>
-                                                <pre>Remarks		    : $row_opentiket_head_programmer_close[KOMENTAR_PROGRAMMER]</pre><br>                                                
+                                                <pre>Remarks		    : $row_opentiket_head_programmer_close[KOMENTAR_PROGRAMMER]</pre><br>
+                                                <pre>Link               : online.indotaichen.com/laporan/ApprovedClose_programmer.php?UNIQUEID=$row_opentiket_head_programmer_close[ABSUNIQUEID]'</pre>                                  
 
                                                 Silahkan <a href='online.indotaichen.com/laporan/ApprovedClose_programmer.php?UNIQUEID=$row_opentiket_head_programmer_close[ABSUNIQUEID]'>Klik disini</a>, untuk Approve Permohonan Permintaan Aplikasi bahwa Sudah Selesai (Close) dikerjakan.
 
@@ -903,7 +906,5 @@
                 }
             }
         // END
-        
-
     }
 ?>
