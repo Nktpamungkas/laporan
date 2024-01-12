@@ -111,7 +111,7 @@
                 <?php
                     $q_cekWaktu_tiket   = db2_exec($conn1, "SELECT 
                                                                 TRIM(p.CODE) AS CODE,
-                                                                p.CREATIONDATETIME AS MULAI_OPENTIKET,
+                                                                p3.STARTDATE AS MULAI_OPENTIKET,
                                                                 TRIM(p.CREATIONUSER) AS CREATIONUSER,
                                                                 p3.ENDDATE AS SELESAI_OPENTIKET
                                                             FROM
