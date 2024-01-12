@@ -680,25 +680,25 @@
             // START 3. Email pemberitahuan kepada programmer yang di tugaskan.
                 require_once "koneksi.php"; 
                 $q_opentiket_programmer_3    = db2_exec($conn1, "SELECT 
-                                                                TRIM(p.CODE) AS CODE,
-                                                                TRIM(p.CREATIONUSER) AS CREATIONUSER,
-                                                                TRIM(p3.ASSIGNEDBYUSERID) AS TUGASDIBUAT_OLEH,
-                                                                TRIM(p3.ASSIGNEDTOUSERID) AS DITUGASKAN_KPD,
-                                                                p.SYMPTOM AS GEJALA,
-                                                                TRIM(d.LONGDESCRIPTION) AS DEPT,
-                                                                TRIM(p2.CODE) AS KODE_MESIN,
-                                                                TRIM(p2.LONGDESCRIPTION) AS NAMA_MESIN,
-                                                                TRIM(p2.GENERICDATA1) || ' ' || TRIM(p2.GENERICDATA2) || ' ' || TRIM(p2.GENERICDATA3) || ' ' || TRIM(p2.GENERICDATA4) AS DESC_MESIN,
-                                                                TRIM(a.SENDEREMAIL) AS EMAIL
-                                                            FROM
-                                                                PMBREAKDOWNENTRY p
-                                                            LEFT JOIN DEPARTMENT d ON d.CODE = p.DEPARTMENTCODE
-                                                            LEFT JOIN PMBOM p2 ON p2.CODE = p.PMBOMCODE 
-                                                            RIGHT JOIN PMWORKORDER p3 ON p3.PMBREAKDOWNENTRYCODE = p.CODE AND NOT p3.ASSIGNEDTOUSERID IS NULL
-                                                            LEFT JOIN ABSUSERDEF a ON a.USERID = p3.ASSIGNEDTOUSERID
-                                                            WHERE
-                                                                (p.BREAKDOWNTYPE = 'SF')
-                                                                AND NOT a.SENDEREMAIL IS NULL");
+                                                                    TRIM(p.CODE) AS CODE,
+                                                                    TRIM(p.CREATIONUSER) AS CREATIONUSER,
+                                                                    TRIM(p3.ASSIGNEDBYUSERID) AS TUGASDIBUAT_OLEH,
+                                                                    TRIM(p3.ASSIGNEDTOUSERID) AS DITUGASKAN_KPD,
+                                                                    p.SYMPTOM AS GEJALA,
+                                                                    TRIM(d.LONGDESCRIPTION) AS DEPT,
+                                                                    TRIM(p2.CODE) AS KODE_MESIN,
+                                                                    TRIM(p2.LONGDESCRIPTION) AS NAMA_MESIN,
+                                                                    TRIM(p2.GENERICDATA1) || ' ' || TRIM(p2.GENERICDATA2) || ' ' || TRIM(p2.GENERICDATA3) || ' ' || TRIM(p2.GENERICDATA4) AS DESC_MESIN,
+                                                                    TRIM(a.SENDEREMAIL) AS EMAIL
+                                                                FROM
+                                                                    PMBREAKDOWNENTRY p
+                                                                LEFT JOIN DEPARTMENT d ON d.CODE = p.DEPARTMENTCODE
+                                                                LEFT JOIN PMBOM p2 ON p2.CODE = p.PMBOMCODE 
+                                                                RIGHT JOIN PMWORKORDER p3 ON p3.PMBREAKDOWNENTRYCODE = p.CODE AND NOT p3.ASSIGNEDTOUSERID IS NULL
+                                                                LEFT JOIN ABSUSERDEF a ON a.USERID = p3.ASSIGNEDTOUSERID
+                                                                WHERE
+                                                                    (p.BREAKDOWNTYPE = 'SF')
+                                                                    AND NOT a.SENDEREMAIL IS NULL");
                 $no = 1;
                 while ($row_opentiket_programmer_3   = db2_fetch_assoc($q_opentiket_programmer_3)) {
                     $q_cektiket3     = mysqli_query($con_nowprd, "SELECT COUNT(*) AS jumlah 
@@ -813,7 +813,7 @@
                                                 <pre>Department         : $row_opentiket_head_programmer_close[DEPT]</pre> 
                                                 <pre>Gejala             : $row_opentiket_head_programmer_close[GEJALA]</pre><br>
                                                 <pre>Remarks		    : $row_opentiket_head_programmer_close[KOMENTAR_PROGRAMMER]</pre><br>
-                                                <pre>Link               : online.indotaichen.com/laporan/ApprovedClose_programmer.php?UNIQUEID=$row_opentiket_head_programmer_close[ABSUNIQUEID]'</pre>                                  
+                                                <pre>Link               : online.indotaichen.com/laporan/ApprovedClose_programmer.php?UNIQUEID=$row_opentiket_head_programmer_close[ABSUNIQUEID]</pre>                                  
 
                                                 Silahkan <a href='online.indotaichen.com/laporan/ApprovedClose_programmer.php?UNIQUEID=$row_opentiket_head_programmer_close[ABSUNIQUEID]'>Klik disini</a>, untuk Approve Permohonan Permintaan Aplikasi bahwa Sudah Selesai (Close) dikerjakan.
 
