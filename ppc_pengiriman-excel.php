@@ -696,7 +696,15 @@
                 <?= number_format($fetch_roll_harian_local['QTY_SJ_YARD'] + $fetch_roll_harian_export['QTY_SJ_YARD'], 2); ?>
             </th>
             <th colspan="3" align="center">SINGGIH</th>
-            <th colspan="6" align="center">PUTRI</th>
+            <th colspan="6" align="center">
+                <?php
+                    if($_GET['tgl1'] < '2024-01-02'){
+                        echo 'PUTRI';
+                    }else{
+                        echo 'BAYU NUGRAHA';
+                    }
+                ?>
+            </th>
         </tr>
         <tr>
             <th colspan="4" align="left">Total Tanggal 01 S/D 
@@ -720,7 +728,15 @@
             <?= number_format($fetch_roll_harian_local_1['QTY_SJ_YARD'] + $fetch_roll_harian_export_1['QTY_SJ_YARD'], 2); ?>
             </th>
             <th colspan="3" align="center">STAFF</th>
-            <th colspan="6" align="center">PPC AST. MANAGER</th>
+            <th colspan="6" align="center">
+                <?php
+                    if($_GET['tgl1'] < '2024-01-02'){
+                        echo 'PPC AST. MANAGER';
+                    }else{
+                        echo 'AST. SUPERVISOR';
+                    }
+                ?>
+            </th>
         </tr>
         <tr>
             <th colspan="4" align="left">Total Tanggal 01 S/D 
