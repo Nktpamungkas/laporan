@@ -698,10 +698,10 @@
             <th colspan="3" align="center">SINGGIH</th>
             <th colspan="6" align="center">
                 <?php
-                    if($_GET['tgl1'] < '2024-01-02'){
+                    if($_GET['tgl1'] < '2024-01-01'){
                         echo 'PUTRI';
                     }else{
-                        echo 'BAYU NUGRAHA';
+                        echo 'SEPTIAN HADI SAPUTRA';
                     }
                 ?>
             </th>
@@ -730,7 +730,7 @@
             <th colspan="3" align="center">STAFF</th>
             <th colspan="6" align="center">
                 <?php
-                    if($_GET['tgl1'] < '2024-01-02'){
+                    if($_GET['tgl1'] < '2024-01-01'){
                         echo 'PPC AST. MANAGER';
                     }else{
                         echo 'AST. SUPERVISOR';
