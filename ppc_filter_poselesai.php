@@ -161,6 +161,7 @@
                                                             $tgl1           = $_POST['tgl1'];
                                                             $tgl2           = $_POST['tgl2'];
                                                             $tgl1_kirim     = $_POST['tgl1_kirim'];
+                                                            $rec            = $_POST['rec'];
                                                             
                                                             if($no_order){
                                                                 $where_order            = "NO_ORDER = '$no_order'";
@@ -171,6 +172,11 @@
                                                                 $where_date             = "DELIVERY BETWEEN '$tgl1' AND '$tgl2'";
                                                             }else{
                                                                 $where_date             = "";
+                                                            }
+                                                            if($rec){
+                                                                $where_rec             = "AND im.JENIS_KAIN LIKE '%RECYCLED%'";
+                                                            }else{
+                                                                $where_rec             = "";
                                                             }
                                                             
                                                             if($tgl1_kirim){
@@ -205,7 +211,8 @@
                                                                                                                 LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON isp.CODE = iasp.CODE 
                                                                                                                 LEFT JOIN ITXVIEW_MEMOPENTINGPPC im ON im.NO_KK = iasp.LOTCODE 
                                                                                                                 WHERE 
-                                                                                                                    isp.GOODSISSUEDATE = '$tgl1_kirim'");
+                                                                                                                    isp.GOODSISSUEDATE = '$tgl1_kirim'
+                                                                                                                    $where_rec");
                                                                     while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
                                                                         $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
                                                                                                 ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
@@ -244,7 +251,7 @@
                                                             }else{
                                                                 // PENCARIAN BUKAN DENGAN TANGGAL KIRIM
                                                                     // ITXVIEW_MEMOPENTINGPPC
-                                                                    $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_order $where_date");
+                                                                    $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_order $where_date $where_rec");
                                                                     while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
                                                                         $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
                                                                                                 ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
