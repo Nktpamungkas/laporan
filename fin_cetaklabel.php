@@ -13,7 +13,8 @@
                             trim( i.ITEMDESCRIPTION ) AS JENISKAIN,
                             trim( i.WARNA ) AS WARNA,
                             trim (i.SUBCODE05) AS NO_WARNA,
-                            trim(ik.EXTERNALREFERENCE) AS NO_PO
+                            trim(ik.EXTERNALREFERENCE) AS NO_PO,
+                            i.LOT
                         FROM 
                             ITXVIEWKK i
                         LEFT JOIN ITXVIEW_PELANGGAN ip ON ip.ORDPRNCUSTOMERSUPPLIERCODE  = i.ORDPRNCUSTOMERSUPPLIERCODE AND ip.CODE = i.PROJECTCODE
@@ -28,7 +29,8 @@
                             i.ITEMDESCRIPTION,
                             i.WARNA,
                             i.SUBCODE05,
-                            ik.EXTERNALREFERENCE";
+                            ik.EXTERNALREFERENCE,
+                            i.LOT";
     $stmt_cetaklabel = db2_exec($conn1,$sqlcetaklabel, array('cursor'=>DB2_SCROLLABLE));
     $rowdb2_cetaklabel = db2_fetch_assoc($stmt_cetaklabel);
 ?>
@@ -55,7 +57,7 @@
     <tr>
         <td align="left" valign="top" style="height: 1.6in;"><table width="100%" border="0" class="table-list1" style="width: 2.3in;">
             <tr>
-            <td colspan="3" style="border-top:0px #000000 solid; border-bottom:0px #000000 solid; border-left:0px #000000 solid; border-right:0px #000000 solid;"><div style="font-size: 8px;">PRD.ORDER : <?php echo $rowdb2_cetaklabel['ORDER']; ?></div></td>
+            <td colspan="3" style="border-top:0px #000000 solid; border-bottom:0px #000000 solid; border-left:0px #000000 solid; border-right:0px #000000 solid;"><div style="font-size: 8px;">PRD.ORDER : <?php echo $rowdb2_cetaklabel['ORDER']; ?> &nbsp;&nbsp;&nbsp; LOT : <?php echo $rowdb2_cetaklabel['LOT']; ?></div></td>
             </tr>
             <tr>
             <td colspan="3" style="border-top:0px #000000 solid; border-bottom:0px #000000 solid; border-left:0px #000000 solid; border-right:0px #000000 solid;"><div style="font-size: 8px;">PRD.DEMAND : <?php echo $rowdb2_cetaklabel['DEMAND']; ?></div></td>
@@ -97,7 +99,7 @@
         </td>
         <td align="left" valign="top" style="height: 1.6in;"><table width="100%" border="0" class="table-list1" style="width: 2.3in;">
             <tr>
-            <td colspan="3" style="border-top:0px #000000 solid; border-bottom:0px #000000 solid; border-left:0px #000000 solid; border-right:0px #000000 solid;"><div style="font-size: 8px;">PRD.ORDER : <?php echo $rowdb2_cetaklabel['ORDER']; ?></div></td>
+            <td colspan="3" style="border-top:0px #000000 solid; border-bottom:0px #000000 solid; border-left:0px #000000 solid; border-right:0px #000000 solid;"><div style="font-size: 8px;">PRD.ORDER : <?php echo $rowdb2_cetaklabel['ORDER']; ?> &nbsp;&nbsp;&nbsp; LOT : <?php echo $rowdb2_cetaklabel['LOT']; ?></div></td>
             </tr>
             <tr>
             <td colspan="3" style="border-top:0px #000000 solid; border-bottom:0px #000000 solid; border-left:0px #000000 solid; border-right:0px #000000 solid;"><div style="font-size: 8px;">PRD.DEMAND : <?php echo $rowdb2_cetaklabel['DEMAND']; ?></div></td>
@@ -138,7 +140,7 @@
         </td>
         <td align="left" valign="top" style="height: 1.6in;"><table width="100%" border="0" class="table-list1" style="width: 2.3in;">
             <tr>
-            <td colspan="3" style="border-top:0px #000000 solid; border-bottom:0px #000000 solid; border-left:0px #000000 solid; border-right:0px #000000 solid;"><div style="font-size: 8px;">PRD.ORDER : <?php echo $rowdb2_cetaklabel['ORDER']; ?></div></td>
+            <td colspan="3" style="border-top:0px #000000 solid; border-bottom:0px #000000 solid; border-left:0px #000000 solid; border-right:0px #000000 solid;"><div style="font-size: 8px;">PRD.ORDER : <?php echo $rowdb2_cetaklabel['ORDER']; ?> &nbsp;&nbsp;&nbsp; LOT : <?php echo $rowdb2_cetaklabel['LOT']; ?> </div></td>
             </tr>
             <tr>
             <td colspan="3" style="border-top:0px #000000 solid; border-bottom:0px #000000 solid; border-left:0px #000000 solid; border-right:0px #000000 solid;"><div style="font-size: 8px;">PRD.DEMAND : <?php echo $rowdb2_cetaklabel['DEMAND']; ?></div></td>
