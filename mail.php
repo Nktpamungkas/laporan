@@ -23,9 +23,8 @@
         $mail->Password   = 'Xr7PzUWoyPA';
         $mail->SMTPSecure = 'ssl';
         $mail->Port       = 465;
-
+        require_once "koneksi.php"; 
         // START 1. MTC
-            require_once "koneksi.php"; 
             $q_opentiket_mtc    = db2_exec($conn1, "SELECT 
                                                         BREAKDOWNTYPE,
                                                         VARCHAR_FORMAT(IDENTIFIEDDATE, 'YYYY-MM-DD hh:ii:ss') AS IDENTIFIEDDATE,
@@ -641,6 +640,7 @@
                                                                         AND NOT a.SENDEREMAIL IS NULL");
                         while ($row_email_programmer2   = db2_fetch_assoc($q_email_programmer2)) {
                             $mail->AddAddress($row_email_programmer2['EMAIL']);
+                            // $mail->AddAddress('nilo.pamungkas@indotaichen.com');
                         }
                         $mail->setFrom('dept.it@indotaichen.com', 'Openticket IT PROGRAMMER'); // Pengirim
                         $mail->addReplyTo('dept.it@indotaichen.com', 'Openticket IT PROGRAMMER'); //jka emailnya dibalas otomatis balas ke email ini dan judulnya
@@ -663,18 +663,23 @@
                                         </html>";
                         $mail->AltBody = '';
                         $kirim = $mail->send();
-                        if($kirim){
-                            // JIKA EMAIL BERHASIL TERKIRIM MAKA SIMPAN LOG ke MYSQLI
-                            $q_simpan_log = mysqli_query($con_nowprd, "INSERT INTO email_auth (code, gejala, dept, `status`)
-                                                                                VALUES ('$row_opentiket_programmer[CODE]',
-                                                                                        '$row_opentiket_programmer[GEJALA]',
-                                                                                        '$row_opentiket_programmer[DEPT]',
-                                                                                        '2. Email Terkirim ke IT PROGRAMMER');");
-                            echo "Log saved";
-                            $mailer->clearAllRecipients();
-                        }
+                        // JIKA EMAIL BERHASIL TERKIRIM MAKA SIMPAN LOG ke MYSQLI
+                        $q_simpan_log = mysqli_query($con_nowprd, "INSERT INTO email_auth (code, gejala, dept, `status`)
+                                                                            VALUES ('$row_opentiket_programmer[CODE]',
+                                                                                    '$row_opentiket_programmer[GEJALA]',
+                                                                                    '$row_opentiket_programmer[DEPT]',
+                                                                                    '2. Email Terkirim ke IT PROGRAMMER');");
+                                                                    
+                        echo "Log saved";
+                        // if($$q_simpan_log){
+                        //     echo "berhasil";
+                        // }else{
+                        //     "gagal";
+                        // }
+                        $mailer->clearAllRecipients();
                     }
                 }
+                
             // END
 
             // START 3. Email pemberitahuan kepada programmer yang di tugaskan.
