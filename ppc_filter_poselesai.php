@@ -84,6 +84,10 @@
                                                     <h4 class="sub-title">Tanggal (Tgl Kirim)</h4>
                                                     <input type="date" name="tgl1_kirim" class="form-control" id="tgl1_kirim" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1_kirim']; } ?>">
                                                 </div>
+                                                <div class="col-sm-12 col-xl-2 m-b-30">
+                                                    <h4 class="sub-title">S/d Tanggal (Tgl Kirim)</h4>
+                                                    <input type="date" name="tgl2_kirim" class="form-control" id="tgl2_kirim" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2_kirim']; } ?>">
+                                                </div>
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
                                                     <a class="btn btn-warning" href="ppc_filter_poselesai.php"><i class="icofont icofont-refresh"></i> Reset</a>
@@ -143,6 +147,7 @@
                                                             <th>Only Nilo</th>
                                                             <?php endif; ?>
                                                             <th>NO SURAT JALAN</th>
+                                                            <th>ROLL KIRIM</th>
                                                             <th>TGL KIRIM</th>
                                                             <th>QTY KIRIM (KG)</th>
                                                             <th>QTY KIRIM (YARD/MTR)</th>
@@ -161,6 +166,7 @@
                                                             $tgl1           = $_POST['tgl1'];
                                                             $tgl2           = $_POST['tgl2'];
                                                             $tgl1_kirim     = $_POST['tgl1_kirim'];
+                                                            $tgl2_kirim     = $_POST['tgl2_kirim'];
                                                             $rec            = $_POST['rec'];
                                                             
                                                             if($no_order){
@@ -179,9 +185,9 @@
                                                                 $where_rec             = "";
                                                             }
                                                             
-                                                            if($tgl1_kirim){
+                                                            if($tgl1_kirim & $tgl2_kirim){
                                                                 // PENCARIAN TANGGAL KIRIM
-                                                                    $itxviewmemo              = db2_exec($conn1, "SELECT 
+                                                                    $itxviewmemo              = db2_exec($conn1, "SELECT DISTINCT
                                                                                                                     im.ORDERDATE,
                                                                                                                     im.PELANGGAN,
                                                                                                                     im.NO_ORDER,
@@ -211,7 +217,7 @@
                                                                                                                 LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON isp.CODE = iasp.CODE 
                                                                                                                 LEFT JOIN ITXVIEW_MEMOPENTINGPPC im ON im.NO_KK = iasp.LOTCODE 
                                                                                                                 WHERE 
-                                                                                                                    isp.GOODSISSUEDATE = '$tgl1_kirim'
+                                                                                                                    isp.GOODSISSUEDATE BETWEEN '$tgl1_kirim' AND '$tgl2_kirim'
                                                                                                                     $where_rec");
                                                                     while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
                                                                         $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
@@ -244,8 +250,9 @@
 
                                                                     // --------------------------------------------------------------------------------------------------------------- //
                                                                     $tgl1_kirim_2   = $_POST['tgl1_kirim'];
+                                                                    $tgl2_kirim_2   = $_POST['tgl2_kirim'];
 
-                                                                    $sqlDB2 = "SELECT DISTINCT * FROM itxview_poselesai WHERE TGL_KIRIM = '$tgl1_kirim_2' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY NO_ORDER, ORDERLINE ASC";
+                                                                    $sqlDB2 = "SELECT DISTINCT * FROM itxview_poselesai WHERE TGL_KIRIM BETWEEN '$tgl1_kirim_2' AND '$tgl2_kirim_2' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY NO_ORDER, ORDERLINE ASC";
                                                                     $stmt   = mysqli_query($con_nowprd,$sqlDB2);
                                                                 // PENCARIAN TANGGAL KIRIM
                                                             }else{
@@ -503,6 +510,7 @@
                                                                                                     TGL_KIRIM,
                                                                                                     SUM(QTY_KIRIM_KG_DETAIL) AS QTY_KIRIM_KG,
                                                                                                     SUM(QTY_KIRIM_YARD_MTR_DETAIL) AS QTY_KIRIM_YARD_MTR,
+                                                                                                    COUNT(LOTCODE) AS ROLL,
                                                                                                     FOC,
                                                                                                     PROGRESSSTATUS
                                                                                                 FROM
@@ -514,6 +522,7 @@
                                                                                                         isp.GOODSISSUEDATE AS TGL_KIRIM,
                                                                                                         iasp2.LINENUMBER,
                                                                                                         iasp2.BASEPRIMARYQUANTITY AS QTY_KIRIM_KG_DETAIL,
+                                                                                                        iasp.LOTCODE,
                                                                                                         CASE
                                                                                                             WHEN isp.PAYMENTMETHODCODE = 'FOC' THEN isp.PAYMENTMETHODCODE
                                                                                                             ELSE ''
@@ -835,6 +844,7 @@
                                                                     </td>
                                                                 <?php endif; ?>
                                                                 <td><?= $d_suratjalan['SURAT_JALAN']; ?></td> <!-- NO SURAT JALAN -->
+                                                                <td><?= $d_suratjalan['ROLL']; ?></td> <!-- ROLL -->
                                                                 <td><?= $d_suratjalan['TGL_KIRIM']; ?></td> <!-- TGL KIRIM -->
                                                                 <td><?= number_format($d_suratjalan['QTY_KIRIM_KG'], 2); ?></td> <!-- QTY KIRIM KG -->
                                                                 <td><?= number_format($d_suratjalan['QTY_KIRIM_YARD_MTR'], 2); ?></td> <!-- QTY KIRIM YARD/METER -->
@@ -1087,6 +1097,7 @@
                                                                     </td>
                                                                 <?php endif; ?>
                                                                 <td><?= $d_suratjalan['SURAT_JALAN']; ?></td> <!-- NO SURAT JALAN -->
+                                                                <td><?= $d_suratjalan['ROLL']; ?></td> <!-- ROLL -->
                                                                 <td><?= $d_suratjalan['TGL_KIRIM']; ?></td> <!-- TGL KIRIM -->
                                                                 <td><?= number_format($d_suratjalan['QTY_KIRIM_KG'], 2); ?></td> <!-- QTY KIRIM KG -->
                                                                 <td><?= number_format($d_suratjalan['QTY_KIRIM_YARD_MTR'], 2); ?></td> <!-- QTY KIRIM YARD/METER -->
