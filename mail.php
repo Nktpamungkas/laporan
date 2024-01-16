@@ -334,7 +334,7 @@
                                                                         FROM
                                                                             ABSUSERDEF a
                                                                         WHERE
-                                                                            TRIM(a.CUSTOMCSS) = 'DIT ADMIN' AND NOT a.SENDEREMAIL IS NULL");
+                                                                            (TRIM(a.CUSTOMCSS) = 'ALL' OR TRIM(a.CUSTOMCSS) = 'DIT ADMIN') AND NOT a.SENDEREMAIL IS NULL");
                         while ($row_email_kepala_dept_user   = db2_fetch_assoc($q_email_kepala_dept_user)) {
                             // $mail->AddAddress('nilo.pamungkas@indotaichen.com');
                             $mail->AddAddress($row_email_kepala_dept_user['EMAIL']);
@@ -844,19 +844,19 @@
         // START 1. ERP
             require_once "koneksi.php"; 
             $q_opentiket_erp    = db2_exec($conn1, "SELECT 
-                                                            TRIM(p.CODE) AS CODE,
-                                                            p.SYMPTOM AS GEJALA,
-                                                            TRIM(p.CREATIONUSER) AS CREATIONUSER,
-                                                            TRIM(d.LONGDESCRIPTION) AS DEPT,
-                                                            TRIM(p2.CODE) AS KODE_MESIN,
-                                                            TRIM(p2.LONGDESCRIPTION) AS NAMA_MESIN,
-                                                            TRIM(p2.GENERICDATA1) || ' ' || TRIM(p2.GENERICDATA2) || ' ' || TRIM(p2.GENERICDATA3) || ' ' || TRIM(p2.GENERICDATA4) AS DESC_MESIN 
-                                                        FROM
-                                                            PMBREAKDOWNENTRY p
-                                                        LEFT JOIN DEPARTMENT d ON d.CODE = p.DEPARTMENTCODE
-                                                        LEFT JOIN PMBOM p2 ON p2.CODE = p.PMBOMCODE 
-                                                        WHERE
-                                                            (p.BREAKDOWNTYPE = 'ERP')");
+                                                        TRIM(p.CODE) AS CODE,
+                                                        p.SYMPTOM AS GEJALA,
+                                                        TRIM(p.CREATIONUSER) AS CREATIONUSER,
+                                                        TRIM(d.LONGDESCRIPTION) AS DEPT,
+                                                        TRIM(p2.CODE) AS KODE_MESIN,
+                                                        TRIM(p2.LONGDESCRIPTION) AS NAMA_MESIN,
+                                                        TRIM(p2.GENERICDATA1) || ' ' || TRIM(p2.GENERICDATA2) || ' ' || TRIM(p2.GENERICDATA3) || ' ' || TRIM(p2.GENERICDATA4) AS DESC_MESIN 
+                                                    FROM
+                                                        PMBREAKDOWNENTRY p
+                                                    LEFT JOIN DEPARTMENT d ON d.CODE = p.DEPARTMENTCODE
+                                                    LEFT JOIN PMBOM p2 ON p2.CODE = p.PMBOMCODE 
+                                                    WHERE
+                                                        (p.BREAKDOWNTYPE = 'ERP')");
             $no = 1;
             while ($row_opentiket_erp   = db2_fetch_assoc($q_opentiket_erp)) {
                 $q_cektiket     = mysqli_query($con_nowprd, "SELECT COUNT(*) AS jumlah 
