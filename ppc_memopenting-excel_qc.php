@@ -482,8 +482,24 @@
                         $d_benang_booking_new		= $r_benang_booking_new['SALESORDERCODE'];
 
                     ?>
+                    <?php
+                        $sql_benang_rajut		= db2_exec($conn1, "SELECT
+                                                                        *
+                                                                    FROM
+                                                                        ITXVIEW_RAJUT
+                                                                    WHERE
+                                                                        (ITEMTYPEAFICODE ='KGF' OR ITEMTYPEAFICODE ='FKG')
+                                                                        AND TRIM(SUBCODE01) = '$d_qtysalinan[SUBCODE01]'
+                                                                        AND TRIM(SUBCODE02) = '$d_qtysalinan[SUBCODE02]'
+                                                                        AND TRIM(SUBCODE03) = '$d_qtysalinan[SUBCODE03]'
+                                                                        AND TRIM(SUBCODE04) = '$d_qtysalinan[SUBCODE04]'
+                                                                        AND TRIM(ORIGDLVSALORDLINESALORDERCODE) = '$rowdb2[NO_ORDER]'");
+                        $r_benang_rajut		= db2_fetch_assoc($sql_benang_rajut);
+                        $d_benang_rajut		= $r_benang_rajut['CODE'];
+                    ?>
                     <!-- <a href="http://online.indotaichen.com/laporan/ppc_catatan_po_greige.php?" target="_blank">Detail</a> -->
                     <?php if($d_benang_booking_new){ echo $d_benang_booking_new.'. Greige Ready'; } ?>
+                    <?php if($d_benang_rajut){ echo $d_benang_rajut.'. Rajut'; } ?>
                 </td> <!-- CATATAN PO GREIGE -->
                 <td></td> <!-- TARGET SELESAI -->
                 <td><?= $rowdb2['KETERANGAN']; ?></td> <!-- KETERANGAN -->

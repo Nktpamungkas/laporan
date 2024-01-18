@@ -47,6 +47,11 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card">
+                                    <div class="card-header" style="background-color: #ffeb3b; padding: 12px; font-family: 'Courier New', monospace;">
+                                        <h5>Reminder :</h5><br>
+                                        - Jika data terasa mulai <b>lambat</b> cobalah untuk klik tombol <b><i class="icofont icofont-refresh"></i> Reset</b> untuk menghapus semua history pencarian<br>
+                                        - Khusus Memo Penting <b>dilarang</b> membuka lebih dari 1 Tab atau 1 Browser
+                                    </div>
                                     <div class="card-header">
                                         <h5>Filter Data</h5>
                                     </div>
@@ -115,7 +120,6 @@
                                                     <!-- <p>Warning : Jika melakukan<b><i class="icofont icofont-refresh"></i> Reset Data</b>, pastikan tidak ada yang menggunakan Memo Penting</p> -->
                                                 </div>
                                             </div>
-                                            <p>*Note : Jika data terasa mulai <b>lambat</b> cobalah untuk klik tombol <b><i class="icofont icofont-refresh"></i> Reset</b> untuk menghapus semua history pencarian.</p>
                                         </form>
                                     </div>
                                 </div>
@@ -739,7 +743,6 @@
                                                                                                                     AND TRIM(ORIGDLVSALORDLINESALORDERCODE) = '$rowdb2[NO_ORDER]'");
                                                                     $r_benang_rajut		= db2_fetch_assoc($sql_benang_rajut);
                                                                     $d_benang_rajut		= $r_benang_rajut['CODE'];
-
                                                                 ?>
                                                                 <!-- <a href="http://online.indotaichen.com/laporan/ppc_catatan_po_greige.php?" target="_blank">Detail</a> -->
                                                                 <?php if($d_benang_booking_new){ echo $d_benang_booking_new.'. Greige Ready'; } ?>
