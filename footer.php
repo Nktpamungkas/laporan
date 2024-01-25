@@ -54,7 +54,13 @@
 <script type="text/javascript" src="files\bower_components\select2\js\select2.full.min.js"></script>
 <script type="text/javascript" src="files\assets\pages\advance-elements\select2-custom.js"></script>
 <script type="text/javascript" src="xeditable/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<!-- Multiselect js -->
+<script type="text/javascript" src="files\bower_components\bootstrap-multiselect\js\bootstrap-multiselect.js">
 
+
+</script>
+<script type="text/javascript" src="files\bower_components\multiselect\js\jquery.multi-select.js"></script>
+<script type="text/javascript" src="files\assets\js\jquery.quicksearch.js"></script>
 <script>
     $.fn.editable.defaults.mode = 'inline';
     $(document).ready(function() {
@@ -113,7 +119,30 @@
 
   $(document).ready(function(){
 	// Single Search Select
-      $(".js-example-basic-single").select2();
+    $(".js-example-basic-single").select2();
+
+  // Multi-select js start
+    $('#my-select').multiSelect();
+    $('#public-methods').multiSelect();
+    $('#select-all').on('click',function() {
+      $('#public-methods').multiSelect('select_all');
+      return false;
+    });
+    $('#deselect-all').on('click',function() {
+      $('#public-methods').multiSelect('deselect_all');
+      return false;
+    });
+
+    $('#public-methods2').multiSelect();
+    $('#select-all2').on('click',function() {
+      $('#public-methods2').multiSelect('select_all');
+      return false;
+    });
+    $('#deselect-all2').on('click',function() {
+      $('#public-methods2').multiSelect('deselect_all');
+      return false;
+    });
+    
   });
 </script>
 </body>
