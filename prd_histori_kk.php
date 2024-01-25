@@ -118,12 +118,10 @@
                                                 global $con; 
 
                                                 $query = "SELECT
-                                                RIGHT(a.VALUESTRING, 8) AS ORIGINALPDCODE
-                                                FROM PRODUCTIONDEMAND p
-                                                LEFT JOIN ADSTORAGE a ON
-                                                a.UNIQUEID = p.ABSUNIQUEID
-                                                AND a.FIELDNAME = 'OriginalPDCode'   
-                                                WHERE LEFT(p.CODE,8) = '$noDemand'";
+                                                                RIGHT(a.VALUESTRING, 8) AS ORIGINALPDCODE
+                                                            FROM PRODUCTIONDEMAND p
+                                                            LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'OriginalPDCode'   
+                                                        WHERE LEFT(p.CODE,8) = '$noDemand'";
 
                                                 $stmt = db2_exec($con, $query);
                                                 if ($stmt) {	
@@ -206,12 +204,10 @@
                                                 return $array_konversi;
                                             }
                                             
-
                                             $noDemand = $_POST['Demand'];
                                             $noDemand = substr($noDemand, 0, 8); 
                                             $result   = cekDemand($noDemand);
                                             $disalin  = cekdisalin($noDemand);
-
 
                                             if ($result) {
                                                 
@@ -226,44 +222,42 @@
                                             ?>
                                                 <link rel="stylesheet" href="dist\css\treeData2.css">
                                                 <!--TIMPA-->
-                                            <style> 
-                                                .tree li a{
-                                                border: 1px solid #000;
-                                                padding: 5px 10px;
-                                                text-decoration: none;
-                                                color: #000;
-                                                font-family: arial, verdana, tahoma;
-                                                font-size: 12px;
-                                                display: inline-block;
+                                                <style> 
+                                                    .tree li a{
+                                                    border: 1px solid #000;
+                                                    padding: 5px 10px;
+                                                    text-decoration: none;
+                                                    color: #000;
+                                                    font-family: arial, verdana, tahoma;
+                                                    font-size: 12px;
+                                                    display: inline-block;
 
-                                                border-radius: 5px;
-                                                -webkit-border-radius: 5px;
-                                                -moz-border-radius: 5px;
+                                                    border-radius: 5px;
+                                                    -webkit-border-radius: 5px;
+                                                    -moz-border-radius: 5px;
 
-                                                transition: all 0.5s;
-                                                -webkit-transition: all 0.5s;
-                                                -moz-transition: all 0.5s;
-                                                }
+                                                    transition: all 0.5s;
+                                                    -webkit-transition: all 0.5s;
+                                                    -moz-transition: all 0.5s;
+                                                    }
 
-                                                li a.disabled-link {
-                                                pointer-events: none;
-                                                color: #999; /* Opsional: Mengubah warna tautan menjadi abu-abu untuk menunjukkan bahwa itu dinonaktifkan */
-                                                text-decoration: none; /* Opsional: Menghilangkan garis bawah */
-                                                cursor: not-allowed; /* Opsional: Mengubah ikon kursor menjadi "not allowed" */
-                                                }
-                                            </style>
+                                                    li a.disabled-link {
+                                                    pointer-events: none;
+                                                    color: #999; /* Opsional: Mengubah warna tautan menjadi abu-abu untuk menunjukkan bahwa itu dinonaktifkan */
+                                                    text-decoration: none; /* Opsional: Menghilangkan garis bawah */
+                                                    cursor: not-allowed; /* Opsional: Mengubah ikon kursor menjadi "not allowed" */
+                                                    }
+                                                </style>
                                                 <h4>Struktur Mapping No Demand</h4><hr>
                                                 <div id="tree" ></div>
                                                 <script type="text/javascript" src="dist\js\treeData2.js"></script>
                                                 <script>
-                                                var tree = <?php echo json_encode($array_konversi); ?>;
-                                                TreeData(tree, "#tree");
+                                                    var tree = <?php echo json_encode($array_konversi); ?>;
+                                                    TreeData(tree, "#tree");
                                                 </script>
-                                                
                                             <?php } else {
                                                 echo "PRODUCTIONDEMANDCODE tidak ditemukan.";
                                             }
-
                                             ?>
                                             </div>                                         
                                         </div>
