@@ -359,7 +359,10 @@
                                                     <div class="col-sm-2">
                                                         <select name="kode" class="form-control" id="kode" onchange="window.location='prd_pinjam_stdcckwarna.php?kode='+this.value+'&tambah=1'" required>
                                                             <!-- <option value="DL" <?php if($kode == 'DL'){ echo "SELECTED"; } ?>>DL - Dye Lot Card</option> -->
-                                                            <option value="RC" selected>RC - Recipe Card</option>
+                                                            <option value="RC" <?php if($_GET['kode'] == 'RC'){ echo "SELECTED"; } ?>>RC - Recipe Card</option>
+                                                            <option value="FristLot" <?php if($_GET['kode'] == 'FristLot'){ echo "SELECTED"; } ?>>Frist Lot</option>
+                                                            <option value="ABC" <?php if($_GET['kode'] == 'ABC'){ echo "SELECTED"; } ?>>ABC</option>
+                                                            <option value="Original" <?php if($_GET['kode'] == 'Original'){ echo "SELECTED"; } ?>>Original</option>
                                                             <!-- <option value="OR" <?php if($kode == 'OR'){ echo "SELECTED"; } ?>>OR - Original</option> -->
                                                             <!-- <option value="LD" <?php if($kode == 'LD'){ echo "SELECTED"; } ?>>LD - Lab Dip</option> -->
                                                             <!-- <option value="SL" <?php if($kode == 'SL'){ echo "SELECTED"; } ?>>SL - Sample L/D</option> -->
