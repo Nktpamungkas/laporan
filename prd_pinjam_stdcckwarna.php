@@ -122,7 +122,7 @@
             echo '</script>';
         }
     }elseif(isset($_POST['update_warna'])){
-        $q_updatewarna  = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE long_description = '' AND kode = 'RC'");
+        $q_updatewarna  = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE long_description = '' AND (kode = 'RC' OR kode = 'ABC' OR kode = 'Original' OR kode = 'FristLot')");
         while($row_updatewarna    = mysqli_fetch_array($q_updatewarna)){
             $q_cekwarna = db2_exec($conn1, "SELECT
                                                 CODE,
@@ -420,11 +420,11 @@
                                                         <tbody>
                                                             <?php
                                                                 if (isset($_POST['lihatdata'])){
-                                                                    $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE status_file IS NULL AND kode = 'RC' ORDER BY id DESC LIMIT 10000");
+                                                                    $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE status_file IS NULL AND (kode = 'RC' OR kode = 'ABC' OR kode = 'Original' OR kode = 'FristLot') ORDER BY id DESC LIMIT 10000");
                                                                 }elseif (isset($_POST['lihatdata_arsip'])){
-                                                                    $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE status_file = 'Arsip' AND kode = 'RC'  ORDER BY id DESC LIMIT 10000");
+                                                                    $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE status_file = 'Arsip' AND (kode = 'RC' OR kode = 'ABC' OR kode = 'Original' OR kode = 'FristLot')  ORDER BY id DESC LIMIT 10000");
                                                                 }elseif (isset($_POST['lihatdata_bergerak'])){
-                                                                    $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE (tgl_in IS NOT NULL OR tgl_out IS NOT NULL) AND kode = 'RC' ORDER BY id DESC LIMIT 10000");
+                                                                    $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE (tgl_in IS NOT NULL OR tgl_out IS NOT NULL) AND (kode = 'RC' OR kode = 'ABC' OR kode = 'Original' OR kode = 'FristLot') ORDER BY id DESC LIMIT 10000");
                                                                 }
                                                             ?>
                                                             <?php while ($row_bukupinjam = mysqli_fetch_array($q_bukupinjam)) { ?>
