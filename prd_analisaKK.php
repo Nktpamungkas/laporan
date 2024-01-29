@@ -80,7 +80,7 @@
                                             <div class="row">
                                                 <div class="col-sm-6 col-xl-6 m-b-30">
                                                     <h4 class="sub-title">Production Demand 1:</h4>
-                                                    <input type="text" name="demand" id="demand" style="text-align: center;" onchange="window.location='prd_analisaKKNilo.php?demand='+this.value" placeholder="Masukan demand di sini" class="form-control" required value="<?php if (isset($_POST['submit'])) {
+                                                    <input type="text" name="demand" id="demand" style="text-align: center;" onchange="window.location='prd_analisaKK.php?demand='+this.value" placeholder="Masukan demand di sini" class="form-control" required value="<?php if (isset($_POST['submit'])) {
                                                                                                                                     echo $_POST['demand'];
                                                                                                                                 } elseif (isset($_GET['demand'])) {
                                                                                                                                     echo $_GET['demand'];
@@ -112,7 +112,7 @@
                                                 </div>
                                                 <div class="col-sm-6 col-xl-6 m-b-30">
                                                     <h4 class="sub-title">Production Demand 2:</h4>
-                                                    <input type="text" name="demand2" style="text-align: center;" onchange="window.location='prd_analisaKKNilo.php?demand='+document.getElementById('demand').value+'&demand2='+this.value" placeholder="Masukan demand di sini" class="form-control" value="<?php if (isset($_POST['submit'])) {
+                                                    <input type="text" name="demand2" style="text-align: center;" onchange="window.location='prd_analisaKK.php?demand='+document.getElementById('demand').value+'&demand2='+this.value" placeholder="Masukan demand di sini" class="form-control" value="<?php if (isset($_POST['submit'])) {
                                                                                                                                                     echo $_POST['demand2'];
                                                                                                                                                 } elseif (isset($_GET['demand2'])) {
                                                                                                                                                     echo $_GET['demand2'];
