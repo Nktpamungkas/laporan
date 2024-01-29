@@ -11,6 +11,10 @@
             mysqli_query($con_nowprd, "DELETE FROM log_activity_users WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'");
             header("Location: Login_prd_pinjam_stdcckwarna_dl.php");
             exit();
+        }else{
+            mysqli_query($con_nowprd, "UPDATE log_activity_users
+                                        SET CREATEDATETIME = '$date'
+                                        WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'");
         }
     }else{
         header("Location: Login_prd_pinjam_stdcckwarna_dl.php");
