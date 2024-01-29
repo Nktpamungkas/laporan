@@ -1,3 +1,22 @@
+<?php
+    require_once "koneksi.php"; 
+    $date = date('Y-m-d H:i:s');
+    $q_cek_login    = mysqli_query($con_nowprd, "SELECT COUNT(*) AS COUNT FROM log_activity_users WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'");
+    $data_login     = mysqli_fetch_assoc($q_cek_login);
+    if($data_login['COUNT'] == '1'){
+        $q_waktu_cek_login    = mysqli_query($con_nowprd, "SELECT TIMESTAMPDIFF(MINUTE, CREATEDATETIME, NOW()) AS selisih_menit FROM log_activity_users WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'");
+        $data_waktu_login     = mysqli_fetch_assoc($q_waktu_cek_login);
+
+        if($data_waktu_login['selisih_menit'] > 30){
+            mysqli_query($con_nowprd, "DELETE FROM log_activity_users WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'");
+            header("Location: Login_prd_pinjam_stdcckwarna_dl.php");
+            exit();
+        }
+    }else{
+        header("Location: Login_prd_pinjam_stdcckwarna_dl.php");
+        exit();
+    }
+?>
 <?php 
     ini_set("error_reporting", 1);
     session_start();

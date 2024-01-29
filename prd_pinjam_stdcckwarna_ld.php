@@ -1,12 +1,3 @@
-<?php
-    if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $session_timeout)) {
-        // Jika waktu sesi lebih dari waktu kadaluwarsa, hancurkan sesi dan redirect ke halaman login
-        session_unset();
-        session_destroy();
-        header("Location: Login_prd_pinjam_stdcckwarna.php");
-        exit();
-    }
-?>
 <?php 
     ini_set("error_reporting", 1);
     session_start();
@@ -110,6 +101,7 @@
         }
     }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -191,6 +183,7 @@
 </script>
 <?php require_once 'header.php'; ?>
 <body>
+<?= $diff_total_waktu->i; ?>
     <div class="pcoded-content">
         <div class="pcoded-inner-content">
             <div class="main-body">

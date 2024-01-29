@@ -1,10 +1,4 @@
 <?php
-    // Set waktu kadaluwarsa sesi dalam detik (misalnya, 30 menit)
-    $session_timeout = 900; // 15 menit
-
-    // Set waktu kadaluwarsa sesi
-    ini_set('session.gc_maxlifetime', $session_timeout);
-
     session_start();
 
     require_once "koneksi.php";
@@ -20,6 +14,8 @@
         if ($result->num_rows > 0) {
             $_SESSION['username'] = $username;
             header("Location: prd_pinjam_stdcckwarna_dl.php"); // Ganti dengan halaman setelah login
+            $date = date('Y-m-d H:i:s');
+            mysqli_query($con_nowprd, "INSERT INTO log_activity_users(user,IPADDRESS,CREATEDATETIME) VALUES('$username','$_SERVER[REMOTE_ADDR]','$date')");
         }else{
             $error_message = "Username atau password salah. Silakan coba lagi.";
         }

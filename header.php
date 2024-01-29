@@ -242,7 +242,7 @@
                                         </a>
                                     </li>
                                     <li class="">
-                                        <a href="prd_pinjam_stdcckwarna_dl.php" data-i18n="nav.animations.main">
+                                        <a href="Login_prd_pinjam_stdcckwarna_dl.php" data-i18n="nav.animations.main">
                                             Pinjam Std Cck Warna DL
                                         </a>
                                     </li>
