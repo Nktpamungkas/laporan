@@ -21,9 +21,10 @@ foreach ($dataArray as $data) {
     $field1 = mysqli_real_escape_string($conn, $data['WAKTUSEKARANG']);
     $field2 = mysqli_real_escape_string($conn, $data['QUERY']);
     $field3 = mysqli_real_escape_string($conn, $data['IPADDRESS']);
+    $field4 = mysqli_real_escape_string($conn, $data['CLIENT_WRKSTNNAME']);
 
     // Melakukan operasi INSERT ke dalam tabel
-    $sql = "INSERT INTO log_query_DB2 (WAKTUSEKARANG, QUERY, IPADDRESS) VALUES ('$field1', '$field2', '$field3')";
+    $sql = "INSERT INTO log_query_DB2 (WAKTUSEKARANG, QUERY, IPADDRESS, CLIENT_WRKSTNNAME) VALUES ('$field1', '$field2', '$field3', '$field4')";
 
 
     if ($conn->query($sql) === TRUE) {

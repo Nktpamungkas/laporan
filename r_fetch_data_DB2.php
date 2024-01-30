@@ -7,6 +7,7 @@ $query = db2_exec($conn1, "SELECT
                                 SUBSTR(NOW() + 14 MINUTES + 30 SECOND, 1, 19) AS WAKTUSEKARANG,
                                 STMT_TEXT AS QUERY,
                                 APPL_ID AS IPADDRESS,
+                                CLIENT_WRKSTNNAME,
                                 *
                             FROM
                                 TABLE(MON_GET_ACTIVITY(NULL,-2)) AS ACTIVITY
