@@ -106,7 +106,9 @@
                                                                                                     OPERATIONCODE ASC");
                                                         ?>
                                                         <?php while($row_operation = db2_fetch_assoc($q_operation)) : ?>
-                                                            <option value="<?= $row_operation['OPERATIONCODE']; ?>"><?= $row_operation['DESKRIPSI_OPERATION']; ?> - <?= $row_operation['OPERATIONCODE']; ?></option>
+                                                            <option value="<?= $row_operation['OPERATIONCODE']; ?>">
+                                                                <?= $row_operation['DESKRIPSI_OPERATION']; ?> - <?= $row_operation['OPERATIONCODE']; ?>
+                                                            </option>
                                                         <?php endwhile; ?>
                                                     </select>
                                                 </div>
@@ -546,7 +548,7 @@
                                                                 $q_cari_tq  = mysqli_query($con_db_qc, "SELECT * FROM tbl_tq_nokk WHERE nodemand = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' ORDER BY id DESC");
                                                             ?>
                                                             <?php while ($row_tq = mysqli_fetch_array($q_cari_tq)) { ?>
-                                                                <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_result.php?idkk=<?= $row_tq['id']; ?>&noitem=<?= $row_tq['no_item']; ?>&nohanger=<?= $row_tq['no_hanger']; ?>" target="_blank">Detail test quality (<?= $row_tq['no_test']; ?>)<i class="icofont icofont-external-link"></i></a><br>
+                                                                <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_result.php?idkk=<?= $row_tq['id']; ?>&noitem=<?= $row_tq['no_item']; ?>&nohanger=<?= $row_tq['no_hanger']; ?>" target="_blank">Detail test quality (<?= $row_tq['no_test']; ?>)<i class="icofont icofont-external-link"></i></a><br>
                                                             <?php } ?>
                                                         </th>
                                                     </tr>
@@ -554,21 +556,21 @@
                                                         <th style="vertical-align: text-top;">Hasil test inspect</th>
                                                         <th style="vertical-align: text-top;">:</th>
                                                         <th style="vertical-align: text-top;">
-                                                            <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
+                                                            <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
                                                         </th>
                                                     </tr>
                                                     <tr>
                                                         <th style="vertical-align: text-top;">Hasil test inspect</th>
                                                         <th style="vertical-align: text-top;">:</th>
                                                         <th style="vertical-align: text-top;">
-                                                            <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
+                                                            <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
                                                         </th>
                                                     </tr>
                                                     <tr>
                                                         <th style="vertical-align: text-top;">Detail bagi kain</th>
                                                         <th style="vertical-align: text-top;">:</th>
                                                         <th style="vertical-align: text-top;">
-                                                            <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/nowgkg/pages/cetak/cetakbagikain.php?demandno=<?= TRIM($demand); ?>" target="_blank">Click here! <i class="icofont icofont-external-link"></i></a><br>
+                                                            <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/nowgkg/pages/cetak/cetakbagikain.php?demandno=<?= TRIM($demand); ?>" target="_blank">Click here! <i class="icofont icofont-external-link"></i></a><br>
                                                         </th>
                                                     </tr>
                                                     <tr>
@@ -577,7 +579,7 @@
                                                         <th style="vertical-align: text-top;">
                                                             <form action="https://online.indotaichen.com/nowqcf/CekKainDemand" method="post" target="_blank">
                                                                 <input name="nodemand" value="<?= TRIM($demand); ?>" type="hidden" class="form-control form-control-sm" id="" required>
-                                                                <button class="btn-link" style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" type="submit">Click here! <i class="icofont icofont-external-link"></i></button>
+                                                                <button class="btn-link" style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" type="submit">Click here! <i class="icofont icofont-external-link"></i></button>
                                                             </form>
                                                         </th>
                                                     </tr>
@@ -697,7 +699,7 @@
                                                                     $cek_QA_DATA4    = mysqli_fetch_assoc($q_QA_DATA4);
                                                                 ?>
                                                                 <?php if ($cek_QA_DATA4) : ?>
-                                                                    <th style="text-align: center; font-size:11px; background-color: #EEE6B3">
+                                                                    <th style="text-align: center; font-size:15px; background-color: #EEE6B3">
                                                                         <?php if ($rowdb4['OPERATIONCODE'] == 'INS3') : ?>
                                                                             <?php
                                                                                 $q_mulai_ins3   = mysqli_query($con_nowprd, "SELECT
@@ -818,14 +820,14 @@
 
                                                                         ?>
                                                                         <th style="text-align: center;">
-                                                                            <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/dye-itti/pages/cetak/cetak_monitoring_new.php?idkk=&no=<?= $d_dye_montemp['no_resep']; ?>&idm=<?php echo $d_dye_montemp['idm']; ?>&ids=<?php echo $d_dye_montemp['ids']; ?>" target="_blank">Monitoring <i class="icofont icofont-external-link"></i></a>
+                                                                            <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/dye-itti/pages/cetak/cetak_monitoring_new.php?idkk=&no=<?= $d_dye_montemp['no_resep']; ?>&idm=<?php echo $d_dye_montemp['idm']; ?>&ids=<?php echo $d_dye_montemp['ids']; ?>" target="_blank">Monitoring <i class="icofont icofont-external-link"></i></a>
                                                                             &ensp;
-                                                                            <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/laporan/dye_filter_bon_reservation.php?demand=<?= $demand; ?>&prod_order=<?= $d_ITXVIEWKK['PRODUCTIONORDERCODE']; ?>" target="_blank">Bon Resep <i class="icofont icofont-external-link"></i></a>
+                                                                            <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/laporan/dye_filter_bon_reservation.php?demand=<?= $demand; ?>&prod_order=<?= $d_ITXVIEWKK['PRODUCTIONORDERCODE']; ?>" target="_blank">Bon Resep <i class="icofont icofont-external-link"></i></a>
                                                                         </th>
                                                                     <?php else : ?>
                                                                             <?php $opr_grup = $rowdb5['OPERATIONGROUPCODE']; if(str_contains($opr_grup, "FIN")) : ?>
                                                                                 <th style="text-align: center;">
-                                                                                    <!-- <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/finishing2-new/reports/pages/reports-detail-stenter.php?FromAnalisa=FromAnalisa&prod_order=<?= TRIM($d_ITXVIEWKK['PRODUCTIONORDERCODE']); ?>&prod_demand=<?= TRIM($demand); ?>&tgl_in=<?= substr($rowdb5['MULAI'], 1, 10); ?>&tgl_out=<?= substr($rowdb5['SELESAI'], 1, 10); ?>" target="_blank">Detail proses <i class="icofont icofont-external-link"></i></a> -->
+                                                                                    <!-- <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/finishing2-new/reports/pages/reports-detail-stenter.php?FromAnalisa=FromAnalisa&prod_order=<?= TRIM($d_ITXVIEWKK['PRODUCTIONORDERCODE']); ?>&prod_demand=<?= TRIM($demand); ?>&tgl_in=<?= substr($rowdb5['MULAI'], 1, 10); ?>&tgl_out=<?= substr($rowdb5['SELESAI'], 1, 10); ?>" target="_blank">Detail proses <i class="icofont icofont-external-link"></i></a> -->
                                                                                 </th>
                                                                             <?php else : ?>
                                                                                 <th style="text-align: center;">-</th>
@@ -855,7 +857,7 @@
                                                                                                                     AND OPERATIONCODE = '$rowdb7[OPERATIONCODE]'");
                                                                         $d_routing  = mysqli_fetch_assoc($q_routing);
                                                                     ?>
-                                                                    <td style="vertical-align: top; font-size:11px;">
+                                                                    <td style="vertical-align: top; font-size:15px;">
                                                                         <?= substr($d_routing['KETERANGAN'], 0,35); ?><?php if(substr($d_routing['KETERANGAN'], 0,35)){ echo "<br>"; } ?>
                                                                         <?= substr($d_routing['KETERANGAN'], 35,70); ?><?php if(substr($d_routing['KETERANGAN'], 35,70)){ echo "<br>"; } ?>
                                                                         <?= substr($d_routing['KETERANGAN'], 70,105); ?><?php if(substr($d_routing['KETERANGAN'], 70,105)){ echo "<br>"; } ?>
@@ -896,7 +898,7 @@
                                                                                                         AND SUBCODE03 ='$d_ITXVIEWKK[SUBCODE03]' 
                                                                                                         AND SUBCODE04 = '$d_ITXVIEWKK[SUBCODE04]'");
                                                                     ?>
-                                                                    <td style="vertical-align: top; font-size:11px;">
+                                                                    <td style="vertical-align: top; font-size:15px;">
                                                                         <b>Acuan Standart :</b> <br>
                                                                         <?php while ($d_specs = db2_fetch_assoc($q_specs)) {  ?>
                                                                             <li><?= $d_specs['NAMENAME']; ?> : <?= $d_specs['VALUESTRING'].$d_specs['VALUEDECIMAL']; ?> </li>
@@ -920,7 +922,7 @@
                                                                     $d_QA_DATAcek   = mysqli_fetch_assoc($q_QA_DATAcek);
                                                                 ?>
                                                                 <?php if ($d_QA_DATAcek) : ?>
-                                                                    <td style="vertical-align: top; font-size:11px;">
+                                                                    <td style="vertical-align: top; font-size:15px;">
                                                                         <?php $q_QA_DATA7     = mysqli_query($con_nowprd, $sqlQAData); ?>
                                                                         <?php $no = 1; while ($d_QA_DATA7 = mysqli_fetch_array($q_QA_DATA7)) : ?>
                                                                             <?php $char_code = $d_QA_DATA7['CHARACTERISTICCODE']; ?>
@@ -1366,7 +1368,7 @@
                                                                         $q_cari_tq  = mysqli_query($con_db_qc, "SELECT * FROM tbl_tq_nokk WHERE nodemand = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' ORDER BY id DESC");
                                                                     ?>
                                                                     <?php while ($row_tq = mysqli_fetch_array($q_cari_tq)) { ?>
-                                                                        <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_result.php?idkk=<?= $row_tq['id']; ?>&noitem=<?= $row_tq['no_item']; ?>&nohanger=<?= $row_tq['no_hanger']; ?>" target="_blank">Detail test quality (<?= $row_tq['no_test']; ?>)<i class="icofont icofont-external-link"></i></a><br>
+                                                                        <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_result.php?idkk=<?= $row_tq['id']; ?>&noitem=<?= $row_tq['no_item']; ?>&nohanger=<?= $row_tq['no_hanger']; ?>" target="_blank">Detail test quality (<?= $row_tq['no_test']; ?>)<i class="icofont icofont-external-link"></i></a><br>
                                                                     <?php } ?>
                                                                 </th>
                                                             </tr>
@@ -1374,21 +1376,21 @@
                                                                 <th style="vertical-align: text-top;">Hasil test inspect</th>
                                                                 <th style="vertical-align: text-top;">:</th>
                                                                 <th style="vertical-align: text-top;">
-                                                                    <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
+                                                                    <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
                                                                 </th>
                                                             </tr>
                                                             <tr>
                                                                 <th style="vertical-align: text-top;">Hasil test inspect</th>
                                                                 <th style="vertical-align: text-top;">:</th>
                                                                 <th style="vertical-align: text-top;">
-                                                                    <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
+                                                                    <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
                                                                 </th>
                                                             </tr>
                                                             <tr>
                                                                 <th style="vertical-align: text-top;">Detail bagi kain</th>
                                                                 <th style="vertical-align: text-top;">:</th>
                                                                 <th style="vertical-align: text-top;">
-                                                                    <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/nowgkg/pages/cetak/cetakbagikain.php?demandno=<?= TRIM($demand); ?>" target="_blank">Click here! <i class="icofont icofont-external-link"></i></a><br>
+                                                                    <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/nowgkg/pages/cetak/cetakbagikain.php?demandno=<?= TRIM($demand); ?>" target="_blank">Click here! <i class="icofont icofont-external-link"></i></a><br>
                                                                 </th>
                                                             </tr>
                                                             <tr>
@@ -1397,7 +1399,7 @@
                                                                 <th style="vertical-align: text-top;">
                                                                     <form action="https://online.indotaichen.com/nowqcf/CekKainDemand" method="post" target="_blank">
                                                                         <input name="nodemand" value="<?= TRIM($demand); ?>" type="hidden" class="form-control form-control-sm" id="" required>
-                                                                        <button class="btn-link" style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" type="submit">Click here! <i class="icofont icofont-external-link"></i></button>
+                                                                        <button class="btn-link" style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" type="submit">Click here! <i class="icofont icofont-external-link"></i></button>
                                                                     </form>
                                                                 </th>
                                                             </tr>
@@ -1517,7 +1519,7 @@
                                                                             $cek_QA_DATA4    = mysqli_fetch_assoc($q_QA_DATA4);
                                                                         ?>
                                                                         <?php if ($cek_QA_DATA4) : ?>
-                                                                            <th style="text-align: center; font-size:11px; background-color: #EEE6B3">
+                                                                            <th style="text-align: center; font-size:15px; background-color: #EEE6B3">
                                                                                 <?php if ($rowdb4['OPERATIONCODE'] == 'INS3') : ?>
                                                                                     <?php
                                                                                         $q_mulai_ins3   = mysqli_query($con_nowprd, "SELECT
@@ -1638,14 +1640,14 @@
 
                                                                                 ?>
                                                                                 <th style="text-align: center;">
-                                                                                    <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/dye-itti/pages/cetak/cetak_monitoring_new.php?idkk=&no=<?= $d_dye_montemp['no_resep']; ?>&idm=<?php echo $d_dye_montemp['idm']; ?>&ids=<?php echo $d_dye_montemp['ids']; ?>" target="_blank">Monitoring <i class="icofont icofont-external-link"></i></a>
+                                                                                    <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/dye-itti/pages/cetak/cetak_monitoring_new.php?idkk=&no=<?= $d_dye_montemp['no_resep']; ?>&idm=<?php echo $d_dye_montemp['idm']; ?>&ids=<?php echo $d_dye_montemp['ids']; ?>" target="_blank">Monitoring <i class="icofont icofont-external-link"></i></a>
                                                                                     &ensp;
-                                                                                    <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/laporan/dye_filter_bon_reservation.php?demand=<?= $demand; ?>&prod_order=<?= $d_ITXVIEWKK['PRODUCTIONORDERCODE']; ?>" target="_blank">Bon Resep <i class="icofont icofont-external-link"></i></a>
+                                                                                    <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/laporan/dye_filter_bon_reservation.php?demand=<?= $demand; ?>&prod_order=<?= $d_ITXVIEWKK['PRODUCTIONORDERCODE']; ?>" target="_blank">Bon Resep <i class="icofont icofont-external-link"></i></a>
                                                                                 </th>
                                                                             <?php else : ?>
                                                                                     <?php $opr_grup = $rowdb5['OPERATIONGROUPCODE']; if(str_contains($opr_grup, "FIN")) : ?>
                                                                                         <th style="text-align: center;">
-                                                                                            <!-- <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/finishing2-new/reports/pages/reports-detail-stenter.php?FromAnalisa=FromAnalisa&prod_order=<?= TRIM($d_ITXVIEWKK['PRODUCTIONORDERCODE']); ?>&prod_demand=<?= TRIM($demand); ?>&tgl_in=<?= substr($rowdb5['MULAI'], 1, 10); ?>&tgl_out=<?= substr($rowdb5['SELESAI'], 1, 10); ?>" target="_blank">Detail proses <i class="icofont icofont-external-link"></i></a> -->
+                                                                                            <!-- <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/finishing2-new/reports/pages/reports-detail-stenter.php?FromAnalisa=FromAnalisa&prod_order=<?= TRIM($d_ITXVIEWKK['PRODUCTIONORDERCODE']); ?>&prod_demand=<?= TRIM($demand); ?>&tgl_in=<?= substr($rowdb5['MULAI'], 1, 10); ?>&tgl_out=<?= substr($rowdb5['SELESAI'], 1, 10); ?>" target="_blank">Detail proses <i class="icofont icofont-external-link"></i></a> -->
                                                                                         </th>
                                                                                     <?php else : ?>
                                                                                         <th style="text-align: center;">-</th>
@@ -1675,7 +1677,7 @@
                                                                                                                             AND OPERATIONCODE = '$rowdb7[OPERATIONCODE]'");
                                                                                 $d_routing  = mysqli_fetch_assoc($q_routing);
                                                                             ?>
-                                                                            <td style="vertical-align: top; font-size:11px;">
+                                                                            <td style="vertical-align: top; font-size:15px;">
                                                                                 <?= substr($d_routing['KETERANGAN'], 0,35); ?><?php if(substr($d_routing['KETERANGAN'], 0,35)){ echo "<br>"; } ?>
                                                                                 <?= substr($d_routing['KETERANGAN'], 35,70); ?><?php if(substr($d_routing['KETERANGAN'], 35,70)){ echo "<br>"; } ?>
                                                                                 <?= substr($d_routing['KETERANGAN'], 70,105); ?><?php if(substr($d_routing['KETERANGAN'], 70,105)){ echo "<br>"; } ?>
@@ -1716,7 +1718,7 @@
                                                                                                                 AND SUBCODE03 ='$d_ITXVIEWKK[SUBCODE03]' 
                                                                                                                 AND SUBCODE04 = '$d_ITXVIEWKK[SUBCODE04]'");
                                                                             ?>
-                                                                            <td style="vertical-align: top; font-size:11px;">
+                                                                            <td style="vertical-align: top; font-size:15px;">
                                                                                 <b>Acuan Standart :</b> <br>
                                                                                 <?php while ($d_specs = db2_fetch_assoc($q_specs)) {  ?>
                                                                                     <li><?= $d_specs['NAMENAME']; ?> : <?= $d_specs['VALUESTRING'].$d_specs['VALUEDECIMAL']; ?> </li>
@@ -1740,7 +1742,7 @@
                                                                             $d_QA_DATAcek   = mysqli_fetch_assoc($q_QA_DATAcek);
                                                                         ?>
                                                                         <?php if ($d_QA_DATAcek) : ?>
-                                                                            <td style="vertical-align: top; font-size:11px;">
+                                                                            <td style="vertical-align: top; font-size:15px;">
                                                                                 <?php $q_QA_DATA7     = mysqli_query($con_nowprd, $sqlQAData); ?>
                                                                                 <?php $no = 1; while ($d_QA_DATA7 = mysqli_fetch_array($q_QA_DATA7)) : ?>
                                                                                     <?php $char_code = $d_QA_DATA7['CHARACTERISTICCODE']; ?>
@@ -2186,7 +2188,7 @@
                                                                                 $q_cari_tq  = mysqli_query($con_db_qc, "SELECT * FROM tbl_tq_nokk WHERE nodemand = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' ORDER BY id DESC");
                                                                             ?>
                                                                             <?php while ($row_tq = mysqli_fetch_array($q_cari_tq)) { ?>
-                                                                                <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_result.php?idkk=<?= $row_tq['id']; ?>&noitem=<?= $row_tq['no_item']; ?>&nohanger=<?= $row_tq['no_hanger']; ?>" target="_blank">Detail test quality (<?= $row_tq['no_test']; ?>)<i class="icofont icofont-external-link"></i></a><br>
+                                                                                <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_result.php?idkk=<?= $row_tq['id']; ?>&noitem=<?= $row_tq['no_item']; ?>&nohanger=<?= $row_tq['no_hanger']; ?>" target="_blank">Detail test quality (<?= $row_tq['no_test']; ?>)<i class="icofont icofont-external-link"></i></a><br>
                                                                             <?php } ?>
                                                                         </th>
                                                                     </tr>
@@ -2194,21 +2196,21 @@
                                                                         <th style="vertical-align: text-top;">Hasil test inspect</th>
                                                                         <th style="vertical-align: text-top;">:</th>
                                                                         <th style="vertical-align: text-top;">
-                                                                            <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
+                                                                            <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
                                                                         </th>
                                                                     </tr>
                                                                     <tr>
                                                                         <th style="vertical-align: text-top;">Hasil test inspect</th>
                                                                         <th style="vertical-align: text-top;">:</th>
                                                                         <th style="vertical-align: text-top;">
-                                                                            <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
+                                                                            <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
                                                                         </th>
                                                                     </tr>
                                                                     <tr>
                                                                         <th style="vertical-align: text-top;">Detail bagi kain</th>
                                                                         <th style="vertical-align: text-top;">:</th>
                                                                         <th style="vertical-align: text-top;">
-                                                                            <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/nowgkg/pages/cetak/cetakbagikain.php?demandno=<?= TRIM($demand); ?>" target="_blank">Click here! <i class="icofont icofont-external-link"></i></a><br>
+                                                                            <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/nowgkg/pages/cetak/cetakbagikain.php?demandno=<?= TRIM($demand); ?>" target="_blank">Click here! <i class="icofont icofont-external-link"></i></a><br>
                                                                         </th>
                                                                     </tr>
                                                                     <tr>
@@ -2217,7 +2219,7 @@
                                                                         <th style="vertical-align: text-top;">
                                                                             <form action="https://online.indotaichen.com/nowqcf/CekKainDemand" method="post" target="_blank">
                                                                                 <input name="nodemand" value="<?= TRIM($demand); ?>" type="hidden" class="form-control form-control-sm" id="" required>
-                                                                                <button class="btn-link" style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" type="submit">Click here! <i class="icofont icofont-external-link"></i></button>
+                                                                                <button class="btn-link" style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" type="submit">Click here! <i class="icofont icofont-external-link"></i></button>
                                                                             </form>
                                                                         </th>
                                                                     </tr>
@@ -2337,7 +2339,7 @@
                                                                                     $cek_QA_DATA4    = mysqli_fetch_assoc($q_QA_DATA4);
                                                                                 ?>
                                                                                 <?php if ($cek_QA_DATA4) : ?>
-                                                                                    <th style="text-align: center; font-size:11px; background-color: #EEE6B3">
+                                                                                    <th style="text-align: center; font-size:15px; background-color: #EEE6B3">
                                                                                         <?php if ($rowdb4['OPERATIONCODE'] == 'INS3') : ?>
                                                                                             <?php
                                                                                                 $q_mulai_ins3   = mysqli_query($con_nowprd, "SELECT
@@ -2458,14 +2460,14 @@
 
                                                                                         ?>
                                                                                         <th style="text-align: center;">
-                                                                                            <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/dye-itti/pages/cetak/cetak_monitoring_new.php?idkk=&no=<?= $d_dye_montemp['no_resep']; ?>&idm=<?php echo $d_dye_montemp['idm']; ?>&ids=<?php echo $d_dye_montemp['ids']; ?>" target="_blank">Monitoring <i class="icofont icofont-external-link"></i></a>
+                                                                                            <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/dye-itti/pages/cetak/cetak_monitoring_new.php?idkk=&no=<?= $d_dye_montemp['no_resep']; ?>&idm=<?php echo $d_dye_montemp['idm']; ?>&ids=<?php echo $d_dye_montemp['ids']; ?>" target="_blank">Monitoring <i class="icofont icofont-external-link"></i></a>
                                                                                             &ensp;
-                                                                                            <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/laporan/dye_filter_bon_reservation.php?demand=<?= $demand; ?>&prod_order=<?= $d_ITXVIEWKK['PRODUCTIONORDERCODE']; ?>" target="_blank">Bon Resep <i class="icofont icofont-external-link"></i></a>
+                                                                                            <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/laporan/dye_filter_bon_reservation.php?demand=<?= $demand; ?>&prod_order=<?= $d_ITXVIEWKK['PRODUCTIONORDERCODE']; ?>" target="_blank">Bon Resep <i class="icofont icofont-external-link"></i></a>
                                                                                         </th>
                                                                                     <?php else : ?>
                                                                                             <?php $opr_grup = $rowdb5['OPERATIONGROUPCODE']; if(str_contains($opr_grup, "FIN")) : ?>
                                                                                                 <th style="text-align: center;">
-                                                                                                    <!-- <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/finishing2-new/reports/pages/reports-detail-stenter.php?FromAnalisa=FromAnalisa&prod_order=<?= TRIM($d_ITXVIEWKK['PRODUCTIONORDERCODE']); ?>&prod_demand=<?= TRIM($demand); ?>&tgl_in=<?= substr($rowdb5['MULAI'], 1, 10); ?>&tgl_out=<?= substr($rowdb5['SELESAI'], 1, 10); ?>" target="_blank">Detail proses <i class="icofont icofont-external-link"></i></a> -->
+                                                                                                    <!-- <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/finishing2-new/reports/pages/reports-detail-stenter.php?FromAnalisa=FromAnalisa&prod_order=<?= TRIM($d_ITXVIEWKK['PRODUCTIONORDERCODE']); ?>&prod_demand=<?= TRIM($demand); ?>&tgl_in=<?= substr($rowdb5['MULAI'], 1, 10); ?>&tgl_out=<?= substr($rowdb5['SELESAI'], 1, 10); ?>" target="_blank">Detail proses <i class="icofont icofont-external-link"></i></a> -->
                                                                                                 </th>
                                                                                             <?php else : ?>
                                                                                                 <th style="text-align: center;">-</th>
@@ -2495,7 +2497,7 @@
                                                                                                                                     AND OPERATIONCODE = '$rowdb7[OPERATIONCODE]'");
                                                                                         $d_routing  = mysqli_fetch_assoc($q_routing);
                                                                                     ?>
-                                                                                    <td style="vertical-align: top; font-size:11px;">
+                                                                                    <td style="vertical-align: top; font-size:15px;">
                                                                                         <?= substr($d_routing['KETERANGAN'], 0,35); ?><?php if(substr($d_routing['KETERANGAN'], 0,35)){ echo "<br>"; } ?>
                                                                                         <?= substr($d_routing['KETERANGAN'], 35,70); ?><?php if(substr($d_routing['KETERANGAN'], 35,70)){ echo "<br>"; } ?>
                                                                                         <?= substr($d_routing['KETERANGAN'], 70,105); ?><?php if(substr($d_routing['KETERANGAN'], 70,105)){ echo "<br>"; } ?>
@@ -2536,7 +2538,7 @@
                                                                                                                         AND SUBCODE03 ='$d_ITXVIEWKK[SUBCODE03]' 
                                                                                                                         AND SUBCODE04 = '$d_ITXVIEWKK[SUBCODE04]'");
                                                                                     ?>
-                                                                                    <td style="vertical-align: top; font-size:11px;">
+                                                                                    <td style="vertical-align: top; font-size:15px;">
                                                                                         <b>Acuan Standart :</b> <br>
                                                                                         <?php while ($d_specs = db2_fetch_assoc($q_specs)) {  ?>
                                                                                             <li><?= $d_specs['NAMENAME']; ?> : <?= $d_specs['VALUESTRING'].$d_specs['VALUEDECIMAL']; ?> </li>
@@ -2560,7 +2562,7 @@
                                                                                     $d_QA_DATAcek   = mysqli_fetch_assoc($q_QA_DATAcek);
                                                                                 ?>
                                                                                 <?php if ($d_QA_DATAcek) : ?>
-                                                                                    <td style="vertical-align: top; font-size:11px;">
+                                                                                    <td style="vertical-align: top; font-size:15px;">
                                                                                         <?php $q_QA_DATA7     = mysqli_query($con_nowprd, $sqlQAData); ?>
                                                                                         <?php $no = 1; while ($d_QA_DATA7 = mysqli_fetch_array($q_QA_DATA7)) : ?>
                                                                                             <?php $char_code = $d_QA_DATA7['CHARACTERISTICCODE']; ?>
@@ -3000,7 +3002,7 @@
                                                                     $q_cari_tq  = mysqli_query($con_db_qc, "SELECT * FROM tbl_tq_nokk WHERE nodemand = '$d_ITXVIEWKK_2[PRODUCTIONDEMANDCODE]' ORDER BY id DESC");
                                                                 ?>
                                                                 <?php while ($row_tq = mysqli_fetch_array($q_cari_tq)) { ?>
-                                                                    <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_result.php?idkk=<?= $row_tq['id']; ?>&noitem=<?= $row_tq['no_item']; ?>&nohanger=<?= $row_tq['no_hanger']; ?>" target="_blank">Detail test quality (<?= $row_tq['no_test']; ?>)<i class="icofont icofont-external-link"></i></a><br>
+                                                                    <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_result.php?idkk=<?= $row_tq['id']; ?>&noitem=<?= $row_tq['no_item']; ?>&nohanger=<?= $row_tq['no_hanger']; ?>" target="_blank">Detail test quality (<?= $row_tq['no_test']; ?>)<i class="icofont icofont-external-link"></i></a><br>
                                                                 <?php } ?>
                                                             </th>
                                                         </tr>
@@ -3008,21 +3010,21 @@
                                                             <th style="vertical-align: text-top;">Hasil test inspect</th>
                                                             <th style="vertical-align: text-top;">:</th>
                                                             <th style="vertical-align: text-top;">
-                                                                <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand_2); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
+                                                                <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand_2); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
                                                             </th>
                                                         </tr>
                                                         <tr>
                                                             <th style="vertical-align: text-top;">Hasil test inspect</th>
                                                             <th style="vertical-align: text-top;">:</th>
                                                             <th style="vertical-align: text-top;">
-                                                                <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand_2); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
+                                                                <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand_2); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
                                                             </th>
                                                         </tr>
                                                         <tr>
                                                             <th style="vertical-align: text-top;">Detail bagi kain</th>
                                                             <th style="vertical-align: text-top;">:</th>
                                                             <th style="vertical-align: text-top;">
-                                                                <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/nowgkg/pages/cetak/cetakbagikain.php?demandno=<?= TRIM($demand_2); ?>" target="_blank">Click here! <i class="icofont icofont-external-link"></i></a><br>
+                                                                <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/nowgkg/pages/cetak/cetakbagikain.php?demandno=<?= TRIM($demand_2); ?>" target="_blank">Click here! <i class="icofont icofont-external-link"></i></a><br>
                                                             </th>
                                                         </tr>
                                                         <tr>
@@ -3031,7 +3033,7 @@
                                                             <th style="vertical-align: text-top;">
                                                                 <form action="https://online.indotaichen.com/nowqcf/CekKainDemand" method="post" target="_blank">
                                                                     <input name="nodemand" value="<?= TRIM($demand_2); ?>" type="hidden" class="form-control form-control-sm" id="" required>
-                                                                    <button class="btn-link" style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" type="submit">Click here! <i class="icofont icofont-external-link"></i></button>
+                                                                    <button class="btn-link" style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" type="submit">Click here! <i class="icofont icofont-external-link"></i></button>
                                                                 </form>
                                                             </th>
                                                         </tr>
@@ -3151,7 +3153,7 @@
                                                                         $cek_QA_DATA4    = mysqli_fetch_assoc($q_QA_DATA4);
                                                                     ?>
                                                                     <?php if ($cek_QA_DATA4) : ?>
-                                                                        <th style="text-align: center; font-size:11px; background-color: #EEE6B3">
+                                                                        <th style="text-align: center; font-size:15px; background-color: #EEE6B3">
                                                                             <?php if ($rowdb4['OPERATIONCODE'] == 'INS3') : ?>
                                                                                 <?php
                                                                                     $q_mulai_ins3   = mysqli_query($con_nowprd, "SELECT
@@ -3272,14 +3274,14 @@
 
                                                                             ?>
                                                                             <th style="text-align: center;">
-                                                                                <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/dye-itti/pages/cetak/cetak_monitoring_new.php?idkk=&no=<?= $d_dye_montemp['no_resep']; ?>&idm=<?php echo $d_dye_montemp['idm']; ?>&ids=<?php echo $d_dye_montemp['ids']; ?>" target="_blank">Monitoring <i class="icofont icofont-external-link"></i></a>
+                                                                                <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/dye-itti/pages/cetak/cetak_monitoring_new.php?idkk=&no=<?= $d_dye_montemp['no_resep']; ?>&idm=<?php echo $d_dye_montemp['idm']; ?>&ids=<?php echo $d_dye_montemp['ids']; ?>" target="_blank">Monitoring <i class="icofont icofont-external-link"></i></a>
                                                                                 &ensp;
-                                                                                <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/laporan/dye_filter_bon_reservation.php?demand=<?= $demand_2; ?>&prod_order=<?= $d_ITXVIEWKK_2['PRODUCTIONORDERCODE']; ?>" target="_blank">Bon Resep <i class="icofont icofont-external-link"></i></a>
+                                                                                <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/laporan/dye_filter_bon_reservation.php?demand=<?= $demand_2; ?>&prod_order=<?= $d_ITXVIEWKK_2['PRODUCTIONORDERCODE']; ?>" target="_blank">Bon Resep <i class="icofont icofont-external-link"></i></a>
                                                                             </th>
                                                                         <?php else : ?>
                                                                                 <?php $opr_grup = $rowdb5['OPERATIONGROUPCODE']; if(str_contains($opr_grup, "FIN")) : ?>
                                                                                     <th style="text-align: center;">
-                                                                                        <!-- <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/finishing2-new/reports/pages/reports-detail-stenter.php?FromAnalisa=FromAnalisa&prod_order=<?= TRIM($d_ITXVIEWKK_2['PRODUCTIONORDERCODE']); ?>&prod_demand=<?= TRIM($demand_2); ?>&tgl_in=<?= substr($rowdb5['MULAI'], 1, 10); ?>&tgl_out=<?= substr($rowdb5['SELESAI'], 1, 10); ?>" target="_blank">Detail proses <i class="icofont icofont-external-link"></i></a> -->
+                                                                                        <!-- <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/finishing2-new/reports/pages/reports-detail-stenter.php?FromAnalisa=FromAnalisa&prod_order=<?= TRIM($d_ITXVIEWKK_2['PRODUCTIONORDERCODE']); ?>&prod_demand=<?= TRIM($demand_2); ?>&tgl_in=<?= substr($rowdb5['MULAI'], 1, 10); ?>&tgl_out=<?= substr($rowdb5['SELESAI'], 1, 10); ?>" target="_blank">Detail proses <i class="icofont icofont-external-link"></i></a> -->
                                                                                     </th>
                                                                                 <?php else : ?>
                                                                                     <th style="text-align: center;">-</th>
@@ -3309,7 +3311,7 @@
                                                                                                                         AND OPERATIONCODE = '$rowdb7[OPERATIONCODE]'");
                                                                             $d_routing  = mysqli_fetch_assoc($q_routing);
                                                                         ?>
-                                                                        <td style="vertical-align: top; font-size:11px;">
+                                                                        <td style="vertical-align: top; font-size:15px;">
                                                                             <?= substr($d_routing['KETERANGAN'], 0,35); ?><?php if(substr($d_routing['KETERANGAN'], 0,35)){ echo "<br>"; } ?>
                                                                             <?= substr($d_routing['KETERANGAN'], 35,70); ?><?php if(substr($d_routing['KETERANGAN'], 35,70)){ echo "<br>"; } ?>
                                                                             <?= substr($d_routing['KETERANGAN'], 70,105); ?><?php if(substr($d_routing['KETERANGAN'], 70,105)){ echo "<br>"; } ?>
@@ -3350,7 +3352,7 @@
                                                                                                             AND SUBCODE03 ='$d_ITXVIEWKK_2[SUBCODE03]' 
                                                                                                             AND SUBCODE04 = '$d_ITXVIEWKK_2[SUBCODE04]'");
                                                                         ?>
-                                                                        <td style="vertical-align: top; font-size:11px;">
+                                                                        <td style="vertical-align: top; font-size:15px;">
                                                                             <b>Acuan Standart :</b> <br>
                                                                             <?php while ($d_specs = db2_fetch_assoc($q_specs)) {  ?>
                                                                                 <li><?= $d_specs['NAMENAME']; ?> : <?= $d_specs['VALUESTRING'].$d_specs['VALUEDECIMAL']; ?> </li>
@@ -3374,7 +3376,7 @@
                                                                         $d_QA_DATAcek   = mysqli_fetch_assoc($q_QA_DATAcek);
                                                                     ?>
                                                                     <?php if ($d_QA_DATAcek) : ?>
-                                                                        <td style="vertical-align: top; font-size:11px;">
+                                                                        <td style="vertical-align: top; font-size:15px;">
                                                                             <?php $q_QA_DATA7     = mysqli_query($con_nowprd, $sqlQAData); ?>
                                                                             <?php $no = 1; while ($d_QA_DATA7 = mysqli_fetch_array($q_QA_DATA7)) : ?>
                                                                                 <?php $char_code = $d_QA_DATA7['CHARACTERISTICCODE']; ?>
@@ -3821,7 +3823,7 @@
                                                                         $q_cari_tq  = mysqli_query($con_db_qc, "SELECT * FROM tbl_tq_nokk WHERE nodemand = '$d_ITXVIEWKK_2[PRODUCTIONDEMANDCODE]' ORDER BY id DESC");
                                                                     ?>
                                                                     <?php while ($row_tq = mysqli_fetch_array($q_cari_tq)) { ?>
-                                                                        <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_result.php?idkk=<?= $row_tq['id']; ?>&noitem=<?= $row_tq['no_item']; ?>&nohanger=<?= $row_tq['no_hanger']; ?>" target="_blank">Detail test quality (<?= $row_tq['no_test']; ?>)<i class="icofont icofont-external-link"></i></a><br>
+                                                                        <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_result.php?idkk=<?= $row_tq['id']; ?>&noitem=<?= $row_tq['no_item']; ?>&nohanger=<?= $row_tq['no_hanger']; ?>" target="_blank">Detail test quality (<?= $row_tq['no_test']; ?>)<i class="icofont icofont-external-link"></i></a><br>
                                                                     <?php } ?>
                                                                 </th>
                                                             </tr>
@@ -3829,21 +3831,21 @@
                                                                 <th style="vertical-align: text-top;">Hasil test inspect</th>
                                                                 <th style="vertical-align: text-top;">:</th>
                                                                 <th style="vertical-align: text-top;">
-                                                                    <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand_2); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
+                                                                    <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand_2); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
                                                                 </th>
                                                             </tr>
                                                             <tr>
                                                                 <th style="vertical-align: text-top;">Hasil test inspect</th>
                                                                 <th style="vertical-align: text-top;">:</th>
                                                                 <th style="vertical-align: text-top;">
-                                                                    <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand_2); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
+                                                                    <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand_2); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
                                                                 </th>
                                                             </tr>
                                                             <tr>
                                                                 <th style="vertical-align: text-top;">Detail bagi kain</th>
                                                                 <th style="vertical-align: text-top;">:</th>
                                                                 <th style="vertical-align: text-top;">
-                                                                    <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/nowgkg/pages/cetak/cetakbagikain.php?demandno=<?= TRIM($demand_2); ?>" target="_blank">Click here! <i class="icofont icofont-external-link"></i></a><br>
+                                                                    <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/nowgkg/pages/cetak/cetakbagikain.php?demandno=<?= TRIM($demand_2); ?>" target="_blank">Click here! <i class="icofont icofont-external-link"></i></a><br>
                                                                 </th>
                                                             </tr>
                                                             <tr>
@@ -3852,7 +3854,7 @@
                                                                 <th style="vertical-align: text-top;">
                                                                     <form action="https://online.indotaichen.com/nowqcf/CekKainDemand" method="post" target="_blank">
                                                                         <input name="nodemand" value="<?= TRIM($demand_2); ?>" type="hidden" class="form-control form-control-sm" id="" required>
-                                                                        <button class="btn-link" style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" type="submit">Click here! <i class="icofont icofont-external-link"></i></button>
+                                                                        <button class="btn-link" style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" type="submit">Click here! <i class="icofont icofont-external-link"></i></button>
                                                                     </form>
                                                                 </th>
                                                             </tr>
@@ -3972,7 +3974,7 @@
                                                                             $cek_QA_DATA4    = mysqli_fetch_assoc($q_QA_DATA4);
                                                                         ?>
                                                                         <?php if ($cek_QA_DATA4) : ?>
-                                                                            <th style="text-align: center; font-size:11px; background-color: #EEE6B3">
+                                                                            <th style="text-align: center; font-size:15px; background-color: #EEE6B3">
                                                                                 <?php if ($rowdb4['OPERATIONCODE'] == 'INS3') : ?>
                                                                                     <?php
                                                                                         $q_mulai_ins3   = mysqli_query($con_nowprd, "SELECT
@@ -4093,14 +4095,14 @@
 
                                                                                 ?>
                                                                                 <th style="text-align: center;">
-                                                                                    <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/dye-itti/pages/cetak/cetak_monitoring_new.php?idkk=&no=<?= $d_dye_montemp['no_resep']; ?>&idm=<?php echo $d_dye_montemp['idm']; ?>&ids=<?php echo $d_dye_montemp['ids']; ?>" target="_blank">Monitoring <i class="icofont icofont-external-link"></i></a>
+                                                                                    <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/dye-itti/pages/cetak/cetak_monitoring_new.php?idkk=&no=<?= $d_dye_montemp['no_resep']; ?>&idm=<?php echo $d_dye_montemp['idm']; ?>&ids=<?php echo $d_dye_montemp['ids']; ?>" target="_blank">Monitoring <i class="icofont icofont-external-link"></i></a>
                                                                                     &ensp;
-                                                                                    <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/laporan/dye_filter_bon_reservation.php?demand=<?= $demand_2; ?>&prod_order=<?= $d_ITXVIEWKK_2['PRODUCTIONORDERCODE']; ?>" target="_blank">Bon Resep <i class="icofont icofont-external-link"></i></a>
+                                                                                    <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/laporan/dye_filter_bon_reservation.php?demand=<?= $demand_2; ?>&prod_order=<?= $d_ITXVIEWKK_2['PRODUCTIONORDERCODE']; ?>" target="_blank">Bon Resep <i class="icofont icofont-external-link"></i></a>
                                                                                 </th>
                                                                             <?php else : ?>
                                                                                     <?php $opr_grup = $rowdb5['OPERATIONGROUPCODE']; if(str_contains($opr_grup, "FIN")) : ?>
                                                                                         <th style="text-align: center;">
-                                                                                            <!-- <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/finishing2-new/reports/pages/reports-detail-stenter.php?FromAnalisa=FromAnalisa&prod_order=<?= TRIM($d_ITXVIEWKK_2['PRODUCTIONORDERCODE']); ?>&prod_demand=<?= TRIM($demand_2); ?>&tgl_in=<?= substr($rowdb5['MULAI'], 1, 10); ?>&tgl_out=<?= substr($rowdb5['SELESAI'], 1, 10); ?>" target="_blank">Detail proses <i class="icofont icofont-external-link"></i></a> -->
+                                                                                            <!-- <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/finishing2-new/reports/pages/reports-detail-stenter.php?FromAnalisa=FromAnalisa&prod_order=<?= TRIM($d_ITXVIEWKK_2['PRODUCTIONORDERCODE']); ?>&prod_demand=<?= TRIM($demand_2); ?>&tgl_in=<?= substr($rowdb5['MULAI'], 1, 10); ?>&tgl_out=<?= substr($rowdb5['SELESAI'], 1, 10); ?>" target="_blank">Detail proses <i class="icofont icofont-external-link"></i></a> -->
                                                                                         </th>
                                                                                     <?php else : ?>
                                                                                         <th style="text-align: center;">-</th>
@@ -4130,7 +4132,7 @@
                                                                                                                             AND OPERATIONCODE = '$rowdb7[OPERATIONCODE]'");
                                                                                 $d_routing  = mysqli_fetch_assoc($q_routing);
                                                                             ?>
-                                                                            <td style="vertical-align: top; font-size:11px;">
+                                                                            <td style="vertical-align: top; font-size:15px;">
                                                                                 <?= substr($d_routing['KETERANGAN'], 0,35); ?><?php if(substr($d_routing['KETERANGAN'], 0,35)){ echo "<br>"; } ?>
                                                                                 <?= substr($d_routing['KETERANGAN'], 35,70); ?><?php if(substr($d_routing['KETERANGAN'], 35,70)){ echo "<br>"; } ?>
                                                                                 <?= substr($d_routing['KETERANGAN'], 70,105); ?><?php if(substr($d_routing['KETERANGAN'], 70,105)){ echo "<br>"; } ?>
@@ -4171,7 +4173,7 @@
                                                                                                                 AND SUBCODE03 ='$d_ITXVIEWKK_2[SUBCODE03]' 
                                                                                                                 AND SUBCODE04 = '$d_ITXVIEWKK_2[SUBCODE04]'");
                                                                             ?>
-                                                                            <td style="vertical-align: top; font-size:11px;">
+                                                                            <td style="vertical-align: top; font-size:15px;">
                                                                                 <b>Acuan Standart :</b> <br>
                                                                                 <?php while ($d_specs = db2_fetch_assoc($q_specs)) {  ?>
                                                                                     <li><?= $d_specs['NAMENAME']; ?> : <?= $d_specs['VALUESTRING'].$d_specs['VALUEDECIMAL']; ?> </li>
@@ -4195,7 +4197,7 @@
                                                                             $d_QA_DATAcek   = mysqli_fetch_assoc($q_QA_DATAcek);
                                                                         ?>
                                                                         <?php if ($d_QA_DATAcek) : ?>
-                                                                            <td style="vertical-align: top; font-size:11px;">
+                                                                            <td style="vertical-align: top; font-size:15px;">
                                                                                 <?php $q_QA_DATA7     = mysqli_query($con_nowprd, $sqlQAData); ?>
                                                                                 <?php $no = 1; while ($d_QA_DATA7 = mysqli_fetch_array($q_QA_DATA7)) : ?>
                                                                                     <?php $char_code = $d_QA_DATA7['CHARACTERISTICCODE']; ?>
@@ -4643,7 +4645,7 @@
                                                                             $q_cari_tq  = mysqli_query($con_db_qc, "SELECT * FROM tbl_tq_nokk WHERE nodemand = '$d_ITXVIEWKK_2[PRODUCTIONDEMANDCODE]' ORDER BY id DESC");
                                                                         ?>
                                                                         <?php while ($row_tq = mysqli_fetch_array($q_cari_tq)) { ?>
-                                                                            <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_result.php?idkk=<?= $row_tq['id']; ?>&noitem=<?= $row_tq['no_item']; ?>&nohanger=<?= $row_tq['no_hanger']; ?>" target="_blank">Detail test quality (<?= $row_tq['no_test']; ?>)<i class="icofont icofont-external-link"></i></a><br>
+                                                                            <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_result.php?idkk=<?= $row_tq['id']; ?>&noitem=<?= $row_tq['no_item']; ?>&nohanger=<?= $row_tq['no_hanger']; ?>" target="_blank">Detail test quality (<?= $row_tq['no_test']; ?>)<i class="icofont icofont-external-link"></i></a><br>
                                                                         <?php } ?>
                                                                     </th>
                                                                 </tr>
@@ -4651,21 +4653,21 @@
                                                                     <th style="vertical-align: text-top;">Hasil test inspect</th>
                                                                     <th style="vertical-align: text-top;">:</th>
                                                                     <th style="vertical-align: text-top;">
-                                                                        <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand_2); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
+                                                                        <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand_2); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
                                                                     </th>
                                                                 </tr>
                                                                 <tr>
                                                                     <th style="vertical-align: text-top;">Hasil test inspect</th>
                                                                     <th style="vertical-align: text-top;">:</th>
                                                                     <th style="vertical-align: text-top;">
-                                                                        <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand_2); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
+                                                                        <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/qc-final-new/pages/cetak/cetak_inspectpackingreport.php?demand=<?= TRIM($demand_2); ?>&ispacking=true" target="_blank">Inspect Report <i class="icofont icofont-external-link"></i></a><br>
                                                                     </th>
                                                                 </tr>
                                                                 <tr>
                                                                     <th style="vertical-align: text-top;">Detail bagi kain</th>
                                                                     <th style="vertical-align: text-top;">:</th>
                                                                     <th style="vertical-align: text-top;">
-                                                                        <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/nowgkg/pages/cetak/cetakbagikain.php?demandno=<?= TRIM($demand_2); ?>" target="_blank">Click here! <i class="icofont icofont-external-link"></i></a><br>
+                                                                        <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/nowgkg/pages/cetak/cetakbagikain.php?demandno=<?= TRIM($demand_2); ?>" target="_blank">Click here! <i class="icofont icofont-external-link"></i></a><br>
                                                                     </th>
                                                                 </tr>
                                                                 <tr>
@@ -4674,7 +4676,7 @@
                                                                     <th style="vertical-align: text-top;">
                                                                         <form action="https://online.indotaichen.com/nowqcf/CekKainDemand" method="post" target="_blank">
                                                                             <input name="nodemand" value="<?= TRIM($demand_2); ?>" type="hidden" class="form-control form-control-sm" id="" required>
-                                                                            <button class="btn-link" style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" type="submit">Click here! <i class="icofont icofont-external-link"></i></button>
+                                                                            <button class="btn-link" style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" type="submit">Click here! <i class="icofont icofont-external-link"></i></button>
                                                                         </form>
                                                                     </th>
                                                                 </tr>
@@ -4794,7 +4796,7 @@
                                                                                 $cek_QA_DATA4    = mysqli_fetch_assoc($q_QA_DATA4);
                                                                             ?>
                                                                             <?php if ($cek_QA_DATA4) : ?>
-                                                                                <th style="text-align: center; font-size:11px; background-color: #EEE6B3">
+                                                                                <th style="text-align: center; font-size:15px; background-color: #EEE6B3">
                                                                                     <?php if ($rowdb4['OPERATIONCODE'] == 'INS3') : ?>
                                                                                         <?php
                                                                                             $q_mulai_ins3   = mysqli_query($con_nowprd, "SELECT
@@ -4915,14 +4917,14 @@
 
                                                                                     ?>
                                                                                     <th style="text-align: center;">
-                                                                                        <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/dye-itti/pages/cetak/cetak_monitoring_new.php?idkk=&no=<?= $d_dye_montemp['no_resep']; ?>&idm=<?php echo $d_dye_montemp['idm']; ?>&ids=<?php echo $d_dye_montemp['ids']; ?>" target="_blank">Monitoring <i class="icofont icofont-external-link"></i></a>
+                                                                                        <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/dye-itti/pages/cetak/cetak_monitoring_new.php?idkk=&no=<?= $d_dye_montemp['no_resep']; ?>&idm=<?php echo $d_dye_montemp['idm']; ?>&ids=<?php echo $d_dye_montemp['ids']; ?>" target="_blank">Monitoring <i class="icofont icofont-external-link"></i></a>
                                                                                         &ensp;
-                                                                                        <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/laporan/dye_filter_bon_reservation.php?demand=<?= $demand_2; ?>&prod_order=<?= $d_ITXVIEWKK_2['PRODUCTIONORDERCODE']; ?>" target="_blank">Bon Resep <i class="icofont icofont-external-link"></i></a>
+                                                                                        <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/laporan/dye_filter_bon_reservation.php?demand=<?= $demand_2; ?>&prod_order=<?= $d_ITXVIEWKK_2['PRODUCTIONORDERCODE']; ?>" target="_blank">Bon Resep <i class="icofont icofont-external-link"></i></a>
                                                                                     </th>
                                                                                 <?php else : ?>
                                                                                         <?php $opr_grup = $rowdb5['OPERATIONGROUPCODE']; if(str_contains($opr_grup, "FIN")) : ?>
                                                                                             <th style="text-align: center;">
-                                                                                                <!-- <a style="color: #E95D4E; font-size:11px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/finishing2-new/reports/pages/reports-detail-stenter.php?FromAnalisa=FromAnalisa&prod_order=<?= TRIM($d_ITXVIEWKK_2['PRODUCTIONORDERCODE']); ?>&prod_demand=<?= TRIM($demand_2); ?>&tgl_in=<?= substr($rowdb5['MULAI'], 1, 10); ?>&tgl_out=<?= substr($rowdb5['SELESAI'], 1, 10); ?>" target="_blank">Detail proses <i class="icofont icofont-external-link"></i></a> -->
+                                                                                                <!-- <a style="color: #E95D4E; font-size:15px; font-family: Microsoft Sans Serif;" href="https://online.indotaichen.com/finishing2-new/reports/pages/reports-detail-stenter.php?FromAnalisa=FromAnalisa&prod_order=<?= TRIM($d_ITXVIEWKK_2['PRODUCTIONORDERCODE']); ?>&prod_demand=<?= TRIM($demand_2); ?>&tgl_in=<?= substr($rowdb5['MULAI'], 1, 10); ?>&tgl_out=<?= substr($rowdb5['SELESAI'], 1, 10); ?>" target="_blank">Detail proses <i class="icofont icofont-external-link"></i></a> -->
                                                                                             </th>
                                                                                         <?php else : ?>
                                                                                             <th style="text-align: center;">-</th>
@@ -4952,7 +4954,7 @@
                                                                                                                                 AND OPERATIONCODE = '$rowdb7[OPERATIONCODE]'");
                                                                                     $d_routing  = mysqli_fetch_assoc($q_routing);
                                                                                 ?>
-                                                                                <td style="vertical-align: top; font-size:11px;">
+                                                                                <td style="vertical-align: top; font-size:15px;">
                                                                                     <?= substr($d_routing['KETERANGAN'], 0,35); ?><?php if(substr($d_routing['KETERANGAN'], 0,35)){ echo "<br>"; } ?>
                                                                                     <?= substr($d_routing['KETERANGAN'], 35,70); ?><?php if(substr($d_routing['KETERANGAN'], 35,70)){ echo "<br>"; } ?>
                                                                                     <?= substr($d_routing['KETERANGAN'], 70,105); ?><?php if(substr($d_routing['KETERANGAN'], 70,105)){ echo "<br>"; } ?>
@@ -4993,7 +4995,7 @@
                                                                                                                     AND SUBCODE03 ='$d_ITXVIEWKK_2[SUBCODE03]' 
                                                                                                                     AND SUBCODE04 = '$d_ITXVIEWKK_2[SUBCODE04]'");
                                                                                 ?>
-                                                                                <td style="vertical-align: top; font-size:11px;">
+                                                                                <td style="vertical-align: top; font-size:15px;">
                                                                                     <b>Acuan Standart :</b> <br>
                                                                                     <?php while ($d_specs = db2_fetch_assoc($q_specs)) {  ?>
                                                                                         <li><?= $d_specs['NAMENAME']; ?> : <?= $d_specs['VALUESTRING'].$d_specs['VALUEDECIMAL']; ?> </li>
@@ -5017,7 +5019,7 @@
                                                                                 $d_QA_DATAcek   = mysqli_fetch_assoc($q_QA_DATAcek);
                                                                             ?>
                                                                             <?php if ($d_QA_DATAcek) : ?>
-                                                                                <td style="vertical-align: top; font-size:11px;">
+                                                                                <td style="vertical-align: top; font-size:15px;">
                                                                                     <?php $q_QA_DATA7     = mysqli_query($con_nowprd, $sqlQAData); ?>
                                                                                     <?php $no = 1; while ($d_QA_DATA7 = mysqli_fetch_array($q_QA_DATA7)) : ?>
                                                                                         <?php $char_code = $d_QA_DATA7['CHARACTERISTICCODE']; ?>
