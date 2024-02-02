@@ -40,7 +40,7 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Unggah file baru (*.xlsx)</h5>
+                                        <h5>Unggah file baru (*.txt)</h5>
                                     </div>
                                     <div class="card-block">
                                         <form action="" method="post" enctype="multipart/form-data">
@@ -60,6 +60,7 @@
                                                         <th>WHITENESS</th>
                                                         <th>TINT</th>
                                                         <th>YELLOWNESS</th>
+                                                        <th>STATUS</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody> 
@@ -74,6 +75,7 @@
                                                             <td><?= $row_dataupload['whiteness'] ?></td>
                                                             <td><?= $row_dataupload['tint'] ?></td>
                                                             <td><?= $row_dataupload['yellowness'] ?></td>
+                                                            <td><?= $row_dataupload['statusheader'] ?></td>
                                                         </tr>
                                                     <?php } ?>
                                                 </tbody>
@@ -86,35 +88,24 @@
                                         ini_set("error_reporting", 1);
                                         $ip = $_SERVER['REMOTE_ADDR'];
                                         $os = $_SERVER['HTTP_USER_AGENT'];
-                                        $fileMimes = array(
-                                            'text/x-comma-separated-values',
-                                            'text/comma-separated-values',
-                                            'application/octet-stream',
-                                            'application/vnd.ms-excel',
-                                            'application/x-csv',
-                                            'text/x-csv',
-                                            'text/csv',
-                                            'application/csv',
-                                            'application/excel',
-                                            'application/vnd.msexcel',
-                                            'text/plain'
-                                        );
 
-                                        if (!empty($_FILES['file']['name']) && in_array($_FILES['file']['type'], $fileMimes)) {
-                                            $file = $_FILES['file']['tmp_name'];
-                                            $handle = fopen($file, "r");
+                                        if ($_FILES['file']['error'] == UPLOAD_ERR_OK) {
+                                            $fileContent = file_get_contents($_FILES['file']['tmp_name']);
+                                            $lines = explode("\n", $fileContent);
+
                                             require_once "koneksi.php";
                                             // Proses data dan masukkan ke database
-                                            while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-                                                $column1 = $data[0]; 
-                                                $column2 = $data[1];
-                                                $column3 = $data[2]; 
-                                                $column4 = $data[3]; 
+                                            foreach ($lines as $line) {
+                                                // Memecah kolom-kolom berdasarkan TAB
+                                                $columns = explode("\t", $line);
+
+                                                // Mengambil data dari kolom yang diinginkan
+                                                $column1 = $columns[0]; 
+                                                $column2 = $columns[1];
+                                                $column3 = $columns[2]; 
+                                                $column4 = $columns[3]; 
                                                 $column5 = date('Y-m-d H:i:s');
                                                 $column6 = $ip; 
-
-                                                $sql = "INSERT INTO upload_spectro (batch_name,whiteness,tint,yellowness,creationdate,ipaddress) VALUES ('$column1', '$column2', '$column3', '$column4', '$column5','$column6')";
-                                                $con_nowprd->query($sql);
 
                                                 // proses transfer ke NOW QUALITYDOCUMENTBEAN
                                                 $nokk     = sprintf("%08d", $column1);
@@ -273,7 +264,7 @@
 
                                                     $next_number_IMPORTAUTOCOUNTER_WHITENESS  = $row_IMPORTAUTOCOUNTER_WHITENESS['nourut'] + 10;
 
-                                                    $q_QUALITYDOCUMENTBEAN_WHITENESS      = db2_exec($conn1,  "INSERT INTO QUALITYDOCLINEBEAN(FATHERID,
+                                                    $q_QUALITYDOCUMENTBEAN_WHITENESS        = db2_exec($conn1,  "INSERT INTO QUALITYDOCLINEBEAN(FATHERID,
                                                                                                                                 IMPORTAUTOCOUNTER,
                                                                                                                                 LINE,
                                                                                                                                 SEQUENCE,
@@ -349,90 +340,6 @@
                                                                                                                                 '0')");
                                                     $q_update_IMPORTAUTOCOUNTER_WHITENESS   = mysqli_query($con_nowprd, "UPDATE no_urut_spectro SET nourut = '$next_number_IMPORTAUTOCOUNTER_WHITENESS'");
                                                     
-                                                    // YELLOWNESS
-                                                    $qty_yellowness  = $column4;
-                                                    $IMPCREATIONDATETIME = date('Y-m-d H:i:s');
-                                                    $q_IMPORTAUTOCOUNTER_YELLOWNESS    = mysqli_query($con_nowprd, "SELECT * FROM no_urut_spectro");
-                                                    $row_IMPORTAUTOCOUNTER_YELLOWNESS  = mysqli_fetch_assoc($q_IMPORTAUTOCOUNTER_YELLOWNESS);
-
-                                                    $next_number_IMPORTAUTOCOUNTER_YELLOWNESS  = $row_IMPORTAUTOCOUNTER_YELLOWNESS['nourut'] + 10;
-
-                                                    $q_QUALITYDOCUMENTBEAN_YELLOWNESS      = db2_exec($conn1, "INSERT INTO QUALITYDOCLINEBEAN(FATHERID,
-                                                                                                                                        IMPORTAUTOCOUNTER,
-                                                                                                                                        LINE,
-                                                                                                                                        SEQUENCE,
-                                                                                                                                        TESTLINESTATUS,
-                                                                                                                                        CANCELED,
-                                                                                                                                        CHARACTERISTICCODE,
-                                                                                                                                        UOMCODE,
-                                                                                                                                        INTERNALSPECIFICATIONCODE,
-                                                                                                                                        ISOSPECIFICATIONCODE,
-                                                                                                                                        SUBCODESTANDARD,
-                                                                                                                                        VALUEBOOLEAN,
-                                                                                                                                        VALUESTRING,
-                                                                                                                                        VALUEQUANTITY,
-                                                                                                                                        VALUEQUANTITY2,
-                                                                                                                                        VALUEQUANTITY3,
-                                                                                                                                        STATUS,
-                                                                                                                                        VALUEGROUPCODE,
-                                                                                                                                        REPETITIONNUMBER,
-                                                                                                                                        REPETITIONPERFORMED,
-                                                                                                                                        ANNOTATION,
-                                                                                                                                        ADDITIONALLINE,
-                                                                                                                                        DATATYPE,
-                                                                                                                                        WSOPERATION,
-                                                                                                                                        IMPOPERATIONUSER,
-                                                                                                                                        IMPORTSTATUS,
-                                                                                                                                        IMPCREATIONDATETIME,
-                                                                                                                                        IMPCREATIONUSER,
-                                                                                                                                        IMPLASTUPDATEDATETIME,
-                                                                                                                                        IMPLASTUPDATEUSER,
-                                                                                                                                        IMPORTDATETIME,
-                                                                                                                                        RETRYNR,
-                                                                                                                                        NEXTRETRY,
-                                                                                                                                        IMPORTID,
-                                                                                                                                        RELATEDDEPENDENTID,
-                                                                                                                                        FORCEEMPTYVALUE,
-                                                                                                                                        ISFROMAUTOCREATE)
-                                                                                                                                VALUES('$next_number_IMPORTAUTOCOUNTER_HEADER',
-                                                                                                                                        '$next_number_IMPORTAUTOCOUNTER_YELLOWNESS',
-                                                                                                                                        '12',
-                                                                                                                                        '0',
-                                                                                                                                        '0',
-                                                                                                                                        '0',
-                                                                                                                                        'YELLOWNESS',
-                                                                                                                                        ' ',
-                                                                                                                                        ' ',
-                                                                                                                                        ' ',
-                                                                                                                                        ' ',
-                                                                                                                                        '0',
-                                                                                                                                        ' ',
-                                                                                                                                        '$qty_yellowness',
-                                                                                                                                        '0',
-                                                                                                                                        '0',
-                                                                                                                                        '0',
-                                                                                                                                        ' ',
-                                                                                                                                        '0',
-                                                                                                                                        '0',
-                                                                                                                                        NULL,
-                                                                                                                                        '0',
-                                                                                                                                        '1',
-                                                                                                                                        '5',
-                                                                                                                                        ' ',
-                                                                                                                                        '5',
-                                                                                                                                        '$IMPCREATIONDATETIME',
-                                                                                                                                        '$row_QUALITYDOCUMENTBEAN[LASTUPDATEUSER]',
-                                                                                                                                        '$IMPCREATIONDATETIME',
-                                                                                                                                        'system',
-                                                                                                                                        '$IMPCREATIONDATETIME',
-                                                                                                                                        '0',
-                                                                                                                                        '0',
-                                                                                                                                        '0',
-                                                                                                                                        '$next_number_IMPORTAUTOCOUNTER_YELLOWNESS',
-                                                                                                                                        '0',
-                                                                                                                                        '0')");
-                                                    $q_update_IMPORTAUTOCOUNTER_YELLOWNESS   = mysqli_query($con_nowprd, "UPDATE no_urut_spectro SET nourut = '$next_number_IMPORTAUTOCOUNTER_YELLOWNESS'");
-                                                    
                                                     // TINT
                                                     $qty_tint  = $column3;
                                                     $IMPCREATIONDATETIME = date('Y-m-d H:i:s');
@@ -441,7 +348,7 @@
 
                                                     $next_number_IMPORTAUTOCOUNTER_TINT  = $row_IMPORTAUTOCOUNTER_TINT['nourut'] + 10;
 
-                                                    $q_QUALITYDOCUMENTBEAN_TINT      = db2_exec($conn1, "INSERT INTO QUALITYDOCLINEBEAN(FATHERID,
+                                                    $q_QUALITYDOCUMENTBEAN_TINT         = db2_exec($conn1, "INSERT INTO QUALITYDOCLINEBEAN(FATHERID,
                                                                                                                                         IMPORTAUTOCOUNTER,
                                                                                                                                         LINE,
                                                                                                                                         SEQUENCE,
@@ -515,12 +422,123 @@
                                                                                                                                         '$next_number_IMPORTAUTOCOUNTER_TINT',
                                                                                                                                         '0',
                                                                                                                                         '0')");
-                                                    $q_update_IMPORTAUTOCOUNTER_TINT   = mysqli_query($con_nowprd, "UPDATE no_urut_spectro SET nourut = '$next_number_IMPORTAUTOCOUNTER_TINT'");
+                                                    $q_update_IMPORTAUTOCOUNTER_TINT    = mysqli_query($con_nowprd, "UPDATE no_urut_spectro SET nourut = '$next_number_IMPORTAUTOCOUNTER_TINT'");
 
-                                                    
                                                     $q_update_IMPORTAUTOCOUNTER_HEADER      = mysqli_query($con_nowprd, "UPDATE importautocounter SET nomor_urut = '$next_number_IMPORTAUTOCOUNTER_HEADER'");
+
+                                                    // YELLOWNESS
+                                                    $qty_yellowness  = $column4;
+                                                    $IMPCREATIONDATETIME = date('Y-m-d H:i:s');
+                                                    $q_IMPORTAUTOCOUNTER_YELLOWNESS    = mysqli_query($con_nowprd, "SELECT * FROM no_urut_spectro");
+                                                    $row_IMPORTAUTOCOUNTER_YELLOWNESS  = mysqli_fetch_assoc($q_IMPORTAUTOCOUNTER_YELLOWNESS);
+
+                                                    $next_number_IMPORTAUTOCOUNTER_YELLOWNESS  = $row_IMPORTAUTOCOUNTER_YELLOWNESS['nourut'] + 10;
+
+                                                    $q_QUALITYDOCUMENTBEAN_YELLOWNESS       = db2_exec($conn1, "INSERT INTO QUALITYDOCLINEBEAN(FATHERID,
+                                                                                                                                        IMPORTAUTOCOUNTER,
+                                                                                                                                        LINE,
+                                                                                                                                        SEQUENCE,
+                                                                                                                                        TESTLINESTATUS,
+                                                                                                                                        CANCELED,
+                                                                                                                                        CHARACTERISTICCODE,
+                                                                                                                                        UOMCODE,
+                                                                                                                                        INTERNALSPECIFICATIONCODE,
+                                                                                                                                        ISOSPECIFICATIONCODE,
+                                                                                                                                        SUBCODESTANDARD,
+                                                                                                                                        VALUEBOOLEAN,
+                                                                                                                                        VALUESTRING,
+                                                                                                                                        VALUEQUANTITY,
+                                                                                                                                        VALUEQUANTITY2,
+                                                                                                                                        VALUEQUANTITY3,
+                                                                                                                                        STATUS,
+                                                                                                                                        VALUEGROUPCODE,
+                                                                                                                                        REPETITIONNUMBER,
+                                                                                                                                        REPETITIONPERFORMED,
+                                                                                                                                        ANNOTATION,
+                                                                                                                                        ADDITIONALLINE,
+                                                                                                                                        DATATYPE,
+                                                                                                                                        WSOPERATION,
+                                                                                                                                        IMPOPERATIONUSER,
+                                                                                                                                        IMPORTSTATUS,
+                                                                                                                                        IMPCREATIONDATETIME,
+                                                                                                                                        IMPCREATIONUSER,
+                                                                                                                                        IMPLASTUPDATEDATETIME,
+                                                                                                                                        IMPLASTUPDATEUSER,
+                                                                                                                                        IMPORTDATETIME,
+                                                                                                                                        RETRYNR,
+                                                                                                                                        NEXTRETRY,
+                                                                                                                                        IMPORTID,
+                                                                                                                                        RELATEDDEPENDENTID,
+                                                                                                                                        FORCEEMPTYVALUE,
+                                                                                                                                        ISFROMAUTOCREATE)
+                                                                                                                                VALUES('$next_number_IMPORTAUTOCOUNTER_HEADER',
+                                                                                                                                        '$next_number_IMPORTAUTOCOUNTER_YELLOWNESS',
+                                                                                                                                        '12',
+                                                                                                                                        '0',
+                                                                                                                                        '0',
+                                                                                                                                        '0',
+                                                                                                                                        'YELLOWNESS',
+                                                                                                                                        ' ',
+                                                                                                                                        ' ',
+                                                                                                                                        ' ',
+                                                                                                                                        ' ',
+                                                                                                                                        '0',
+                                                                                                                                        ' ',
+                                                                                                                                        '$qty_yellowness',
+                                                                                                                                        '0',
+                                                                                                                                        '0',
+                                                                                                                                        '0',
+                                                                                                                                        ' ',
+                                                                                                                                        '0',
+                                                                                                                                        '0',
+                                                                                                                                        NULL,
+                                                                                                                                        '0',
+                                                                                                                                        '1',
+                                                                                                                                        '5',
+                                                                                                                                        ' ',
+                                                                                                                                        '5',
+                                                                                                                                        '$IMPCREATIONDATETIME',
+                                                                                                                                        '$row_QUALITYDOCUMENTBEAN[LASTUPDATEUSER]',
+                                                                                                                                        '$IMPCREATIONDATETIME',
+                                                                                                                                        'system',
+                                                                                                                                        '$IMPCREATIONDATETIME',
+                                                                                                                                        '0',
+                                                                                                                                        '0',
+                                                                                                                                        '0',
+                                                                                                                                        '$next_number_IMPORTAUTOCOUNTER_YELLOWNESS',
+                                                                                                                                        '0',
+                                                                                                                                        '0')");
+                                                    $q_update_IMPORTAUTOCOUNTER_YELLOWNESS  = mysqli_query($con_nowprd, "UPDATE no_urut_spectro SET nourut = '$next_number_IMPORTAUTOCOUNTER_YELLOWNESS'");
+                                                    
+                                                    // jika berhasil terkirim maka status nya berhasil, kalau gagal ya gagal lah 
+                                                    if($q_QUALITYDOCUMENTBEAN_HEADER){
+                                                        $statusheader = "Berhasil";
+                                                    }else{
+                                                        $statusheader = "Gagal";
+                                                    }
+
+                                                    if($q_QUALITYDOCUMENTBEAN_WHITENESS){
+                                                        $statusw = "Berhasil";
+                                                    }else{
+                                                        $statusw = "Gagal";
+                                                    }
+
+                                                    if($q_QUALITYDOCUMENTBEAN_TINT){
+                                                        $statust = "Berhasil";
+                                                    }else{
+                                                        $statust = "Gagal";
+                                                    }
+
+                                                    if($q_QUALITYDOCUMENTBEAN_YELLOWNESS){
+                                                        $statusy = "Berhasil";
+                                                    }else{
+                                                        $statusy = "Gagal";
+                                                    }
+                                                    
+
+                                                    $sql = "INSERT INTO upload_spectro (batch_name,whiteness,tint,yellowness,creationdate,ipaddress,statusheader,statuswhiteness,statustint,statusyellowness) VALUES ('$column1', '$column2', '$column3', '$column4', '$column5','$column6','$statusheader','$statusw','$statust','$statusy')";
+                                                    $con_nowprd->query($sql);
                                             }
-                                            fclose($handle);
                                             $con_nowprd->close();
                                             echo "<script type=\"text/javascript\">
                                                     alert(\"CSV File berhasil terkirim ke NOW\");

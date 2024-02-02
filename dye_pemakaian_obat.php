@@ -46,9 +46,38 @@
                                         <form action="" method="post">
                                             <div class="row">
                                                 <div class="col-sm-12 col-xl-2 m-b-0">
-                                                    <h4 class="sub-title">Tanggal</h4>
+                                                    <h4 class="sub-title">Tanggal Awal</h4>
                                                     <div class="input-group input-group-sm">
-                                                        <input type="date" class="form-control" placeholder="input-group-sm" name="tgl" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl']; } ?>" required>
+                                                        <input type="date" class="form-control" required placeholder="input-group-sm" name="tgl" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl']; } ?>" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-xl-2 m-b-0">
+                                                    <h4 class="sub-title">Tanggal Akhir</h4>
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="date" class="form-control" required placeholder="input-group-sm" name="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-xl-2 m-b-0">
+                                                    <h4 class="sub-title">LOGICAL WAREHOUSE</h4>
+                                                    <div class="input-group input-group-sm">
+                                                        <select name="warehouse" class="form-control" style="width: 100%;" required>
+                                                            <option value="M510" selected>M510</option>
+                                                            <?php 
+                                                                $sqlDB  =   "SELECT  
+                                                                                TRIM(CODE) AS CODE,
+                                                                                LONGDESCRIPTION 
+                                                                            FROM
+                                                                                LOGICALWAREHOUSE
+                                                                            ORDER BY 
+                                                                                CODE ASC";
+                                                                $stmt   =   db2_exec($conn1, $sqlDB);
+                                                                while ($rowdb = db2_fetch_assoc($stmt)) {
+                                                            ?>
+                                                            <option value="<?= $rowdb['CODE']; ?>">
+                                                                <?= $rowdb['CODE']; ?> <?= $rowdb['LONGDESCRIPTION']; ?>
+                                                            </option>
+                                                            <?php } ?> 
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2">
@@ -97,7 +126,12 @@
                                                                                                                         ELSE s.TEMPLATECODE 
                                                                                                                     END	AS KODE_OBAT,
                                                                                                                     s.USERPRIMARYQUANTITY AS AKTUAL_QTY,
-                                                                                                                    p.LONGDESCRIPTION 
+                                                                                                                    p.LONGDESCRIPTION,
+                                                                                                                    s.TEMPLATECODE,
+                                                                                                                    CASE
+                                                                                                                        WHEN s.TEMPLATECODE = '303' THEN 'Finishing/Printing'
+                                                                                                                        ELSE NULL
+                                                                                                                    END AS KETERANGAN 
                                                                                                                 FROM
                                                                                                                     STOCKTRANSACTION s
                                                                                                                 LEFT JOIN PRODUCT p ON p.ITEMTYPECODE = s.ITEMTYPECODE 
@@ -106,18 +140,19 @@
                                                                                                                                     AND p.SUBCODE03 = s.DECOSUBCODE03
                                                                                                                 WHERE 
                                                                                                                     s.ITEMTYPECODE = 'DYC'
-                                                                                                                    AND s.LOGICALWAREHOUSECODE = 'M510'
-                                                                                                                    AND s.TRANSACTIONDATE = '$_POST[tgl]'
+                                                                                                                    AND s.LOGICALWAREHOUSECODE = '$_POST[warehouse]'
+                                                                                                                    AND s.TRANSACTIONDATE BETWEEN '$_POST[tgl]' AND '$_POST[tgl2]'
                                                                                                                 ORDER BY 
                                                                                                                     s.PRODUCTIONORDERCODE ASC");
                                                                     $no = 1;
                                                                     while ($row_stocktransaction = db2_fetch_assoc($db_stocktransaction)) {
                                                                         $db_reservation     = db2_exec($conn1, "SELECT 
                                                                                                                     TRIM(p.PRODUCTIONORDERCODE) || '-' || TRIM(p.GROUPSTEPNUMBER) AS NO_RESEP,
+                                                                                                                    p.GROUPSTEPNUMBER,
                                                                                                                     SUM(p.USERPRIMARYQUANTITY) AS USERPRIMARYQUANTITY,
                                                                                                                     CASE
-                                                                                                                        WHEN p2.CODE = 'T1' OR p2.CODE = 'T2' OR p2.CODE = 'T3' OR p2.CODE = 'T4' OR p2.CODE = 'T5' OR p2.CODE = 'T6' OR p2.CODE = 'T7' THEN 'Tambah Obat'
-                                                                                                                        WHEN p2.CODE = 'R1' OR p2.CODE = 'R2' OR p2.CODE = 'R3' OR p2.CODE = 'R4' OR p2.CODE = 'R5' OR p2.CODE = 'R6' OR p2.CODE = 'R7' THEN 'Perbaikan'
+                                                                                                                        WHEN p2.CODE LIKE '%T1%' OR p2.CODE LIKE '%T2%' OR p2.CODE LIKE '%T3%' OR p2.CODE LIKE '%T4%' OR p2.CODE LIKE '%T5%' OR p2.CODE LIKE '%T6%' OR p2.CODE LIKE '%T7%' THEN 'Tambah Obat'
+                                                                                                                        WHEN p2.CODE LIKE '%R1%' OR p2.CODE LIKE '%R2%' OR p2.CODE LIKE '%R3%' OR p2.CODE LIKE '%R4%' OR p2.CODE LIKE '%R5%' OR p2.CODE LIKE '%R6%' OR p2.CODE LIKE '%R7%' THEN 'Perbaikan'
                                                                                                                         ELSE 'Normal'
                                                                                                                     END AS KETERANGAN
                                                                                                                 FROM
@@ -142,7 +177,13 @@
                                                                     <td><?= number_format($row_reservation['USERPRIMARYQUANTITY'], 2); ?></td>
                                                                     <td><?= number_format($row_stocktransaction['AKTUAL_QTY'], 2); ?></td>
                                                                     <td></td>
-                                                                    <td><?= $row_reservation['KETERANGAN']; ?></td>
+                                                                    <td>
+                                                                        <?php if($row_stocktransaction['TEMPLATECODE'] == '303') : ?>
+                                                                            <?= $row_stocktransaction['KETERANGAN']; ?>
+                                                                        <?php else : ?>
+                                                                            <?= $row_reservation['KETERANGAN']; ?>
+                                                                        <?php endif; ?>
+                                                                    </td>
                                                                     <td><?= $row_stocktransaction['LONGDESCRIPTION']; ?></td>
                                                                 </tr>
                                                                 <?php } ?>
