@@ -104,11 +104,11 @@
                                                                     <th>No. Group Line</th>
                                                                     <th>No. KK</th>
                                                                     <th>Kode Obat</th>
-                                                                    <th>QTY (Gram) TARGET</th>
-                                                                    <th>QTY (Gram) Actual</th>
-                                                                    <th>Volume Air</th>
-                                                                    <th>Keterangan</th>
-                                                                    <th>Nama Obat</th>
+                                                                    <th>QTY TARGET</th>
+                                                                    <th>QTY Actual</th>
+                                                                    <th>SATUAN</th>
+                                                                    <th>KETERANGAN</th>
+                                                                    <th>NAMA OBAT</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -122,14 +122,20 @@
                                                                                                                     s.DECOSUBCODE02,
                                                                                                                     s.DECOSUBCODE03,
                                                                                                                     CASE
-                                                                                                                        WHEN s.TEMPLATECODE = '120' THEN TRIM(s.DECOSUBCODE01) || '-' || TRIM(s.DECOSUBCODE02) || '-' || TRIM(s.DECOSUBCODE03) 
+                                                                                                                        WHEN s.TEMPLATECODE = '120' THEN TRIM(s.DECOSUBCODE01) || '-' || TRIM(s.DECOSUBCODE02) || '-' || TRIM(s.DECOSUBCODE03)
+                                                                                                                        WHEN s.TEMPLATECODE = '303' THEN TRIM(s.DECOSUBCODE01) || '-' || TRIM(s.DECOSUBCODE02) || '-' || TRIM(s.DECOSUBCODE03) 
+                                                                                                                        WHEN s.TEMPLATECODE = '304' THEN TRIM(s.DECOSUBCODE01) || '-' || TRIM(s.DECOSUBCODE02) || '-' || TRIM(s.DECOSUBCODE03) 
+                                                                                                                        WHEN s.TEMPLATECODE = '203' THEN TRIM(s.DECOSUBCODE01) || '-' || TRIM(s.DECOSUBCODE02) || '-' || TRIM(s.DECOSUBCODE03)
                                                                                                                         ELSE s.TEMPLATECODE 
                                                                                                                     END	AS KODE_OBAT,
                                                                                                                     s.USERPRIMARYQUANTITY AS AKTUAL_QTY,
+                                                                                                                    s.USERPRIMARYUOMCODE AS SATUAN,
                                                                                                                     p.LONGDESCRIPTION,
                                                                                                                     s.TEMPLATECODE,
                                                                                                                     CASE
-                                                                                                                        WHEN s.TEMPLATECODE = '303' THEN 'Finishing/Printing'
+                                                                                                                        WHEN s.TEMPLATECODE = '304' THEN TRIM(s.LOGICALWAREHOUSECODE) || '-' || TRIM(s2.LOGICALWAREHOUSECODE)
+                                                                                                                        WHEN s.TEMPLATECODE = '303' THEN l2.LONGDESCRIPTION 
+                                                                                                                        WHEN s.TEMPLATECODE = '203' THEN l.LONGDESCRIPTION
                                                                                                                         ELSE NULL
                                                                                                                     END AS KETERANGAN 
                                                                                                                 FROM
@@ -138,6 +144,11 @@
                                                                                                                                     AND p.SUBCODE01 = s.DECOSUBCODE01 
                                                                                                                                     AND p.SUBCODE02 = s.DECOSUBCODE02 
                                                                                                                                     AND p.SUBCODE03 = s.DECOSUBCODE03
+                                                                                                                LEFT JOIN INTERNALDOCUMENT i ON i.PROVISIONALCODE = s.ORDERCODE
+                                                                                                                LEFT JOIN ORDERPARTNER o ON o.CUSTOMERSUPPLIERCODE = i.ORDPRNCUSTOMERSUPPLIERCODE
+                                                                                                                LEFT JOIN LOGICALWAREHOUSE l ON l.CODE = o.CUSTOMERSUPPLIERCODE
+                                                                                                                LEFT JOIN STOCKTRANSACTION s2 ON s2.TRANSACTIONNUMBER = s.TRANSACTIONNUMBER AND s2.DETAILTYPE = 2
+                                                                                                                LEFT JOIN LOGICALWAREHOUSE l2 ON l2.CODE = s2.LOGICALWAREHOUSECODE 
                                                                                                                 WHERE 
                                                                                                                     s.ITEMTYPECODE = 'DYC'
                                                                                                                     AND s.LOGICALWAREHOUSECODE = '$_POST[warehouse]'
@@ -175,10 +186,16 @@
                                                                     <td><?= $row_stocktransaction['PRODUCTIONORDERCODE']; ?></td>
                                                                     <td><?= $row_stocktransaction['KODE_OBAT']; ?></td>
                                                                     <td><?= number_format($row_reservation['USERPRIMARYQUANTITY'], 2); ?></td>
-                                                                    <td><?= number_format($row_stocktransaction['AKTUAL_QTY'], 2); ?></td>
-                                                                    <td></td>
                                                                     <td>
-                                                                        <?php if($row_stocktransaction['TEMPLATECODE'] == '303') : ?>
+                                                                        <?php if(substr(number_format($row_stocktransaction['AKTUAL_QTY'], 2), -3) == '.00') : ?>
+                                                                            <?= number_format($row_stocktransaction['AKTUAL_QTY'], 0); ?>
+                                                                        <?php else : ?>
+                                                                            <?= number_format($row_stocktransaction['AKTUAL_QTY'], 2); ?>
+                                                                        <?php endif; ?>
+                                                                    </td>
+                                                                    <td><?= $row_stocktransaction['SATUAN']; ?></td>
+                                                                    <td>
+                                                                        <?php if($row_stocktransaction['TEMPLATECODE'] == '304' OR $row_stocktransaction['TEMPLATECODE'] == '303' OR $row_stocktransaction['TEMPLATECODE'] == '203') : ?>
                                                                             <?= $row_stocktransaction['KETERANGAN']; ?>
                                                                         <?php else : ?>
                                                                             <?= $row_reservation['KETERANGAN']; ?>
