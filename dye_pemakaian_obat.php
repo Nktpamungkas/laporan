@@ -61,7 +61,7 @@
                                                     <h4 class="sub-title">LOGICAL WAREHOUSE</h4>
                                                     <div class="input-group input-group-sm">
                                                         <select name="warehouse" class="form-control" style="width: 100%;" required>
-                                                            <option value="M510" selected>M510</option>
+                                                            <option value="M510">M510</option>
                                                             <?php 
                                                                 $sqlDB  =   "SELECT  
                                                                                 TRIM(CODE) AS CODE,
@@ -73,7 +73,7 @@
                                                                 $stmt   =   db2_exec($conn1, $sqlDB);
                                                                 while ($rowdb = db2_fetch_assoc($stmt)) {
                                                             ?>
-                                                            <option value="<?= $rowdb['CODE']; ?>">
+                                                            <option value="<?= $rowdb['CODE']; ?>" <?php if($rowdb['CODE'] == $_POST['warehouse']){ echo "SELECTED"; } ?>>
                                                                 <?= $rowdb['CODE']; ?> <?= $rowdb['LONGDESCRIPTION']; ?>
                                                             </option>
                                                             <?php } ?> 
@@ -118,6 +118,7 @@
                                                                                                                         WHEN s.PRODUCTIONORDERCODE IS NULL THEN s.ORDERCODE 
                                                                                                                         ELSE s.PRODUCTIONORDERCODE 
                                                                                                                     END AS PRODUCTIONORDERCODE,
+                                                                                                                    s.ORDERLINE,
                                                                                                                     s.DECOSUBCODE01,
                                                                                                                     s.DECOSUBCODE02,
                                                                                                                     s.DECOSUBCODE03,
@@ -126,6 +127,7 @@
                                                                                                                         WHEN s.TEMPLATECODE = '303' THEN TRIM(s.DECOSUBCODE01) || '-' || TRIM(s.DECOSUBCODE02) || '-' || TRIM(s.DECOSUBCODE03) 
                                                                                                                         WHEN s.TEMPLATECODE = '304' THEN TRIM(s.DECOSUBCODE01) || '-' || TRIM(s.DECOSUBCODE02) || '-' || TRIM(s.DECOSUBCODE03) 
                                                                                                                         WHEN s.TEMPLATECODE = '203' THEN TRIM(s.DECOSUBCODE01) || '-' || TRIM(s.DECOSUBCODE02) || '-' || TRIM(s.DECOSUBCODE03)
+                                                                                                                        WHEN s.TEMPLATECODE = '201' THEN TRIM(s.DECOSUBCODE01) || '-' || TRIM(s.DECOSUBCODE02) || '-' || TRIM(s.DECOSUBCODE03)
                                                                                                                         ELSE s.TEMPLATECODE 
                                                                                                                     END	AS KODE_OBAT,
                                                                                                                     s.USERPRIMARYQUANTITY AS AKTUAL_QTY,
@@ -133,9 +135,9 @@
                                                                                                                     p.LONGDESCRIPTION,
                                                                                                                     s.TEMPLATECODE,
                                                                                                                     CASE
-                                                                                                                        WHEN s.TEMPLATECODE = '304' THEN TRIM(s.LOGICALWAREHOUSECODE) || '-' || TRIM(s2.LOGICALWAREHOUSECODE)
                                                                                                                         WHEN s.TEMPLATECODE = '303' THEN l2.LONGDESCRIPTION 
                                                                                                                         WHEN s.TEMPLATECODE = '203' THEN l.LONGDESCRIPTION
+                                                                                                                        WHEN s.TEMPLATECODE = '201' THEN l.LONGDESCRIPTION
                                                                                                                         ELSE NULL
                                                                                                                     END AS KETERANGAN 
                                                                                                                 FROM
@@ -153,6 +155,8 @@
                                                                                                                     s.ITEMTYPECODE = 'DYC'
                                                                                                                     AND s.LOGICALWAREHOUSECODE = '$_POST[warehouse]'
                                                                                                                     AND s.TRANSACTIONDATE BETWEEN '$_POST[tgl]' AND '$_POST[tgl2]'
+                                                                                                                    AND NOT s.TEMPLATECODE = '313'
+                                                                                                                    AND (s.DETAILTYPE = 1 OR s.DETAILTYPE = 0)
                                                                                                                 ORDER BY 
                                                                                                                     s.PRODUCTIONORDERCODE ASC");
                                                                     $no = 1;
@@ -164,20 +168,23 @@
                                                                                                                     CASE
                                                                                                                         WHEN p2.CODE LIKE '%T1%' OR p2.CODE LIKE '%T2%' OR p2.CODE LIKE '%T3%' OR p2.CODE LIKE '%T4%' OR p2.CODE LIKE '%T5%' OR p2.CODE LIKE '%T6%' OR p2.CODE LIKE '%T7%' THEN 'Tambah Obat'
                                                                                                                         WHEN p2.CODE LIKE '%R1%' OR p2.CODE LIKE '%R2%' OR p2.CODE LIKE '%R3%' OR p2.CODE LIKE '%R4%' OR p2.CODE LIKE '%R5%' OR p2.CODE LIKE '%R6%' OR p2.CODE LIKE '%R7%' THEN 'Perbaikan'
-                                                                                                                        ELSE 'Normal'
+                                                                                                                        -- ELSE 'Normal'
+                                                                                                                        ELSE p.PRODRESERVATIONLINKGROUPCODE
                                                                                                                     END AS KETERANGAN
                                                                                                                 FROM
                                                                                                                     PRODUCTIONRESERVATION p
                                                                                                                 LEFT JOIN PRODRESERVATIONLINKGROUP p2 ON p2.CODE = p.PRODRESERVATIONLINKGROUPCODE 
                                                                                                                 WHERE 
                                                                                                                     p.PRODUCTIONORDERCODE = '$row_stocktransaction[PRODUCTIONORDERCODE]' 
-                                                                                                                    AND p.SUBCODE01 = '$row_stocktransaction[DECOSUBCODE01]' 
-                                                                                                                    AND p.SUBCODE02 = '$row_stocktransaction[DECOSUBCODE02]' 
-                                                                                                                    AND p.SUBCODE03 = '$row_stocktransaction[DECOSUBCODE03]'
+                                                                                                                    AND GROUPLINE = '$row_stocktransaction[ORDERLINE]'
+                                                                                                                    -- AND p.SUBCODE01 = '$row_stocktransaction[DECOSUBCODE01]' 
+                                                                                                                    -- AND p.SUBCODE02 = '$row_stocktransaction[DECOSUBCODE02]' 
+                                                                                                                    -- AND p.SUBCODE03 = '$row_stocktransaction[DECOSUBCODE03]'
                                                                                                                 GROUP BY
                                                                                                                     p.PRODUCTIONORDERCODE,
                                                                                                                     p.GROUPSTEPNUMBER,
-                                                                                                                    p2.CODE");
+                                                                                                                    p2.CODE,
+                                                                                                                    p.PRODRESERVATIONLINKGROUPCODE");
                                                                         $row_reservation    = db2_fetch_assoc($db_reservation);
                                                                 ?>
                                                                 <tr>
@@ -195,7 +202,7 @@
                                                                     </td>
                                                                     <td><?= $row_stocktransaction['SATUAN']; ?></td>
                                                                     <td>
-                                                                        <?php if($row_stocktransaction['TEMPLATECODE'] == '304' OR $row_stocktransaction['TEMPLATECODE'] == '303' OR $row_stocktransaction['TEMPLATECODE'] == '203') : ?>
+                                                                        <?php if($row_stocktransaction['TEMPLATECODE'] == '303' OR $row_stocktransaction['TEMPLATECODE'] == '203' OR $row_stocktransaction['TEMPLATECODE'] == '201') : ?>
                                                                             <?= $row_stocktransaction['KETERANGAN']; ?>
                                                                         <?php else : ?>
                                                                             <?= $row_reservation['KETERANGAN']; ?>
