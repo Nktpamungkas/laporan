@@ -245,7 +245,7 @@
                                                                                                                                     '$row_QUALITYDOCUMENTBEAN[FULLITEMIDENTIFIER]',
                                                                                                                                     '5',
                                                                                                                                     '$row_QUALITYDOCUMENTBEAN[LASTUPDATEUSER]',
-                                                                                                                                    '3',
+                                                                                                                                    '0',
                                                                                                                                     '$IMPCREATIONDATETIME',
                                                                                                                                     '$row_QUALITYDOCUMENTBEAN[LASTUPDATEUSER]',
                                                                                                                                     '$IMPCREATIONDATETIME',
@@ -264,7 +264,7 @@
 
                                                     $next_number_IMPORTAUTOCOUNTER_WHITENESS  = $row_IMPORTAUTOCOUNTER_WHITENESS['nourut'] + 10;
 
-                                                    $q_QUALITYDOCUMENTBEAN_WHITENESS        = db2_exec($conn1,  "INSERT INTO QUALITYDOCLINEBEAN(FATHERID,
+                                                    $q_QUALITYDOCUMENTBEAN_WHITENESS        = db2_exec($conn1, "INSERT INTO QUALITYDOCLINEBEAN(FATHERID,
                                                                                                                                 IMPORTAUTOCOUNTER,
                                                                                                                                 LINE,
                                                                                                                                 SEQUENCE,
@@ -326,7 +326,7 @@
                                                                                                                                 '1',
                                                                                                                                 '5',
                                                                                                                                 ' ',
-                                                                                                                                '5',
+                                                                                                                                '0',
                                                                                                                                 '$IMPCREATIONDATETIME',
                                                                                                                                 '$row_QUALITYDOCUMENTBEAN[LASTUPDATEUSER]',
                                                                                                                                 '$IMPCREATIONDATETIME',
@@ -410,7 +410,7 @@
                                                                                                                                         '1',
                                                                                                                                         '5',
                                                                                                                                         ' ',
-                                                                                                                                        '5',
+                                                                                                                                        '0',
                                                                                                                                         '$IMPCREATIONDATETIME',
                                                                                                                                         '$row_QUALITYDOCUMENTBEAN[LASTUPDATEUSER]',
                                                                                                                                         '$IMPCREATIONDATETIME',
@@ -496,7 +496,7 @@
                                                                                                                                         '1',
                                                                                                                                         '5',
                                                                                                                                         ' ',
-                                                                                                                                        '5',
+                                                                                                                                        '0',
                                                                                                                                         '$IMPCREATIONDATETIME',
                                                                                                                                         '$row_QUALITYDOCUMENTBEAN[LASTUPDATEUSER]',
                                                                                                                                         '$IMPCREATIONDATETIME',
@@ -541,8 +541,8 @@
                                             }
                                             $con_nowprd->close();
                                             echo "<script type=\"text/javascript\">
-                                                    alert(\"CSV File berhasil terkirim ke NOW\");
                                                     window.location = \"spectro_upload.php\"
+                                                    alert(\"CSV File berhasil terkirim ke NOW\");
                                                 </script>";
                                         }else{
                                             echo "<script type=\"text/javascript\">
