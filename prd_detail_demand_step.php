@@ -78,7 +78,7 @@
                                         </form>
                                     </div>
                                 </div>
-                                <?php if (isset($_POST['submit'])) : ?>
+                                <?php if (isset($_POST['submit']) OR isset($_GET['demand'])) : ?>
                                     <div class="card">
                                         <div class="card-block">
                                             <div>
@@ -87,7 +87,12 @@
                                                 <table width="100%" border="0">
                                                     <?php
                                                         require_once "koneksi.php";
-                                                        $q_ITXVIEWKK    = db2_exec($conn1, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$_POST[demand]'");
+                                                        if($_GET['demand']){
+                                                            $demand         = $_GET['demand'];
+                                                        }else{
+                                                            $demand         = $_POST['demand'];
+                                                        }
+                                                        $q_ITXVIEWKK    = db2_exec($conn1, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$demand'");
                                                         $d_ITXVIEWKK    = db2_fetch_assoc($q_ITXVIEWKK);
 
                                                         $sql_pelanggan_buyer 	= db2_exec($conn1, "SELECT * FROM ITXVIEW_PELANGGAN WHERE ORDPRNCUSTOMERSUPPLIERCODE = '$d_ITXVIEWKK[ORDPRNCUSTOMERSUPPLIERCODE]' 
@@ -111,7 +116,7 @@
                                                                                                     ORDERCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]'");
                                                         $dt_qtyorder    = db2_fetch_assoc($sql_qtyorder);
 
-                                                        $q_qtypacking   = db2_exec($conn1, "SELECT * FROM PRODUCTIONDEMAND WHERE CODE = '$_POST[demand]'");
+                                                        $q_qtypacking   = db2_exec($conn1, "SELECT * FROM PRODUCTIONDEMAND WHERE CODE = '$demand'");
                                                         $d_qtypacking   = db2_fetch_assoc($q_qtypacking);
 
                                                         // itxview_detail_qa_data
