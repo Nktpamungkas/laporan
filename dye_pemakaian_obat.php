@@ -102,7 +102,7 @@
                                                                 <tr>
                                                                     <!-- <th>No</th> -->
                                                                     <th>No. Group Line</th>
-                                                                    <th>No. KK</th>
+                                                                    <th>Tanggal & Waktu</th>
                                                                     <th>Kode Obat</th>
                                                                     <th>QTY TARGET</th>
                                                                     <th>QTY Actual</th>
@@ -114,6 +114,7 @@
                                                             <tbody>
                                                                 <?php
                                                                     $db_stocktransaction   = db2_exec($conn1, "SELECT
+                                                                                                                    s.TRANSACTIONDATE || ' ' || s.TRANSACTIONTIME AS TGL,
                                                                                                                     CASE
                                                                                                                         WHEN s.PRODUCTIONORDERCODE IS NULL THEN s.ORDERCODE 
                                                                                                                         ELSE s.PRODUCTIONORDERCODE 
@@ -190,7 +191,7 @@
                                                                 <tr>
                                                                     <!-- <td><?= $no++; ?></td> -->
                                                                     <td><?= $row_reservation['NO_RESEP']; ?></td>
-                                                                    <td><?= $row_stocktransaction['PRODUCTIONORDERCODE']; ?></td>
+                                                                    <td><?= $row_stocktransaction['TGL']; ?></td>
                                                                     <td><?= $row_stocktransaction['KODE_OBAT']; ?></td>
                                                                     <td><?= number_format($row_reservation['USERPRIMARYQUANTITY'], 2); ?></td>
                                                                     <td>
