@@ -1,3 +1,4 @@
+
 <?php if(isset($_POST['print_select_zebra'])) : ?>
     <style>
         @page {
@@ -13,6 +14,7 @@
         }
     </style>
     <?php
+        require_once "phpqrcode/qrlib.php"; 
         require_once "koneksi.php";
         $id_generate = $_POST['id_barcode'];
         if (empty($id_generate)) {
@@ -29,35 +31,50 @@
         }
     ?>
     <?php if (!empty($id_generate)) { ?>
+        <?php
+            $penyimpanan = "temp/";
+        ?>
         <?php while ($row_data = mysqli_fetch_array($q_pinjambuku)) { ?>
             <!-- <p> -->
-                <img src="barcode.php?text=<?= sprintf("%'.06d\n", $row_data['id']); ?>&print=true" width="210" height="106">
+                <?php
+                    $isi = $row_data['id'];
+
+                    $nama_file = $penyimpanan .  $row_data['id']. '.png';
+
+                    QRcode::png($isi, $nama_file, QR_ECLEVEL_Q, 6,1); 
+                ?>
+                &nbsp;
+                <img src="temp/<?= $row_data['id']; ?>.png" width="85">
+                <span style="font-size: 12px;"><?= $row_data['id']; ?></span>
+                <br>
+                <!-- <img src="barcode.php?text=<?= sprintf("%'.06d\n", $row_data['id']); ?>&print=true" width="210" height="106"> -->
             <!-- </p> -->
         <?php } ?>
     <?php } ?>
 <?php else : ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="styles_cetak.css" rel="stylesheet" type="text/css">
-<?php if(isset($_POST['print_select'])){ ?>
-    <title>Print Barcode</title>
-<?php }elseif(isset($_POST['arsip_select'])){ ?>
-    <title>Arsip Data Resep</title>
-<?php } ?>
-<style>
-	td{
-        border-top:0px #000000 solid; 
-        border-bottom:0px #000000 solid;
-        border-left:0px #000000 solid; 
-        border-right:0px #000000 solid;
-	}
-	</style>
+    <link href="styles_cetak.css" rel="stylesheet" type="text/css">
+    <?php if(isset($_POST['print_select'])){ ?>
+        <title>Print Barcode</title>
+    <?php }elseif(isset($_POST['arsip_select'])){ ?>
+        <title>Arsip Data Resep</title>
+    <?php } ?>
+    <style>
+        td{
+            border-top:0px #000000 solid; 
+            border-bottom:0px #000000 solid;
+            border-left:0px #000000 solid; 
+            border-right:0px #000000 solid;
+        }
+    </style>
 </head>
 <body onload="print();">
-<?php if(isset($_POST['print_select'])){
+<?php if(isset($_POST['print_select'])){ ?>
+    <?php
         require_once "koneksi.php";
+        require_once "phpqrcode/qrlib.php"; 
+
         $id_generate = $_POST['id_barcode'];
         if (empty($id_generate)) {
             echo ("You didn't select anything");
@@ -100,13 +117,26 @@
                 <td></td>
                 <td></td>
                 <?php if (!empty($id_generate)) { ?>
+                    <?php
+                        $penyimpanan = "temp/";
+                    ?>
                     <?php while ($row_data = mysqli_fetch_array($q_pinjambuku)) { ?>
-                        <td align="left" valign="top" style="height: 1.6in;"><table width="100%" border="0" class="table-list1" style="width: 2.3in;">
+                        <td align="left" valign="top" style="height: 1.6in;">
+                        <table width="100%" border="0" class="table-list1" style="width: 2.3in;">
                             <tr>
+                                <?php
+                                    // $isi = $row_data['id'];
+
+                                    // $nama_file = $penyimpanan .  $row_data['id']. '.png';
+
+                                    // QRcode::png($isi, $nama_file); 
+                                ?>
+                                &nbsp;
+                                <!-- <img src="temp/<?= $row_data['id']; ?>.png" width="82px"> -->
                                 <img src="barcode.php?text=<?= sprintf("%'.06d\n", $row_data['id']); ?>&print=true&size=60" width="160px">
                                 <!-- <img src='https://barcode.tec-it.com/barcode.ashx?data=<?= sprintf("%'.06d\n", $row_data['id']); ?>&code=Code128&translate-esc=on'/> -->
                             </tr>
-                            </table>
+                        </table>
                         </td>
                     <?php } ?>
                 <?php } ?>
