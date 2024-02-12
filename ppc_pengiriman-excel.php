@@ -115,6 +115,7 @@
                                                 AND i2.SUBCODE09 = i.SUBCODE09 AND i2.SUBCODE10 = i.SUBCODE10
                         WHERE 
                             $where_no_order $where_date 
+                            AND NOT (SUBSTR(i.DLVSALORDERLINESALESORDERCODE, 1,3) = 'CAP' AND (i.ITEMTYPEAFICODE = 'KFF' OR i.ITEMTYPEAFICODE = 'KGF'))
                             AND i.DOCUMENTTYPETYPE = 05 
                             AND NOT i.CODE IS NULL 
                             AND i.PROGRESSSTATUS_SALDOC = 2
