@@ -449,7 +449,11 @@
                                                 i.LEGALNAME1 AS CUSTOMER,
                                                 i.PO_NUMBER,
                                                 i.DLVSALORDERLINESALESORDERCODE,
-                                                LISTAGG(DISTINCT TRIM(p.LONGDESCRIPTION), ', ') AS JENIS_KAIN   
+                                                CASE
+                                                    WHEN LOCATE('//', LISTAGG(DISTINCT TRIM(p.LONGDESCRIPTION), '//')) = 0 THEN LISTAGG(DISTINCT TRIM(p.LONGDESCRIPTION), '//')
+                                                    ELSE
+                                                        SUBSTR(LISTAGG(DISTINCT TRIM(p.LONGDESCRIPTION), '//'), 1, LOCATE('//', LISTAGG(DISTINCT TRIM(p.LONGDESCRIPTION), '//'))-1)
+                                                END AS JENIS_KAIN   
                                             FROM 
                                                 ITXVIEW_SURATJALAN_PPC i
                                             LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON iasp.CODE = i.CODE
