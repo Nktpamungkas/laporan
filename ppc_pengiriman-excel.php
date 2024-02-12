@@ -434,6 +434,68 @@
             </tr>
         <?php endif; ?>
         <?php } ?>
+        <!-- CAPITAL KFF & KGF -->
+        <?php
+            $stmt_cap_kff = db2_exec($conn1, "SELECT 
+                                                DISTINCT
+                                                i.GOODSISSUEDATE,
+                                                i.PROVISIONALCODE,
+                                                i2.WARNA,
+                                                COUNT(i2.SUBCODE05) AS ROLL,
+                                                SUM(iasp.BASEPRIMARYQUANTITY) AS QTY_KG,
+                                                SUM(iasp.BASESECONDARYQUANTITY) AS QTY_YD,
+                                                i.LONGDESCRIPTION AS BUYER,
+                                                i.LEGALNAME1 AS CUSTOMER,
+                                                i.PO_NUMBER,
+                                                i.DLVSALORDERLINESALESORDERCODE,
+                                                LISTAGG(DISTINCT TRIM(p.LONGDESCRIPTION), ', ') AS JENIS_KAIN   
+                                            FROM 
+                                                ITXVIEW_SURATJALAN_PPC i
+                                            LEFT JOIN ITXVIEW_ALLOCATION_SURATJALAN_PPC iasp ON iasp.CODE = i.CODE
+                                            LEFT JOIN ITXVIEWCOLOR i2 ON i2.ITEMTYPECODE =  i.ITEMTYPEAFICODE
+                                                                    AND i2.SUBCODE01 = i.SUBCODE01 AND i2.SUBCODE02 = i.SUBCODE02
+                                                                    AND i2.SUBCODE03 = i.SUBCODE03 AND i2.SUBCODE04 = i.SUBCODE04
+                                                                    AND i2.SUBCODE05 = i.SUBCODE05 AND i2.SUBCODE06 = i.SUBCODE06
+                                                                    AND i2.SUBCODE07 = i.SUBCODE07 AND i2.SUBCODE08 = i.SUBCODE08
+                                                                    AND i2.SUBCODE09 = i.SUBCODE09 AND i2.SUBCODE10 = i.SUBCODE10
+                                            LEFT JOIN PRODUCT p ON p.ITEMTYPECODE =  i.ITEMTYPEAFICODE
+                                                                    AND p.SUBCODE01 = i.SUBCODE01 AND p.SUBCODE02 = i.SUBCODE02
+                                                                    AND p.SUBCODE03 = i.SUBCODE03 AND p.SUBCODE04 = i.SUBCODE04
+                                                                    AND p.SUBCODE05 = i.SUBCODE05 AND p.SUBCODE06 = i.SUBCODE06
+                                                                    AND p.SUBCODE07 = i.SUBCODE07 AND p.SUBCODE08 = i.SUBCODE08
+                                                                    AND p.SUBCODE09 = i.SUBCODE09 AND p.SUBCODE10 = i.SUBCODE10
+                                            WHERE 
+                                                $where_no_order $where_date 
+                                                AND (SUBSTR(i.DLVSALORDERLINESALESORDERCODE, 1,3) = 'CAP' AND (i.ITEMTYPEAFICODE = 'KFF' OR i.ITEMTYPEAFICODE = 'KGF'))
+                                            GROUP BY 
+                                                i.GOODSISSUEDATE,
+                                                i.PROVISIONALCODE,
+                                                i2.WARNA,
+                                                i.LONGDESCRIPTION,
+                                                i.LEGALNAME1,
+                                                i.PO_NUMBER,
+                                                i.DLVSALORDERLINESALESORDERCODE");
+        ?>
+        <?php $nourut = 1; while ($row_stmt_cap_kff = db2_fetch_assoc($stmt_cap_kff)) { ?>
+            <tr>
+                <td><?= $nourut++; ?></td>
+                <td><?= $row_stmt_cap_kff['GOODSISSUEDATE']; ?></td> 
+                <td><?= $row_stmt_cap_kff['PROVISIONALCODE']; ?></td> 
+                <td><?= $row_stmt_cap_kff['WARNA']; ?></td> 
+                <td><?= $row_stmt_cap_kff['ROLL']; ?></td> 
+                <td><?= $row_stmt_cap_kff['QTY_KG']; ?></td> 
+                <td><?= $row_stmt_cap_kff['QTY_YD']; ?></td> 
+                <td><?= $row_stmt_cap_kff['BUYER']; ?></td> 
+                <td><?= $row_stmt_cap_kff['CUSTOMER']; ?></td> 
+                <td><?= $row_stmt_cap_kff['PO_NUMBER']; ?></td> 
+                <td><?= $row_stmt_cap_kff['DLVSALORDERLINESALESORDERCODE']; ?></td> 
+                <td><?= $row_stmt_cap_kff['JENIS_KAIN']; ?></td> 
+                <td></td> 
+                <td></td> 
+                <td></td> 
+                <td>KFF</td> 
+            </tr>
+        <?php } ?>
     </tbody>
     <tfoot>
         <?php
