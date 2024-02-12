@@ -37,17 +37,17 @@
         <?php while ($row_data = mysqli_fetch_array($q_pinjambuku)) { ?>
             <!-- <p> -->
                 <?php
-                    $isi = $row_data['id'];
+                    // $isi = $row_data['id'];
 
-                    $nama_file = $penyimpanan .  $row_data['id']. '.png';
+                    // $nama_file = $penyimpanan .  $row_data['id']. '.png';
 
-                    QRcode::png($isi, $nama_file, QR_ECLEVEL_Q, 6,1); 
+                    // QRcode::png($isi, $nama_file, QR_ECLEVEL_Q, 6,1); 
                 ?>
-                &nbsp;
+                <!-- &nbsp;
                 <img src="temp/<?= $row_data['id']; ?>.png" width="85">
                 <span style="font-size: 12px;"><?= $row_data['id']; ?></span>
-                <br>
-                <!-- <img src="barcode.php?text=<?= sprintf("%'.06d\n", $row_data['id']); ?>&print=true" width="210" height="106"> -->
+                <br> -->
+                <img src="barcode.php?text=<?= sprintf("%'.06d\n", $row_data['id']); ?>&print=true" width="210" height="106">
             <!-- </p> -->
         <?php } ?>
     <?php } ?>
