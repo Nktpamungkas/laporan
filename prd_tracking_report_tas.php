@@ -208,36 +208,31 @@ $conn1 = db2_connect($conn_string, '', '');
                                                             while ($row2 = db2_fetch_assoc($stmt2)) {
                                                                 ?>
                                                                 <tr>
-                                                                    <?php
-                                                                    if ($count < 1) {
-                                                                        $count = 1;
-                                                                        ?>
-                                                                        <td rowspan="<?= $rowspan ?>">
+                                                                        <td>
                                                                             <?= $row['TGLHPB'] ?>
                                                                         </td>
-                                                                        <td rowspan="<?= $rowspan ?>">
+                                                                        <td>
                                                                             <?= $row['TGLTERIMA'] ?>
                                                                         </td>
-                                                                        <td rowspan="<?= $rowspan ?>"></td>
-                                                                        <td rowspan="<?= $rowspan ?>">
+                                                                        <td></td>
+                                                                        <td>
                                                                             <?= $row['PURCHASEORDERCODE'] ?>
                                                                         </td>
-                                                                        <td rowspan="<?= $rowspan ?>">
+                                                                        <td>
                                                                             <?= $row['MRNDATE'] ?>
                                                                         </td>
-                                                                        <td rowspan="<?= $rowspan ?>">
+                                                                        <td>
                                                                             <?= $row['LEGALNAME1'] ?>
                                                                         </td>
-                                                                        <td rowspan="<?= $rowspan ?>">
+                                                                        <td>
                                                                             <?= $row['SHORTDESCRIPTION'] ?>
                                                                         </td>
-                                                                        <td rowspan="<?= $rowspan ?>">
+                                                                        <td>
                                                                             <?= $row['RECEIVEDQUANTITY'] ?>
                                                                         </td>
-                                                                        <td rowspan="<?= $rowspan ?>">
+                                                                        <td>
                                                                             <?= $row['LOTCODE'] ?>
                                                                         </td>
-                                                                    <?php } ?>
                                                                     <td>
                                                                         <?php
                                                                         if (substr($row2['CHARACTERISTICCODE'], 0, 2) == 'PH') {
