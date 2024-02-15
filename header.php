@@ -242,7 +242,7 @@
                                         </a>
                                     </li>
                                     <li class="">
-                                        <a href="Login_prd_pinjam_stdcckwarna_dl.php" data-i18n="nav.animations.main">
+                                        <a href="prd_pinjam_stdcckwarna_dl.php" data-i18n="nav.animations.main">
                                             Pinjam Std Cck Warna DL
                                         </a>
                                     </li>
@@ -254,6 +254,11 @@
                                     <li class=" ">
                                         <a href="prd_histori_kk.php" data-i18n="nav.animations.main">
                                             Riwayat Salin No. Demand
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="prd_tracking_report_tas.php" data-i18n="nav.animations.main">
+                                            Report Tracking TAS
                                         </a>
                                     </li>
                                 </ul>
@@ -282,20 +287,6 @@
                                     <li class=" ">
                                         <a href="aftersales_memopenting_order.php" data-i18n="nav.animations.main">
                                             Memo Penting Order Replacement dan Retur
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="pcoded-hasmenu">
-                                <a href="javascript:void(0)">
-                                    <span class="pcoded-micon"><i class="icofont icofont-upload-alt"></i></span>
-                                    <span class="pcoded-mtext">SPECTRO</span>
-                                    <span class="pcoded-mcaret"></span>
-                                </a>
-                                <ul class="pcoded-submenu">
-                                    <li class=" ">
-                                        <a href="spectro_upload.php" data-i18n="nav.animations.main">
-                                            Import Data Spectro
                                         </a>
                                     </li>
                                 </ul>
