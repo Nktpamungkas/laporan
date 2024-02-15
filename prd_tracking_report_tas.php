@@ -65,23 +65,19 @@ $conn1 = db2_connect($conn_string, '', '');
                                                 <!-- <div class="col-sm-6 col-xl-12 m-b-30">
                                                     <h4 class="sub-title">No MRN:</h4>
                                                     <input type="text" name="nomrn" class="form-control"
-                                                        value="<?= ''//isset($_POST['submit']) ? $_POST['nomrn'] : ''  ?>">
+                                                        value="<?= ''//isset($_POST['submit']) ? $_POST['nomrn'] : ''   ?>">
                                                 </div> -->
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
                                                     <h4 class="sub-title">From Date</h4>
-                                                    <input type="date" class="form-control" name="tgl1"
-                                                        value="<?php if (isset($_POST['submit'])) {
-                                                            echo $_POST['tgl1'];
-                                                        } ?>"
-                                                        required>
+                                                    <input type="date" class="form-control" name="tgl1" value="<?php if (isset($_POST['submit'])) {
+                                                        echo $_POST['tgl1'];
+                                                    } ?>" required>
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
                                                     <h4 class="sub-title">Until Date</h4>
-                                                    <input type="date" class="form-control" name="tgl2"
-                                                        value="<?php if (isset($_POST['submit'])) {
-                                                            echo $_POST['tgl2'];
-                                                        } ?>"
-                                                        required>
+                                                    <input type="date" class="form-control" name="tgl2" value="<?php if (isset($_POST['submit'])) {
+                                                        echo $_POST['tgl2'];
+                                                    } ?>" required>
                                                 </div>
                                                 <h4 class="sub-title">&nbsp; </h4>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
@@ -133,6 +129,7 @@ $conn1 = db2_connect($conn_string, '', '');
                                                                     STOCKTRANSACTION.LOTCODE,
                                                                     QUALITYDOCUMENT.HEADERDATE,
                                                                     QUALITYDOCUMENT.LASTUPDATEUSER,
+                                                                    QUALITYDOCUMENT.HEADERLINE,
                                                                     A.TGLHPB,
                                                                     A.TGLTERIMA
                                                                 FROM
@@ -201,7 +198,8 @@ $conn1 = db2_connect($conn_string, '', '');
                                                                         WHEN (QUALITYDOCLINE.QUALITYDOCUMENTSUBCODE01 = 'R' OR QUALITYDOCLINE.QUALITYDOCUMENTSUBCODE01 = 'D') THEN QUALITYDOCLINE.CHARACTERISTICCODE = 'DL' OR QUALITYDOCLINE.CHARACTERISTICCODE = 'DE'
                                                                         ELSE QUALITYDOCLINE.CHARACTERISTICCODE <> 'DL' OR QUALITYDOCLINE.CHARACTERISTICCODE <> 'DE'
                                                                     END 
-                                                                    AND QUALITYDOCLINE.QUALITYDOCUMENTLOTCODE = '$row[LOTCODE]'
+                                                                    AND QUALITYDOCLINE.QUALITYDOCUMENTHEADERLINE = '$row[HEADERLINE]'
+                                                                    ORDER BY QUALITYDOCLINE.LINE ASC
                                                                 ";
 
                                                             $stmt2 = db2_exec($conn1, $query2, array('cursor' => DB2_SCROLLABLE));
