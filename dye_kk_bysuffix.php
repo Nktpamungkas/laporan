@@ -10,23 +10,20 @@
     <meta name="keywords" content="Admin , Responsive, Landing, Bootstrap, App, Template, Mobile, iOS, Android, apple, creative app">
     <meta name="author" content="#">
     <link rel="icon" href="files\assets\images\favicon.ico" type="image/x-icon">
-        <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800" rel="stylesheet"> -->
+     <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800" rel="stylesheet"> --> 
     <link rel="stylesheet" type="text/css" href="files\bower_components\bootstrap\css\bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\themify-icons\themify-icons.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\icofont\css\icofont.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\feather\css\feather.css">
-    <link rel="stylesheet" href="files\bower_components\select2\css\select2.min.css">
-    <link rel="stylesheet" type="text/css" href="files\bower_components\bootstrap-multiselect\css\bootstrap-multiselect.css">
-    <link rel="stylesheet" type="text/css" href="files\bower_components\multiselect\css\multi-select.css">
-    <link rel="stylesheet" type="text/css" href="files\assets\css\style.css">
     <link rel="stylesheet" type="text/css" href="files\assets\pages\prism\prism.css">
     <link rel="stylesheet" type="text/css" href="files\assets\css\style.css">
     <link rel="stylesheet" type="text/css" href="files\assets\css\jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" type="text/css" href="files\assets\css\pcoded-horizontal.min.css">
     <link rel="stylesheet" type="text/css" href="files\bower_components\datatables.net-bs4\css\dataTables.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="files\assets\pages\data-table\css\buttons.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="files\bower_components\datatables.net-responsive-bs4\css\responsive.bootstrap4.min.css">
-    <link rel="stylesheet" type="text/css" href="files\assets\css\pcoded-horizontal.min.css">
-
+    <link rel="stylesheet" type="text/css" href="files\assets\pages\data-table\extensions\buttons\css\buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="files\assets\css\jquery.mCustomScrollbar.css">
 </head>
 <?php require_once 'header.php'; ?>
 <body>
@@ -53,7 +50,7 @@
                                                     <input type="text" class="form-control" name="suffix" value="<?php if (isset($_POST['submit'])){ echo $_POST['suffix']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
-                                                    <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> <i class="icofont icofont-search-alt-1"></i> Cari data</button>
+                                                    <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -63,7 +60,7 @@
                                     <div class="card">
                                         <div class="card-block">
                                             <div class="table-responsive dt-responsive">
-                                                <table id="excel-bg" class="table table-striped table-bordered nowrap">
+                                                <table id="basic-btn" class="table compact table-striped table-bordered nowrap">
                                                     <thead>
                                                         <tr>
                                                             <th>CREATION DATE TIME</th>
@@ -147,43 +144,29 @@
     <script type="text/javascript" src="files\bower_components\jquery-slimscroll\js\jquery.slimscroll.js"></script>
     <script type="text/javascript" src="files\bower_components\modernizr\js\modernizr.js"></script>
     <script type="text/javascript" src="files\bower_components\modernizr\js\css-scrollbars.js"></script>
-
-    <script type="text/javascript" src="files\bower_components\i18next\js\i18next.min.js"></script>
-    <script type="text/javascript" src="files\bower_components\i18next-xhr-backend\js\i18nextXHRBackend.min.js"></script>
-    <script type="text/javascript" src="files\bower_components\i18next-browser-languagedetector\js\i18nextBrowserLanguageDetector.min.js"></script>
-    <script type="text/javascript" src="files\bower_components\jquery-i18next\js\jquery-i18next.min.js"></script>
-    <script type="text/javascript" src="files\bower_components\select2\js\select2.full.min.js"></script>
-    <script type="text/javascript" src="files\bower_components\bootstrap-multiselect\js\bootstrap-multiselect.js"></script>
-    <script type="text/javascript" src="files\bower_components\multiselect\js\jquery.multi-select.js"></script>
-    <script type="text/javascript" src="files\assets\js\jquery.quicksearch.js"></script>
-    <script type="text/javascript" src="files\assets\pages\advance-elements\select2-custom.js"></script>
-    <script src="files\assets\js\pcoded.min.js"></script>
-    <script src="files\assets\js\menu\menu-hori-fixed.js"></script>
-    <script src="files\assets\js\jquery.mCustomScrollbar.concat.min.js"></script>
-    <script type="text/javascript" src="files\assets\js\script.js"></script>
-    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
-
-    <script type="text/javascript" src="files\assets\pages\prism\custom-prism.js"></script>
-    <script src="files\assets\js\jquery.mCustomScrollbar.concat.min.js"></script>
-    <script type="text/javascript" src="files\assets\js\script.js"></script>
-
     <script src="files\bower_components\datatables.net\js\jquery.dataTables.min.js"></script>
     <script src="files\bower_components\datatables.net-buttons\js\dataTables.buttons.min.js"></script>
     <script src="files\assets\pages\data-table\js\jszip.min.js"></script>
     <script src="files\assets\pages\data-table\js\pdfmake.min.js"></script>
     <script src="files\assets\pages\data-table\js\vfs_fonts.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\dataTables.buttons.min.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\buttons.flash.min.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\jszip.min.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\vfs_fonts.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\buttons.colVis.min.js"></script>
     <script src="files\bower_components\datatables.net-buttons\js\buttons.print.min.js"></script>
     <script src="files\bower_components\datatables.net-buttons\js\buttons.html5.min.js"></script>
     <script src="files\bower_components\datatables.net-bs4\js\dataTables.bootstrap4.min.js"></script>
     <script src="files\bower_components\datatables.net-responsive\js\dataTables.responsive.min.js"></script>
     <script src="files\bower_components\datatables.net-responsive-bs4\js\responsive.bootstrap4.min.js"></script>
-
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'UA-23581568-13');
-    </script>
+    <script type="text/javascript" src="files\bower_components\i18next\js\i18next.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\i18next-xhr-backend\js\i18nextXHRBackend.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\i18next-browser-languagedetector\js\i18nextBrowserLanguageDetector.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\jquery-i18next\js\jquery-i18next.min.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\extension-btns-custom.js"></script>
+    <script src="files\assets\js\pcoded.min.js"></script>
+    <script src="files\assets\js\menu\menu-hori-fixed.js"></script>
+    <script src="files\assets\js\jquery.mCustomScrollbar.concat.min.js"></script>
+    <script type="text/javascript" src="files\assets\js\script.js"></script>
 </body>
 </html>
