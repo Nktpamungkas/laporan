@@ -345,17 +345,19 @@
                                                 <table border="1" style='font-family:"Microsoft Sans Serif"' width="100%">
                                                     <thead>
                                                         <tr>
-                                                            <th width="100px" style="text-align: center;">STEP NUMBER</th>
+                                                            <th width="100px" style="text-align: center;">STEP <br>NUMBER</th>
                                                             <th width="100px" style="text-align: center;">ACTIONS</th>
-                                                            <th width="300px" style="text-align: center;">TANGGAL IN</th>
-                                                            <th width="300px" style="text-align: center;">TANGGAL OUT</th>
+                                                            <th width="300px" style="text-align: center;">TANGGAL <br>IN</th>
+                                                            <th width="300px" style="text-align: center;">TANGGAL <br>OUT</th>
                                                             <th width="100px" style="text-align: center;">OPERATION</th>
+                                                            <th width="100px" style="text-align: center;">DEPT</th>
                                                             <th width="500px" style="text-align: center;">LONGDESCRIPTION</th>
                                                             <th width="100px" style="text-align: center;">STATUS</th>
-                                                            <th width="100px" style="text-align: center;">PROD. ORDER</th>
-                                                            <th width="100px" style="text-align: center;">PROD. DEMAND</th>
-                                                            <th width="100px" style="text-align: center;">OPERATOR IN</th>
-                                                            <th width="100px" style="text-align: center;">OPERATOR OUT</th>
+                                                            <th width="100px" style="text-align: center;">PROD. <br>ORDER</th>
+                                                            <th width="100px" style="text-align: center;">PROD. <br>DEMAND</th>
+                                                            <th width="100px" style="text-align: center;">OPERATOR <br>IN</th>
+                                                            <th width="100px" style="text-align: center;">OPERATOR <br>OUT</th>
+                                                            <th width="100px" style="text-align: center;">NO GEROBAK</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody> 
@@ -404,6 +406,7 @@
                                                                             p.PRODUCTIONORDERCODE,
                                                                             p.STEPNUMBER AS STEPNUMBER,
                                                                             TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
+                                                                            TRIM(o.OPERATIONGROUPCODE) AS DEPT,
                                                                             o.LONGDESCRIPTION,
                                                                             CASE
                                                                                 WHEN p.PROGRESSSTATUS = 0 THEN 'Entered'
@@ -416,14 +419,39 @@
                                                                             p.PRODUCTIONORDERCODE,
                                                                             p.PRODUCTIONDEMANDCODE,
                                                                             iptip.LONGDESCRIPTION AS OP1,
-                                                                            iptop.LONGDESCRIPTION AS OP2
+                                                                            iptop.LONGDESCRIPTION AS OP2,
+                                                                            LISTAGG(FLOOR(idqd.VALUEQUANTITY), ', ') AS GEROBAK
                                                                         FROM 
                                                                             PRODUCTIONDEMANDSTEP p 
                                                                         LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
                                                                         LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                         LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
+                                                                        LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
+                                                                                                            AND idqd.OPERATIONCODE = p.OPERATIONCODE 
+                                                                                                            AND (idqd.CHARACTERISTICCODE = 'GRB1' OR
+                                                                                                                idqd.CHARACTERISTICCODE = 'GRB2' OR
+                                                                                                                idqd.CHARACTERISTICCODE = 'GRB3' OR
+                                                                                                                idqd.CHARACTERISTICCODE = 'GRB4' OR
+                                                                                                                idqd.CHARACTERISTICCODE = 'GRB5' OR
+                                                                                                                idqd.CHARACTERISTICCODE = 'GRB6' OR
+                                                                                                                idqd.CHARACTERISTICCODE = 'GRB7' OR
+                                                                                                                idqd.CHARACTERISTICCODE = 'GRB8')
+                                                                                                            AND NOT (idqd.VALUEQUANTITY = 9 OR idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999)
                                                                         WHERE
                                                                             p.PRODUCTIONORDERCODE  = '$prod_order' AND p.PRODUCTIONDEMANDCODE = '$demand'  
+                                                                        GROUP BY
+                                                                            p.PRODUCTIONORDERCODE,
+                                                                            p.STEPNUMBER,
+                                                                            p.OPERATIONCODE,
+                                                                            o.OPERATIONGROUPCODE,
+                                                                            o.LONGDESCRIPTION,
+                                                                            p.PROGRESSSTATUS,
+                                                                            iptip.MULAI,
+                                                                            iptop.SELESAI,
+                                                                            p.PRODUCTIONORDERCODE,
+                                                                            p.PRODUCTIONDEMANDCODE,
+                                                                            iptip.LONGDESCRIPTION,
+                                                                            iptop.LONGDESCRIPTION
                                                                         ORDER BY p.STEPNUMBER ASC";
                                                             $stmt = db2_exec($conn1, $sqlDB2);
                                                             while ($rowdb2 = db2_fetch_assoc($stmt)) {
@@ -599,6 +627,7 @@
                                                                     <?php endif; ?>
                                                                 </td>
                                                                 <td align="center"><?= $rowdb2['OPERATIONCODE']; ?></td>
+                                                                <td align="center"><?= $rowdb2['DEPT']; ?></td>
                                                                 <td><?= $rowdb2['LONGDESCRIPTION']; ?></td>
                                                                 <td 
                                                                     <?php 
@@ -633,6 +662,7 @@
                                                                         <?= $rowdb2['OP2']; ?>
                                                                     <?php endif; ?>
                                                                 </td>
+                                                                <td align="center"><?= $rowdb2['GEROBAK']; ?></td>
                                                             </tr>
                                                             <div id="confirm-note<?= $rowdb2['STEPNUMBER']; ?>" class="modal fade" role="dialog">
                                                                 <div class="modal-dialog modal-lg">

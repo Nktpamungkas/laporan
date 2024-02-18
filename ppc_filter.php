@@ -400,7 +400,14 @@
                                                                                                                                                                                         ELSE p.GROUPSTEPNUMBER
                                                                                                                                                                                     END
                                                                                                                             WHERE
-                                                                                                                                p.PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' AND p.PROGRESSSTATUS = '3' ORDER BY p.GROUPSTEPNUMBER DESC LIMIT 1");
+                                                                                                                                p.PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' AND p.PROGRESSSTATUS = '3' AND NOT iptop.SELESAI IS NULL
+                                                                                                                            ORDER BY 
+                                                                                                                                CASE
+                                                                                                                                    WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER 
+                                                                                                                                    WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                                                                    ELSE p.GROUPSTEPNUMBER
+                                                                                                                                END DESC 
+                                                                                                                            LIMIT 1");
                                                                             $d_delay_progress_mulai   = db2_fetch_assoc($q_delay_progress_mulai);
                                                                             $jam_status_terakhir      = $d_delay_progress_mulai['SELESAI'];
                                                                             $delay_progress_status    = $d_delay_progress_mulai['DELAY_PROGRESSSTATUS'].' Hari';
