@@ -227,6 +227,11 @@
                                         </a>
                                     </li>
                                     <li class="">
+                                        <a href="prd_carigerobak.php" data-i18n="nav.animations.main">
+                                            Cari Gerobak
+                                        </a>
+                                    </li>
+                                    <li class="">
                                         <a href="prd_pinjam_stdcckwarna.php" data-i18n="nav.animations.main">
                                             Pinjam Std Cck Warna RC
                                         </a>
