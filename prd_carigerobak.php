@@ -334,7 +334,7 @@
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB6' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB7' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB8')
-                                                                                                                                        AND NOT (idqd.VALUEQUANTITY = 9 OR idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 99)
+                                                                                                                                        AND NOT (idqd.VALUEQUANTITY = 9 OR idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 99 OR idqd.VALUEQUANTITY = 91)
                                                                                                     WHERE
                                                                                                         p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' AND p.PRODUCTIONDEMANDCODE = '$row_iptip[PRODUCTIONDEMANDCODE]'
                                                                                                         AND NOT idqd.VALUEQUANTITY IS NULL
