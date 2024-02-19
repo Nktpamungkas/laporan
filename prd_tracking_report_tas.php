@@ -65,7 +65,7 @@ $conn1 = db2_connect($conn_string, '', '');
                                                 <!-- <div class="col-sm-6 col-xl-12 m-b-30">
                                                     <h4 class="sub-title">No MRN:</h4>
                                                     <input type="text" name="nomrn" class="form-control"
-                                                        value="<?= ''//isset($_POST['submit']) ? $_POST['nomrn'] : ''   ?>">
+                                                        value="<?= ''//isset($_POST['submit']) ? $_POST['nomrn'] : ''     ?>">
                                                 </div> -->
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
                                                     <h4 class="sub-title">From Date</h4>
@@ -208,31 +208,36 @@ $conn1 = db2_connect($conn_string, '', '');
                                                             while ($row2 = db2_fetch_assoc($stmt2)) {
                                                                 ?>
                                                                 <tr>
-                                                                        <td>
+                                                                    <?php
+                                                                    if ($count < 1) {
+                                                                        $count = 1;
+                                                                        ?>
+                                                                        <td rowspan="<?= $rowspan ?>">
                                                                             <?= $row['TGLHPB'] ?>
                                                                         </td>
-                                                                        <td>
+                                                                        <td rowspan="<?= $rowspan ?>">
                                                                             <?= $row['TGLTERIMA'] ?>
                                                                         </td>
-                                                                        <td></td>
-                                                                        <td>
+                                                                        <td rowspan="<?= $rowspan ?>"></td>
+                                                                        <td rowspan="<?= $rowspan ?>">
                                                                             <?= $row['PURCHASEORDERCODE'] ?>
                                                                         </td>
-                                                                        <td>
+                                                                        <td rowspan="<?= $rowspan ?>">
                                                                             <?= $row['MRNDATE'] ?>
                                                                         </td>
-                                                                        <td>
+                                                                        <td rowspan="<?= $rowspan ?>">
                                                                             <?= $row['LEGALNAME1'] ?>
                                                                         </td>
-                                                                        <td>
+                                                                        <td rowspan="<?= $rowspan ?>">
                                                                             <?= $row['SHORTDESCRIPTION'] ?>
                                                                         </td>
-                                                                        <td>
+                                                                        <td rowspan="<?= $rowspan ?>">
                                                                             <?= $row['RECEIVEDQUANTITY'] ?>
                                                                         </td>
-                                                                        <td>
+                                                                        <td rowspan="<?= $rowspan ?>">
                                                                             <?= $row['LOTCODE'] ?>
                                                                         </td>
+                                                                    <?php } ?>
                                                                     <td>
                                                                         <?php
                                                                         if (substr($row2['CHARACTERISTICCODE'], 0, 2) == 'PH') {
