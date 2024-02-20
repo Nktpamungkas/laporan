@@ -139,6 +139,7 @@
                                                                                                     AND NOT p.PRODUCTIONORDERCODE IS NULL)
                                                                                             WHERE
                                                                                                 RN = 1
+                                                                                                AND NOT OPERATIONCODE = 'BAT1'
                                                                                             GROUP BY 
                                                                                                 PRODUCTIONORDERCODE,
                                                                                                 STEPNUMBER,
