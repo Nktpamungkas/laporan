@@ -123,6 +123,7 @@ require_once "koneksi.php";
                                                         <?php
                                                         $query = "SELECT 
                                                                     MRNHEADER.PURCHASEORDERCODE,
+                                                                    MRNHEADER.MRNDATE,
                                                                     BUSINESSPARTNER.LEGALNAME1,
                                                                     FULLITEMKEYDECODER.SHORTDESCRIPTION,
                                                                     MRNDETAIL.RECEIVEDQUANTITY,
@@ -229,7 +230,9 @@ require_once "koneksi.php";
                                                                         <td rowspan="<?= $rowspan ?>">
                                                                             <?= $row['TGLTERIMA'] ?>
                                                                         </td>
-                                                                        <td rowspan="<?= $rowspan ?>"></td>
+                                                                        <td rowspan="<?= $rowspan ?>">
+                                                                            <?= ''//$row['MRNDATE'] ?>
+                                                                        </td>
                                                                         <td rowspan="<?= $rowspan ?>">
                                                                             <?= $row['PURCHASEORDERCODE'] ?>
                                                                         </td>
@@ -318,7 +321,9 @@ require_once "koneksi.php";
                                                                     <td>
                                                                         <?= $row2['TESTSTATUS'] ?>
                                                                     </td>
-                                                                    <td></td>
+                                                                    <td>
+                                                                        <?= $row2['HEADERDATE'] ?>
+                                                                    </td>
                                                                     <td>
                                                                         <?= $row2['LASTUPDATEUSER'] ?>
                                                                     </td>
