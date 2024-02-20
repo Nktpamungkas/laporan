@@ -139,7 +139,18 @@ require_once "koneksi.php";
                                                                 LEFT JOIN STOCKTRANSACTION STOCKTRANSACTION
                                                                     ON STOCKTRANSACTION.TRANSACTIONNUMBER = MRNDETAIL.TRANSACTIONNUMBER
                                                                 LEFT JOIN QUALITYDOCUMENT QUALITYDOCUMENT
-                                                                    ON QUALITYDOCUMENT.LOTCODE = STOCKTRANSACTION.LOTCODE
+                                                                ON QUALITYDOCUMENT.LOTCODE = STOCKTRANSACTION.LOTCODE
+                                                                    AND QUALITYDOCUMENT.ITEMTYPEAFICODE = STOCKTRANSACTION.ITEMTYPECODE 
+                                                                    AND QUALITYDOCUMENT.SUBCODE01 = STOCKTRANSACTION.DECOSUBCODE01
+                                                                    AND QUALITYDOCUMENT.SUBCODE02 = STOCKTRANSACTION.DECOSUBCODE02
+                                                                    AND QUALITYDOCUMENT.SUBCODE03 = STOCKTRANSACTION.DECOSUBCODE03
+                                                                    AND QUALITYDOCUMENT.SUBCODE04 = STOCKTRANSACTION.DECOSUBCODE04
+                                                                    AND QUALITYDOCUMENT.SUBCODE05 = STOCKTRANSACTION.DECOSUBCODE05
+                                                                    AND QUALITYDOCUMENT.SUBCODE06 = STOCKTRANSACTION.DECOSUBCODE06
+                                                                    AND QUALITYDOCUMENT.SUBCODE07 = STOCKTRANSACTION.DECOSUBCODE07
+                                                                    AND QUALITYDOCUMENT.SUBCODE08 = STOCKTRANSACTION.DECOSUBCODE08
+                                                                    AND QUALITYDOCUMENT.SUBCODE09 = STOCKTRANSACTION.DECOSUBCODE09
+                                                                    AND QUALITYDOCUMENT.SUBCODE10 = STOCKTRANSACTION.DECOSUBCODE10
                                                                 LEFT JOIN FULLITEMKEYDECODER FULLITEMKEYDECODER
                                                                     ON FULLITEMKEYDECODER.ITEMTYPECODE = STOCKTRANSACTION.ITEMTYPECODE 
                                                                     AND FULLITEMKEYDECODER.SUBCODE01 = STOCKTRANSACTION.DECOSUBCODE01
