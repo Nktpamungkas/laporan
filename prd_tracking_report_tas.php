@@ -2,17 +2,17 @@
 ini_set("error_reporting", 0);
 // set_time_limit(0);
 session_start();
-// require_once "koneksi.php";
+require_once "koneksi.php";
 
-$hostname = "10.0.0.21";
-$database = "NOWTEST"; // SERVER NOW 20
-// $database = "NOWPRD"; // SERVER NOW 22
-$user = "db2admin";
-$passworddb2 = "Sunkam@24809";
-$port = "25000";
-$conn_string = "DRIVER={IBM ODBC DB2 DRIVER}; HOSTNAME=$hostname; PORT=$port; PROTOCOL=TCPIP; UID=$user; PWD=$passworddb2; DATABASE=$database;";
-// $conn1 = db2_pconnect($conn_string,'', '');
-$conn1 = db2_connect($conn_string, '', '');
+// $hostname = "10.0.0.21";
+// $database = "NOWTEST"; // SERVER NOW 20
+// // $database = "NOWPRD"; // SERVER NOW 22
+// $user = "db2admin";
+// $passworddb2 = "Sunkam@24809";
+// $port = "25000";
+// $conn_string = "DRIVER={IBM ODBC DB2 DRIVER}; HOSTNAME=$hostname; PORT=$port; PROTOCOL=TCPIP; UID=$user; PWD=$passworddb2; DATABASE=$database;";
+// // $conn1 = db2_pconnect($conn_string,'', '');
+// $conn1 = db2_connect($conn_string, '', '');
 
 ?>
 <!DOCTYPE html>
@@ -167,7 +167,7 @@ $conn1 = db2_connect($conn_string, '', '');
                                                                                 AND FIELDNAME = 'tglterima' OR FIELDNAME = 'tglhpb'
                                                                             GROUP BY UNIQUEID) A 
                                                                     ON A.UNIQUEID = QUALITYDOCUMENT.ABSUNIQUEID 
-                                                                WHERE MRNHEADER.MRNDATE BETWEEN '$tgl1' AND '$tgl2'
+                                                                WHERE FULLITEMKEYDECODER.ITEMTYPECODE = 'DYC' AND MRNHEADER.MRNDATE BETWEEN '$tgl1' AND '$tgl2'
                                                                 ";
 
                                                         $stmt = db2_exec($conn1, $query, array('cursor' => DB2_SCROLLABLE));
