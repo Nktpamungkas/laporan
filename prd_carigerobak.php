@@ -1,192 +1,7 @@
-<?php 
+<?php
     ini_set("error_reporting", 0);
     session_start();
     require_once "koneksi.php";
-    mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_ins3 WHERE CREATEDATETIME BETWEEN NOW() - INTERVAL 3 DAY AND NOW() - INTERVAL 1 DAY");
-    mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_ins3 WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'"); 
-    mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WHERE CREATEDATETIME BETWEEN NOW() - INTERVAL 3 DAY AND NOW() - INTERVAL 1 DAY");
-    mysqli_query($con_nowprd, "DELETE FROM itxview_posisikk_tgl_in_prodorder_cnp1 WHERE IPADDRESS = '$_SERVER[REMOTE_ADDR]'"); 
-    if($_GET['demand']){
-        $demand     = $_GET['demand'];
-    }else{
-        $demand     = $_POST['demand'];
-    }
-
-    $q_ITXVIEWKK    = db2_exec($conn1, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$demand'");
-    $d_ITXVIEWKK    = db2_fetch_assoc($q_ITXVIEWKK);
-    
-    if($_GET['prod_order']){
-        $prod_order     = $_GET['prod_order'];
-    }elseif($_POST['prod_order']) {
-        $prod_order     = $_POST['prod_order'];
-    }else{
-        $prod_order     = $d_ITXVIEWKK['PRODUCTIONORDERCODE'];
-    }
-
-    if(isset($_POST['simpanin_catch'])){
-        $productionorder    = $_POST['productionorder'];
-        $productiondemand   = $_POST['productiondemand'];
-        $stepnumber         = $_POST['stepnumber'];
-        $tanggal_proses_in  = $_POST['tanggal_proses_in'];
-        $operation          = $_POST['operation'];
-        $longdescription    = $_POST['longdescription'];
-        $status             = $_POST['status'];
-        $ipaddress          = $_POST['ipaddress'];
-        $createdatetime     = $_POST['createdatetime'];
-
-        $simpan_cache_in    = mysqli_query($con_nowprd, "INSERT INTO posisikk_cache_in(productionorder,
-                                                            productiondemand,
-                                                            stepnumber,
-                                                            tanggal_in,
-                                                            operation,
-                                                            longdescription,
-                                                            `status`,
-                                                            ipaddress,
-                                                            createdatetime)
-                                        VALUES('$productionorder',
-                                                '$productiondemand',
-                                                '$stepnumber',
-                                                '$tanggal_proses_in',
-                                                '$operation',
-                                                '$longdescription',
-                                                '$status',
-                                                '$ipaddress',
-                                                '$createdatetime')");
-        if($simpan_cache_in){
-            header('Location: https://online.indotaichen.com/laporan/ppc_filter_steps.php?demand='.TRIM($productiondemand).'&prod_order='.TRIM($productionorder).'');
-            exit;
-        }else{
-            echo("Error description: " . mysqli_error($simpan_cache_in));
-        }
-    }elseif (isset($_POST['simpanout_catch'])) {
-        $productionorder    = $_POST['productionorder'];
-        $productiondemand   = $_POST['productiondemand'];
-        $stepnumber         = $_POST['stepnumber'];
-        $tanggal_proses_out = $_POST['tanggal_proses_out'];
-        $operation          = $_POST['operation'];
-        $longdescription    = $_POST['longdescription'];
-        $status             = $_POST['status'];
-        $ipaddress          = $_POST['ipaddress'];
-        $createdatetime     = $_POST['createdatetime'];
-
-        $simpan_cache_out   = mysqli_query($con_nowprd, "INSERT INTO posisikk_cache_out(productionorder,
-                                                            productiondemand,
-                                                            stepnumber,
-                                                            tanggal_out,
-                                                            operation,
-                                                            longdescription,
-                                                            `status`,
-                                                            ipaddress,
-                                                            createdatetime)
-                                        VALUES('$productionorder',
-                                                '$productiondemand',
-                                                '$stepnumber',
-                                                '$tanggal_proses_out',
-                                                '$operation',
-                                                '$longdescription',
-                                                '$status',
-                                                '$ipaddress',
-                                                '$createdatetime')");
-        if($simpan_cache_out){
-            header('Location: https://online.indotaichen.com/laporan/ppc_filter_steps.php?demand='.TRIM($productiondemand).'&prod_order='.TRIM($productionorder).'');
-            exit;
-        }else{
-            echo("Error description: " . mysqli_error($simpan_cache_out));
-        }
-    }elseif (isset($_POST['simpan_keterangan'])) {
-        $productionorder    = $_POST['productionorder'];
-        $productiondemand   = $_POST['productiondemand'];
-        $keterangan         = $_POST['keterangan'];
-        $ipaddress          = $_POST['ipaddress'];
-        $createdatetime     = $_POST['createdatetime'];
-
-        $simpan_keterangan  = mysqli_query($con_nowprd, "INSERT INTO posisikk_keterangan(productionorder,
-                                                                                productiondemand,
-                                                                                keterangan,
-                                                                                ipaddress,
-                                                                                createdatetime)
-                                                            VALUES('$productionorder',
-                                                                    '$productiondemand',
-                                                                    '$keterangan',
-                                                                    '$ipaddress',
-                                                                    '$createdatetime')");
-        if($simpan_keterangan){
-            header('Location: https://online.indotaichen.com/laporan/ppc_filter_steps.php?demand='.TRIM($productiondemand).'&prod_order='.TRIM($productionorder).'');
-            exit;
-        }else{
-            echo("Error description: " . mysqli_error($simpan_keterangan));
-        }
-    }elseif ($_GET['simpan_note'] == 'simpan_note'){
-        $productionorder    = $_GET['PRODUCTIONORDERCODE'];
-        $productiondemand   = $_GET['PRODUCTIONDEMANDCODE'];
-        $stepnumber         = $_GET['STEPNUMBER'];
-        $operationcode      = $_GET['OPERATIONCODE'];
-        $keterangan         = str_replace ("'","\'", $_GET['KETERANGAN']);
-        $ipaddress          = $_GET['IPADDRESS'];
-        $createdatetime     = $_GET['CREATEDATETIME'];
-
-        $simpan_keterangan  = mysqli_query($con_nowprd, "INSERT INTO keterangan_leader(PRODUCTIONORDERCODE,
-                                                                                        PRODUCTIONDEMANDCODE,
-                                                                                        STEPNUMBER,
-                                                                                        OPERATIONCODE,
-                                                                                        KETERANGAN,
-                                                                                        IPADDRESS,
-                                                                                        CREATEDATETIME)
-                                                            VALUES('$productionorder',
-                                                                    '$productiondemand',
-                                                                    '$stepnumber',
-                                                                    '$operationcode',
-                                                                    '$keterangan',
-                                                                    '$ipaddress',
-                                                                    '$createdatetime')");
-        if($simpan_keterangan){
-            header("Location: https://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=$productiondemand&prod_order=$productionorder");
-            exit;
-        }else{
-            echo("Error description: ".$mysqli -> error);
-            echo "INSERT INTO keterangan_leader(PRODUCTIONORDERCODE,
-                                                            PRODUCTIONDEMANDCODE,
-                                                            STEPNUMBER,
-                                                            OPERATIONCODE,
-                                                            KETERANGAN,
-                                                            IPADDRESS,
-                                                            CREATEDATETIME)
-                                                VALUES('$productionorder',
-                                                '$productiondemand',
-                                                '$stepnumber',
-                                                '$operationcode',
-                                                '$keterangan',
-                                                '$ipaddress',
-                                                '$createdatetime')";
-            exit();
-        }
-    }elseif ($_GET['edit_note'] == 'edit_note'){
-        $productionorder    = $_GET['PRODUCTIONORDERCODE'];
-        $productiondemand   = $_GET['PRODUCTIONDEMANDCODE'];
-        $stepnumber         = $_GET['STEPNUMBER'];
-        $keterangan         = str_replace ("'","\'", $_GET['KETERANGAN']);
-        $ipaddress          = $_GET['IPADDRESS'];
-        $createdatetime     = $_GET['CREATEDATETIME'];
-
-        $ubah_keterangan  = mysqli_query($con_nowprd, "UPDATE keterangan_leader SET KETERANGAN = '$keterangan'
-                                                            WHERE PRODUCTIONORDERCODE = '$productionorder'
-                                                            AND PRODUCTIONDEMANDCODE = '$productiondemand'
-                                                            AND STEPNUMBER = '$stepnumber'");
-        
-        if($ubah_keterangan){
-            header("Location: https://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=$productiondemand&prod_order=$productionorder");
-            exit;
-        }else{
-            echo("Error description: ".$mysqli -> error);
-            echo "UPDATE keterangan_leader SET KETERANGAN = '$keterangan'
-                                        WHERE PRODUCTIONORDERCODE = '$productionorder'
-                                        AND PRODUCTIONDEMANDCODE = '$productiondemand'
-                                        AND STEPNUMBER = '$stepnumber'";
-            exit();
-        }
-    }
-
-    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -227,14 +42,14 @@
                                     <div class="card-block">
                                         <form action="" method="post">
                                             <div class="row">
-                                                <div class="col-sm-6 col-xl-2 m-b-30">
+                                                <!-- <div class="col-sm-6 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Tanggal Awal:</h4>
-                                                    <input type="date" name="tgl1" class="form-control" value="<?php if(isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
+                                                    <input type="datetime-local" name="tgl1" class="form-control" value="<?php if(isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
                                                 </div>
                                                 <div class="col-sm-6 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Tanggal Akhir:</h4>
-                                                    <input type="date" name="tgl2" class="form-control" value="<?php if(isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
-                                                </div>
+                                                    <input type="datetime-local" name="tgl2" class="form-control" value="<?php if(isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
+                                                </div> -->
                                                 <div class="col-sm-6 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Departemen:</h4>
                                                     <select name="dept" class="form-control">
@@ -261,15 +76,21 @@
                                     <div class="card">
                                         <div class="card-block">
                                             <div class="table-responsive dt-responsive">
-                                                <table border="1" style='font-family:"Microsoft Sans Serif"' width="100%">
+                                                <!-- <table border="1" style='font-family:"Microsoft Sans Serif"' width="100%"> -->
+                                                <table id="basic-btn" class="table compact table-striped table-bordered nowrap" width="100%">
                                                     <thead>
                                                         <tr>
-                                                            <th style="text-align: center;" rowspan="2">TANGGAL</th>
+                                                            <th style="text-align: center; background: #B97E6F; color: #FCFCFC;" colspan="6">POSISI GEROBAK SEKARANG</th>
+                                                            <th style="text-align: center; background: #83D46E; color: Black;" colspan="10">POSISI GEROBAK SEBELUMNYA</th>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <th style="text-align: center;" rowspan="2">STEP NB</th>
                                                             <th style="text-align: center;" rowspan="2">PROD. ORDER</th>
                                                             <th style="text-align: center;" rowspan="2">PROD. DEMAND</th>
                                                             <th style="text-align: center;" rowspan="2">OPERATION</th>
                                                             <th style="text-align: center;" rowspan="2">DEPARTEMEN</th>
-                                                            <th style="text-align: center; background: #B97E6F; color: #FCFCFC;" colspan="8">POSISI GEROBAK SEBELUMNYA</th>
+                                                            <th style="text-align: center;" rowspan="2">STATUS</th>
                                                         </tr>
                                                         <tr>
                                                             <th style="text-align: center;">OPERATION</th>
@@ -280,24 +101,50 @@
                                                             <th style="text-align: center;">OPERATOR IN</th>
                                                             <th style="text-align: center;">OPERATOR OUT</th>
                                                             <th style="text-align: center;">GEROBAK</th>
+                                                            <th style="text-align: center;">QTY</th>
+                                                            <th style="text-align: center;">JML GEROBAK</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody> 
                                                         <?php
-                                                            $q_iptip    = db2_exec($conn1, "SELECT
-                                                                                                iptip.PROGRESSSTARTPROCESSDATE,
-                                                                                                TRIM(p.PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
-                                                                                                TRIM(p.PRODUCTIONDEMANDCODE) AS PRODUCTIONDEMANDCODE,
-                                                                                                TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
-                                                                                                p.PROGRESSSTATUS,
-                                                                                                TRIM(o.OPERATIONGROUPCODE) AS OPERATIONGROUPCODE 
+                                                            $q_iptip    = db2_exec($conn1, "SELECT 
+                                                                                                PRODUCTIONORDERCODE,
+                                                                                                REPLACE(LISTAGG( '`'|| PRODUCTIONDEMANDCODE || '`', ', '), '`', '''')  AS PRODUCTIONDEMANDCODE2,
+                                                                                                LISTAGG(PRODUCTIONDEMANDCODE, ', ')  AS PRODUCTIONDEMANDCODE,
+                                                                                                STEPNUMBER,
+                                                                                                OPERATIONCODE,
+                                                                                                STATUS_OPERATION,
+                                                                                                OPERATIONGROUPCODE
                                                                                             FROM
-                                                                                                ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip 
-                                                                                            LEFT JOIN PRODUCTIONDEMANDSTEP p ON p.PRODUCTIONORDERCODE = iptip.PRODUCTIONORDERCODE AND p.STEPNUMBER = iptip.DEMANDSTEPSTEPNUMBER
-                                                                                            LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
-                                                                                            WHERE 
-                                                                                                PROGRESSSTARTPROCESSDATE BETWEEN '$_POST[tgl1]' AND '$_POST[tgl2]'
-                                                                                                AND PROGRESSSTATUS  ='2' AND OPERATIONGROUPCODE = '$_POST[dept]'");
+                                                                                                (SELECT	
+                                                                                                    TRIM(p.PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
+                                                                                                    TRIM(p.PRODUCTIONDEMANDCODE) AS PRODUCTIONDEMANDCODE,
+                                                                                                    p.STEPNUMBER,
+                                                                                                    TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
+                                                                                                    CASE
+                                                                                                        WHEN p.PROGRESSSTATUS = 0 THEN 'Entered'
+                                                                                                        WHEN p.PROGRESSSTATUS = 1 THEN 'Planned'
+                                                                                                        WHEN p.PROGRESSSTATUS = 2 THEN 'Progress'
+                                                                                                        WHEN p.PROGRESSSTATUS = 3 THEN 'Closed'
+                                                                                                    END AS STATUS_OPERATION,
+                                                                                                    TRIM(o.OPERATIONGROUPCODE) AS OPERATIONGROUPCODE,
+                                                                                                    ROW_NUMBER() OVER (PARTITION BY p.PRODUCTIONORDERCODE, p.PRODUCTIONDEMANDCODE ORDER BY p.STEPNUMBER) AS RN
+                                                                                                FROM
+                                                                                                    PRODUCTIONDEMANDSTEP p
+                                                                                                LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
+                                                                                                WHERE 
+                                                                                                    TRIM(p.PROGRESSSTATUS) IN ('2', '0')
+                                                                                                    AND TRIM(o.OPERATIONGROUPCODE) = '$_POST[dept]'
+                                                                                                    AND p.CREATIONDATETIME >= '2023-11-01'
+                                                                                                    AND NOT p.PRODUCTIONORDERCODE IS NULL)
+                                                                                            WHERE
+                                                                                                RN = 1
+                                                                                            GROUP BY 
+                                                                                                PRODUCTIONORDERCODE,
+                                                                                                STEPNUMBER,
+                                                                                                OPERATIONCODE,
+                                                                                                STATUS_OPERATION,
+                                                                                                OPERATIONGROUPCODE");
                                                         ?>
                                                         <?php while($row_iptip = db2_fetch_assoc($q_iptip)) : ?>
                                                             <?php
@@ -336,6 +183,45 @@
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB8')
                                                                                                                                         AND NOT (idqd.VALUEQUANTITY = 9 OR idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 99 OR idqd.VALUEQUANTITY = 91)
                                                                                                     WHERE
+                                                                                                        p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' 
+                                                                                                        AND p.PRODUCTIONDEMANDCODE IN ($row_iptip[PRODUCTIONDEMANDCODE2])
+                                                                                                        AND NOT idqd.VALUEQUANTITY IS NULL
+                                                                                                    GROUP BY
+                                                                                                        p.PRODUCTIONORDERCODE,
+                                                                                                        p.STEPNUMBER,
+                                                                                                        p.OPERATIONCODE,
+                                                                                                        o.LONGDESCRIPTION,
+                                                                                                        o.OPERATIONGROUPCODE,
+                                                                                                        p.PROGRESSSTATUS,
+                                                                                                        iptip.MULAI,
+                                                                                                        iptop.SELESAI,
+                                                                                                        p.PRODUCTIONORDERCODE,
+                                                                                                        p.PRODUCTIONDEMANDCODE,
+                                                                                                        iptip.LONGDESCRIPTION,
+                                                                                                        iptop.LONGDESCRIPTION
+                                                                                                    ORDER BY 
+                                                                                                        p.STEPNUMBER
+                                                                                                    DESC
+                                                                                                    LIMIT 1");
+                                                                $count_gerobak  = db2_exec($conn1, "SELECT
+                                                                                                        COUNT(*) AS JML_GEROBAK
+                                                                                                    FROM 
+                                                                                                        PRODUCTIONDEMANDSTEP p 
+                                                                                                    LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
+                                                                                                    LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
+                                                                                                    LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
+                                                                                                    LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
+                                                                                                                                        AND idqd.OPERATIONCODE = p.OPERATIONCODE 
+                                                                                                                                        AND (idqd.CHARACTERISTICCODE = 'GRB1' OR
+                                                                                                                                            idqd.CHARACTERISTICCODE = 'GRB2' OR
+                                                                                                                                            idqd.CHARACTERISTICCODE = 'GRB3' OR
+                                                                                                                                            idqd.CHARACTERISTICCODE = 'GRB4' OR
+                                                                                                                                            idqd.CHARACTERISTICCODE = 'GRB5' OR
+                                                                                                                                            idqd.CHARACTERISTICCODE = 'GRB6' OR
+                                                                                                                                            idqd.CHARACTERISTICCODE = 'GRB7' OR
+                                                                                                                                            idqd.CHARACTERISTICCODE = 'GRB8')
+                                                                                                                                        AND NOT (idqd.VALUEQUANTITY = 9 OR idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 99 OR idqd.VALUEQUANTITY = 91)
+                                                                                                    WHERE
                                                                                                         p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' AND p.PRODUCTIONDEMANDCODE = '$row_iptip[PRODUCTIONDEMANDCODE]'
                                                                                                         AND NOT idqd.VALUEQUANTITY IS NULL
                                                                                                     GROUP BY
@@ -356,13 +242,27 @@
                                                                                                     DESC
                                                                                                     LIMIT 1");
                                                             ?>
+                                                            <?php $row_count_gerobak = db2_fetch_assoc($count_gerobak); ?>
                                                             <?php $row_posisikk = db2_fetch_assoc($q_posisikk); ?>
                                                             <tr>
-                                                                <td><?= $row_iptip['PROGRESSSTARTPROCESSDATE'] ?></td>
+                                                                <td><?= $row_iptip['STEPNUMBER'] ?></td>
                                                                 <td><?= $row_iptip['PRODUCTIONORDERCODE'] ?></td>
                                                                 <td><a target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $row_iptip['PRODUCTIONDEMANDCODE']; ?>&prod_order=<?= $row_iptip['PRODUCTIONORDERCODE']; ?>"><?= $row_iptip['PRODUCTIONDEMANDCODE'] ?></a></td>
                                                                 <td align="center"><?= $row_iptip['OPERATIONCODE'] ?></td>
                                                                 <td align="center"><?= $row_iptip['OPERATIONGROUPCODE'] ?></td>
+                                                                <td
+                                                                    <?php 
+                                                                        if($row_iptip['STATUS_OPERATION'] == 'Closed'){ 
+                                                                            echo 'style="background-color:#DC526E; color:#F7F7F7;"'; 
+                                                                            
+                                                                        }elseif($row_iptip['STATUS_OPERATION'] == 'Progress'){ 
+                                                                            echo 'style="background-color:#41CC11;"'; 
+                                                                        }else{ 
+                                                                            echo 'style="background-color:#CECECE;"'; 
+                                                                        } 
+                                                                    ?>>
+                                                                    <center><?= $row_iptip['STATUS_OPERATION']; ?></center>
+                                                                </td>
 
                                                                 <td align="center"><?= $row_posisikk['OPERATIONCODE'] ?></td>
                                                                 <td align="center"><?= $row_posisikk['DEPT'] ?></td>
@@ -384,6 +284,24 @@
                                                                 <td><?= $row_posisikk['OP1'] ?></td>
                                                                 <td><?= $row_posisikk['OP2'] ?></td>
                                                                 <td><?= $row_posisikk['GEROBAK'] ?></td>
+                                                                <td>
+                                                                    <?php
+                                                                        $sql_qtyorder   = db2_exec($conn1, "SELECT DISTINCT
+                                                                                                                    GROUPSTEPNUMBER,
+                                                                                                                    INITIALUSERPRIMARYQUANTITY AS QTY_ORDER,
+                                                                                                                    INITIALUSERSECONDARYQUANTITY AS QTY_ORDER_YARD
+                                                                                                                FROM 
+                                                                                                                    VIEWPRODUCTIONDEMANDSTEP 
+                                                                                                                WHERE 
+                                                                                                                    PRODUCTIONORDERCODE = '$row_iptip[PRODUCTIONORDERCODE]'
+                                                                                                                    -- AND GROUPSTEPNUMBER = '$row_iptip[STEPNUMBER]'
+                                                                                                                ORDER BY
+                                                                                                                    GROUPSTEPNUMBER ASC LIMIT 1");
+                                                                        $dt_qtyorder    = db2_fetch_assoc($sql_qtyorder);
+                                                                    ?>
+                                                                    <?= $dt_qtyorder['QTY_ORDER']; ?>
+                                                                </td>
+                                                                <td><?= $row_count_gerobak['JML_GEROBAK'] ?></td>
                                                             </tr>
                                                         <?php endwhile; ?>
                                                     </tbody>
@@ -399,7 +317,36 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="files\bower_components\jquery\js\jquery.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\jquery-ui\js\jquery-ui.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\popper.js\js\popper.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\bootstrap\js\bootstrap.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\jquery-slimscroll\js\jquery.slimscroll.js"></script>
+    <script type="text/javascript" src="files\bower_components\modernizr\js\modernizr.js"></script>
+    <script type="text/javascript" src="files\bower_components\modernizr\js\css-scrollbars.js"></script>
+    <script src="files\bower_components\datatables.net\js\jquery.dataTables.min.js"></script>
+    <script src="files\bower_components\datatables.net-buttons\js\dataTables.buttons.min.js"></script>
+    <script src="files\assets\pages\data-table\js\jszip.min.js"></script>
+    <script src="files\assets\pages\data-table\js\pdfmake.min.js"></script>
+    <script src="files\assets\pages\data-table\js\vfs_fonts.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\dataTables.buttons.min.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\buttons.flash.min.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\jszip.min.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\vfs_fonts.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\buttons.colVis.min.js"></script>
+    <script src="files\bower_components\datatables.net-buttons\js\buttons.print.min.js"></script>
+    <script src="files\bower_components\datatables.net-buttons\js\buttons.html5.min.js"></script>
+    <script src="files\bower_components\datatables.net-bs4\js\dataTables.bootstrap4.min.js"></script>
+    <script src="files\bower_components\datatables.net-responsive\js\dataTables.responsive.min.js"></script>
+    <script src="files\bower_components\datatables.net-responsive-bs4\js\responsive.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\i18next\js\i18next.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\i18next-xhr-backend\js\i18nextXHRBackend.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\i18next-browser-languagedetector\js\i18nextBrowserLanguageDetector.min.js"></script>
+    <script type="text/javascript" src="files\bower_components\jquery-i18next\js\jquery-i18next.min.js"></script>
+    <script src="files\assets\pages\data-table\extensions\buttons\js\extension-btns-custom.js"></script>
+    <script src="files\assets\js\pcoded.min.js"></script>
+    <script src="files\assets\js\menu\menu-hori-fixed.js"></script>
+    <script src="files\assets\js\jquery.mCustomScrollbar.concat.min.js"></script>
+    <script type="text/javascript" src="files\assets\js\script.js"></script>
 </body>
-<script src="files\assets\js\pcoded.min.js"></script>
-<script type="text/javascript" src="files\assets\js\script.js"></script>
-<?php require_once 'footer.php'; ?>
+</html>

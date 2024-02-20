@@ -464,7 +464,7 @@
                                                                         ?>
                                                                     </td>
                                                                     <td>
-                                                                        <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132' OR $_SERVER['REMOTE_ADDR'] == '10.0.7.90' OR $_SERVER['REMOTE_ADDR'] == '10.0.7.106') : ?>
+                                                                        <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132' OR $_SERVER['REMOTE_ADDR'] == '10.0.7.90' OR $_SERVER['REMOTE_ADDR'] == '10.0.7.106' OR $_SERVER['REMOTE_ADDR'] == '10.0.7.115') : ?>
                                                                             <a data-pk="<?= $row_bukupinjam['id'] ?>" data-value="<?= $row_bukupinjam['archive'] ?>" class="archive_edit" href="javascipt:void(0)">
                                                                                 <?= $row_bukupinjam['archive']; ?>
                                                                             </a>
