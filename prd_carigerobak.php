@@ -135,6 +135,9 @@
                                                                                                 WHERE 
                                                                                                     TRIM(p.PROGRESSSTATUS) IN ('2', '0')
                                                                                                     AND TRIM(o.OPERATIONGROUPCODE) = '$_POST[dept]'
+                                                                                                    -- AND p.PRODUCTIONDEMANDCODE = '00194548'
+                                                                                                    -- AND p.PRODUCTIONDEMANDCODE = '00219204'
+                                                                                                    -- AND p.PRODUCTIONDEMANDCODE = '00221530'
                                                                                                     AND p.CREATIONDATETIME >= '2023-11-01'
                                                                                                     AND NOT p.PRODUCTIONORDERCODE IS NULL)
                                                                                             WHERE
@@ -186,7 +189,8 @@
                                                                                                     WHERE
                                                                                                         p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' 
                                                                                                         AND p.PRODUCTIONDEMANDCODE IN ($row_iptip[PRODUCTIONDEMANDCODE2])
-                                                                                                        AND NOT idqd.VALUEQUANTITY IS NULL
+                                                                                                        -- AND NOT idqd.VALUEQUANTITY IS NULL
+                                                                                                        AND p.STEPNUMBER < '$row_iptip[STEPNUMBER]'
                                                                                                     GROUP BY
                                                                                                         p.PRODUCTIONORDERCODE,
                                                                                                         p.STEPNUMBER,
@@ -223,8 +227,10 @@
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB8')
                                                                                                                                         AND NOT (idqd.VALUEQUANTITY = 9 OR idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 99 OR idqd.VALUEQUANTITY = 91)
                                                                                                     WHERE
-                                                                                                        p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' AND p.PRODUCTIONDEMANDCODE = '$row_iptip[PRODUCTIONDEMANDCODE]'
-                                                                                                        AND NOT idqd.VALUEQUANTITY IS NULL
+                                                                                                        p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' 
+                                                                                                        AND p.PRODUCTIONDEMANDCODE IN ($row_iptip[PRODUCTIONDEMANDCODE2])
+                                                                                                        -- AND NOT idqd.VALUEQUANTITY IS NULL
+                                                                                                        AND p.STEPNUMBER < '$row_iptip[STEPNUMBER]'
                                                                                                     GROUP BY
                                                                                                         p.PRODUCTIONORDERCODE,
                                                                                                         p.STEPNUMBER,
@@ -245,6 +251,7 @@
                                                             ?>
                                                             <?php $row_count_gerobak = db2_fetch_assoc($count_gerobak); ?>
                                                             <?php $row_posisikk = db2_fetch_assoc($q_posisikk); ?>
+                                                            <?php if(!empty($row_posisikk['GEROBAK'])) :?>
                                                             <tr>
                                                                 <td><?= $row_iptip['STEPNUMBER'] ?></td>
                                                                 <td><?= $row_iptip['PRODUCTIONORDERCODE'] ?></td>
@@ -304,6 +311,7 @@
                                                                 </td>
                                                                 <td><?= $row_count_gerobak['JML_GEROBAK'] ?></td>
                                                             </tr>
+                                                            <?php endif; ?>
                                                         <?php endwhile; ?>
                                                     </tbody>
                                                 </table>
