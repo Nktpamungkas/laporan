@@ -190,6 +190,7 @@ require_once "koneksi.php";
                                                                         QUALITYDOCLINE.VALUEQUANTITY,
                                                                         QUALITYDOCLINE.VALUEQUANTITY2,
                                                                         QUALITYDOCLINE.VALUEQUANTITY3,
+                                                                        SUBSTR(COALESCE(QUALITYDOCLINE.LASTUPDATEDATETIME, QUALITYDOCLINE.CREATIONDATETIME), 1, 10) AS TANGGALTEST,
                                                                         CASE 
                                                                             WHEN QUALITYDOCLINE.TESTLINESTATUS = 0 THEN 'N/A'
                                                                             WHEN QUALITYDOCLINE.TESTLINESTATUS = 1 THEN 'Out limit'
@@ -322,7 +323,7 @@ require_once "koneksi.php";
                                                                         <?= $row2['TESTSTATUS'] ?>
                                                                     </td>
                                                                     <td>
-                                                                        <?= $row2['HEADERDATE'] ?>
+                                                                        <?= $row2['TANGGALTEST'] ?>
                                                                     </td>
                                                                     <td>
                                                                         <?= $row2['LASTUPDATEUSER'] ?>
