@@ -51,6 +51,10 @@
                                                     <input type="datetime-local" name="tgl2" class="form-control" value="<?php if(isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
                                                 </div> -->
                                                 <div class="col-sm-6 col-xl-2 m-b-30">
+                                                    <h4 class="sub-title">Production Demand:</h4>
+                                                    <input type="text" name="demand" class="form-control" value="<?php if(isset($_POST['submit'])){ echo $_POST['demand']; } ?>">
+                                                </div>
+                                                <div class="col-sm-6 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Departemen:</h4>
                                                     <select name="dept" class="form-control">
                                                         <option value="">Pilih Dept</option>
@@ -107,6 +111,11 @@
                                                     </thead>
                                                     <tbody> 
                                                         <?php
+                                                            if($_POST['demand']){
+                                                                $where_demand    = "AND p.PRODUCTIONDEMANDCODE = '$_POST[demand]'";
+                                                            }else{
+                                                                $where_demand    = "";
+                                                            }
                                                             $q_iptip    = db2_exec($conn1, "SELECT 
                                                                                                 PRODUCTIONORDERCODE,
                                                                                                 REPLACE(LISTAGG( '`'|| PRODUCTIONDEMANDCODE || '`', ', '), '`', '''')  AS PRODUCTIONDEMANDCODE2,
@@ -138,6 +147,9 @@
                                                                                                     -- AND p.PRODUCTIONDEMANDCODE = '00194548'
                                                                                                     -- AND p.PRODUCTIONDEMANDCODE = '00219204'
                                                                                                     -- AND p.PRODUCTIONDEMANDCODE = '00221530'
+                                                                                                    -- AND p.PRODUCTIONDEMANDCODE = '00227787'
+                                                                                                    -- AND p.PRODUCTIONDEMANDCODE = '00213125'
+                                                                                                    $where_demand
                                                                                                     AND p.CREATIONDATETIME >= '2023-11-01'
                                                                                                     AND NOT p.PRODUCTIONORDERCODE IS NULL)
                                                                                             WHERE
@@ -173,6 +185,7 @@
                                                                                                     FROM 
                                                                                                         PRODUCTIONDEMANDSTEP p 
                                                                                                     LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
+                                                                                                    LEFT JOIN ADSTORAGE a ON a.UNIQUEID = o.ABSUNIQUEID AND a.FIELDNAME = 'Gerobak'
                                                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                     LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
@@ -191,6 +204,7 @@
                                                                                                         AND p.PRODUCTIONDEMANDCODE IN ($row_iptip[PRODUCTIONDEMANDCODE2])
                                                                                                         -- AND NOT idqd.VALUEQUANTITY IS NULL
                                                                                                         AND p.STEPNUMBER < '$row_iptip[STEPNUMBER]'
+                                                                                                        AND a.VALUEBOOLEAN IS NULL
                                                                                                     GROUP BY
                                                                                                         p.PRODUCTIONORDERCODE,
                                                                                                         p.STEPNUMBER,
