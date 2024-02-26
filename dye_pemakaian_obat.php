@@ -49,12 +49,14 @@
                                                     <h4 class="sub-title">Tanggal Awal</h4>
                                                     <div class="input-group input-group-sm">
                                                         <input type="date" class="form-control" required placeholder="input-group-sm" name="tgl" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl']; } ?>" required>
+                                                        <input type="time" class="form-control"  placeholder="input-group-sm" name="time" value="<?php if (isset($_POST['submit'])){ echo $_POST['time']; } ?>" >
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-0">
                                                     <h4 class="sub-title">Tanggal Akhir</h4>
                                                     <div class="input-group input-group-sm">
                                                         <input type="date" class="form-control" required placeholder="input-group-sm" name="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>" required>
+                                                        <input type="time" class="form-control"  placeholder="input-group-sm" name="time2" value="<?php if (isset($_POST['submit'])){ echo $_POST['time2']; } ?>" >
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-0">
@@ -113,6 +115,11 @@
                                                             </thead>
                                                             <tbody>
                                                                 <?php
+                                                                    if($_POST['time'] && $_POST['time2']){
+                                                                        $where_time     = "AND s.TRANSACTIONTIME BETWEEN '$_POST[time]' AND '$_POST[time2]'";
+                                                                    }else{
+                                                                        $where_time     = "";
+                                                                    }
                                                                     $db_stocktransaction   = db2_exec($conn1, "SELECT
                                                                                                                     s.TRANSACTIONDATE || ' ' || s.TRANSACTIONTIME AS TGL,
                                                                                                                     CASE
@@ -156,6 +163,7 @@
                                                                                                                     s.ITEMTYPECODE = 'DYC'
                                                                                                                     AND s.LOGICALWAREHOUSECODE = '$_POST[warehouse]'
                                                                                                                     AND s.TRANSACTIONDATE BETWEEN '$_POST[tgl]' AND '$_POST[tgl2]'
+                                                                                                                    $where_time
                                                                                                                     AND NOT s.TEMPLATECODE = '313'
                                                                                                                     AND (s.DETAILTYPE = 1 OR s.DETAILTYPE = 0)
                                                                                                                 ORDER BY 
