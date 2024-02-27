@@ -84,9 +84,19 @@
                                                 <table id="basic-btn" class="table compact table-striped table-bordered nowrap" width="100%">
                                                     <thead>
                                                         <tr>
-                                                            <th style="text-align: center; background: #B97E6F; color: #FCFCFC;" colspan="6">POSISI GEROBAK SEKARANG</th>
-                                                            <th style="text-align: center; background: #83D46E; color: Black;" colspan="10">POSISI GEROBAK SEBELUMNYA</th>
+                                                            <?php
+                                                                $dept   = $_POST['dept'];
 
+                                                                if($dept = 'DYE'){
+                                                                    $colspan    = '7';
+                                                                    $th         = '<th style="text-align: center;" rowspan="2">KETERANGAN</th>';
+                                                                }else{
+                                                                    $colspan    = '6';
+                                                                    $th         = '';
+                                                                }
+                                                            ?>
+                                                            <th style="text-align: center; background: #B97E6F; color: #FCFCFC;" colspan="<?= $colspan; ?>">POSISI GEROBAK SEKARANG</th>
+                                                            <th style="text-align: center; background: #83D46E; color: Black;" colspan="10">POSISI GEROBAK SEBELUMNYA</th>
                                                         </tr>
                                                         <tr>
                                                             <th style="text-align: center;" rowspan="2">STEP NB</th>
@@ -95,6 +105,7 @@
                                                             <th style="text-align: center;" rowspan="2">OPERATION</th>
                                                             <th style="text-align: center;" rowspan="2">DEPARTEMEN</th>
                                                             <th style="text-align: center;" rowspan="2">STATUS</th>
+                                                            <?= $th; ?>
                                                         </tr>
                                                         <tr>
                                                             <th style="text-align: center;">OPERATION</th>
@@ -144,11 +155,6 @@
                                                                                                 WHERE 
                                                                                                     TRIM(p.PROGRESSSTATUS) IN ('2', '0')
                                                                                                     AND TRIM(o.OPERATIONGROUPCODE) = '$_POST[dept]'
-                                                                                                    -- AND p.PRODUCTIONDEMANDCODE = '00194548'
-                                                                                                    -- AND p.PRODUCTIONDEMANDCODE = '00219204'
-                                                                                                    -- AND p.PRODUCTIONDEMANDCODE = '00221530'
-                                                                                                    -- AND p.PRODUCTIONDEMANDCODE = '00227787'
-                                                                                                    -- AND p.PRODUCTIONDEMANDCODE = '00213125'
                                                                                                     $where_demand
                                                                                                     AND p.CREATIONDATETIME >= '2023-11-01'
                                                                                                     AND NOT p.PRODUCTIONORDERCODE IS NULL)
@@ -181,7 +187,11 @@
                                                                                                         p.PRODUCTIONDEMANDCODE,
                                                                                                         iptip.LONGDESCRIPTION AS OP1,
                                                                                                         iptop.LONGDESCRIPTION AS OP2,
-                                                                                                        LISTAGG(FLOOR(idqd.VALUEQUANTITY), ', ') AS GEROBAK
+                                                                                                        CASE
+                                                                                                            WHEN TRIM(p.OPERATIONCODE) = 'DYE2' OR TRIM(p.OPERATIONCODE) = 'DYE4' THEN 'Poly'
+                                                                                                            WHEN TRIM(p.OPERATIONCODE) = 'DYE4' THEN 'Cotton'
+                                                                                                            ELSE LISTAGG(FLOOR(idqd.VALUEQUANTITY), ', ')
+                                                                                                        END AS GEROBAK
                                                                                                     FROM 
                                                                                                         PRODUCTIONDEMANDSTEP p 
                                                                                                     LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
@@ -222,13 +232,18 @@
                                                                                                         p.STEPNUMBER
                                                                                                     DESC
                                                                                                     LIMIT 1");
+                                                                $row_posisikk = db2_fetch_assoc($q_posisikk);
+
                                                                 $count_gerobak  = db2_exec($conn1, "SELECT
-                                                                                                        COUNT(*) AS JML_GEROBAK
+                                                                                                        CASE
+                                                                                                            WHEN TRIM(p.OPERATIONCODE) = 'DYE2' OR TRIM(p.OPERATIONCODE) = 'DYE4' THEN '0'
+                                                                                                            WHEN TRIM(p.OPERATIONCODE) = 'DYE4' THEN '0'
+                                                                                                            ELSE COUNT(*)
+                                                                                                        END AS JML_GEROBAK
                                                                                                     FROM 
                                                                                                         PRODUCTIONDEMANDSTEP p 
                                                                                                     LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
-                                                                                                    LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
-                                                                                                    LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
+                                                                                                    LEFT JOIN ADSTORAGE a ON a.UNIQUEID = o.ABSUNIQUEID AND a.FIELDNAME = 'Gerobak'
                                                                                                     LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
                                                                                                                                         AND idqd.OPERATIONCODE = p.OPERATIONCODE 
                                                                                                                                         AND (idqd.CHARACTERISTICCODE = 'GRB1' OR
@@ -243,8 +258,8 @@
                                                                                                     WHERE
                                                                                                         p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' 
                                                                                                         AND p.PRODUCTIONDEMANDCODE IN ($row_iptip[PRODUCTIONDEMANDCODE2])
-                                                                                                        -- AND NOT idqd.VALUEQUANTITY IS NULL
-                                                                                                        AND p.STEPNUMBER < '$row_iptip[STEPNUMBER]'
+                                                                                                        AND p.STEPNUMBER = '$row_posisikk[STEPNUMBER]'
+                                                                                                        AND a.VALUEBOOLEAN IS NULL
                                                                                                     GROUP BY
                                                                                                         p.PRODUCTIONORDERCODE,
                                                                                                         p.STEPNUMBER,
@@ -252,19 +267,13 @@
                                                                                                         o.LONGDESCRIPTION,
                                                                                                         o.OPERATIONGROUPCODE,
                                                                                                         p.PROGRESSSTATUS,
-                                                                                                        iptip.MULAI,
-                                                                                                        iptop.SELESAI,
                                                                                                         p.PRODUCTIONORDERCODE,
-                                                                                                        p.PRODUCTIONDEMANDCODE,
-                                                                                                        iptip.LONGDESCRIPTION,
-                                                                                                        iptop.LONGDESCRIPTION
+                                                                                                        p.PRODUCTIONDEMANDCODE
                                                                                                     ORDER BY 
                                                                                                         p.STEPNUMBER
-                                                                                                    DESC
-                                                                                                    LIMIT 1");
+                                                                                                    DESC");
                                                             ?>
                                                             <?php $row_count_gerobak = db2_fetch_assoc($count_gerobak); ?>
-                                                            <?php $row_posisikk = db2_fetch_assoc($q_posisikk); ?>
                                                             <?php if(!empty($row_posisikk['GEROBAK'])) :?>
                                                             <tr>
                                                                 <td><?= $row_iptip['STEPNUMBER'] ?></td>
@@ -285,6 +294,46 @@
                                                                     ?>>
                                                                     <center><?= $row_iptip['STATUS_OPERATION']; ?></center>
                                                                 </td>
+                                                                <?php if($dept = 'DYE') : ?>
+                                                                    <?php
+                                                                        $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT
+                                                                                                                                nokk,
+                                                                                                                                id,
+                                                                                                                                GROUP_CONCAT( lot SEPARATOR '/' ) AS lot,
+                                                                                                                                if(COUNT(lot)>1,'Gabung Kartu','') as ket_kartu,
+                                                                                                                                no_mesin,
+                                                                                                                                nodemand,
+                                                                                                                                no_urut,
+                                                                                                                                buyer,
+                                                                                                                                langganan,
+                                                                                                                                GROUP_CONCAT(DISTINCT no_order SEPARATOR '-' ) AS no_order,
+                                                                                                                                no_resep,
+                                                                                                                                nokk,
+                                                                                                                                jenis_kain,
+                                                                                                                                warna,
+                                                                                                                                no_warna,
+                                                                                                                                sum(rol) as rol,
+                                                                                                                                sum(bruto) as bruto,
+                                                                                                                                proses,
+                                                                                                                                ket_status,
+                                                                                                                                tgl_delivery,
+                                                                                                                                ket_kain,
+                                                                                                                                mc_from,
+                                                                                                                                GROUP_CONCAT(DISTINCT personil SEPARATOR ',' ) AS personil
+                                                                                                                            FROM
+                                                                                                                                tbl_schedule 
+                                                                                                                            WHERE
+                                                                                                                                (`status` = 'sedang jalan' or `status` ='antri mesin') and nokk = '$row_iptip[PRODUCTIONORDERCODE]'
+                                                                                                                            GROUP BY
+                                                                                                                                no_mesin,
+                                                                                                                                no_urut 
+                                                                                                                            ORDER BY
+                                                                                                                                id ASC");
+                                                                        $row_schedule_dye   = mysqli_fetch_assoc($q_schedule_dye);
+                                                                        $ket    = $row_schedule_dye['ket_status'].' - '.$row_schedule_dye['ket_kain'].' '.$row_schedule_dye['proses'].' MC '.$row_schedule_dye['mc_from'];
+                                                                    ?>
+                                                                    <td align="center"><?= $ket; ?></td>
+                                                                <?php endif; ?>
 
                                                                 <td align="center"><?= $row_posisikk['OPERATIONCODE'] ?></td>
                                                                 <td align="center"><?= $row_posisikk['DEPT'] ?></td>
