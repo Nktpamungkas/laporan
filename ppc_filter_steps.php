@@ -420,10 +420,14 @@
                                                                             p.PRODUCTIONDEMANDCODE,
                                                                             iptip.LONGDESCRIPTION AS OP1,
                                                                             iptop.LONGDESCRIPTION AS OP2,
-                                                                            LISTAGG(FLOOR(idqd.VALUEQUANTITY), ', ') AS GEROBAK
+                                                                            CASE
+                                                                                WHEN a.VALUEBOOLEAN = 1 THEN 'Tidak Perlu Gerobak'
+                                                                                ELSE LISTAGG(FLOOR(idqd.VALUEQUANTITY), ', ')
+                                                                            END AS GEROBAK 
                                                                         FROM 
                                                                             PRODUCTIONDEMANDSTEP p 
                                                                         LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
+                                                                        LEFT JOIN ADSTORAGE a ON a.UNIQUEID = o.ABSUNIQUEID AND a.FIELDNAME = 'Gerobak'
                                                                         LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                         LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                         LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
@@ -451,7 +455,8 @@
                                                                             p.PRODUCTIONORDERCODE,
                                                                             p.PRODUCTIONDEMANDCODE,
                                                                             iptip.LONGDESCRIPTION,
-                                                                            iptop.LONGDESCRIPTION
+                                                                            iptop.LONGDESCRIPTION,
+                                                                            a.VALUEBOOLEAN
                                                                         ORDER BY p.STEPNUMBER ASC";
                                                             $stmt = db2_exec($conn1, $sqlDB2);
                                                             while ($rowdb2 = db2_fetch_assoc($stmt)) {
@@ -662,7 +667,15 @@
                                                                         <?= $rowdb2['OP2']; ?>
                                                                     <?php endif; ?>
                                                                 </td>
-                                                                <td align="center"><?= $rowdb2['GEROBAK']; ?></td>
+                                                                <td align="center">
+                                                                    <?php
+                                                                        if($rowdb2['GEROBAK'] == 'Tidak Perlu Gerobak'){
+                                                                            echo "<span style='background-color:#CECECE;'>$rowdb2[GEROBAK]</span>";
+                                                                        }else{
+                                                                            echo $rowdb2['GEROBAK'];
+                                                                        }
+                                                                    ?>
+                                                                </td>
                                                             </tr>
                                                             <div id="confirm-note<?= $rowdb2['STEPNUMBER']; ?>" class="modal fade" role="dialog">
                                                                 <div class="modal-dialog modal-lg">

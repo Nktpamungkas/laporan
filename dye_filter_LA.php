@@ -180,7 +180,13 @@
                                                                             <td>
                                                                                 <?php
                                                                                     $prod_order     = sprintf("%08d", substr($_POST['bon_resep'], 1, 9));
-                                                                                    $q_consumtion   = mysqli_query($con_nowprd, "SELECT * FROM ITXVIEWRESEP WHERE SUBCODE = '$row_la[PRODUCT_CODE]' AND PRODUCTIONORDERCODE = '$prod_order' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'");
+                                                                                    $groupline      = sprintf("%08d", substr($_POST['bon_resep'], 9));
+                                                                                    $q_consumtion   = mysqli_query($con_nowprd, "SELECT * FROM ITXVIEWRESEP 
+                                                                                                                                        WHERE 
+                                                                                                                                            SUBCODE = '$row_la[PRODUCT_CODE]' 
+                                                                                                                                            AND PRODUCTIONORDERCODE = '$prod_order'
+                                                                                                                                            AND GROUPLINE = '$groupline'
+                                                                                                                                            AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'");
                                                                                     $d_consumtion   = mysqli_fetch_assoc($q_consumtion);
                                                                                     echo $d_consumtion['CONSUMPTION'];
                                                                                 ?>
@@ -269,7 +275,13 @@
                                                                             <td>
                                                                                 <?php
                                                                                     $prod_order     = sprintf("%08d", substr($_POST['bon_resep'], 1, 9));
-                                                                                    $q_consumtion   = mysqli_query($con_nowprd, "SELECT * FROM ITXVIEWRESEP WHERE SUBCODE = '$row_CAMS[CODE]' AND PRODUCTIONORDERCODE = '$prod_order' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'");
+                                                                                    $groupline      = sprintf("%08d", substr($_POST['bon_resep'], 9));
+                                                                                    $q_consumtion   = mysqli_query($con_nowprd, "SELECT * FROM ITXVIEWRESEP 
+                                                                                                                                        WHERE 
+                                                                                                                                            SUBCODE = '$row_CAMS[CODE]' 
+                                                                                                                                            AND PRODUCTIONORDERCODE = '$prod_order' 
+                                                                                                                                            AND GROUPLINE = '$groupline'
+                                                                                                                                            AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'");
                                                                                     $d_consumtion   = mysqli_fetch_assoc($q_consumtion);
                                                                                     echo $d_consumtion['CONSUMPTION'];
                                                                                 ?>
