@@ -87,7 +87,7 @@
                                                             <?php
                                                                 $dept   = $_POST['dept'];
 
-                                                                if($dept = 'DYE'){
+                                                                if($dept == 'DYE'){
                                                                     $colspan    = '7';
                                                                     $th         = '<th style="text-align: center;" rowspan="2">KETERANGAN</th>';
                                                                 }else{
@@ -294,7 +294,7 @@
                                                                     ?>>
                                                                     <center><?= $row_iptip['STATUS_OPERATION']; ?></center>
                                                                 </td>
-                                                                <?php if($dept = 'DYE') : ?>
+                                                                <?php if($dept == 'DYE') : ?>
                                                                     <?php
                                                                         $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT
                                                                                                                                 nokk,
@@ -330,7 +330,7 @@
                                                                                                                             ORDER BY
                                                                                                                                 id ASC");
                                                                         $row_schedule_dye   = mysqli_fetch_assoc($q_schedule_dye);
-                                                                        $ket    = $row_schedule_dye['ket_status'].' - '.$row_schedule_dye['ket_kain'].' '.$row_schedule_dye['proses'].' MC '.$row_schedule_dye['mc_from'];
+                                                                        $ket    = $row_schedule_dye['ket_status'].'- '.$row_schedule_dye['ket_kain'].' '.$row_schedule_dye['proses'].' MC '.$row_schedule_dye['mc_from'];
                                                                     ?>
                                                                     <td align="center"><?= $ket; ?></td>
                                                                 <?php endif; ?>
