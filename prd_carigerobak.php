@@ -170,6 +170,16 @@
                                                         ?>
                                                         <?php while($row_iptip = db2_fetch_assoc($q_iptip)) : ?>
                                                             <?php
+                                                                if($dept == 'DYE'){
+                                                                    $gerobak    = "CASE
+                                                                                        WHEN TRIM(p.OPERATIONCODE) = 'DYE2' THEN 'Poly'
+                                                                                        WHEN TRIM(p.OPERATIONCODE) = 'DYE4' THEN 'Cotton'
+                                                                                        ELSE LISTAGG(FLOOR(idqd.VALUEQUANTITY), ', ')
+                                                                                    END AS GEROBAK";
+                                                                }else{
+                                                                    $gerobak    = "LISTAGG(FLOOR(idqd.VALUEQUANTITY), ', ') AS GEROBAK";
+                                                                }
+
                                                                 $q_posisikk     = db2_exec($conn1, "SELECT
                                                                                                         p.STEPNUMBER AS STEPNUMBER,
                                                                                                         TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
@@ -187,11 +197,7 @@
                                                                                                         p.PRODUCTIONDEMANDCODE,
                                                                                                         iptip.LONGDESCRIPTION AS OP1,
                                                                                                         iptop.LONGDESCRIPTION AS OP2,
-                                                                                                        CASE
-                                                                                                            WHEN TRIM(p.OPERATIONCODE) = 'DYE2' THEN 'Poly'
-                                                                                                            WHEN TRIM(p.OPERATIONCODE) = 'DYE4' THEN 'Cotton'
-                                                                                                            ELSE LISTAGG(FLOOR(idqd.VALUEQUANTITY), ', ')
-                                                                                                        END AS GEROBAK
+                                                                                                        $gerobak
                                                                                                     FROM 
                                                                                                         PRODUCTIONDEMANDSTEP p 
                                                                                                     LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
@@ -212,7 +218,6 @@
                                                                                                     WHERE
                                                                                                         p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' 
                                                                                                         AND p.PRODUCTIONDEMANDCODE IN ($row_iptip[PRODUCTIONDEMANDCODE2])
-                                                                                                        -- AND NOT idqd.VALUEQUANTITY IS NULL
                                                                                                         AND p.STEPNUMBER < '$row_iptip[STEPNUMBER]'
                                                                                                         AND a.VALUEBOOLEAN IS NULL
                                                                                                     GROUP BY
