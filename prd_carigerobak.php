@@ -188,7 +188,7 @@
                                                                                                         iptip.LONGDESCRIPTION AS OP1,
                                                                                                         iptop.LONGDESCRIPTION AS OP2,
                                                                                                         CASE
-                                                                                                            WHEN TRIM(p.OPERATIONCODE) = 'DYE2' OR TRIM(p.OPERATIONCODE) = 'DYE4' THEN 'Poly'
+                                                                                                            WHEN TRIM(p.OPERATIONCODE) = 'DYE2' THEN 'Poly'
                                                                                                             WHEN TRIM(p.OPERATIONCODE) = 'DYE4' THEN 'Cotton'
                                                                                                             ELSE LISTAGG(FLOOR(idqd.VALUEQUANTITY), ', ')
                                                                                                         END AS GEROBAK
