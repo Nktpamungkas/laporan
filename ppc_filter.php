@@ -78,7 +78,7 @@
                                                     <h4 class="sub-title">Sampai Tanggal</h4>
                                                     <input type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
                                                 </div>
-                                                <div class="col-sm-12 col-xl-2 m-b-30">
+                                                <!-- <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 style="font-size: 12px;" class="sub-title">DEPARTEMENT</h4>
                                                     <?php
                                                         require_once "koneksi.php";
@@ -95,7 +95,7 @@
                                                             ?>><?= $d_operation['OPERATIONGROUPCODE']; ?></option>
                                                         <?php } ?>
                                                     </select>
-                                                </div> 
+                                                </div> -->
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Nomor PO</h4>
                                                     <input type="text" name="no_po" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['no_po']; } ?>">
@@ -175,45 +175,10 @@
                                                             $no_order       = $_POST['no_order'];
                                                             $tgl1           = $_POST['tgl1'];
                                                             $tgl2           = $_POST['tgl2'];
+                                                            $operation      = $_POST['operation'];
                                                             $no_po          = $_POST['no_po'];
                                                             $article_group  = $_POST['article_group'];
                                                             $article_code   = $_POST['article_code'];
-                                                            $dept           = $_POST['operation'];
-
-                                                            $q_demandgerobak              = db2_exec($conn1, "SELECT 
-                                                                                                                DISTINCT 
-                                                                                                                PRODUCTIONDEMANDCODE
-                                                                                                            FROM
-                                                                                                                (SELECT	
-                                                                                                                    TRIM(p.PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
-                                                                                                                    TRIM(p.PRODUCTIONDEMANDCODE) AS PRODUCTIONDEMANDCODE,
-                                                                                                                    p.STEPNUMBER,
-                                                                                                                    TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
-                                                                                                                    CASE
-                                                                                                                        WHEN p.PROGRESSSTATUS = 0 THEN 'Entered'
-                                                                                                                        WHEN p.PROGRESSSTATUS = 1 THEN 'Planned'
-                                                                                                                        WHEN p.PROGRESSSTATUS = 2 THEN 'Progress'
-                                                                                                                        WHEN p.PROGRESSSTATUS = 3 THEN 'Closed'
-                                                                                                                    END AS STATUS_OPERATION,
-                                                                                                                    TRIM(o.OPERATIONGROUPCODE) AS OPERATIONGROUPCODE,
-                                                                                                                    ROW_NUMBER() OVER (PARTITION BY p.PRODUCTIONORDERCODE, p.PRODUCTIONDEMANDCODE ORDER BY p.STEPNUMBER) AS RN
-                                                                                                                FROM
-                                                                                                                    PRODUCTIONDEMANDSTEP p
-                                                                                                                LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
-                                                                                                                WHERE 
-                                                                                                                    TRIM(p.PROGRESSSTATUS) IN ('2', '0')
-                                                                                                                    AND TRIM(o.OPERATIONGROUPCODE) = '$dept'
-                                                                                                                    -- AND p.PRODUCTIONDEMANDCODE = '00194548'
-                                                                                                                    AND p.CREATIONDATETIME >= '2023-11-01'
-                                                                                                                    AND NOT p.PRODUCTIONORDERCODE IS NULL)
-                                                                                                            WHERE
-                                                                                                                RN = 1
-                                                                                                                AND NOT OPERATIONCODE = 'BAT1' LIMIT 2");
-                                                            while ($row_demandgerobak   = db2_fetch_assoc($q_demandgerobak)) {
-                                                                $r_demandgerobak[]      = "'".TRIM(addslashes($row_demandgerobak['PRODUCTIONDEMANDCODE']))."'";
-
-                                                            }
-                                                            echo $value_demandgerobak        = implode(',', $r_demandgerobak);
 
                                                             if($prod_order){
                                                                 $where_prodorder        = "NO_KK  = '$prod_order'";
@@ -246,36 +211,69 @@
                                                                 $where_article          = "";
                                                             }
 
-                                                            // ITXVIEW_MEMOPENTINGPPC
-                                                            $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article");
-                                                            while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
-                                                                $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_ORDER']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_PO']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['SUBCODE02']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['SUBCODE03']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN_PRODUCT']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['WARNA']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_WARNA']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['DELIVERY']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['QTY_BAGIKAIN']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NETTO']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['DELAY']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_KK']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['DEMAND']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['LOT']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['ORDERLINE']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS_DEMAND']))."',"
-                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN']))."',"
-                                                                                        ."'".$_SERVER['REMOTE_ADDR']."',"
-                                                                                        ."'".date('Y-m-d H:i:s')."',"
-                                                                                        ."'".'MEMO'."')";
+                                                            if($operation){
+                                                                // ITXVIEW_MEMOPENTINGPPC_WITHOPERATIONS
+                                                                $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC_WITHOPERATIONS WHERE OPERATIONGROUPCODE = '$operation' AND NOT PROGRESSSTATUS = '6'");
+                                                                while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
+                                                                    $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['OPERATIONCODE']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_ORDER']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_PO']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN_PRODUCT']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['WARNA']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_WARNA']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['DELIVERY']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['QTY_BAGIKAIN']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NETTO']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['DELAY']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_KK']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['DEMAND']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['ORDERLINE']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS_DEMAND']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN']))."',"
+                                                                                            ."'".$_SERVER['REMOTE_ADDR']."',"
+                                                                                            ."'".date('Y-m-d H:i:s')."',"
+                                                                                            ."'".'MEMO W OPR'."')";
 
+                                                                }
+                                                                $value_itxviewmemo        = implode(',', $r_itxviewmemo);
+                                                                $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(OPERATIONCODE,ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
+                                                                
+                                                            }else{
+                                                                // ITXVIEW_MEMOPENTINGPPC
+                                                                $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article");
+                                                                while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
+                                                                    $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_ORDER']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_PO']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['SUBCODE02']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['SUBCODE03']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN_PRODUCT']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['WARNA']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_WARNA']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['DELIVERY']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['QTY_BAGIKAIN']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NETTO']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['DELAY']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_KK']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['DEMAND']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['LOT']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['ORDERLINE']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS_DEMAND']))."',"
+                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN']))."',"
+                                                                                            ."'".$_SERVER['REMOTE_ADDR']."',"
+                                                                                            ."'".date('Y-m-d H:i:s')."',"
+                                                                                            ."'".'MEMO'."')";
+
+                                                                }
+                                                                $value_itxviewmemo        = implode(',', $r_itxviewmemo);
+                                                                $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,ARTICLE_GROUP,ARTICLE_CODE,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,LOT,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
+                                                                
                                                             }
-                                                            $value_itxviewmemo        = implode(',', $r_itxviewmemo);
-                                                            $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,ARTICLE_GROUP,ARTICLE_CODE,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,LOT,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
                                                             
                                                             // --------------------------------------------------------------------------------------------------------------- //
                                                             $prod_order_2   = $_POST['prod_order'];
