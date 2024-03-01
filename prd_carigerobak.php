@@ -88,7 +88,7 @@
                                                                 $dept   = $_POST['dept'];
 
                                                                 if($dept == 'DYE'){
-                                                                    $colspan    = '7';
+                                                                    $colspan    = '8';
                                                                     $th         = '<th style="text-align: center;" rowspan="2">KETERANGAN</th>';
                                                                 }else{
                                                                     $colspan    = '6';
@@ -96,10 +96,11 @@
                                                                 }
                                                             ?>
                                                             <th style="text-align: center; background: #B97E6F; color: #FCFCFC;" colspan="<?= $colspan; ?>">POSISI GEROBAK SEKARANG</th>
-                                                            <th style="text-align: center; background: #83D46E; color: Black;" colspan="10">POSISI GEROBAK SEBELUMNYA</th>
+                                                            <th style="text-align: center; background: #83D46E; color: Black;" colspan="11">POSISI GEROBAK SEBELUMNYA</th>
                                                         </tr>
                                                         <tr>
                                                             <th style="text-align: center;" rowspan="2">STEP NB</th>
+                                                            <th style="text-align: center;" rowspan="2">NO HANGER</th>
                                                             <th style="text-align: center;" rowspan="2">PROD. ORDER</th>
                                                             <th style="text-align: center;" rowspan="2">PROD. DEMAND</th>
                                                             <th style="text-align: center;" rowspan="2">OPERATION</th>
@@ -134,6 +135,8 @@
                                                                                                 STEPNUMBER,
                                                                                                 OPERATIONCODE,
                                                                                                 STATUS_OPERATION,
+                                                                                                HANGER,
+                                                                                                SUBCODE06,
                                                                                                 OPERATIONGROUPCODE
                                                                                             FROM
                                                                                                 (SELECT	
@@ -148,10 +151,13 @@
                                                                                                         WHEN p.PROGRESSSTATUS = 3 THEN 'Closed'
                                                                                                     END AS STATUS_OPERATION,
                                                                                                     TRIM(o.OPERATIONGROUPCODE) AS OPERATIONGROUPCODE,
+                                                                                                    TRIM(p2.SUBCODE02) || '-' || TRIM(p2.SUBCODE03) AS HANGER,
+                                                                                                    TRIM(p2.SUBCODE06) AS SUBCODE06,
                                                                                                     ROW_NUMBER() OVER (PARTITION BY p.PRODUCTIONORDERCODE, p.PRODUCTIONDEMANDCODE ORDER BY p.STEPNUMBER) AS RN
                                                                                                 FROM
                                                                                                     PRODUCTIONDEMANDSTEP p
                                                                                                 LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
+                                                                                                LEFT JOIN PRODUCTIONDEMAND p2 ON p2.CODE = p.PRODUCTIONDEMANDCODE
                                                                                                 WHERE 
                                                                                                     TRIM(p.PROGRESSSTATUS) IN ('2', '0')
                                                                                                     AND TRIM(o.OPERATIONGROUPCODE) = '$_POST[dept]'
@@ -166,6 +172,8 @@
                                                                                                 STEPNUMBER,
                                                                                                 OPERATIONCODE,
                                                                                                 STATUS_OPERATION,
+                                                                                                HANGER,
+                                                                                                SUBCODE06,
                                                                                                 OPERATIONGROUPCODE");
                                                         ?>
                                                         <?php while($row_iptip = db2_fetch_assoc($q_iptip)) : ?>
@@ -282,6 +290,7 @@
                                                             <?php if(!empty($row_posisikk['GEROBAK'])) :?>
                                                             <tr>
                                                                 <td><?= $row_iptip['STEPNUMBER'] ?></td>
+                                                                <td><?= $row_iptip['HANGER'] ?> - <?= $row_iptip['SUBCODE06'] ?></td>
                                                                 <td><?= $row_iptip['PRODUCTIONORDERCODE'] ?></td>
                                                                 <td><a target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $row_iptip['PRODUCTIONDEMANDCODE']; ?>&prod_order=<?= $row_iptip['PRODUCTIONORDERCODE']; ?>"><?= $row_iptip['PRODUCTIONDEMANDCODE'] ?></a></td>
                                                                 <td align="center"><?= $row_iptip['OPERATIONCODE'] ?></td>
