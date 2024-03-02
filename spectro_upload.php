@@ -70,7 +70,8 @@
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $q_dataupload = mysqli_query($con_nowprd, "SELECT * FROM upload_spectro WHERE SUBSTR(creationdate, 1, 9) = SUBSTR(now(), 1,9) ORDER BY id DESC");
+                                                    // $q_dataupload = mysqli_query($con_nowprd, "SELECT * FROM upload_spectro WHERE SUBSTR(creationdate, 1, 9) = SUBSTR(now(), 1,9) ORDER BY id DESC");
+                                                    $q_dataupload = mysqli_query($con_nowprd, "SELECT * FROM upload_spectro ORDER BY id DESC");
                                                     $no = 1;
                                                     while ($row_dataupload = mysqli_fetch_array($q_dataupload)) {
                                                     ?>
