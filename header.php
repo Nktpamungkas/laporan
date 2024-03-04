@@ -232,6 +232,11 @@
                                         </a>
                                     </li>
                                     <li class="">
+                                        <a href="prd_outstandingkk.php" data-i18n="nav.animations.main">
+                                            Outstanding Kartu Kerja
+                                        </a>
+                                    </li>
+                                    <li class="">
                                         <a href="prd_pinjam_stdcckwarna.php" data-i18n="nav.animations.main">
                                             Pinjam Std Cck Warna RC
                                         </a>
