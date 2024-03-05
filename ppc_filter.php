@@ -175,7 +175,6 @@
                                                             $no_order       = $_POST['no_order'];
                                                             $tgl1           = $_POST['tgl1'];
                                                             $tgl2           = $_POST['tgl2'];
-                                                            $operation      = $_POST['operation'];
                                                             $no_po          = $_POST['no_po'];
                                                             $article_group  = $_POST['article_group'];
                                                             $article_code   = $_POST['article_code'];
@@ -211,69 +210,36 @@
                                                                 $where_article          = "";
                                                             }
 
-                                                            if($operation){
-                                                                // ITXVIEW_MEMOPENTINGPPC_WITHOPERATIONS
-                                                                $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC_WITHOPERATIONS WHERE OPERATIONGROUPCODE = '$operation' AND NOT PROGRESSSTATUS = '6'");
-                                                                while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
-                                                                    $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['OPERATIONCODE']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_ORDER']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_PO']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN_PRODUCT']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['WARNA']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_WARNA']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['DELIVERY']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['QTY_BAGIKAIN']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NETTO']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['DELAY']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_KK']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['DEMAND']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['ORDERLINE']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS_DEMAND']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN']))."',"
-                                                                                            ."'".$_SERVER['REMOTE_ADDR']."',"
-                                                                                            ."'".date('Y-m-d H:i:s')."',"
-                                                                                            ."'".'MEMO W OPR'."')";
+                                                            // ITXVIEW_MEMOPENTINGPPC
+                                                            $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article");
+                                                            while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
+                                                                $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_ORDER']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_PO']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['SUBCODE02']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['SUBCODE03']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN_PRODUCT']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['WARNA']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_WARNA']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['DELIVERY']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['QTY_BAGIKAIN']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NETTO']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['DELAY']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_KK']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['DEMAND']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['LOT']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['ORDERLINE']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS_DEMAND']))."',"
+                                                                                        ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN']))."',"
+                                                                                        ."'".$_SERVER['REMOTE_ADDR']."',"
+                                                                                        ."'".date('Y-m-d H:i:s')."',"
+                                                                                        ."'".'MEMO'."')";
 
-                                                                }
-                                                                $value_itxviewmemo        = implode(',', $r_itxviewmemo);
-                                                                $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(OPERATIONCODE,ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
-                                                                
-                                                            }else{
-                                                                // ITXVIEW_MEMOPENTINGPPC
-                                                                $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article");
-                                                                while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
-                                                                    $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_ORDER']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_PO']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['SUBCODE02']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['SUBCODE03']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN_PRODUCT']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['WARNA']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_WARNA']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['DELIVERY']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['QTY_BAGIKAIN']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NETTO']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['DELAY']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['NO_KK']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['DEMAND']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['LOT']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['ORDERLINE']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS_DEMAND']))."',"
-                                                                                            ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN']))."',"
-                                                                                            ."'".$_SERVER['REMOTE_ADDR']."',"
-                                                                                            ."'".date('Y-m-d H:i:s')."',"
-                                                                                            ."'".'MEMO'."')";
-
-                                                                }
-                                                                $value_itxviewmemo        = implode(',', $r_itxviewmemo);
-                                                                $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,ARTICLE_GROUP,ARTICLE_CODE,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,LOT,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
-                                                                
                                                             }
+                                                            $value_itxviewmemo        = implode(',', $r_itxviewmemo);
+                                                            $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,ARTICLE_GROUP,ARTICLE_CODE,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,LOT,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
                                                             
                                                             // --------------------------------------------------------------------------------------------------------------- //
                                                             $prod_order_2   = $_POST['prod_order'];
@@ -281,7 +247,6 @@
                                                             $no_order_2     = $_POST['no_order'];
                                                             $tgl1_2         = $_POST['tgl1'];
                                                             $tgl2_2         = $_POST['tgl2'];
-                                                            $operation_2    = $_POST['operation'];
                                                             $no_po2         = $_POST['no_po'];
                                                             $article_group2 = $_POST['article_group'];
                                                             $article_code2  = $_POST['article_code'];
@@ -316,11 +281,7 @@
                                                             }else{
                                                                 $where_article2          = "";
                                                             }
-                                                            if($operation_2){
-                                                                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE OPERATIONCODE = '$operation_2' AND ACCESS_TO = 'MEMO W OPR' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
-                                                            }else{
-                                                                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 $where_no_po2 $where_article2 AND ACCESS_TO = 'MEMO' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
-                                                            }
+                                                            $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 $where_no_po2 $where_article2 AND ACCESS_TO = 'MEMO' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
                                                             $stmt   = mysqli_query($con_nowprd,$sqlDB2);
                                                             while ($rowdb2 = mysqli_fetch_array($stmt)) {
                                                         ?>
@@ -574,16 +535,6 @@
                                                                 }
                                                             }
                                                         ?>
-                                                        <?php 
-                                                            if($operation_2){
-                                                                if($rowdb2['OPERATIONCODE'] == $kode_dept) {
-                                                                    $cek_operation  = "MUNCUL";
-                                                                }else{
-                                                                    $cek_operation  = "TIDAK MUNCUL";
-                                                                }
-                                                            }
-                                                        ?>
-                                                        <?php if($cek_operation == "MUNCUL" OR $cek_operation == NULL) : ?>
                                                         <tr>
                                                             <td><?= $rowdb2['ORDERDATE']; ?></td> <!-- TGL TERIMA ORDER -->
                                                             <td><?= $rowdb2['PELANGGAN']; ?></td> <!-- PELANGGAN -->
@@ -764,7 +715,6 @@
                                                             </td>
                                                             <?php endif; ?>
                                                         </tr>
-                                                        <?php endif; ?>
                                                         <?php } ?>
                                                     </tbody>
                                                 </table>
