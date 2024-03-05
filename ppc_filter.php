@@ -50,7 +50,8 @@
                                     <div class="card-header" style="background-color: #ffeb3b; padding: 12px; font-family: 'Courier New', monospace;">
                                         <h5>Reminder :</h5><br>
                                         - Jika data terasa mulai <b>lambat</b> cobalah untuk klik tombol <b><i class="icofont icofont-refresh"></i> Reset</b> untuk menghapus semua history pencarian<br>
-                                        - Khusus Memo Penting <b>dilarang</b> membuka lebih dari 1 Tab atau 1 Browser
+                                        - Khusus Memo Penting <b>dilarang</b> membuka lebih dari 1 Tab atau 1 Browser<br>
+                                        - Pencarian WARNA hanya bisa dikombinasikan.
                                     </div>
                                     <div class="card-header">
                                         <h5>Filter Data</h5>
@@ -107,6 +108,10 @@
                                                 <div class="col-sm-12 col-xl-1 m-b-30">
                                                     <h4 style="font-size: 12px;" class="sub-title">Article Code</h4>
                                                     <input type="text" name="article_code" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['article_code']; } ?>">
+                                                </div>
+                                                <div class="col-sm-12 col-xl-2 m-b-30">
+                                                    <h4 class="sub-title">Nama Warna</h4>
+                                                    <input type="text" name="nama_warna" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['nama_warna']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
@@ -178,7 +183,13 @@
                                                             $no_po          = $_POST['no_po'];
                                                             $article_group  = $_POST['article_group'];
                                                             $article_code   = $_POST['article_code'];
+                                                            $nama_warna     = $_POST['nama_warna'];
 
+                                                            if($nama_warna){
+                                                                $where_nama_warna   = "AND WARNA LIKE '%$nama_warna%'";
+                                                            }else{
+                                                                $where_nama_warna   = "";
+                                                            }
                                                             if($prod_order){
                                                                 $where_prodorder        = "NO_KK  = '$prod_order'";
                                                             }else{
@@ -211,7 +222,7 @@
                                                             }
 
                                                             // ITXVIEW_MEMOPENTINGPPC
-                                                            $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article");
+                                                            $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article $where_nama_warna");
                                                             while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
                                                                 $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
