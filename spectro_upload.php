@@ -196,31 +196,31 @@
 
                                             if(is_numeric($stepnumber)){
                                                 $q_QUALITYDOCUMENTBEAN      = db2_exec($conn1, "SELECT
-                                                                                                        q.PRODUCTIONORDERCODE,
-                                                                                                        a.VALUEINT,
-                                                                                                        q.HEADERNUMBERID,
-                                                                                                        q.HEADERLINE,
-                                                                                                        q.ITEMTYPEAFICODE,
-                                                                                                        q.SUBCODE01,
-                                                                                                        q.SUBCODE02,
-                                                                                                        q.SUBCODE03,
-                                                                                                        q.SUBCODE04,
-                                                                                                        q.SUBCODE05,
-                                                                                                        q.SUBCODE06,
-                                                                                                        q.SUBCODE07,
-                                                                                                        q.SUBCODE08,
-                                                                                                        q.SUBCODE09,
-                                                                                                        q.SUBCODE10,
-                                                                                                        q.WORKCENTERCODE,
-                                                                                                        q.OPERATIONCODE,
-                                                                                                        q.LASTUPDATEUSER,
-                                                                                                        q.FULLITEMIDENTIFIER 
-                                                                                                    FROM
-                                                                                                        QUALITYDOCUMENT q  
-                                                                                                    LEFT JOIN ADSTORAGE a ON a.UNIQUEID = q.ABSUNIQUEID AND a.FIELDNAME = 'GroupStepNumber'
-                                                                                                    WHERE
-                                                                                                        q.PRODUCTIONORDERCODE = '$nokk'
-                                                                                                        AND a.VALUEINT = '$stepnumber'");
+                                                                                                    q.PRODUCTIONORDERCODE,
+                                                                                                    a.VALUEINT,
+                                                                                                    q.HEADERNUMBERID,
+                                                                                                    q.HEADERLINE,
+                                                                                                    q.ITEMTYPEAFICODE,
+                                                                                                    q.SUBCODE01,
+                                                                                                    q.SUBCODE02,
+                                                                                                    q.SUBCODE03,
+                                                                                                    q.SUBCODE04,
+                                                                                                    q.SUBCODE05,
+                                                                                                    q.SUBCODE06,
+                                                                                                    q.SUBCODE07,
+                                                                                                    q.SUBCODE08,
+                                                                                                    q.SUBCODE09,
+                                                                                                    q.SUBCODE10,
+                                                                                                    q.WORKCENTERCODE,
+                                                                                                    q.OPERATIONCODE,
+                                                                                                    q.LASTUPDATEUSER,
+                                                                                                    q.FULLITEMIDENTIFIER 
+                                                                                                FROM
+                                                                                                    QUALITYDOCUMENT q  
+                                                                                                LEFT JOIN ADSTORAGE a ON a.UNIQUEID = q.ABSUNIQUEID AND a.FIELDNAME = 'GroupStepNumber'
+                                                                                                WHERE
+                                                                                                    q.PRODUCTIONORDERCODE = '$nokk'
+                                                                                                    AND a.VALUEINT = '$stepnumber'");
                                                 $row_QUALITYDOCUMENTBEAN    = db2_fetch_assoc($q_QUALITYDOCUMENTBEAN);
 
                                                 $q_IMPORTAUTOCOUNTER    = mysqli_query($con_nowprd, "SELECT * FROM importautocounter");
@@ -342,7 +342,7 @@
                                                 $row_IMPORTAUTOCOUNTER_WHITENESS  = mysqli_fetch_assoc($q_IMPORTAUTOCOUNTER_WHITENESS);
 
                                                 $next_number_IMPORTAUTOCOUNTER_WHITENESS  = $row_IMPORTAUTOCOUNTER_WHITENESS['nourut'] + 10;
-
+                                                
                                                 $q_QUALITYDOCUMENTBEAN_WHITENESS        = db2_exec($conn1, "INSERT INTO QUALITYDOCLINEBEAN(FATHERID,
                                                                                                                                     IMPORTAUTOCOUNTER,
                                                                                                                                     LINE,
@@ -666,8 +666,7 @@
                                                                                         AND QUALITYDOCUMENTHEADERLINE = '$data_qualitydoc[HEADERLINE]'
                                                                                         AND LINE IN ('11', '12', '13')
                                                                                         AND TRIM(CHARACTERISTICCODE) IN ('WHITENESS', 'TINT', 'YELLOWNESS')");
-                                                $update_statusspectro = mysqli_query($con_nowprd, "UPDATE upload_spectro
-                                                                                                    SET `status` = 'Deleted'
+                                                $delete_statusspectro   = mysqli_query($con_nowprd, "DELETE FROM upload_spectro
                                                                                                     WHERE batch_name='$_POST[batch_name]'");
                                                 echo "<script type=\"text/javascript\">
                                                             alert(\"Your data was successfully deleted.\");
@@ -682,9 +681,9 @@
                                                                                         QUALITYDOCPRODUCTIONORDERCODE = '$nokk'
                                                                                         AND LINE IN ('11', '12', '13')
                                                                                         AND TRIM(CHARACTERISTICCODE) IN ('WHITENESS', 'TINT', 'YELLOWNESS')");
-                                                    $update_statusspectro   = mysqli_query($con_nowprd, "UPDATE upload_spectro
-                                                                                                        SET `status` = 'Deleted'
+                                                    $delete_statusspectro   = mysqli_query($con_nowprd, "DELETE FROM upload_spectro
                                                                                                         WHERE batch_name='$_POST[batch_name]'");
+
                                                     echo "<script type=\"text/javascript\">
                                                                 alert(\"Your data was successfully deleted, but not database ERP.\");
                                                                 window.location = \"spectro_upload.php\"
