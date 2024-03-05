@@ -169,7 +169,7 @@
                                                                                             WHERE
                                                                                                 RN = 1
                                                                                                 AND NOT OPERATIONCODE = 'BAT1'
-                                                                                                AND B = 'B'
+                                                                                                -- AND B = 'B'
                                                                                             GROUP BY 
                                                                                                 PRODUCTIONORDERCODE,
                                                                                                 LANGGANAN,
