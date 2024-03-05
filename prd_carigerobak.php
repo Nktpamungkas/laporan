@@ -164,7 +164,8 @@
                                                                                                     $where_demand
                                                                                                     AND p.CREATIONDATETIME >= '2023-11-01'
                                                                                                     AND NOT p.PRODUCTIONORDERCODE IS NULL
-                                                                                                    AND TRIM(DESTINATIONORDER) = '1')
+                                                                                                    AND (TRIM(p2.DESTINATIONORDER) = '1' OR NOT p2.PROJECTCODE IS NULL)
+                                                                                                    )
                                                                                             WHERE
                                                                                                 RN = 1
                                                                                                 AND NOT OPERATIONCODE = 'BAT1'
@@ -214,7 +215,8 @@
                                                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                     LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
-                                                                                                                                        AND idqd.OPERATIONCODE = p.OPERATIONCODE 
+                                                                                                                                        AND idqd.OPERATIONCODE = p.OPERATIONCODE
+                                                                                                                                        AND idqd.VALUEINT = p.STEPNUMBER 
                                                                                                                                         AND (idqd.CHARACTERISTICCODE = 'GRB1' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB2' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB3' OR
@@ -260,6 +262,7 @@
                                                                                                     LEFT JOIN ADSTORAGE a ON a.UNIQUEID = o.ABSUNIQUEID AND a.FIELDNAME = 'Gerobak'
                                                                                                     LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
                                                                                                                                         AND idqd.OPERATIONCODE = p.OPERATIONCODE 
+                                                                                                                                        AND idqd.VALUEINT = p.STEPNUMBER
                                                                                                                                         AND (idqd.CHARACTERISTICCODE = 'GRB1' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB2' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB3' OR
