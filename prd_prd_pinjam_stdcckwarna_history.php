@@ -27,6 +27,7 @@
     <table id="excel-LA" class="table table-striped table-bordered nowrap" style="width:100%">
         <thead>
             <tr>
+                <th>#</th>
                 <th>Penanggung Jawab</th>
                 <th>Tanggal Pinjam</th>
                 <th>Tanggal Kembali</th>
@@ -44,14 +45,16 @@
                 }else{
                     $where = "";
                 }
-                $q_history  = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam_history WHERE id_buku_pinjam = '$_GET[id]' $where");
+                $q_history  = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam_history WHERE id_buku_pinjam = '$_GET[id]' $where ORDER BY id DESC");
                 while ($row_history = mysqli_fetch_array($q_history)) {
-                    $no_absen    = ltrim($row_history['no_absen'], '0');
-                    $cari_nama_in = mysqli_query($con_hrd, "SELECT * FROM tbl_makar WHERE no_scan = '$no_absen'");
-                    $nama_in    = mysqli_fetch_assoc($cari_nama_in);
-                    $ket = substr($row_history['ket'], 20);
+                    $no_absen       = ltrim($row_history['no_absen'], '0');
+                    $cari_nama_in   = mysqli_query($con_hrd, "SELECT * FROM tbl_makar WHERE no_scan = '$no_absen'");
+                    $nama_in        = mysqli_fetch_assoc($cari_nama_in);
+                    $ket            = substr($row_history['ket'], 20);
             ?>
-            <tr <?php if($ket == "Belum_Diarsipkan" OR $ket == "Diarsipkan") { echo "style='background-color: #00FF70;'"; } ?>>
+            <!-- <tr <?php if($ket == "Belum_Diarsipkan" OR $ket == "Diarsipkan") { echo "style='background-color: #00FF70;'"; } ?>> -->
+            <tr>
+                <td></td>
                 <td><?= $row_history['no_absen'].' - '.$nama_in['nama']; ?></td>
                 <td><?= $row_history['tgl_in']; ?></td>
                 <td><?= $row_history['tgl_out']; ?></td>
