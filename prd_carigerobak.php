@@ -88,8 +88,9 @@
                                                                 $dept   = $_POST['dept'];
 
                                                                 if($dept == 'DYE'){
-                                                                    $colspan    = '8';
-                                                                    $th         = '<th style="text-align: center;" rowspan="2">KETERANGAN</th>';
+                                                                    $colspan    = '9';
+                                                                    $th         = '<th style="text-align: center;" rowspan="2">KETERANGAN</th>
+                                                                                    <th style="text-align: center;" rowspan="2">NO URUT</th>';
                                                                 }else{
                                                                     $colspan    = '6';
                                                                     $th         = '';
@@ -351,6 +352,7 @@
                                                                         $ket    = $row_schedule_dye['ket_status'].'- '.$row_schedule_dye['ket_kain'].' '.$row_schedule_dye['proses'].' MC '.$row_schedule_dye['mc_from'];
                                                                     ?>
                                                                     <td align="center"><?= $ket; ?></td>
+                                                                    <td align="center"><?= $row_schedule_dye['no_urut']; ?></td>
                                                                 <?php endif; ?>
 
                                                                 <td align="center"><?= $row_posisikk['OPERATIONCODE'] ?></td>
