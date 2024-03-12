@@ -109,6 +109,12 @@
                                                                     $prod_order     = $d_ITXVIEWKK['PRODUCTIONORDERCODE'];
                                                                 }
 
+                                                                if($_GET['OPERATION']){
+                                                                    $where_operation    = "AND r.PRODRESERVATIONLINKGROUPCODE = '$_GET[OPERATION]'";
+                                                                }else{
+                                                                    $where_operation    = "";
+                                                                }
+
                                                                 $sql_reservation = "SELECT 
                                                                                         DISTINCT 
                                                                                         r.GROUPLINE,
@@ -152,6 +158,7 @@
                                                                                         r.PRODUCTIONORDERCODE = '$prod_order' 
                                                                                         AND ORDERCODE = '$demand' 
                                                                                         AND (NOT r.ITEMTYPEAFICODE = 'KGF' OR r.ITEMTYPEAFICODE = 'KFF') 
+                                                                                        $where_operation
                                                                                     ORDER BY 
                                                                                         r.GROUPLINE ASC";
                                                                 $stmt   = db2_exec($conn1, $sql_reservation);
