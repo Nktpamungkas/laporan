@@ -139,7 +139,7 @@
                                                                                                                     s.TRANSACTIONDATE || ' ' || s.TRANSACTIONTIME AS TGL,
                                                                                                                     TIMESTAMP(s.TRANSACTIONDATE, s.TRANSACTIONTIME) AS TGL_WAKTU,
                                                                                                                     CASE
-                                                                                                                        WHEN s.PRODUCTIONORDERCODE IS NULL THEN s.ORDERCODE
+                                                                                                                        WHEN s.PRODUCTIONORDERCODE IS NULL THEN COALESCE(s.ORDERCODE, s.LOTCODE)
                                                                                                                         ELSE s.PRODUCTIONORDERCODE
                                                                                                                     END AS PRODUCTIONORDERCODE,
                                                                                                                     s.ORDERLINE,
@@ -166,22 +166,15 @@
                                                                                                                     END AS KETERANGAN
                                                                                                                 FROM
                                                                                                                     STOCKTRANSACTION s
-                                                                                                                LEFT JOIN PRODUCT p ON
-                                                                                                                    p.ITEMTYPECODE = s.ITEMTYPECODE
+                                                                                                                LEFT JOIN PRODUCT p ON p.ITEMTYPECODE = s.ITEMTYPECODE
                                                                                                                     AND p.SUBCODE01 = s.DECOSUBCODE01
                                                                                                                     AND p.SUBCODE02 = s.DECOSUBCODE02
                                                                                                                     AND p.SUBCODE03 = s.DECOSUBCODE03
-                                                                                                                LEFT JOIN INTERNALDOCUMENT i ON
-                                                                                                                    i.PROVISIONALCODE = s.ORDERCODE
-                                                                                                                LEFT JOIN ORDERPARTNER o ON
-                                                                                                                    o.CUSTOMERSUPPLIERCODE = i.ORDPRNCUSTOMERSUPPLIERCODE
-                                                                                                                LEFT JOIN LOGICALWAREHOUSE l ON
-                                                                                                                    l.CODE = o.CUSTOMERSUPPLIERCODE
-                                                                                                                LEFT JOIN STOCKTRANSACTION s2 ON
-                                                                                                                    s2.TRANSACTIONNUMBER = s.TRANSACTIONNUMBER
-                                                                                                                    AND s2.DETAILTYPE = 2
-                                                                                                                LEFT JOIN LOGICALWAREHOUSE l2 ON
-                                                                                                                    l2.CODE = s2.LOGICALWAREHOUSECODE
+                                                                                                                LEFT JOIN INTERNALDOCUMENT i ON i.PROVISIONALCODE = s.ORDERCODE
+                                                                                                                LEFT JOIN ORDERPARTNER o ON o.CUSTOMERSUPPLIERCODE = i.ORDPRNCUSTOMERSUPPLIERCODE
+                                                                                                                LEFT JOIN LOGICALWAREHOUSE l ON l.CODE = o.CUSTOMERSUPPLIERCODE
+                                                                                                                LEFT JOIN STOCKTRANSACTION s2 ON s2.TRANSACTIONNUMBER = s.TRANSACTIONNUMBER AND s2.DETAILTYPE = 2
+                                                                                                                LEFT JOIN LOGICALWAREHOUSE l2 ON l2.CODE = s2.LOGICALWAREHOUSECODE
                                                                                                                 WHERE
                                                                                                                     s.ITEMTYPECODE = 'DYC'
                                                                                                                     AND s.LOGICALWAREHOUSECODE = '$_POST[warehouse]'
@@ -222,7 +215,7 @@
                                                                 ?>
                                                                 <tr>
                                                                     <!-- <td><?= $no++; ?></td> -->
-                                                                    <td><?= $row_reservation['NO_RESEP']; ?></td>
+                                                                    <td><?php if($row_reservation['NO_RESEP']){ echo $row_reservation['NO_RESEP']; } else { echo $row_stocktransaction['PRODUCTIONORDERCODE']; } ?></td>
                                                                     <td><?= $row_stocktransaction['TGL']; ?></td>
                                                                     <td><?= $row_stocktransaction['KODE_OBAT']; ?></td>
                                                                     <td><?= number_format($row_reservation['USERPRIMARYQUANTITY'], 2); ?></td>
