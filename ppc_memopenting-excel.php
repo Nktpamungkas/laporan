@@ -97,16 +97,21 @@ header('Cache-Control: max-age=0');
                                                                         (p.PROGRESSSTATUS = '3' OR p.PROGRESSSTATUS = '2') ORDER BY p.GROUPSTEPNUMBER DESC LIMIT 1");
                         $row_status_close = db2_fetch_assoc($q_deteksi_status_close);
 
-                        // UNTUK DELAY PROGRESS STATUS PERMINTAAN MS. AMY
+                       // UNTUK DELAY PROGRESS STATUS PERMINTAAN MS. AMY
                             if($row_status_close['PROGRESSSTATUS'] == '2'){ // KALAU PROGRESS STATUSNYA ENTERED
                                 $q_delay_progress_selesai   = db2_exec($conn1, "SELECT 
                                                                                     p.PRODUCTIONORDERCODE AS PRODUCTIONORDERCODE, 
-                                                                                    p.GROUPSTEPNUMBER AS GROUPSTEPNUMBER,
+                                                                                    CASE
+                                                                                        WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER
+                                                                                        WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                        ELSE p.GROUPSTEPNUMBER
+                                                                                    END AS GROUPSTEPNUMBER,
                                                                                     iptip.MULAI,
                                                                                     DAYS(CURRENT DATE) - DAYS(iptip.MULAI) AS DELAY_PROGRESSSTATUS,
                                                                                     p.PROGRESSSTATUS AS PROGRESSSTATUS
                                                                                 FROM 
                                                                                     PRODUCTIONDEMANDSTEP p
+                                                                                LEFT JOIN PRODUCTIONDEMANDSTEP p2 ON p2.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND p2.STEPTYPE = p.STEPTYPE AND p2.OPERATIONCODE = p.OPERATIONCODE 
                                                                                 LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                 WHERE
                                                                                     p.PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' AND p.PROGRESSSTATUS = '2' ORDER BY p.GROUPSTEPNUMBER DESC LIMIT 1");
@@ -116,22 +121,39 @@ header('Cache-Control: max-age=0');
                             }elseif($row_status_close['PROGRESSSTATUS'] == '3'){ // KALAU PROGRESS STATUSNYA PROGRESS
                                 $q_delay_progress_mulai   = db2_exec($conn1, "SELECT 
                                                                                     p.PRODUCTIONORDERCODE AS PRODUCTIONORDERCODE, 
-                                                                                    p.GROUPSTEPNUMBER AS GROUPSTEPNUMBER,
+                                                                                    CASE
+                                                                                        WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER
+                                                                                        WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                        ELSE p.GROUPSTEPNUMBER
+                                                                                    END AS GROUPSTEPNUMBER,
                                                                                     iptop.SELESAI,
                                                                                     DAYS(CURRENT DATE) - DAYS(iptop.SELESAI) AS DELAY_PROGRESSSTATUS,
                                                                                     p.PROGRESSSTATUS AS PROGRESSSTATUS
                                                                                 FROM 
                                                                                     VIEWPRODUCTIONDEMANDSTEP p
-                                                                                LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.GROUPSTEPNUMBER
+                                                                                LEFT JOIN PRODUCTIONDEMANDSTEP p2 ON p2.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND p2.STEPTYPE = p.STEPTYPE AND p2.OPERATIONCODE = p.OPERATIONCODE
+                                                                                LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE 
+                                                                                                                                    AND iptop.DEMANDSTEPSTEPNUMBER = 
+                                                                                                                                        CASE
+                                                                                                                                            WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER
+                                                                                                                                            WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                                                                            ELSE p.GROUPSTEPNUMBER
+                                                                                                                                        END
                                                                                 WHERE
-                                                                                    p.PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' AND p.PROGRESSSTATUS = '3' ORDER BY p.GROUPSTEPNUMBER DESC LIMIT 1");
+                                                                                    p.PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' AND p.PROGRESSSTATUS = '3' AND NOT iptop.SELESAI IS NULL
+                                                                                ORDER BY 
+                                                                                    CASE
+                                                                                        WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER 
+                                                                                        WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                        ELSE p.GROUPSTEPNUMBER
+                                                                                    END DESC 
+                                                                                LIMIT 1");
                                 $d_delay_progress_mulai   = db2_fetch_assoc($q_delay_progress_mulai);
                                 $jam_status_terakhir      = $d_delay_progress_mulai['SELESAI'];
                                 $delay_progress_status    = $d_delay_progress_mulai['DELAY_PROGRESSSTATUS'].' Hari';
                             }else{
                                 $jam_status_terakhir      = '';
                                 $delay_progress_status    = '';
-
                             }
                         // UNTUK DELAY PROGRESS STATUS PERMINTAAN MS. AMY
 
