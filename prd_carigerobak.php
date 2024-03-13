@@ -138,7 +138,8 @@
                                                                                                 STATUS_OPERATION,
                                                                                                 HANGER,
                                                                                                 SUBCODE06,
-                                                                                                OPERATIONGROUPCODE
+                                                                                                OPERATIONGROUPCODE,
+                                                                                                ABSUNIQUEID_OPERATION
                                                                                             FROM
                                                                                                 (SELECT	
                                                                                                     TRIM(p.PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
@@ -154,7 +155,8 @@
                                                                                                     TRIM(o.OPERATIONGROUPCODE) AS OPERATIONGROUPCODE,
                                                                                                     TRIM(p2.SUBCODE02) || '-' || TRIM(p2.SUBCODE03) AS HANGER,
                                                                                                     TRIM(p2.SUBCODE06) AS SUBCODE06,
-                                                                                                    ROW_NUMBER() OVER (PARTITION BY p.PRODUCTIONORDERCODE, p.PRODUCTIONDEMANDCODE ORDER BY p.STEPNUMBER) AS RN
+                                                                                                    ROW_NUMBER() OVER (PARTITION BY p.PRODUCTIONORDERCODE, p.PRODUCTIONDEMANDCODE ORDER BY p.STEPNUMBER) AS RN,
+                                                                                                    o.ABSUNIQUEID AS ABSUNIQUEID_OPERATION
                                                                                                 FROM
                                                                                                     PRODUCTIONDEMANDSTEP p
                                                                                                 LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
@@ -167,9 +169,11 @@
                                                                                                     AND NOT p.PRODUCTIONORDERCODE IS NULL
                                                                                                     AND (TRIM(p2.DESTINATIONORDER) = '1' OR NOT p2.PROJECTCODE IS NULL)
                                                                                                     )
+                                                                                            LEFT JOIN ADSTORAGE a ON a.UNIQUEID = ABSUNIQUEID_OPERATION AND a.FIELDNAME = 'Gerobak'
                                                                                             WHERE
                                                                                                 RN = 1
                                                                                                 AND NOT OPERATIONCODE = 'BAT1'
+                                                                                                AND a.VALUEBOOLEAN IS NULL
                                                                                             GROUP BY 
                                                                                                 PRODUCTIONORDERCODE,
                                                                                                 STEPNUMBER,
@@ -177,7 +181,8 @@
                                                                                                 STATUS_OPERATION,
                                                                                                 HANGER,
                                                                                                 SUBCODE06,
-                                                                                                OPERATIONGROUPCODE");
+                                                                                                OPERATIONGROUPCODE,
+                                                                                                ABSUNIQUEID_OPERATION");
                                                         ?>
                                                         <?php while($row_iptip = db2_fetch_assoc($q_iptip)) : ?>
                                                             <?php
