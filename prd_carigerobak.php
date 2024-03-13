@@ -173,7 +173,7 @@
                                                                                             WHERE
                                                                                                 RN = 1
                                                                                                 AND NOT OPERATIONCODE = 'BAT1'
-                                                                                                AND a.VALUEBOOLEAN IS NULL
+                                                                                                AND (a.VALUEBOOLEAN IS NULL OR a.VALUEBOOLEAN = 0)
                                                                                             GROUP BY 
                                                                                                 PRODUCTIONORDERCODE,
                                                                                                 STEPNUMBER,
