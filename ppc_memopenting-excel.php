@@ -30,9 +30,9 @@ header('Cache-Control: max-age=0');
             <th>NETTO(yd)</th>
             <th>DELAY</th>
             <th>KODE DEPT</th>
-            <!-- <th>NOMOR MESIN SCHEDULE</th>
-            <th>NOMOR URUT SCHEDULE</th> -->
             <th>STATUS TERAKHIR</th>
+            <th>NOMOR MESIN SCHEDULE</th>
+            <th>NOMOR URUT SCHEDULE</th>
             <th>DELAY PROGRESS STATUS</th>
             <th>PROGRESS STATUS</th>
             <th>TOTAL HARI </th>
@@ -459,6 +459,7 @@ header('Cache-Control: max-age=0');
                     </td> <!-- NETTO KG-->
                     <td><?= $rowdb2['DELAY']; ?></td> <!-- DELAY -->
                     <td><?= $kode_dept; ?></td> <!-- KODE DEPT -->
+                    <td><?= $status_terakhir; ?> (<?= $jam_status_terakhir; ?>)</td> <!-- STATUS TERAKHIR -->
                     <td>
                         <?php
                             $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]'  AND NOT `status` = 'selesai'");
@@ -467,7 +468,6 @@ header('Cache-Control: max-age=0');
                         <?= $data_schedule_dye['no_mesin']; ?>
                     </td> <!-- NOMOR MESIN SCHEDULE -->
                     <td><?= $data_schedule_dye['no_urut']; ?></td> <!-- NOMOR URUT SCHEDULE -->
-                    <td><?= $status_terakhir; ?> (<?= $jam_status_terakhir; ?>)</td> <!-- STATUS TERAKHIR -->
                     <td><?= $delay_progress_status; ?></td> <!-- DELAY PROGRESS STATUS -->
                     <td><?= $status_operation; ?></td> <!-- PROGRESS STATUS -->
                     <td>
