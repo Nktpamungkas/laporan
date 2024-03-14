@@ -236,7 +236,7 @@
                                                                                                         p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' 
                                                                                                         AND p.PRODUCTIONDEMANDCODE IN ($row_iptip[PRODUCTIONDEMANDCODE2])
                                                                                                         AND p.STEPNUMBER < '$row_iptip[STEPNUMBER]'
-                                                                                                        AND a.VALUEBOOLEAN IS NULL
+                                                                                                        AND (a.VALUEBOOLEAN IS NULL OR a.VALUEBOOLEAN = 0)
                                                                                                     GROUP BY
                                                                                                         p.PRODUCTIONORDERCODE,
                                                                                                         p.STEPNUMBER,
