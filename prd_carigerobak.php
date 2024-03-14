@@ -198,7 +198,8 @@
 
                                                                 $q_posisikk     = db2_exec($conn1, "SELECT
                                                                                                         p.STEPNUMBER AS STEPNUMBER,
-                                                                                                        TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
+                                                                                                        -- TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
+                                                                                                        COALESCE(TRIM(p.PRODRESERVATIONLINKGROUPCODE), TRIM(p.OPERATIONCODE)) AS OPERATIONCODE,
                                                                                                         TRIM(o.OPERATIONGROUPCODE) AS DEPT,
                                                                                                         o.LONGDESCRIPTION,
                                                                                                         CASE
@@ -221,7 +222,7 @@
                                                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                     LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
-                                                                                                                                        AND idqd.OPERATIONCODE = p.OPERATIONCODE
+                                                                                                                                        AND idqd.OPERATIONCODE = COALESCE(p.PRODRESERVATIONLINKGROUPCODE, p.OPERATIONCODE)
                                                                                                                                         AND idqd.VALUEINT = p.STEPNUMBER 
                                                                                                                                         AND (idqd.CHARACTERISTICCODE = 'GRB1' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB2' OR
@@ -241,6 +242,7 @@
                                                                                                         p.PRODUCTIONORDERCODE,
                                                                                                         p.STEPNUMBER,
                                                                                                         p.OPERATIONCODE,
+                                                                                                        p.PRODRESERVATIONLINKGROUPCODE,
                                                                                                         o.LONGDESCRIPTION,
                                                                                                         o.OPERATIONGROUPCODE,
                                                                                                         p.PROGRESSSTATUS,
