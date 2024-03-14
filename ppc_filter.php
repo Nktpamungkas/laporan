@@ -155,6 +155,8 @@
                                                             <th>DELAY</th>
                                                             <th>KODE DEPT</th>
                                                             <th>STATUS TERAKHIR</th>
+                                                            <th>NOMOR MESIN SCHEDULE</th>
+                                                            <th>NOMOR URUT SCHEDULE</th>
                                                             <th>DELAY PROGRESS STATUS</th>
                                                             <th>PROGRESS STATUS</th>
                                                             <th>TOTAL HARI</th>
@@ -661,6 +663,14 @@
                                                                     (<?= $jam_status_terakhir; ?>) 
                                                                 <?php endif; ?>
                                                             </td> <!-- STATUS TERAKHIR -->
+                                                            <td>
+                                                                <?php
+                                                                    $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]'  AND NOT `status` = 'selesai'");
+                                                                    $data_schedule_dye  = mysqli_fetch_assoc($q_schedule_dye);
+                                                                ?>
+                                                                <?= $data_schedule_dye['no_mesin']; ?>
+                                                            </td> <!-- NOMOR MESIN SCHEDULE -->
+                                                            <td><?= $data_schedule_dye['no_urut']; ?></td> <!-- NOMOR URUT SCHEDULE -->
                                                             <td>
                                                                 <?php if($status_operation != 'KK Oke') : ?>
                                                                     <?= $delay_progress_status; ?>
