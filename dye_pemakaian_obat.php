@@ -195,11 +195,17 @@
                                                                                                                         WHEN p2.CODE LIKE '%T1%' OR p2.CODE LIKE '%T2%' OR p2.CODE LIKE '%T3%' OR p2.CODE LIKE '%T4%' OR p2.CODE LIKE '%T5%' OR p2.CODE LIKE '%T6%' OR p2.CODE LIKE '%T7%' THEN 'Tambah Obat'
                                                                                                                         WHEN p2.CODE LIKE '%R1%' OR p2.CODE LIKE '%R2%' OR p2.CODE LIKE '%R3%' OR p2.CODE LIKE '%R4%' OR p2.CODE LIKE '%R5%' OR p2.CODE LIKE '%R6%' OR p2.CODE LIKE '%R7%' THEN 'Perbaikan'
                                                                                                                         -- ELSE 'Normal'
-                                                                                                                        ELSE p.PRODRESERVATIONLINKGROUPCODE
+                                                                                                                        -- ELSE p.PRODRESERVATIONLINKGROUPCODE
+                                                                                                                        ELSE 
+                                                                                                                            CASE
+                                                                                                                	        	WHEN p.PRODRESERVATIONLINKGROUPCODE IS NULL THEN COALESCE(p3.OPERATIONCODE, p.PRODRESERVATIONLINKGROUPCODE)
+                                                                                                                	        	ELSE p.PRODRESERVATIONLINKGROUPCODE
+                                                                                                                	        END
                                                                                                                     END AS KETERANGAN
                                                                                                                 FROM
                                                                                                                     PRODUCTIONRESERVATION p
                                                                                                                 LEFT JOIN PRODRESERVATIONLINKGROUP p2 ON p2.CODE = p.PRODRESERVATIONLINKGROUPCODE 
+                                                                                                                LEFT JOIN PRODUCTIONDEMANDSTEP p3 ON p3.STEPNUMBER = p.GROUPSTEPNUMBER AND p3.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
                                                                                                                 WHERE 
                                                                                                                     p.PRODUCTIONORDERCODE = '$row_stocktransaction[PRODUCTIONORDERCODE]' 
                                                                                                                     AND GROUPLINE = '$row_stocktransaction[ORDERLINE]'
@@ -210,6 +216,7 @@
                                                                                                                     p.PRODUCTIONORDERCODE,
                                                                                                                     p.GROUPSTEPNUMBER,
                                                                                                                     p2.CODE,
+                                                                                                                    p3.OPERATIONCODE,
                                                                                                                     p.PRODRESERVATIONLINKGROUPCODE");
                                                                         $row_reservation    = db2_fetch_assoc($db_reservation);
                                                                 ?>
