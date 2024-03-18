@@ -3,6 +3,19 @@
     session_start();
     require_once "koneksi.php";
 ?>
+<?php
+// Mulai session
+session_start();
+
+// Set nilai-nilai $_POST ke dalam session saat formulir disubmit
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $_SESSION['tgl'] = $_POST['tgl'];
+    $_SESSION['time'] = $_POST['time'];
+    $_SESSION['tgl2'] = $_POST['tgl2'];
+    $_SESSION['time2'] = $_POST['time2'];
+    $_SESSION['warehouse'] = $_POST['warehouse'];
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +27,6 @@
     <meta name="keywords" content="Admin , Responsive, Landing, Bootstrap, App, Template, Mobile, iOS, Android, apple, creative app">
     <meta name="author" content="#">
     <link rel="icon" href="files\assets\images\favicon.ico" type="image/x-icon">
-     <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800" rel="stylesheet"> --> 
     <link rel="stylesheet" type="text/css" href="files\bower_components\bootstrap\css\bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\themify-icons\themify-icons.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\icofont\css\icofont.css">
@@ -94,9 +106,11 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-12 col-xl-2">
-                                                    <h4 class="sub-title">&nbsp;</h4>
+                                                <h4 class="sub-title">&nbsp;</h4>
                                                     <button type="submit" name="submit" class="btn btn-primary btn-sm"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
+                                                        <?php if (isset($_POST['submit'])) { ?>
+                                                            <a href="print_laporan pemakaian_obat2.php" class="btn btn-info btn-sm"><i class="icofont icofont-print"></i>Download Test</a>
+                                                        <?php } ?>
                                                 </div>
                                             </div>
                                         </form>
@@ -185,6 +199,10 @@
                                                                                                                     s.PRODUCTIONORDERCODE ASC)
                                                                                                                 WHERE
                                                                                                                     TGL_WAKTU BETWEEN '$_POST[tgl] $_POST[time]:00' AND '$_POST[tgl2] $_POST[time2]:00'");
+
+                                                                                    if ($db_stocktransaction->num_rows > 0) {
+                                                                                        // Inisialisasi array untuk menyimpan data
+                                                                                        $data_array = array();
                                                                     $no = 1;
                                                                     while ($row_stocktransaction = db2_fetch_assoc($db_stocktransaction)) {
                                                                         $db_reservation     = db2_exec($conn1, "SELECT 
@@ -219,6 +237,14 @@
                                                                                                                     p3.OPERATIONCODE,
                                                                                                                     p.PRODRESERVATIONLINKGROUPCODE");
                                                                         $row_reservation    = db2_fetch_assoc($db_reservation);
+
+                                                                        if ($db_reservation->num_rows > 0) {
+                                                                            $ $row_reservation = db2_fetch_assoc($db_reservation);
+                                                                            $keterangan = $row_reservation['KETERANGAN'];
+                                                                        }
+
+                                                                        $row['keterangan'] = $keterangan;
+
                                                                 ?>
                                                                 <tr>
                                                                     <!-- <td><?= $no++; ?></td> -->
@@ -243,9 +269,24 @@
                                                                     </td>
                                                                     <td><?= $row_stocktransaction['LONGDESCRIPTION']; ?></td>
                                                                 </tr>
-                                                                <?php } ?>
+                                                                <?php 
+                                                                $row['keterangan'] = $keterangan;
+
+                                                                // Menambahkan setiap baris hasil query ke dalam array
+                                                                $data_array[] = $row;
+                                                                }
+                                                                echo "<pre>";
+                                                                print_r($data_array);
+                                                                echo "</pre>";
+                                                            } else {
+                                                                echo "Tidak ada data yang ditemukan";
+                                                            }
+                                                            
+                                                                  
+                                                                ?>
                                                             </tbody>
                                                         </table>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
