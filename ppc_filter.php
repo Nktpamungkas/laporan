@@ -360,8 +360,8 @@
                                                                                                                                     WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
                                                                                                                                     ELSE p.GROUPSTEPNUMBER
                                                                                                                                 END AS GROUPSTEPNUMBER,
-                                                                                                                                iptop.SELESAI,
-                                                                                                                                DAYS(CURRENT DATE) - DAYS(iptop.SELESAI) AS DELAY_PROGRESSSTATUS,
+                                                                                                                                COALESCE(iptop.SELESAI, SUBSTRING(p2.LASTUPDATEDATETIME, 1, 19)) AS SELESAI,
+                                                                                                                                DAYS(CURRENT DATE) - COALESCE(DAYS(iptop.SELESAI), DAYS(p2.LASTUPDATEDATETIME)) AS DELAY_PROGRESSSTATUS,
                                                                                                                                 p.PROGRESSSTATUS AS PROGRESSSTATUS
                                                                                                                             FROM 
                                                                                                                                 VIEWPRODUCTIONDEMANDSTEP p
@@ -374,7 +374,8 @@
                                                                                                                                                                                         ELSE p.GROUPSTEPNUMBER
                                                                                                                                                                                     END
                                                                                                                             WHERE
-                                                                                                                                p.PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' AND p.PROGRESSSTATUS = '3' AND NOT iptop.SELESAI IS NULL
+                                                                                                                                p.PRODUCTIONORDERCODE = '$rowdb2[NO_KK]' AND p.PROGRESSSTATUS = '3' 
+                                                                                                                                AND (NOT iptop.SELESAI IS NULL OR NOT p2.LASTUPDATEDATETIME IS NULL)
                                                                                                                             ORDER BY 
                                                                                                                                 CASE
                                                                                                                                     WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER 

@@ -416,7 +416,10 @@
                                                                                 WHEN p.PROGRESSSTATUS = 3 THEN 'Closed'
                                                                             END AS STATUS_OPERATION,
                                                                             iptip.MULAI,
-                                                                            iptop.SELESAI,
+                                                                            CASE
+                                                                                WHEN p.PROGRESSSTATUS = 3 THEN COALESCE(iptop.SELESAI, SUBSTRING(p.LASTUPDATEDATETIME, 1, 19) || '(Run Manual Closures)')
+                                                                                ELSE iptop.SELESAI
+                                                                            END AS SELESAI,
                                                                             p.PRODUCTIONORDERCODE,
                                                                             p.PRODUCTIONDEMANDCODE,
                                                                             iptip.LONGDESCRIPTION AS OP1,
@@ -455,6 +458,7 @@
                                                                             p.PROGRESSSTATUS,
                                                                             iptip.MULAI,
                                                                             iptop.SELESAI,
+                                                                            p.LASTUPDATEDATETIME,
                                                                             p.PRODUCTIONORDERCODE,
                                                                             p.PRODUCTIONDEMANDCODE,
                                                                             iptip.LONGDESCRIPTION,
