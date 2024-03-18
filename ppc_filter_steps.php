@@ -433,7 +433,7 @@
                                                                         LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                         LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
                                                                                                             AND idqd.OPERATIONCODE = COALESCE(p.PRODRESERVATIONLINKGROUPCODE, p.OPERATIONCODE) 
-                                                                                                            -- AND idqd.VALUEINT = p.STEPNUMBER
+                                                                                                            AND (idqd.VALUEINT = p.STEPNUMBER OR idqd.VALUEINT = p.GROUPSTEPNUMBER) 
                                                                                                             AND (idqd.CHARACTERISTICCODE = 'GRB1' OR
                                                                                                                 idqd.CHARACTERISTICCODE = 'GRB2' OR
                                                                                                                 idqd.CHARACTERISTICCODE = 'GRB3' OR
