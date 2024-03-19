@@ -102,6 +102,8 @@
                                                         <tr>
                                                             <th style="text-align: center;" rowspan="2">STEP NB</th>
                                                             <th style="text-align: center;" rowspan="2">NO HANGER</th>
+                                                            <th style="text-align: center;" rowspan="2">NO WARNA</th>
+                                                            <th style="text-align: center;" rowspan="2">WARNA</th>
                                                             <th style="text-align: center;" rowspan="2">PROD. ORDER</th>
                                                             <th style="text-align: center;" rowspan="2">PROD. DEMAND</th>
                                                             <th style="text-align: center;" rowspan="2">OPERATION</th>
@@ -137,6 +139,8 @@
                                                                                                 OPERATIONCODE,
                                                                                                 STATUS_OPERATION,
                                                                                                 HANGER,
+                                                                                                NO_WARNA,
+                                                                                                WARNA,
                                                                                                 SUBCODE06,
                                                                                                 OPERATIONGROUPCODE,
                                                                                                 ABSUNIQUEID_OPERATION
@@ -155,12 +159,25 @@
                                                                                                     TRIM(o.OPERATIONGROUPCODE) AS OPERATIONGROUPCODE,
                                                                                                     TRIM(p2.SUBCODE02) || '-' || TRIM(p2.SUBCODE03) AS HANGER,
                                                                                                     TRIM(p2.SUBCODE06) AS SUBCODE06,
+                                                                                                    i.SUBCODE05 AS NO_WARNA,
+                                                                                                    i.WARNA,
                                                                                                     ROW_NUMBER() OVER (PARTITION BY p.PRODUCTIONORDERCODE, p.PRODUCTIONDEMANDCODE ORDER BY p.STEPNUMBER) AS RN,
                                                                                                     o.ABSUNIQUEID AS ABSUNIQUEID_OPERATION
                                                                                                 FROM
                                                                                                     PRODUCTIONDEMANDSTEP p
                                                                                                 LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
                                                                                                 LEFT JOIN PRODUCTIONDEMAND p2 ON p2.CODE = p.PRODUCTIONDEMANDCODE
+                                                                                                LEFT JOIN ITXVIEWCOLOR i ON i.ITEMTYPECODE = p2.ITEMTYPEAFICODE
+                                                                                                                        AND i.SUBCODE01 = p2.SUBCODE01
+                                                                                                                        AND i.SUBCODE02 = p2.SUBCODE02
+                                                                                                                        AND i.SUBCODE03 = p2.SUBCODE03
+                                                                                                                        AND i.SUBCODE04 = p2.SUBCODE04
+                                                                                                                        AND i.SUBCODE05 = p2.SUBCODE05
+                                                                                                                        AND i.SUBCODE06 = p2.SUBCODE06
+                                                                                                                        AND i.SUBCODE07 = p2.SUBCODE07
+                                                                                                                        AND i.SUBCODE08 = p2.SUBCODE08
+                                                                                                                        AND i.SUBCODE09 = p2.SUBCODE09
+                                                                                                                        AND i.SUBCODE10 = p2.SUBCODE10
                                                                                                 WHERE 
                                                                                                     TRIM(p.PROGRESSSTATUS) IN ('2', '0')
                                                                                                     AND TRIM(o.OPERATIONGROUPCODE) = '$_POST[dept]'
@@ -180,6 +197,8 @@
                                                                                                 OPERATIONCODE,
                                                                                                 STATUS_OPERATION,
                                                                                                 HANGER,
+                                                                                                NO_WARNA,
+                                                                                                WARNA,
                                                                                                 SUBCODE06,
                                                                                                 OPERATIONGROUPCODE,
                                                                                                 ABSUNIQUEID_OPERATION");
@@ -316,6 +335,8 @@
                                                             <tr>
                                                                 <td><?= $row_iptip['STEPNUMBER'] ?></td>
                                                                 <td><?= $row_iptip['HANGER'] ?> - <?= $row_iptip['SUBCODE06'] ?></td>
+                                                                <td><?= $row_iptip['NO_WARNA']; ?></td>
+                                                                <td><?= $row_iptip['WARNA']; ?></td>
                                                                 <td><?= $row_iptip['PRODUCTIONORDERCODE'] ?></td>
                                                                 <td><a target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= $row_iptip['PRODUCTIONDEMANDCODE']; ?>&prod_order=<?= $row_iptip['PRODUCTIONORDERCODE']; ?>"><?= $row_iptip['PRODUCTIONDEMANDCODE'] ?></a></td>
                                                                 <td align="center"><?= $row_iptip['OPERATIONCODE'] ?></td>
