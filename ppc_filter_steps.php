@@ -406,7 +406,11 @@
                                                                             p.PRODUCTIONORDERCODE,
                                                                             p.STEPNUMBER AS STEPNUMBER,
                                                                             -- TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
-                                                                            COALESCE(TRIM(p.PRODRESERVATIONLINKGROUPCODE), TRIM(p.OPERATIONCODE)) AS OPERATIONCODE,
+                                                                            -- COALESCE(TRIM(p.PRODRESERVATIONLINKGROUPCODE), TRIM(p.OPERATIONCODE)) AS OPERATIONCODE,
+                                                                            CASE
+                                                                                WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) IS NULL OR TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE)
+                                                                                ELSE TRIM(p.PRODRESERVATIONLINKGROUPCODE)
+                                                                            END AS OPERATIONCODE,
                                                                             TRIM(o.OPERATIONGROUPCODE) AS DEPT,
                                                                             o.LONGDESCRIPTION,
                                                                             CASE
@@ -435,7 +439,11 @@
                                                                         LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                         LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                         LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
-                                                                                                            AND idqd.OPERATIONCODE = COALESCE(p.PRODRESERVATIONLINKGROUPCODE, p.OPERATIONCODE) 
+                                                                                                            -- AND idqd.OPERATIONCODE = COALESCE(p.PRODRESERVATIONLINKGROUPCODE, p.OPERATIONCODE)
+                                                                                                            AND idqd.OPERATIONCODE = CASE
+                                                                                                                                        WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) IS NULL OR TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE)
+                                                                                                                                        ELSE TRIM(p.PRODRESERVATIONLINKGROUPCODE)
+                                                                                                                                    END
                                                                                                             AND (idqd.VALUEINT = p.STEPNUMBER OR idqd.VALUEINT = p.GROUPSTEPNUMBER) 
                                                                                                             AND (idqd.CHARACTERISTICCODE = 'GRB1' OR
                                                                                                                 idqd.CHARACTERISTICCODE = 'GRB2' OR
