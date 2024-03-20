@@ -27,7 +27,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="keywords" content="Admin , Responsive, Landing, Bootstrap, App, Template, Mobile, iOS, Android, apple, creative app">
     <meta name="author" content="#">
     <link rel="icon" href="files\assets\images\favicon.ico" type="image/x-icon">
-     <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800" rel="stylesheet"> --> 
     <link rel="stylesheet" type="text/css" href="files\bower_components\bootstrap\css\bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\themify-icons\themify-icons.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\icofont\css\icofont.css">
@@ -41,9 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" type="text/css" href="files\bower_components\datatables.net-responsive-bs4\css\responsive.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="files\assets\pages\data-table\extensions\buttons\css\buttons.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="files\assets\css\jquery.mCustomScrollbar.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Memuat CSS DataTables -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 </head>
 <?php require_once 'header.php'; ?>
 <body>
@@ -115,7 +111,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     <button type="submit" name="submit" class="btn btn-primary btn-sm"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
                                                         <?php if (isset($_POST['submit'])) { ?>
                                                             <a href="print_laporan pemakaian_obat2.php" class="btn btn-info btn-sm"><i class="icofont icofont-print"></i>Download Test</a>
-                                                            <button onclick="exportToExcel('tblexportData', 'user-data')" class="btn btn-success">Export Table Data To Excel File</button>
                                                         <?php } ?>
                                                 </div>
                                             </div>
@@ -265,13 +260,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                 </tr>
                                                                 <?php } ?>
                                                             </tbody>
-                                                        </table>                                                        
+                                                        </table>
+                                                        <table id="excel-cams" class="table compact table-striped table-bordered nowrap">
+                                                        </table>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <table id="excel-cams" class="table compact table-striped table-bordered nowrap">
-                                      </table>
                                     </div>
                                 <?php endif; ?>
                             </div>
@@ -281,101 +276,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </div>
-<!-- <script>
-    // Pastikan dokumen sudah siap
-    $(document).ready(function() {
-        // Objek untuk menyimpan summary qtyAktual berdasarkan kodeObat dan keterangan
-        var summaryData = {};
-
-        // Loop melalui setiap baris dalam tabel
-        $('#basic-btn tbody tr').each(function() {
-            // Ambil data dari kolom yang diperlukan
-            var kodeObat = $(this).find('td:nth-child(3)').text().trim();
-            var qtyAktual = parseFloat($(this).find('td:nth-child(5)').text().trim());
-            var keterangan = $(this).find('td:nth-child(7)').text().trim();
-            var namaObat = $(this).find('td:nth-child(8)').text().trim();
-
-            // Buat kunci unik berdasarkan kodeObat dan keterangan
-            var key = kodeObat + '-' + keterangan;
-
-            // Jika kunci belum ada dalam summaryData, inisialisasi dengan qtyAktual
-            if (!summaryData[key]) {
-                summaryData[key] = {
-                    'Kode Obat': kodeObat,
-                    'Nama Obat' : namaObat,
-                    'Keterangan': keterangan,
-                    'Total Qty Aktual': qtyAktual
-                };
-            } else {
-                // Jika kunci sudah ada, tambahkan qtyAktual ke total qty yang ada
-                summaryData[key]['Total Qty Aktual'] += qtyAktual;
-            }
-        });
-
-        // Ubah objek summaryData menjadi array
-        var summaryArray = Object.values(summaryData);
-
-        // Tampilkan data dalam konsol
-        console.log(summaryArray);
-
-        // Buka tab baru dan tampilkan data di dalamnya
-        var newTab = window.open();
-        newTab.document.write('<pre>' + JSON.stringify(summaryArray, null, 2) + '</pre>');
-    });
-</script> -->
-<!-- <script>
-    // Pastikan dokumen sudah siap
-    $(document).ready(function() {
-        // Objek untuk menyimpan summary qtyAktual berdasarkan kodeObat dan keterangan
-        var summaryData = {};
-
-        // Loop melalui setiap baris dalam tabel
-        $('#basic-btn tbody tr').each(function() {
-            // Ambil data dari kolom yang diperlukan
-            var kodeObat = $(this).find('td:nth-child(3)').text().trim();
-            var qtyAktual = parseFloat($(this).find('td:nth-child(5)').text().trim());
-            var keterangan = $(this).find('td:nth-child(7)').text().trim();
-            var namaObat = $(this).find('td:nth-child(8)').text().trim();
-
-            // Tentukan kategori berdasarkan keterangan
-            var kategori;
-            if (keterangan.includes('Perbaikan')) {
-                kategori = 'Perbaikan';
-            } else if (keterangan.includes('Tambah Obat')) {
-                kategori = 'Tambah Obat';
-            } else {
-                kategori = 'Normal';
-            }
-
-            // Buat kunci unik berdasarkan kodeObat dan kategori
-            var key = kodeObat + '-' + kategori;
-
-            // Jika kunci belum ada dalam summaryData, inisialisasi dengan qtyAktual
-            if (!summaryData[key]) {
-                summaryData[key] = {
-                    'Kode Obat': kodeObat,
-                    'Nama Obat' : namaObat,
-                    'Kategori': kategori,
-                    'Total Qty Aktual': qtyAktual
-                };
-            } else {
-                // Jika kunci sudah ada, tambahkan qtyAktual ke total qty yang ada
-                summaryData[key]['Total Qty Aktual'] += qtyAktual;
-            }
-        });
-
-        // Ubah objek summaryData menjadi array
-        var summaryArray = Object.values(summaryData);
-
-        // Tampilkan data dalam konsol
-        console.log(summaryArray);
-
-        // Buka tab baru dan tampilkan data di dalamnya
-        var newTab = window.open();
-        newTab.document.write('<pre>' + JSON.stringify(summaryArray, null, 2) + '</pre>');
-    });
-</script> -->
-<script>
+    <script>
 $(document).ready(function() {
     // Objek untuk menyimpan summary qtyAktual berdasarkan kodeObat
     var summaryData = {};
@@ -499,25 +400,5 @@ $(document).ready(function() {
     <script src="files\assets\js\menu\menu-hori-fixed.js"></script>
     <script src="files\assets\js\jquery.mCustomScrollbar.concat.min.js"></script>
     <script type="text/javascript" src="files\assets\js\script.js"></script>
-<<<<<<< HEAD
-    <script>
-        $('#excel-cams').DataTable({
-            dom: 'Bfrtip',
-            buttons: [{
-                extend: 'excelHtml5',
-                customize: function(xlsx) {
-                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
-                    $('row c[r^="F"]', sheet).each(function() {
-                        if ($('is t', this).text().replace(/[^\d]/g, '') * 1 >= 500000) {
-                            $(this).attr('s', '20');
-                        }
-                    });
-                }
-            }]
-        });
-
-    </script>
-=======
->>>>>>> a5b0557abc9db7801acb04717b58f1c110d8edfc
 </body>
 </html>
