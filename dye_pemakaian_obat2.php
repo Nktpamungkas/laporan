@@ -271,7 +271,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             </div>
                                         </div>
                                         <table id="excel-cams" class="table compact table-striped table-bordered nowrap">
-                                      </table>
+                                        </table>
                                     </div>
                                 <?php endif; ?>
                             </div>
@@ -281,100 +281,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </div>
-<!-- <script>
-    // Pastikan dokumen sudah siap
-    $(document).ready(function() {
-        // Objek untuk menyimpan summary qtyAktual berdasarkan kodeObat dan keterangan
-        var summaryData = {};
-
-        // Loop melalui setiap baris dalam tabel
-        $('#basic-btn tbody tr').each(function() {
-            // Ambil data dari kolom yang diperlukan
-            var kodeObat = $(this).find('td:nth-child(3)').text().trim();
-            var qtyAktual = parseFloat($(this).find('td:nth-child(5)').text().trim());
-            var keterangan = $(this).find('td:nth-child(7)').text().trim();
-            var namaObat = $(this).find('td:nth-child(8)').text().trim();
-
-            // Buat kunci unik berdasarkan kodeObat dan keterangan
-            var key = kodeObat + '-' + keterangan;
-
-            // Jika kunci belum ada dalam summaryData, inisialisasi dengan qtyAktual
-            if (!summaryData[key]) {
-                summaryData[key] = {
-                    'Kode Obat': kodeObat,
-                    'Nama Obat' : namaObat,
-                    'Keterangan': keterangan,
-                    'Total Qty Aktual': qtyAktual
-                };
-            } else {
-                // Jika kunci sudah ada, tambahkan qtyAktual ke total qty yang ada
-                summaryData[key]['Total Qty Aktual'] += qtyAktual;
-            }
-        });
-
-        // Ubah objek summaryData menjadi array
-        var summaryArray = Object.values(summaryData);
-
-        // Tampilkan data dalam konsol
-        console.log(summaryArray);
-
-        // Buka tab baru dan tampilkan data di dalamnya
-        var newTab = window.open();
-        newTab.document.write('<pre>' + JSON.stringify(summaryArray, null, 2) + '</pre>');
-    });
-</script> -->
-<!-- <script>
-    // Pastikan dokumen sudah siap
-    $(document).ready(function() {
-        // Objek untuk menyimpan summary qtyAktual berdasarkan kodeObat dan keterangan
-        var summaryData = {};
-
-        // Loop melalui setiap baris dalam tabel
-        $('#basic-btn tbody tr').each(function() {
-            // Ambil data dari kolom yang diperlukan
-            var kodeObat = $(this).find('td:nth-child(3)').text().trim();
-            var qtyAktual = parseFloat($(this).find('td:nth-child(5)').text().trim());
-            var keterangan = $(this).find('td:nth-child(7)').text().trim();
-            var namaObat = $(this).find('td:nth-child(8)').text().trim();
-
-            // Tentukan kategori berdasarkan keterangan
-            var kategori;
-            if (keterangan.includes('Perbaikan')) {
-                kategori = 'Perbaikan';
-            } else if (keterangan.includes('Tambah Obat')) {
-                kategori = 'Tambah Obat';
-            } else {
-                kategori = 'Normal';
-            }
-
-            // Buat kunci unik berdasarkan kodeObat dan kategori
-            var key = kodeObat + '-' + kategori;
-
-            // Jika kunci belum ada dalam summaryData, inisialisasi dengan qtyAktual
-            if (!summaryData[key]) {
-                summaryData[key] = {
-                    'Kode Obat': kodeObat,
-                    'Nama Obat' : namaObat,
-                    'Kategori': kategori,
-                    'Total Qty Aktual': qtyAktual
-                };
-            } else {
-                // Jika kunci sudah ada, tambahkan qtyAktual ke total qty yang ada
-                summaryData[key]['Total Qty Aktual'] += qtyAktual;
-            }
-        });
-
-        // Ubah objek summaryData menjadi array
-        var summaryArray = Object.values(summaryData);
-
-        // Tampilkan data dalam konsol
-        console.log(summaryArray);
-
-        // Buka tab baru dan tampilkan data di dalamnya
-        var newTab = window.open();
-        newTab.document.write('<pre>' + JSON.stringify(summaryArray, null, 2) + '</pre>');
-    });
-</script> -->
 <script>
 $(document).ready(function() {
     // Objek untuk menyimpan summary qtyAktual berdasarkan kodeObat
@@ -458,11 +364,7 @@ $(document).ready(function() {
     tableHTML += '</table>';
 
     // Masukkan tabel HTML ke dalam tabel dengan ID "tabelsummary"
-<<<<<<< HEAD
     $('#excel-cams').html(tableHTML);
-=======
-    $('#tabelsummary').html(tableHTML);
->>>>>>> a5b0557abc9db7801acb04717b58f1c110d8edfc
 
     // Kirim data summary ke halaman print_laporan pemakaian_obat2.php
     $.post('print_laporan pemakaian_obat2.php', { summaryData: JSON.stringify(summaryArray) });
@@ -499,7 +401,6 @@ $(document).ready(function() {
     <script src="files\assets\js\menu\menu-hori-fixed.js"></script>
     <script src="files\assets\js\jquery.mCustomScrollbar.concat.min.js"></script>
     <script type="text/javascript" src="files\assets\js\script.js"></script>
-<<<<<<< HEAD
     <script>
         $('#excel-cams').DataTable({
             dom: 'Bfrtip',
@@ -517,7 +418,5 @@ $(document).ready(function() {
         });
 
     </script>
-=======
->>>>>>> a5b0557abc9db7801acb04717b58f1c110d8edfc
 </body>
 </html>

@@ -286,7 +286,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                 ?>
                                                             </tbody>
                                                         </table>
-                                                        
                                                     </div>
                                                 </div>
                                             </div>
