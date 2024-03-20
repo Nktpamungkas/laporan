@@ -106,6 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <div class="col-sm-12 col-xl-2">
                                                 <h4 class="sub-title">&nbsp;</h4>
                                                     <button type="submit" name="submit" class="btn btn-primary btn-sm"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
                                                         <?php if (isset($_POST['submit'])) { ?>
@@ -199,10 +200,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                                                                     s.PRODUCTIONORDERCODE ASC)
                                                                                                                 WHERE
                                                                                                                     TGL_WAKTU BETWEEN '$_POST[tgl] $_POST[time]:00' AND '$_POST[tgl2] $_POST[time2]:00'");
-
-                                                                                    if ($db_stocktransaction->num_rows > 0) {
-                                                                                        // Inisialisasi array untuk menyimpan data
-                                                                                        $data_array = array();
                                                                     $no = 1;
                                                                     while ($row_stocktransaction = db2_fetch_assoc($db_stocktransaction)) {
                                                                         $db_reservation     = db2_exec($conn1, "SELECT 
@@ -237,14 +234,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                                                                     p3.OPERATIONCODE,
                                                                                                                     p.PRODRESERVATIONLINKGROUPCODE");
                                                                         $row_reservation    = db2_fetch_assoc($db_reservation);
-
-                                                                        if ($db_reservation->num_rows > 0) {
-                                                                            $ $row_reservation = db2_fetch_assoc($db_reservation);
-                                                                            $keterangan = $row_reservation['KETERANGAN'];
-                                                                        }
-
-                                                                        $row['keterangan'] = $keterangan;
-
                                                                 ?>
                                                                 <tr>
                                                                     <!-- <td><?= $no++; ?></td> -->
@@ -269,21 +258,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                     </td>
                                                                     <td><?= $row_stocktransaction['LONGDESCRIPTION']; ?></td>
                                                                 </tr>
-                                                                <?php 
-                                                                $row['keterangan'] = $keterangan;
-
-                                                                // Menambahkan setiap baris hasil query ke dalam array
-                                                                $data_array[] = $row;
-                                                                }
-                                                                echo "<pre>";
-                                                                print_r($data_array);
-                                                                echo "</pre>";
-                                                            } else {
-                                                                echo "Tidak ada data yang ditemukan";
-                                                            }
-                                                            
-                                                                  
-                                                                ?>
+                                                                <?php } ?>
                                                             </tbody>
                                                         </table>
                                                     </div>
