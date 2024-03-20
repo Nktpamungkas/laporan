@@ -114,8 +114,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <h4 class="sub-title">&nbsp;</h4>
                                                     <button type="submit" name="submit" class="btn btn-primary btn-sm"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
                                                         <?php if (isset($_POST['submit'])) { ?>
+<<<<<<< HEAD
                                                             <a href="print_laporan pemakaian_obat2.php" class="btn btn-info btn-sm"><i class="icofont icofont-print"></i>Download Test</a>
                                                             <button onclick="exportToExcel('tblexportData', 'user-data')" class="btn btn-success">Export Table Data To Excel File</button>
+=======
+                                                            <!-- <a href="print_laporan pemakaian_obat2.php" class="btn btn-info btn-sm"><i class="icofont icofont-print"></i>Download Test</a> -->
+                                                            <!-- <button onclick="exportToExcel('tblexportData', 'user-data')" class="btn btn-success">Export Table Data To Excel File</button> -->
+>>>>>>> a5b0557abc9db7801acb04717b58f1c110d8edfc
                                                         <?php } ?>
                                                 </div>
                                             </div>
@@ -458,7 +463,11 @@ $(document).ready(function() {
     tableHTML += '</table>';
 
     // Masukkan tabel HTML ke dalam tabel dengan ID "tabelsummary"
+<<<<<<< HEAD
     $('#excel-cams').html(tableHTML);
+=======
+    $('#tabelsummary').html(tableHTML);
+>>>>>>> a5b0557abc9db7801acb04717b58f1c110d8edfc
 
     // Kirim data summary ke halaman print_laporan pemakaian_obat2.php
     $.post('print_laporan pemakaian_obat2.php', { summaryData: JSON.stringify(summaryArray) });
@@ -495,6 +504,7 @@ $(document).ready(function() {
     <script src="files\assets\js\menu\menu-hori-fixed.js"></script>
     <script src="files\assets\js\jquery.mCustomScrollbar.concat.min.js"></script>
     <script type="text/javascript" src="files\assets\js\script.js"></script>
+<<<<<<< HEAD
     <script>
         $('#excel-cams').DataTable({
             dom: 'Bfrtip',
@@ -512,5 +522,7 @@ $(document).ready(function() {
         });
 
     </script>
+=======
+>>>>>>> a5b0557abc9db7801acb04717b58f1c110d8edfc
 </body>
 </html>
