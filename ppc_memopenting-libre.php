@@ -56,7 +56,6 @@ header('Cache-Control: max-age=0');
             $no_order_2 = $_GET['no_order'];
             $tgl1_2     = $_GET['tgl1'];
             $tgl2_2     = $_GET['tgl2'];
-            $operation_2      = $_GET['operation'];
 
             if ($no_order_2) {
                 $where_order2    = "AND NO_ORDER = '$no_order_2'";
@@ -227,6 +226,7 @@ header('Cache-Control: max-age=0');
                                 $q_not_cnp1             = db2_exec($conn1, "SELECT 
                                                                                 GROUPSTEPNUMBER,
                                                                                 TRIM(OPERATIONCODE) AS OPERATIONCODE,
+                                                                                TRIM(o.OPERATIONGROUPCODE) AS OPERATIONGROUPCODE,
                                                                                 o.LONGDESCRIPTION AS LONGDESCRIPTION,
                                                                                 PROGRESSSTATUS,
                                                                                 CASE
@@ -246,7 +246,7 @@ header('Cache-Control: max-age=0');
                                 $d_not_cnp_close        = db2_fetch_assoc($q_not_cnp1);
 
                                 if($d_not_cnp_close){
-                                    $kode_dept          = $d_not_cnp_close['OPERATIONCODE'];
+                                    $kode_dept          = $d_not_cnp_close['OPERATIONGROUPCODE'];
                                     $status_terakhir    = $d_not_cnp_close['LONGDESCRIPTION'];
                                     $status_operation   = $d_not_cnp_close['STATUS_OPERATION'];
                                 }else{
@@ -255,6 +255,7 @@ header('Cache-Control: max-age=0');
                                     $q_not_cnp1             = db2_exec($conn1, "SELECT 
                                                                                 GROUPSTEPNUMBER,
                                                                                 TRIM(OPERATIONCODE) AS OPERATIONCODE,
+                                                                                TRIM(o.OPERATIONGROUPCODE) AS OPERATIONGROUPCODE,
                                                                                 o.LONGDESCRIPTION AS LONGDESCRIPTION,
                                                                                 PROGRESSSTATUS,
                                                                                 CASE
@@ -273,7 +274,7 @@ header('Cache-Control: max-age=0');
                                                                                 GROUPSTEPNUMBER ASC LIMIT 1");
                                     $d_not_cnp_close        = db2_fetch_assoc($q_not_cnp1);
                                     
-                                    $kode_dept          = $d_not_cnp_close['OPERATIONCODE'];
+                                    $kode_dept          = $d_not_cnp_close['OPERATIONGROUPCODE'];
                                     $status_terakhir    = $d_not_cnp_close['LONGDESCRIPTION'];
                                     $status_operation   = $d_not_cnp_close['STATUS_OPERATION'];
                                 }
@@ -292,6 +293,7 @@ header('Cache-Control: max-age=0');
                                                                         p.PRODUCTIONORDERCODE, 
                                                                         p.GROUPSTEPNUMBER, 
                                                                         p.OPERATIONCODE, 
+                                                                        TRIM(o.OPERATIONGROUPCODE) AS OPERATIONGROUPCODE,
                                                                         o.LONGDESCRIPTION AS LONGDESCRIPTION, 
                                                                         CASE
                                                                             WHEN p.PROGRESSSTATUS = 0 THEN 'Entered'
@@ -311,7 +313,7 @@ header('Cache-Control: max-age=0');
                                                                         AND p.GROUPSTEPNUMBER $groupstep_option
                                                                     ORDER BY p.GROUPSTEPNUMBER ASC LIMIT 1");
                             $d_StatusTerakhir   = db2_fetch_assoc($q_StatusTerakhir);
-                            $kode_dept          = $d_StatusTerakhir['OPERATIONCODE'];
+                            $kode_dept          = $d_StatusTerakhir['OPERATIONGROUPCODE'];
                             $status_terakhir    = $d_StatusTerakhir['LONGDESCRIPTION'];
                             $status_operation   = $d_StatusTerakhir['STATUS_OPERATION'];
                         }
@@ -343,16 +345,6 @@ header('Cache-Control: max-age=0');
                 }
             ?>
             <?php if($show_hide == 'show') : ?>
-                <?php 
-                    if($operation_2){
-                        if($rowdb2['OPERATIONCODE'] == $kode_dept) {
-                            $cek_operation  = "MUNCUL";
-                        }else{
-                            $cek_operation  = "TIDAK MUNCUL";
-                        }
-                    }
-                ?>
-                <?php if($cek_operation == "MUNCUL" OR $cek_operation == NULL) : ?>
                 <tr>
                     <td><?= $rowdb2['ORDERDATE']; ?></td> <!-- TGL TERIMA ORDER -->
                     <td><?= $rowdb2['PELANGGAN']; ?></td> <!-- PELANGGAN -->
@@ -463,11 +455,13 @@ header('Cache-Control: max-age=0');
                     <td><?= $status_terakhir; ?> (<?= $jam_status_terakhir; ?>)</td> <!-- STATUS TERAKHIR -->
                     <td>
                         <?php
-                            $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]'  AND NOT `status` = 'selesai'");
-                            $data_schedule_dye  = mysqli_fetch_assoc($q_schedule_dye);
-
-                            $schedule_fin       = mysqli_query($con_db_finishing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]' AND NOT catatan = 'data diinput dari finishing' ORDER BY id DESC LIMIT 1");
-                            $data_schedule_fin  = mysqli_fetch_assoc($schedule_fin);
+                            if($kode_dept = 'DYE'){
+                                $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]'  AND NOT `status` = 'selesai'");
+                                $data_schedule_dye  = mysqli_fetch_assoc($q_schedule_dye);
+                            }elseif($kode_dept = 'DYE'){
+                                $schedule_fin       = mysqli_query($con_db_finishing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]' AND NOT catatan = 'data diinput dari finishing' ORDER BY id DESC LIMIT 1");
+                                $data_schedule_fin  = mysqli_fetch_assoc($schedule_fin);
+                            }
                         ?>
                         <?= $data_schedule_dye['no_mesin']; ?>
                         <?= $data_schedule_fin['no_mesin']; ?>
@@ -552,7 +546,6 @@ header('Cache-Control: max-age=0');
                     <td><?= $rowdb2['KETERANGAN']; ?></td> <!-- KETERANGAN -->
                     <td><?= $d_orig_pd_code['ORIGINALPDCODE']; ?></td> <!-- ORIGINAL PD CODE -->
                 </tr>
-                <?php endif; ?>
             <?php endif; ?>
         <?php } ?>
     </tbody>

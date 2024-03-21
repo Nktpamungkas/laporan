@@ -458,6 +458,7 @@
                                                                             $q_not_cnp1             = db2_exec($conn1, "SELECT 
                                                                                                                             GROUPSTEPNUMBER,
                                                                                                                             TRIM(OPERATIONCODE) AS OPERATIONCODE,
+                                                                                                                            TRIM(o.OPERATIONGROUPCODE) AS OPERATIONGROUPCODE,
                                                                                                                             o.LONGDESCRIPTION AS LONGDESCRIPTION,
                                                                                                                             PROGRESSSTATUS,
                                                                                                                             CASE
@@ -477,7 +478,7 @@
                                                                             $d_not_cnp_close        = db2_fetch_assoc($q_not_cnp1);
 
                                                                             if($d_not_cnp_close){
-                                                                                $kode_dept          = $d_not_cnp_close['OPERATIONCODE'];
+                                                                                $kode_dept          = $d_not_cnp_close['OPERATIONGROUPCODE'];
                                                                                 $status_terakhir    = $d_not_cnp_close['LONGDESCRIPTION'];
                                                                                 $status_operation   = $d_not_cnp_close['STATUS_OPERATION'];
                                                                             }else{
@@ -486,6 +487,7 @@
                                                                                 $q_not_cnp1             = db2_exec($conn1, "SELECT 
                                                                                                                             GROUPSTEPNUMBER,
                                                                                                                             TRIM(OPERATIONCODE) AS OPERATIONCODE,
+                                                                                                                            TRIM(o.OPERATIONGROUPCODE) AS OPERATIONGROUPCODE,
                                                                                                                             o.LONGDESCRIPTION AS LONGDESCRIPTION,
                                                                                                                             PROGRESSSTATUS,
                                                                                                                             CASE
@@ -504,7 +506,7 @@
                                                                                                                             GROUPSTEPNUMBER ASC LIMIT 1");
                                                                                 $d_not_cnp_close        = db2_fetch_assoc($q_not_cnp1);
                                                                                 
-                                                                                $kode_dept          = $d_not_cnp_close['OPERATIONCODE'];
+                                                                                $kode_dept          = $d_not_cnp_close['OPERATIONGROUPCODE'];
                                                                                 $status_terakhir    = $d_not_cnp_close['LONGDESCRIPTION'];
                                                                                 $status_operation   = $d_not_cnp_close['STATUS_OPERATION'];
                                                                             }
@@ -523,6 +525,7 @@
                                                                                                                     p.PRODUCTIONORDERCODE, 
                                                                                                                     p.GROUPSTEPNUMBER, 
                                                                                                                     p.OPERATIONCODE, 
+                                                                                                                    TRIM(o.OPERATIONGROUPCODE) AS OPERATIONGROUPCODE,
                                                                                                                     o.LONGDESCRIPTION AS LONGDESCRIPTION, 
                                                                                                                     CASE
                                                                                                                         WHEN p.PROGRESSSTATUS = 0 THEN 'Entered'
@@ -542,7 +545,7 @@
                                                                                                                     AND p.GROUPSTEPNUMBER $groupstep_option
                                                                                                                 ORDER BY p.GROUPSTEPNUMBER ASC LIMIT 1");
                                                                         $d_StatusTerakhir   = db2_fetch_assoc($q_StatusTerakhir);
-                                                                        $kode_dept          = $d_StatusTerakhir['OPERATIONCODE'];
+                                                                        $kode_dept          = $d_StatusTerakhir['OPERATIONGROUPCODE'];
                                                                         $status_terakhir    = $d_StatusTerakhir['LONGDESCRIPTION'];
                                                                         $status_operation   = $d_StatusTerakhir['STATUS_OPERATION'];
                                                                     }
@@ -666,11 +669,13 @@
                                                             </td> <!-- STATUS TERAKHIR -->
                                                             <td>
                                                                 <?php
-                                                                    $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]'  AND NOT `status` = 'selesai'");
-                                                                    $data_schedule_dye  = mysqli_fetch_assoc($q_schedule_dye);
-
-                                                                    $schedule_fin       = mysqli_query($con_db_finishing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]' AND NOT catatan = 'data diinput dari finishing' ORDER BY id DESC LIMIT 1");
-                                                                    $data_schedule_fin  = mysqli_fetch_assoc($schedule_fin);
+                                                                    if($kode_dept = 'DYE'){
+                                                                        $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]'  AND NOT `status` = 'selesai'");
+                                                                        $data_schedule_dye  = mysqli_fetch_assoc($q_schedule_dye);
+                                                                    }elseif($kode_dept = 'DYE'){
+                                                                        $schedule_fin       = mysqli_query($con_db_finishing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]' AND NOT catatan = 'data diinput dari finishing' ORDER BY id DESC LIMIT 1");
+                                                                        $data_schedule_fin  = mysqli_fetch_assoc($schedule_fin);
+                                                                    }
                                                                 ?>
                                                                 <?= $data_schedule_dye['no_mesin']; ?>
                                                                 <?= $data_schedule_fin['no_mesin']; ?>
