@@ -455,10 +455,10 @@ header('Cache-Control: max-age=0');
                     <td><?= $status_terakhir; ?> (<?= $jam_status_terakhir; ?>)</td> <!-- STATUS TERAKHIR -->
                     <td>
                         <?php
-                            if($kode_dept = 'DYE'){
+                            if($kode_dept == 'DYE'){
                                 $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]'  AND NOT `status` = 'selesai'");
                                 $data_schedule_dye  = mysqli_fetch_assoc($q_schedule_dye);
-                            }elseif($kode_dept = 'DYE'){
+                            }elseif($kode_dept == 'FIN'){
                                 $schedule_fin       = mysqli_query($con_db_finishing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]' AND NOT catatan = 'data diinput dari finishing' ORDER BY id DESC LIMIT 1");
                                 $data_schedule_fin  = mysqli_fetch_assoc($schedule_fin);
                             }
