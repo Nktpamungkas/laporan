@@ -668,10 +668,14 @@
                                                                 <?php
                                                                     $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]'  AND NOT `status` = 'selesai'");
                                                                     $data_schedule_dye  = mysqli_fetch_assoc($q_schedule_dye);
+
+                                                                    $schedule_fin       = mysqli_query($con_db_finishing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]' AND NOT catatan = 'data diinput dari finishing' ORDER BY id DESC LIMIT 1");
+                                                                    $data_schedule_fin  = mysqli_fetch_assoc($schedule_fin);
                                                                 ?>
                                                                 <?= $data_schedule_dye['no_mesin']; ?>
+                                                                <?= $data_schedule_fin['no_mesin']; ?>
                                                             </td> <!-- NOMOR MESIN SCHEDULE -->
-                                                            <td><?= $data_schedule_dye['no_urut']; ?></td> <!-- NOMOR URUT SCHEDULE -->
+                                                            <td><?= $data_schedule_dye['no_urut']; ?><?= $data_schedule_fin['no_urut']; ?></td> <!-- NOMOR URUT SCHEDULE -->
                                                             <td>
                                                                 <?php if($status_operation != 'KK Oke') : ?>
                                                                     <?= $delay_progress_status; ?>

@@ -32,13 +32,14 @@ $conn_string = "DRIVER={IBM ODBC DB2 DRIVER}; HOSTNAME=$hostname; PORT=$port; PR
 // $conn1 = db2_pconnect($conn_string,'', '');
 $conn1 = db2_connect($conn_string,'', '');
 
-$con_invoice    = mysqli_connect("10.0.0.10","dit","4dm1n","invoice");
-$con_nowprd     = mysqli_connect("10.0.0.10","dit","4dm1n","nowprd");
-$con_db_dyeing  = mysqli_connect("10.0.0.10","dit","4dm1n","db_dying");
-$con_db_lab     = mysqli_connect("10.0.0.10","dit","4dm1n","db_laborat");
-$con_dbnow_mkt  = mysqli_connect("10.0.0.10","dit","4dm1n","dbnow_mkt");
-$con_db_qc      = mysqli_connect("10.0.0.10","dit","4dm1n","db_qc");
-$con_hrd        = mysqli_connect("10.0.0.10","dit","4dm1n","hrd");
+$con_invoice        = mysqli_connect("10.0.0.10","dit","4dm1n","invoice");
+$con_nowprd         = mysqli_connect("10.0.0.10","dit","4dm1n","nowprd");
+$con_db_dyeing      = mysqli_connect("10.0.0.10","dit","4dm1n","db_dying");
+$con_db_finishing   = mysqli_connect("10.0.0.10","dit","4dm1n","db_finishing");
+$con_db_lab         = mysqli_connect("10.0.0.10","dit","4dm1n","db_laborat");
+$con_dbnow_mkt      = mysqli_connect("10.0.0.10","dit","4dm1n","dbnow_mkt");
+$con_db_qc          = mysqli_connect("10.0.0.10","dit","4dm1n","db_qc");
+$con_hrd            = mysqli_connect("10.0.0.10","dit","4dm1n","hrd");
 
 if($conn1) {
     // echo "koneksi berhasil";

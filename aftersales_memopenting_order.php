@@ -52,7 +52,7 @@
                                             <div class="row">
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Bon Order</h4>
-                                                    <input type="text" name="no_order" id="no_order" class="form-control" onkeyup="this.value = this.value.toUpperCase()" value="<?php if (isset($_POST['submit'])){ echo $_POST['no_order']; } ?>">
+                                                    <input type="text" name="no_order" id="no_order" class="form-control" onkeyup="this.value = this.value.toUpperCase()" value="<?php if (isset($_POST['submit'])){ echo $_POST['no_order']; } ?><?= $_GET['bonorder']; ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Production Demand</h4>
@@ -134,7 +134,7 @@
                                         </form>
                                     </div>
                                 </div>
-                                <?php if (isset($_POST['submit'])) : ?>
+                                <?php if (isset($_POST['submit']) OR $_GET['bonorder']) : ?>
                                     <div class="card">
                                         <div class="card-block">
                                             <div class="dt-responsive table-responsive">
@@ -186,7 +186,12 @@
                                                             require_once "koneksi.php";
                                                             $prod_order     = $_POST['prod_order'];
                                                             $prod_demand    = $_POST['prod_demand'];
-                                                            $no_order       = $_POST['no_order'];
+                                                            // $no_order       = $_POST['no_order'];
+                                                            if($_GET['bonorder']){
+                                                                $no_order       = $_GET['bonorder'];
+                                                            }else{
+                                                                $no_order       = $_POST['no_order'];
+                                                            }
                                                             $tgl1           = $_POST['tgl1'];
                                                             $tgl2           = $_POST['tgl2'];
                                                             $operation      = $_POST['operation'];
@@ -210,7 +215,11 @@
                                                                 $where_proddemand       = "";
                                                             }
                                                             if($no_order){
-                                                                $where_order            = "NO_ORDER LIKE '%$no_order%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate' AND '$tgl2_orderdate'";
+                                                                if($_GET['bonorder']){
+                                                                    $where_order            = "NO_ORDER = '$_GET[bonorder]'";
+                                                                }else{
+                                                                    $where_order            = "NO_ORDER LIKE '%$no_order%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate' AND '$tgl2_orderdate'";
+                                                                }
                                                             }else{
                                                                 $where_order            = "";
                                                             }
@@ -296,6 +305,7 @@
                                                                 // ITXVIEW_MEMOPENTINGPPC
                                                                 // echo "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article $where_langganan $where_warna $where_datecreatesalesorder AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')";
                                                                 $itxviewmemo    = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article $where_langganan $where_warna $where_datecreatesalesorder AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')");
+                                                                // echo "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article $where_langganan $where_warna $where_datecreatesalesorder AND (SUBSTR(NO_ORDER, 1,3) = 'RFD' OR SUBSTR(NO_ORDER, 1,3) = 'RFE' OR SUBSTR(NO_ORDER, 1,3) = 'RPE' OR SUBSTR(NO_ORDER, 1,3) = 'REP')";
                                                                 while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
                                                                     $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
                                                                                             ."'".TRIM(addslashes($row_itxviewmemo['CREATIONDATETIME_SALESORDER']))."',"
@@ -330,7 +340,12 @@
                                                             // --------------------------------------------------------------------------------------------------------------- //
                                                             $prod_order_2   = $_POST['prod_order'];
                                                             $prod_demand_2  = $_POST['prod_demand'];
-                                                            $no_order_2     = $_POST['no_order'];
+                                                            // $no_order_2     = $_POST['no_order'];
+                                                            if($_GET['bonorder']){
+                                                                $no_order_2       = $_GET['bonorder'];
+                                                            }else{
+                                                                $no_order_2       = $_POST['no_order'];
+                                                            }
                                                             $tgl1_2         = $_POST['tgl1'];
                                                             $tgl2_2         = $_POST['tgl2'];
                                                             $operation_2    = $_POST['operation'];
@@ -354,7 +369,11 @@
                                                             }
 
                                                             if($no_order_2){
-                                                                $where_order2            = "NO_ORDER LIKE '%$no_order_2%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
+                                                                if($_GET['bonorder']){
+                                                                    $where_order2            = "NO_ORDER = '$_GET[bonorder]'";
+                                                                }else{
+                                                                    $where_order2            = "NO_ORDER LIKE '%$no_order_2%' AND CREATIONDATETIME_SALESORDER BETWEEN '$tgl1_orderdate_2' AND '$tgl2_orderdate_2'";
+                                                                }
                                                             }else{
                                                                 $where_order2            = "";
                                                             }

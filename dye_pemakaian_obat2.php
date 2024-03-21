@@ -27,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="keywords" content="Admin , Responsive, Landing, Bootstrap, App, Template, Mobile, iOS, Android, apple, creative app">
     <meta name="author" content="#">
     <link rel="icon" href="files\assets\images\favicon.ico" type="image/x-icon">
+     <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800" rel="stylesheet"> --> 
     <link rel="stylesheet" type="text/css" href="files\bower_components\bootstrap\css\bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\themify-icons\themify-icons.css">
     <link rel="stylesheet" type="text/css" href="files\assets\icon\icofont\css\icofont.css">
@@ -40,6 +41,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" type="text/css" href="files\bower_components\datatables.net-responsive-bs4\css\responsive.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="files\assets\pages\data-table\extensions\buttons\css\buttons.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="files\assets\css\jquery.mCustomScrollbar.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Memuat CSS DataTables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 </head>
 <?php require_once 'header.php'; ?>
 <body>
@@ -110,7 +114,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <h4 class="sub-title">&nbsp;</h4>
                                                     <button type="submit" name="submit" class="btn btn-primary btn-sm"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
                                                         <?php if (isset($_POST['submit'])) { ?>
-                                                            <a href="print_laporan pemakaian_obat2.php" class="btn btn-info btn-sm"><i class="icofont icofont-print"></i>Download Test</a>
+                                                            <!-- <a href="print_laporan pemakaian_obat2.php" class="btn btn-info btn-sm"><i class="icofont icofont-print"></i>Download Test</a> -->
+                                                            <!-- <button onclick="exportToExcel('tblexportData', 'user-data')" class="btn btn-success">Export Table Data To Excel File</button> -->
                                                         <?php } ?>
                                                 </div>
                                             </div>
@@ -260,9 +265,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                 </tr>
                                                                 <?php } ?>
                                                             </tbody>
-                                                        </table>
-                                                        <table id="excel-cams" class="table compact table-striped table-bordered nowrap">
-                                                        </table>
+                                                        </table>                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -455,7 +458,7 @@ $(document).ready(function() {
     tableHTML += '</table>';
 
     // Masukkan tabel HTML ke dalam tabel dengan ID "tabelsummary"
-    $('#excel-cams').html(tableHTML);
+    $('#tabelsummary').html(tableHTML);
 
     // Kirim data summary ke halaman print_laporan pemakaian_obat2.php
     $.post('print_laporan pemakaian_obat2.php', { summaryData: JSON.stringify(summaryArray) });
@@ -492,25 +495,5 @@ $(document).ready(function() {
     <script src="files\assets\js\menu\menu-hori-fixed.js"></script>
     <script src="files\assets\js\jquery.mCustomScrollbar.concat.min.js"></script>
     <script type="text/javascript" src="files\assets\js\script.js"></script>
-<<<<<<< HEAD
-    <script>
-        $('#excel-cams').DataTable({
-            dom: 'Bfrtip',
-            buttons: [{
-                extend: 'excelHtml5',
-                customize: function(xlsx) {
-                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
-                    $('row c[r^="F"]', sheet).each(function() {
-                        if ($('is t', this).text().replace(/[^\d]/g, '') * 1 >= 500000) {
-                            $(this).attr('s', '20');
-                        }
-                    });
-                }
-            }]
-        });
-
-    </script>
-=======
->>>>>>> a5b0557abc9db7801acb04717b58f1c110d8edfc
 </body>
 </html>
