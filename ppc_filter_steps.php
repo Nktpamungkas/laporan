@@ -405,8 +405,6 @@
                                                             $sqlDB2 = "SELECT
                                                                             p.PRODUCTIONORDERCODE,
                                                                             p.STEPNUMBER AS STEPNUMBER,
-                                                                            -- TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
-                                                                            -- COALESCE(TRIM(p.PRODRESERVATIONLINKGROUPCODE), TRIM(p.OPERATIONCODE)) AS OPERATIONCODE,
                                                                             CASE
                                                                                 WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) IS NULL OR TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE)
                                                                                 ELSE TRIM(p.PRODRESERVATIONLINKGROUPCODE)

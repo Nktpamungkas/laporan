@@ -97,7 +97,7 @@
                                                                 }
                                                             ?>
                                                             <th style="text-align: center; background: #B97E6F; color: #FCFCFC;" colspan="<?= $colspan; ?>">POSISI GEROBAK SEKARANG</th>
-                                                            <th style="text-align: center; background: #83D46E; color: Black;" colspan="11">POSISI GEROBAK SEBELUMNYA</th>
+                                                            <th style="text-align: center; background: #83D46E; color: Black;" colspan="13">POSISI GEROBAK SEBELUMNYA</th>
                                                         </tr>
                                                         <tr>
                                                             <th style="text-align: center;" rowspan="2">STEP NB</th>
@@ -217,17 +217,10 @@
 
                                                                 $q_posisikk     = db2_exec($conn1, "SELECT
                                                                                                         p.STEPNUMBER AS STEPNUMBER,
-                                                                                                        -- TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
-                                                                                                        -- SEBELUMNYA
-                                                                                                        COALESCE(TRIM(p.PRODRESERVATIONLINKGROUPCODE), TRIM(p.OPERATIONCODE)) AS OPERATIONCODE,
-                                                                                                        
-                                                                                                        -- DIRUBAH KE
                                                                                                         CASE
                                                                                                             WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) IS NULL OR TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE)
                                                                                                             ELSE TRIM(p.PRODRESERVATIONLINKGROUPCODE)
                                                                                                         END AS OPERATIONCODE,
-
-
                                                                                                         TRIM(o.OPERATIONGROUPCODE) AS DEPT,
                                                                                                         o.LONGDESCRIPTION,
                                                                                                         CASE
@@ -237,7 +230,10 @@
                                                                                                             WHEN p.PROGRESSSTATUS = 3 THEN 'Closed'
                                                                                                         END AS STATUS_OPERATION,
                                                                                                         iptip.MULAI,
-                                                                                                        iptop.SELESAI,
+                                                                                                        CASE
+                                                                                                            WHEN p.PROGRESSSTATUS = 3 THEN COALESCE(iptop.SELESAI, SUBSTRING(p.LASTUPDATEDATETIME, 1, 19) || '(Run Manual Closures)')
+                                                                                                            ELSE iptop.SELESAI
+                                                                                                        END AS SELESAI,
                                                                                                         p.PRODUCTIONORDERCODE,
                                                                                                         p.PRODUCTIONDEMANDCODE,
                                                                                                         iptip.LONGDESCRIPTION AS OP1,
@@ -250,7 +246,6 @@
                                                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                     LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
-                                                                                                                                        -- AND idqd.OPERATIONCODE = COALESCE(p.PRODRESERVATIONLINKGROUPCODE, p.OPERATIONCODE)
                                                                                                                                         AND idqd.OPERATIONCODE = CASE
                                                                                                                                                                     WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) IS NULL OR TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE)
                                                                                                                                                                     ELSE TRIM(p.PRODRESERVATIONLINKGROUPCODE)
@@ -275,11 +270,12 @@
                                                                                                         p.STEPNUMBER,
                                                                                                         p.OPERATIONCODE,
                                                                                                         p.PRODRESERVATIONLINKGROUPCODE,
-                                                                                                        o.LONGDESCRIPTION,
                                                                                                         o.OPERATIONGROUPCODE,
+                                                                                                        o.LONGDESCRIPTION,
                                                                                                         p.PROGRESSSTATUS,
                                                                                                         iptip.MULAI,
                                                                                                         iptop.SELESAI,
+                                                                                                        p.LASTUPDATEDATETIME,
                                                                                                         p.PRODUCTIONORDERCODE,
                                                                                                         p.PRODUCTIONDEMANDCODE,
                                                                                                         iptip.LONGDESCRIPTION,
@@ -288,21 +284,23 @@
                                                                                                         p.STEPNUMBER
                                                                                                     DESC
                                                                                                     LIMIT 1");
+                                                                                                    
                                                                 $row_posisikk = db2_fetch_assoc($q_posisikk);
 
                                                                 $count_gerobak  = db2_exec($conn1, "SELECT
-                                                                                                        CASE
-                                                                                                            WHEN TRIM(p.OPERATIONCODE) = 'DYE2' OR TRIM(p.OPERATIONCODE) = 'DYE4' THEN '0'
-                                                                                                            WHEN TRIM(p.OPERATIONCODE) = 'DYE4' THEN '0'
-                                                                                                            ELSE COUNT(*)
-                                                                                                        END AS JML_GEROBAK
+                                                                                                        COUNT(*) AS JML_GEROBAK
                                                                                                     FROM 
                                                                                                         PRODUCTIONDEMANDSTEP p 
                                                                                                     LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
                                                                                                     LEFT JOIN ADSTORAGE a ON a.UNIQUEID = o.ABSUNIQUEID AND a.FIELDNAME = 'Gerobak'
+                                                                                                    LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
+                                                                                                    LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                     LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
-                                                                                                                                        AND idqd.OPERATIONCODE = p.OPERATIONCODE 
-                                                                                                                                        AND idqd.VALUEINT = p.STEPNUMBER
+                                                                                                                                        AND idqd.OPERATIONCODE = CASE
+                                                                                                                                                                    WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) IS NULL OR TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE)
+                                                                                                                                                                    ELSE TRIM(p.PRODRESERVATIONLINKGROUPCODE)
+                                                                                                                                                                END
+                                                                                                                                        AND (idqd.VALUEINT = p.STEPNUMBER OR idqd.VALUEINT = p.GROUPSTEPNUMBER) 
                                                                                                                                         AND (idqd.CHARACTERISTICCODE = 'GRB1' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB2' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB3' OR
@@ -315,20 +313,27 @@
                                                                                                     WHERE
                                                                                                         p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' 
                                                                                                         AND p.PRODUCTIONDEMANDCODE IN ($row_iptip[PRODUCTIONDEMANDCODE2])
-                                                                                                        AND p.STEPNUMBER = '$row_posisikk[STEPNUMBER]'
-                                                                                                        AND a.VALUEBOOLEAN IS NULL
+                                                                                                        AND p.STEPNUMBER < '$row_iptip[STEPNUMBER]'
+                                                                                                        AND (a.VALUEBOOLEAN IS NULL OR a.VALUEBOOLEAN = 0)
                                                                                                     GROUP BY
                                                                                                         p.PRODUCTIONORDERCODE,
                                                                                                         p.STEPNUMBER,
                                                                                                         p.OPERATIONCODE,
-                                                                                                        o.LONGDESCRIPTION,
+                                                                                                        p.PRODRESERVATIONLINKGROUPCODE,
                                                                                                         o.OPERATIONGROUPCODE,
+                                                                                                        o.LONGDESCRIPTION,
                                                                                                         p.PROGRESSSTATUS,
+                                                                                                        iptip.MULAI,
+                                                                                                        iptop.SELESAI,
+                                                                                                        p.LASTUPDATEDATETIME,
                                                                                                         p.PRODUCTIONORDERCODE,
-                                                                                                        p.PRODUCTIONDEMANDCODE
+                                                                                                        p.PRODUCTIONDEMANDCODE,
+                                                                                                        iptip.LONGDESCRIPTION,
+                                                                                                        iptop.LONGDESCRIPTION
                                                                                                     ORDER BY 
                                                                                                         p.STEPNUMBER
-                                                                                                    DESC");
+                                                                                                    DESC
+                                                                                                    LIMIT 1");
                                                             ?>
                                                             <?php $row_count_gerobak = db2_fetch_assoc($count_gerobak); ?>
                                                             <?php if(!empty($row_posisikk['GEROBAK'])) :?>

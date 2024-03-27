@@ -115,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     <button type="submit" name="submit" class="btn btn-primary btn-sm"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
                                                         <?php if (isset($_POST['submit'])) { ?>
                                                             <!-- <a href="print_laporan pemakaian_obat2.php" class="btn btn-info btn-sm"><i class="icofont icofont-print"></i>Download Test</a> -->
-                                                            <!-- <button onclick="exportToExcel('tblexportData', 'user-data')" class="btn btn-success">Export Table Data To Excel File</button> -->
+                                                            <!-- <button id = "downloadBtn" class="btn btn-success">Export Table Data To Excel File</button> -->
                                                         <?php } ?>
                                                 </div>
                                             </div>
@@ -131,7 +131,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 </div>
                                                 <div class="card-block">
                                                     <div class="dt-responsive table-responsive">
-                                                        <table id="basic-btn" class="table compact table-striped table-bordered nowrap">
+                                                        <table id="basic-btn" name = "tabelsummary" class="table compact table-striped table-bordered nowrap">
+                                                            <thead></thead>
+                                                            <tbody></tbody>
+                                                        </table>                                                    
+                                                    </div>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div class="dt-responsive table-responsive">
+                                                        <table id="excel-cams" class="table compact table-striped table-bordered nowrap">
                                                             <thead>
                                                                 <tr>
                                                                     <!-- <th>No</th> -->
@@ -143,6 +151,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                     <th>SATUAN</th>
                                                                     <th>KETERANGAN</th>
                                                                     <th>NAMA OBAT</th>
+                                                                    <th>DESTINATIONWAREHOUSECODE</th>
+                                                                    <th>SAVETYSTOCK</th>
+                                                                    <th>QTY PO</th>
+                                                                    <th>CUTSTOCK</th>
+                                                                    <th>QTY_masuk</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -178,12 +191,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                                                                     s.USERPRIMARYUOMCODE AS SATUAN,
                                                                                                                     p.LONGDESCRIPTION,
                                                                                                                     s.TEMPLATECODE,
+                                                                                                                    trim(i.DESTINATIONWAREHOUSECODE) as DESTINATIONWAREHOUSECODE,
                                                                                                                     CASE
                                                                                                                         WHEN s.TEMPLATECODE = '303' THEN l2.LONGDESCRIPTION
                                                                                                                         WHEN s.TEMPLATECODE = '203' THEN l.LONGDESCRIPTION
                                                                                                                         WHEN s.TEMPLATECODE = '201' THEN l.LONGDESCRIPTION
                                                                                                                         ELSE NULL
-                                                                                                                    END AS KETERANGAN
+                                                                                                                    END AS KETERANGAN,
+                                                                                                                    T.SAFETYSTOCK
                                                                                                                 FROM
                                                                                                                     STOCKTRANSACTION s
                                                                                                                 LEFT JOIN PRODUCT p ON p.ITEMTYPECODE = s.ITEMTYPECODE
@@ -195,6 +210,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                                                                 LEFT JOIN LOGICALWAREHOUSE l ON l.CODE = o.CUSTOMERSUPPLIERCODE
                                                                                                                 LEFT JOIN STOCKTRANSACTION s2 ON s2.TRANSACTIONNUMBER = s.TRANSACTIONNUMBER AND s2.DETAILTYPE = 2
                                                                                                                 LEFT JOIN LOGICALWAREHOUSE l2 ON l2.CODE = s2.LOGICALWAREHOUSECODE
+                                                                                                                LEFT JOIN ITEMWAREHOUSELINK T ON T.ITEMTYPECODE = s.ITEMTYPECODE
+                                                                                                                    AND T.SUBCODE01 = s.DECOSUBCODE01
+                                                                                                                    AND T.SUBCODE02 = s.DECOSUBCODE02
+                                                                                                                    AND T.SUBCODE03 = s.DECOSUBCODE03
+                                                                                                                    AND T.LOGICALWAREHOUSECODE ='M510'
                                                                                                                 WHERE
                                                                                                                     s.ITEMTYPECODE = 'DYC'
                                                                                                                     AND s.LOGICALWAREHOUSECODE = '$_POST[warehouse]'
@@ -239,6 +259,69 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                                                                     p3.OPERATIONCODE,
                                                                                                                     p.PRODRESERVATIONLINKGROUPCODE");
                                                                         $row_reservation    = db2_fetch_assoc($db_reservation);
+
+                                                                        $db_po=db2_exec($conn1, "SELECT 
+                                                                                                --p.CODE,
+                                                                                                p2.ITEMTYPEAFICODE,
+                                                                                                p2.SUBCODE01,
+                                                                                                p2.SUBCODE02,
+                                                                                                p2.SUBCODE03,
+                                                                                                p2.ITEMDESCRIPTION,
+                                                                                                sum(p2.USERPRIMARYQUANTITY) AS QTY_PO,
+                                                                                                p2.USERPRIMARYUOMCODE
+                                                                                                FROM 
+                                                                                                PURCHASEORDER p 
+                                                                                                LEFT JOIN PURCHASEORDERLINE p2 ON p2.PURCHASEORDERCODE =p.CODE AND p2.PURCHASEORDERCOUNTERCODE = p.COUNTERCODE  
+                                                                                                WHERE 
+                                                                                                p2.ITEMTYPEAFICODE ='DYC'
+                                                                                                AND p.CREATIONDATETIME BETWEEN  '$_POST[tgl] $_POST[time]:00.0' AND '$_POST[tgl2] $_POST[time2]:00.0'
+                                                                                                AND p2.SUBCODE01 = '$row_stocktransaction[DECOSUBCODE01]' 
+                                                                                                AND p2.SUBCODE02 = '$row_stocktransaction[DECOSUBCODE02]' 
+                                                                                                AND p2.SUBCODE03 = '$row_stocktransaction[DECOSUBCODE03]'
+                                                                                                GROUP BY 
+                                                                                                --p.CODE,
+                                                                                                p2.ITEMTYPEAFICODE,
+                                                                                                p2.SUBCODE01,
+                                                                                                p2.SUBCODE02,
+                                                                                                p2.SUBCODE03,
+                                                                                                p2.ITEMDESCRIPTION,
+                                                                                                p2.USERPRIMARYUOMCODE");
+                                                                    $row_po = db2_fetch_assoc( $db_po);
+
+                                                                    $db_qty_masuk = db2_exec($conn1, "SELECT 
+                                                                                                TRIM(m2.SUBCODE01) || '-' || TRIM(m2.SUBCODE02)|| '-' || TRIM(m2.SUBCODE03) AS kode_obat,
+                                                                                                m2.SUBCODE01,
+                                                                                                m2.SUBCODE02,
+                                                                                                m2.SUBCODE03,
+                                                                                                CASE 
+                                                                                                    WHEN m2.PRIMARYUMCODE ='kg' THEN sum(m2.PRIMARYQTY)*1000
+                                                                                                    ELSE sum(m2.PRIMARYQTY)
+                                                                                                END AS qty_masuk,
+                                                                                                m2.PRIMARYUMCODE 
+                                                                                                FROM 
+                                                                                                MRNHEADER m 
+                                                                                                LEFT JOIN MRNDETAIL m2 ON m2.MRNHEADERCODE =m.CODE 
+                                                                                                AND m2.MRNHEADERMRNPREFIXCODE = m.MRNPREFIXCODE 
+                                                                                                WHERE m2.ITEMTYPEAFICODE = 'DYC'
+                                                                                                AND m2.CREATIONDATETIME BETWEEN '$_POST[tgl] $_POST[time]:00.0' AND '$_POST[tgl2] $_POST[time2]:00.0'
+                                                                                                AND m2.SUBCODE01 = '$row_stocktransaction[DECOSUBCODE01]' 
+                                                                                                AND m2.SUBCODE02 = '$row_stocktransaction[DECOSUBCODE02]' 
+                                                                                                AND m2.SUBCODE03 = '$row_stocktransaction[DECOSUBCODE03]'
+                                                                                                GROUP BY 
+                                                                                                m2.SUBCODE01,
+                                                                                                m2.SUBCODE02,
+                                                                                                m2.SUBCODE03,
+                                                                                                m2.PRIMARYUMCODE");
+                                                                    $row_qty_masuk = db2_fetch_assoc( $db_qty_masuk);
+                                                                    // echo $d_qtycutoff['QTY_GRAM'];
+                                                                    $q_qtycutoff  = mysqli_query($con_nowprd, "SELECT * FROM stocktransaction_penggunaan_obat 
+                                                                    WHERE 
+                                                                    DECOSUBCODE01 = '$row_stocktransaction[DECOSUBCODE01]' 
+                                                                    AND DECOSUBCODE02 = '$row_stocktransaction[DECOSUBCODE02]' 
+                                                                    AND DECOSUBCODE03 = '$row_stocktransaction[DECOSUBCODE03]'
+                                                                    AND LOGICALWAREHOUSECODE = '$_POST[warehouse]'");
+                                                                $d_qtycutoff   = mysqli_fetch_assoc($q_qtycutoff);
+                                                                // echo $d_qtycutoff['QTY_GRAM'];
                                                                 ?>
                                                                 <tr>
                                                                     <!-- <td><?= $no++; ?></td> -->
@@ -262,16 +345,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                         <?php endif; ?>
                                                                     </td>
                                                                     <td><?= $row_stocktransaction['LONGDESCRIPTION']; ?></td>
+                                                                    <td><?= $row_stocktransaction['DESTINATIONWAREHOUSECODE']; ?></td>
+                                                                    <td><?= $row_stocktransaction['SAFETYSTOCK']; ?></td>
+                                                                    <td>
+                                                                    <?= isset($row_po['QTY_PO']) ? number_format($row_po['QTY_PO'], 2) : '0.00'; ?>
+                                                                    </td>
+                                                                    <td>
+                                                                    <?= isset($d_qtycutoff['QTY_GRAM']) ? number_format($d_qtycutoff['QTY_GRAM'], 2) : '0.00'; ?>
+                                                                    </td>
+                                                                    <td>
+                                                                    <?= isset($row_qty_masuk['qty_masuk']) ? number_format($row_qty_masuk['qty_masuk'], 2) : '0.00'; ?>
+                                                                    </td>                                                                  
                                                                 </tr>
                                                                 <?php } ?>
                                                             </tbody>
-                                                        </table>                                                        
+                                                        </table>    
                                                     </div>
-                                                </div>
+                                                </div>                                                
                                             </div>
                                         </div>
-                                        <table id="excel-cams" class="table compact table-striped table-bordered nowrap">
-                                      </table>
                                     </div>
                                 <?php endif; ?>
                             </div>
@@ -281,189 +373,156 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </div>
-<!-- <script>
-    // Pastikan dokumen sudah siap
-    $(document).ready(function() {
-        // Objek untuk menyimpan summary qtyAktual berdasarkan kodeObat dan keterangan
-        var summaryData = {};
-
-        // Loop melalui setiap baris dalam tabel
-        $('#basic-btn tbody tr').each(function() {
-            // Ambil data dari kolom yang diperlukan
-            var kodeObat = $(this).find('td:nth-child(3)').text().trim();
-            var qtyAktual = parseFloat($(this).find('td:nth-child(5)').text().trim());
-            var keterangan = $(this).find('td:nth-child(7)').text().trim();
-            var namaObat = $(this).find('td:nth-child(8)').text().trim();
-
-            // Buat kunci unik berdasarkan kodeObat dan keterangan
-            var key = kodeObat + '-' + keterangan;
-
-            // Jika kunci belum ada dalam summaryData, inisialisasi dengan qtyAktual
-            if (!summaryData[key]) {
-                summaryData[key] = {
-                    'Kode Obat': kodeObat,
-                    'Nama Obat' : namaObat,
-                    'Keterangan': keterangan,
-                    'Total Qty Aktual': qtyAktual
-                };
-            } else {
-                // Jika kunci sudah ada, tambahkan qtyAktual ke total qty yang ada
-                summaryData[key]['Total Qty Aktual'] += qtyAktual;
-            }
-        });
-
-        // Ubah objek summaryData menjadi array
-        var summaryArray = Object.values(summaryData);
-
-        // Tampilkan data dalam konsol
-        console.log(summaryArray);
-
-        // Buka tab baru dan tampilkan data di dalamnya
-        var newTab = window.open();
-        newTab.document.write('<pre>' + JSON.stringify(summaryArray, null, 2) + '</pre>');
-    });
-</script> -->
-<!-- <script>
-    // Pastikan dokumen sudah siap
-    $(document).ready(function() {
-        // Objek untuk menyimpan summary qtyAktual berdasarkan kodeObat dan keterangan
-        var summaryData = {};
-
-        // Loop melalui setiap baris dalam tabel
-        $('#basic-btn tbody tr').each(function() {
-            // Ambil data dari kolom yang diperlukan
-            var kodeObat = $(this).find('td:nth-child(3)').text().trim();
-            var qtyAktual = parseFloat($(this).find('td:nth-child(5)').text().trim());
-            var keterangan = $(this).find('td:nth-child(7)').text().trim();
-            var namaObat = $(this).find('td:nth-child(8)').text().trim();
-
-            // Tentukan kategori berdasarkan keterangan
-            var kategori;
-            if (keterangan.includes('Perbaikan')) {
-                kategori = 'Perbaikan';
-            } else if (keterangan.includes('Tambah Obat')) {
-                kategori = 'Tambah Obat';
-            } else {
-                kategori = 'Normal';
-            }
-
-            // Buat kunci unik berdasarkan kodeObat dan kategori
-            var key = kodeObat + '-' + kategori;
-
-            // Jika kunci belum ada dalam summaryData, inisialisasi dengan qtyAktual
-            if (!summaryData[key]) {
-                summaryData[key] = {
-                    'Kode Obat': kodeObat,
-                    'Nama Obat' : namaObat,
-                    'Kategori': kategori,
-                    'Total Qty Aktual': qtyAktual
-                };
-            } else {
-                // Jika kunci sudah ada, tambahkan qtyAktual ke total qty yang ada
-                summaryData[key]['Total Qty Aktual'] += qtyAktual;
-            }
-        });
-
-        // Ubah objek summaryData menjadi array
-        var summaryArray = Object.values(summaryData);
-
-        // Tampilkan data dalam konsol
-        console.log(summaryArray);
-
-        // Buka tab baru dan tampilkan data di dalamnya
-        var newTab = window.open();
-        newTab.document.write('<pre>' + JSON.stringify(summaryArray, null, 2) + '</pre>');
-    });
-</script> -->
 <script>
-$(document).ready(function() {
     // Objek untuk menyimpan summary qtyAktual berdasarkan kodeObat
-    var summaryData = {};
+var summaryData = {};
 
-    // Loop melalui setiap baris dalam tabel
-    $('#basic-btn tbody tr').each(function() {
-        // Ambil data dari kolom yang diperlukan
-        var kodeObat = $(this).find('td:nth-child(3)').text().trim();
-        // Hapus koma sebagai pemisah ribuan dan ganti dengan string kosong
-        var qtyAktualStr = $(this).find('td:nth-child(5)').text().trim().replace(',', '');
-        var qtyAktual = parseFloat(qtyAktualStr);
-        var keterangan = $(this).find('td:nth-child(7)').text().trim();
-        var namaObat = $(this).find('td:nth-child(8)').text().trim();
-        var satuan = $(this).find('td:nth-child(6)').text().trim();
-
-        // Periksa apakah satuan adalah "kg", jika ya, kalikan qtyAktual dengan 1000
-        if (satuan.toLowerCase() === 'kg') {
-            qtyAktual *= 1000;
-        }
-
-        // Bulatkan qtyAktual menjadi 2 desimal
-        qtyAktual = parseFloat(qtyAktual.toFixed(2));
-
-        // Inisialisasi jumlah qtyAktual pada objek summaryData
-        if (!summaryData[kodeObat]) {
-            summaryData[kodeObat] = {
-                'Kode Obat': kodeObat,
-                'Nama Obat': namaObat,
-                'Stock Awal': 0,
-                'Masuk': 0,
-                'Normal': 0,
-                'Tambah Obat': 0,
-                'Perbaikan': 0,
-                'Total Pemakaian': 0,
-                'Sisa Stok': 0
-            };
-        }
-
-        // Tambahkan qtyAktual ke kolom yang sesuai berdasarkan kategori
-        if (keterangan.includes('Tambah Obat')) {
-            summaryData[kodeObat]['Tambah Obat'] += qtyAktual;
-        } else if (keterangan.includes('Perbaikan')) {
-            summaryData[kodeObat]['Perbaikan'] += qtyAktual;
-        } else {
-            summaryData[kodeObat]['Normal'] += qtyAktual;
-        }
-    });
-
-    // Hitung total pemakaian dan sisa stok untuk setiap kode obat
-    for (var key in summaryData) {
-        var totalPemakaian = summaryData[key]['Tambah Obat'] + summaryData[key]['Perbaikan'] + summaryData[key]['Normal'];
-        var sisaStok = summaryData[key]['Stock Awal'] + summaryData[key]['Masuk'] - totalPemakaian;
-        summaryData[key]['Total Pemakaian'] = totalPemakaian;
-        summaryData[key]['Sisa Stok'] = sisaStok;
+// Loop melalui setiap baris dalam tabel
+$('#excel-cams tbody tr').each(function() {
+    // Ambil data dari kolom yang diperlukan
+    var kodeObat = $(this).find('td:nth-child(3)').text().trim();
+    // Hapus koma sebagai pemisah ribuan dan ganti dengan string kosong
+    var qtyAktualStr = $(this).find('td:nth-child(5)').text().trim().replace(',', '');
+    var qtyAktual = parseFloat(qtyAktualStr);
+    var keterangan = $(this).find('td:nth-child(7)').text().trim();
+    var namaObat = $(this).find('td:nth-child(8)').text().trim();
+    var satuan = $(this).find('td:nth-child(6)').text().trim();
+    var destinationWarehouseCode = $(this).find('td:nth-child(9)').text().trim();
+    var SafetyStokStr = $(this).find('td:nth-child(10)').text().trim();
+    var BukaPostr = $(this).find('td:nth-child(11)').text().trim().replace(',', '');
+    var BukaPo =  parseFloat(BukaPostr);
+    var StockAwalstr = $(this).find('td:nth-child(12)').text().trim().replace(',', '');
+    var StockAwal = parseFloat(StockAwalstr);
+    var StockMasukstr = $(this).find('td:nth-child(13)').text().trim().replace(',', '');
+    var StockMasuk = parseFloat(StockMasukstr);
+    // Periksa apakah satuan adalah "kg", jika ya, kalikan qtyAktual dengan 1000
+    if (satuan.toLowerCase() === 'kg') {
+        qtyAktual *= 1000;
     }
 
-    // Ubah objek summaryData menjadi array dan urutkan berdasarkan nama obat secara ascending
-    var summaryArray = Object.values(summaryData);
-    summaryArray.sort(function(a, b) {
-        var namaObatA = a['Nama Obat'].toLowerCase();
-        var namaObatB = b['Nama Obat'].toLowerCase();
-        if (namaObatA < namaObatB) {
-            return -1;
-        }
-        if (namaObatA > namaObatB) {
-            return 1;
-        }
-        return 0;
-    });
+    // Bulatkan qtyAktual menjadi 2 desimal
+    qtyAktual = parseFloat(qtyAktual.toFixed(2));
+    var SafetyStok = parseFloat(SafetyStokStr); // Konversi ke desimal
+        SafetyStok = parseFloat(SafetyStok.toFixed(2)); // Bulatkan menjadi 2 desimal
+    // var StockAwal = parseFloat(StockAwalstr);
+    //     StockAwal = parseFloat(StockAwal.toFixed(2));
+// var BukaPo = parseFloat(BukaPostr); // Konversi ke desimal
+// BukaPo = parseFloat(BukaPo.toFixed(2)); // Bulatkan menjadi 2 desimal
 
-    // Buat header tabel
-    var tableHTML = '<table border="1"><tr><th style="text-align: center;">KODE OBAT ERP NOW</th><th style="text-align: center;">NAMA DAN JENIS BAHAN KIMIA/DYESTUFF</th><th style="text-align: center;">STOCK AWAL  (Gr)</th><th style="text-align: center;">MASUK  (Gr)</th><th style="text-align: center;">Normal</th><th style="text-align: center;">Tambah Obat</th><th style="text-align: center;">Perbaikan (Gr)</th><th style="text-align: center;">TOTAL PEMAKAIAN (Gr)</th><th style="text-align: center;">SISA STOK (Gr)</th><th style="text-align: center;">STOK AMAN</th><th style="text-align: center;">STATUS</th><th style="text-align: center;">BUKA PO</th><th style="text-align: center;">SISA PO</th><th style="text-align: center;">STOK CATATAN GK</th><th style="text-align: center;">SELISIH</th></tr>';
+    // Inisialisasi jumlah qtyAktual pada objek summaryData
+    if (!summaryData[kodeObat]) {
+        summaryData[kodeObat] = {
+            'Kode Obat': kodeObat,
+            'Nama Obat': namaObat,
+            'Stok Aman': SafetyStok,
+            'Buka PO' :BukaPo,
+            'Stock Awal' : StockAwal,
+            'Masuk': StockMasuk,
+            'Normal': 0,
+            'Tambah Obat': 0,
+            'Perbaikan': 0,
+            'finishing': 0,
+            'printing': 0,
+            'dyeing': 0,
+            'Total Pemakaian': 0,
+            'Sisa Stok': 0
+        };
+    }
+    // // Tambahkan qtyAktual ke kolom yang sesuai berdasarkan kategori
+    // if (keterangan.includes('Tambah Obat')) {
+    //     summaryData[kodeObat]['Tambah Obat'] += qtyAktual;
+    // } else if (keterangan.includes('Perbaikan')) {
+    //     summaryData[kodeObat]['Perbaikan'] += qtyAktual;
+    // } else if (keterangan.includes('finishing')) {
+    //     summaryData[kodeObat]['finishing'] += qtyAktual;
+    // } else if (keterangan.includes('printing')&& destinationWarehouseCode === 'M516') {
+    //     summaryData[kodeObat]['printing'] += qtyAktual;
+    // } else if (keterangan.includes('dyeing')&& destinationWarehouseCode === 'P101') {
+    //     summaryData[kodeObat]['dyeing'] += qtyAktual;
+    // } else {
+    //     summaryData[kodeObat]['Normal'] += qtyAktual;
+    // }
+    // Tambahkan qtyAktual ke kolom yang sesuai berdasarkan kategori
+    if (keterangan.includes('Tambah Obat')) {
+        summaryData[kodeObat]['Tambah Obat'] += qtyAktual;
+        summaryData[kodeObat]['Tambah Obat'] = parseFloat(summaryData[kodeObat]['Tambah Obat'].toFixed(2));
+    } else if (keterangan.includes('Perbaikan')) {
+        summaryData[kodeObat]['Perbaikan'] += qtyAktual;
+        summaryData[kodeObat]['Perbaikan'] = parseFloat(summaryData[kodeObat]['Perbaikan'].toFixed(2));
+    } else if (keterangan.includes('finishing')) {
+        summaryData[kodeObat]['finishing'] += qtyAktual;
+        summaryData[kodeObat]['finishing'] = parseFloat(summaryData[kodeObat]['finishing'].toFixed(2));
+    } else if (keterangan.includes('printing') && destinationWarehouseCode === 'M516') {
+        summaryData[kodeObat]['printing'] += qtyAktual;
+        summaryData[kodeObat]['printing'] = parseFloat(summaryData[kodeObat]['printing'].toFixed(2));
+    } else if (keterangan.includes('dyeing') && destinationWarehouseCode === 'P101') {
+        summaryData[kodeObat]['dyeing'] += qtyAktual;
+        summaryData[kodeObat]['dyeing'] = parseFloat(summaryData[kodeObat]['dyeing'].toFixed(2));
+    } else {
+        summaryData[kodeObat]['Normal'] += qtyAktual;
+        summaryData[kodeObat]['Normal'] = parseFloat(summaryData[kodeObat]['Normal'].toFixed(2));
+}
 
-    // Tambahkan baris baru ke tabel untuk setiap entri
-    summaryArray.forEach(function(entry) {
-        tableHTML += '<tr><td>' + entry['Kode Obat'] + '</td><td>' + entry['Nama Obat'] + '</td><td>' + entry['Stock Awal'] + '</td><td>' + entry['Masuk'] + '</td><td>' + entry['Normal'] + '</td><td>' + entry['Tambah Obat'] + '</td><td>' + entry['Perbaikan'] + '</td><td>' + entry['Total Pemakaian'] + '</td><td>' + entry['Sisa Stok'] + '</td><td>' + entry['Stok Aman'] + '</td><td>' + entry['Status'] + '</td><td>' + entry['Buka PO'] + '</td><td>' + entry['Sisa PO'] + '</td><td>' + entry['Stok Catatan GK'] + '</td><td>' + entry['Selisih'] + '</td></tr>';
-    });
-
-    // Tutup tabel
-    tableHTML += '</table>';
-
-    // Masukkan tabel HTML ke dalam tabel dengan ID "tabelsummary"
-    $('#tabelsummary').html(tableHTML);
-
-    // Kirim data summary ke halaman print_laporan pemakaian_obat2.php
-    $.post('print_laporan pemakaian_obat2.php', { summaryData: JSON.stringify(summaryArray) });
 });
+
+// // Hitung total pemakaian dan sisa stok untuk setiap kode obat
+// for (var key in summaryData) {
+//     var totalPemakaian = summaryData[key]['Tambah Obat'] + summaryData[key]['Perbaikan'] + summaryData[key]['Normal']+ summaryData[key]['finishing']+ summaryData[key]['printing']+ summaryData[key]['dyeing'];
+//     var sisaStok = summaryData[key]['Stock Awal'] + summaryData[key]['Masuk'] - totalPemakaian;
+//     summaryData[key]['Total Pemakaian'] = totalPemakaian;
+//     summaryData[key]['Sisa Stok'] = sisaStok;
+// }
+
+// Hitung total pemakaian dan sisa stok untuk setiap kode obat
+for (var key in summaryData) {
+    var totalPemakaian = summaryData[key]['Tambah Obat'] + summaryData[key]['Perbaikan'] + summaryData[key]['Normal'] + summaryData[key]['finishing'] + summaryData[key]['printing'] + summaryData[key]['dyeing'];
+    var sisaStok = summaryData[key]['Stock Awal'] + summaryData[key]['Masuk'] - totalPemakaian;
+
+    // Bulatkan totalPemakaian dan sisaStok menjadi 2 desimal
+    totalPemakaian = parseFloat(totalPemakaian.toFixed(2));
+    sisaStok = parseFloat(sisaStok.toFixed(2));
+
+    summaryData[key]['Total Pemakaian'] = totalPemakaian;
+    summaryData[key]['Sisa Stok'] = sisaStok;
+}
+
+// Ubah objek summaryData menjadi array
+var summaryArray = Object.values(summaryData);
+
+ // Buat header tabel
+var tableHTML = '<table border="1"><tr><th rowspan="2" style="text-align: center;">KODE OBAT ERP NOW</th><th  rowspan="2" style="text-align: center;">NAMA DAN JENIS BAHAN KIMIA/DYESTUFF</th><th  rowspan="2" style="text-align: center;">STOCK AWAL  (Gr)</th><th  rowspan="2" style="text-align: center;">MASUK  (Gr)</th><th colspan="6" style="text-align: center;">PEMAKAIAN</th><th rowspan="2" style="text-align: center;">TOTAL PEMAKAIAN (Gr)</th><th rowspan="2" style="text-align: center;">SISA STOK (Gr)</th><th rowspan="2" style="text-align: center;">STOK AMAN</th><th rowspan="2" style="text-align: center;">STATUS</th><th rowspan="2" style="text-align: center;">BUKA PO</th><th rowspan="2" style="text-align: center;">SISA PO</th><th rowspan="2" style="text-align: center;">STOK CATATAN GK</th><th rowspan="2" style="text-align: center;">SELISIH</th></tr><tr><th style="text-align: center;">Normal</th><th style="text-align: center;">Tambah Obat</th><th style="text-align: center;">Perbaikan (Gr)</th> <th style="text-align: center;">Finishing</th><th style="text-align: center;">Printing</th><th style="text-align: center;">Yarn Dye</th></tr>';
+
+// Tambahkan baris baru ke tabel untuk setiap entri
+summaryArray.forEach(function(entry) {
+    tableHTML += '<tr><td>' + entry['Kode Obat'] + '</td><td>' + entry['Nama Obat'] + '</td><td>' + entry['Stock Awal'] + '</td><td>' + entry['Masuk'] + '</td><td>' + entry['Normal'] + '</td><td>' + entry['Tambah Obat'] + '</td><td>' + entry['Perbaikan'] + '</td><td>' + entry['finishing'] + '</td><td>' + entry['printing'] + '</td><td>' + entry['dyeing'] + '</td><td>' + entry['Total Pemakaian'] + '</td><td>' + entry['Sisa Stok'] + '</td><td>' + entry['Stok Aman'] + '</td><td>' + entry['Status'] + '</td><td>' + entry['Buka PO'] + '</td><td>' + entry['Sisa PO'] + '</td><td>' + entry['Stok Catatan GK'] + '</td><td>' + entry['Selisih'] + '</td></tr>';
+});
+
+// Tutup tabel
+tableHTML += '</table>';
+
+// Masukkan tabel HTML ke dalam tabel dengan ID "tabelsummary"
+// $('#basic-btn').html(tableHTML);
+$('table[name="tabelsummary"]').html(tableHTML);
+
+//Buat header CSV
+var csvContent = "data:text/csv;charset=utf-8,";
+csvContent += "KODE OBAT ERP NOW,NAMA DAN JENIS BAHAN KIMIA/DYESTUFF,Stock Awal (Gr),Masuk (Gr),Normal,Tambah Obat,Perbaikan (Gr),Finishing,Printing,Yarn Dye,Total Pemakaian (Gr),Sisa Stok (Gr),STOK AMAN,STATUS,BUKA PO,SISA PO,STOK CATATAN GK,SELISIH\n";
+
+// Tambahkan baris data ke CSV
+summaryArray.forEach(function(entry) {
+    csvContent += entry['Kode Obat'] + "," + entry['Nama Obat'] + "," + entry['Stock Awal'] + "," + entry['Masuk'] + "," + entry['Normal'] + "," + entry['Tambah Obat'] + "," + entry['Perbaikan'] + "," + entry['finishing'] + ","+ entry['printing'] + ","+ entry['dyeing'] + ","+ entry['Total Pemakaian'] + "," + entry['Sisa Stok'] +"," + entry['Stok Aman'] +"," + entry[''] + "," + entry['Buka PO'] +"\n";
+});
+
+// Buat link untuk download file CSV
+var encodedUri = encodeURI(csvContent);
+var link = document.createElement("a");
+link.setAttribute("href", encodedUri);
+link.setAttribute("download", "DYE-Laporan Pemakaian Obat.csv");
+document.body.appendChild(link); // Untuk Firefox
+link.click(); // Klik otomatis pada link untuk mengunduh file CSV
+
 </script>
+
     <script type="text/javascript" src="files\bower_components\jquery\js\jquery.min.js"></script>
     <script type="text/javascript" src="files\bower_components\jquery-ui\js\jquery-ui.min.js"></script>
     <script type="text/javascript" src="files\bower_components\popper.js\js\popper.min.js"></script>
@@ -495,5 +554,11 @@ $(document).ready(function() {
     <script src="files\assets\js\menu\menu-hori-fixed.js"></script>
     <script src="files\assets\js\jquery.mCustomScrollbar.concat.min.js"></script>
     <script type="text/javascript" src="files\assets\js\script.js"></script>
+    <script>
+$(document).ready(function() {
+    // Inisialisasi DataTables
+    $('#basic-btn').DataTable();
+});
+</script>
 </body>
 </html>
