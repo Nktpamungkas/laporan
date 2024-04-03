@@ -46,10 +46,38 @@
                                     </div>
                                     <div class="card-block">
                                         <form action="" method="post" enctype="multipart/form-data">
-                                            <input type="file" name="file">
-                                            <button type="submit" name="import" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> Import Data</button>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-xl-2 m-b-0">
+                                                    <h4 class="sub-title">Tanggal Awal</h4>
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="date" class="form-control" placeholder="input-group-sm" name="tgl" value="<?php if (isset($_POST['cari'])){ echo $_POST['tgl']; } ?>">
+                                                    </div>
+                                                    <button type="submit" name="cari" class="btn btn-primary btn-sm"><i class="icofont icofont-search-alt-1"></i> Search</button>
+                                                    <input type="button" name="reset" value="Reset" onclick="window.location.href='spectro_upload.php'" class="btn btn-warning btn-sm">
+                                                </div>
+                                                <div class="col-sm-12 col-xl-2 m-b-0">
+                                                    <h4 class="sub-title">Tanggal Akhir</h4>
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="date" class="form-control" placeholder="input-group-sm" name="tgl2" value="<?php if (isset($_POST['cari'])){ echo $_POST['tgl2']; } ?>">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-xl-2 m-b-0">
+                                                    <h4 class="sub-title">Unggah data spectro</h4>
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="file" name="file">
+                                                        <button type="submit" name="import" class="btn btn-primary btn-sm"><i class="icofont icofont-upload"></i> Import Data</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
                                         </form>
                                     </div>
+                                </div>
+                                <div class="card-header" style="background-color: #FFF7AE; padding: 5px; font-family: 'Courier New', monospace; font-size: 15px;" >
+                                    <center>Data yang tampil adalah data yang tercatat hari ini.</center>
+                                    <center>Silahkan gunakan fitur pencarian untuk menemukan lebih banyak data pada tanggal yang Anda inginkan.</center>
+                                    <center>Harap memeriksa ketersediaan data di PRODUCTION ORDER > QUALITY DATA yang akan di-import sebelum melanjutkan.</center>
+                                    <!-- <center><b>UNDER MAINTENANCE !!</b><br>PROGRAM TETAP BISA DIGUNAKAN.</center> -->
                                 </div>
                                 <div class="card">
                                     <div class="card-block">
@@ -70,10 +98,16 @@
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    // $q_dataupload = mysqli_query($con_nowprd, "SELECT * FROM upload_spectro WHERE SUBSTR(creationdate, 1, 9) = SUBSTR(now(), 1,9) ORDER BY id DESC");
-                                                    $q_dataupload = mysqli_query($con_nowprd, "SELECT * FROM upload_spectro ORDER BY id DESC");
-                                                    $no = 1;
-                                                    while ($row_dataupload = mysqli_fetch_array($q_dataupload)) {
+                                                        if(isset($_POST['cari'])){
+                                                            $where_tgl  = "SUBSTR(creationdate, 1,10) BETWEEN '$_POST[tgl]' AND '$_POST[tgl2]'";
+                                                        }else{
+                                                            $where_tgl  = "SUBSTR(creationdate, 1,10) = CURRENT_DATE()";
+                                                        }
+                                                        // echo "SELECT * FROM upload_spectro WHERE $where_tgl ORDER BY id DESC";
+                                                        // $q_dataupload = mysqli_query($con_nowprd, "SELECT * FROM upload_spectro WHERE SUBSTR(creationdate, 1, 9) = SUBSTR(now(), 1,9) ORDER BY id DESC");
+                                                        $q_dataupload = mysqli_query($con_nowprd, "SELECT * FROM upload_spectro WHERE $where_tgl ORDER BY id DESC");
+                                                        $no = 1;
+                                                        while ($row_dataupload = mysqli_fetch_array($q_dataupload)) {
                                                     ?>
                                                         <tr>
                                                             <td><?= $no++; ?></td>
