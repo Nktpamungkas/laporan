@@ -635,7 +635,7 @@
                                                         <thead>
                                                             <?php
                                                             ini_set("error_reporting", 1);
-                                                            $sqlDB2 = "SELECT
+                                                            $sqlDB2 = "SELECT DISTINCT
                                                                             p.WORKCENTERCODE,
                                                                             CASE
                                                                                 WHEN p.PRODRESERVATIONLINKGROUPCODE IS NULL THEN TRIM(p.OPERATIONCODE) 
@@ -1489,7 +1489,7 @@
                                                                 <thead>
                                                                     <?php
                                                                         ini_set("error_reporting", 1);
-                                                                        $sqlDB2 = "SELECT
+                                                                        $sqlDB2 = "SELECT DISTINCT
                                                                                         p.WORKCENTERCODE,
                                                                                         CASE
                                                                                             WHEN p.PRODRESERVATIONLINKGROUPCODE IS NULL THEN TRIM(p.OPERATIONCODE) 
@@ -2328,7 +2328,7 @@
                                                                         <thead>
                                                                             <?php
                                                                             ini_set("error_reporting", 1);
-                                                                            $sqlDB2 = "SELECT
+                                                                            $sqlDB2 = "SELECT DISTINCT
                                                                                             p.WORKCENTERCODE,
                                                                                             CASE
                                                                                                 WHEN p.PRODRESERVATIONLINKGROUPCODE IS NULL THEN TRIM(p.OPERATIONCODE) 
@@ -3161,7 +3161,7 @@
                                                                 <thead>
                                                                     <?php
                                                                     ini_set("error_reporting", 1);
-                                                                    $sqlDB2 = "SELECT
+                                                                    $sqlDB2 = "SELECT DISTINCT
                                                                                 p.WORKCENTERCODE,
                                                                                 CASE
                                                                                     WHEN p.PRODRESERVATIONLINKGROUPCODE IS NULL THEN TRIM(p.OPERATIONCODE) 
@@ -4001,7 +4001,7 @@
                                                                     <thead>
                                                                         <?php
                                                                         ini_set("error_reporting", 1);
-                                                                        $sqlDB2 = "SELECT
+                                                                        $sqlDB2 = "SELECT DISTINCT
                                                                                     p.WORKCENTERCODE,
                                                                                     CASE
                                                                                         WHEN p.PRODRESERVATIONLINKGROUPCODE IS NULL THEN TRIM(p.OPERATIONCODE) 
@@ -4842,7 +4842,7 @@
                                                                         <thead>
                                                                             <?php
                                                                             ini_set("error_reporting", 1);
-                                                                            $sqlDB2 = "SELECT
+                                                                            $sqlDB2 = "SELECT DISTINCT
                                                                                         p.WORKCENTERCODE,
                                                                                         CASE
                                                                                             WHEN p.PRODRESERVATIONLINKGROUPCODE IS NULL THEN TRIM(p.OPERATIONCODE) 
