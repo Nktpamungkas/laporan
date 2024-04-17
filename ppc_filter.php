@@ -65,11 +65,11 @@
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Production Demand</h4>
-                                                    <input type="text" name="prod_demand" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['prod_demand']; } ?>">
+                                                    <input type="text" name="prod_demand" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['prod_demand']; }elseif($_GET['demand']){ echo $_GET['demand']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Production Order</h4>
-                                                    <input type="text" name="prod_order" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['prod_order']; } ?>">
+                                                    <input type="text" name="prod_order" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['prod_order']; }elseif($_GET['prod_order']){ echo $_GET['prod_order']; } ?>">
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Dari Tanggal</h4>
@@ -128,7 +128,7 @@
                                         </form>
                                     </div>
                                 </div>
-                                <?php if (isset($_POST['submit'])) : ?>
+                                <?php if (isset($_POST['submit']) OR ($_GET['demand'] AND $_GET['prod_order'])) : ?>
                                     <div class="card">
                                         <div class="card-block">
                                             <div class="dt-responsive table-responsive">
@@ -177,8 +177,8 @@
                                                             ini_set("error_reporting", 0);
                                                             session_start();
                                                             require_once "koneksi.php";
-                                                            $prod_order     = $_POST['prod_order'];
-                                                            $prod_demand    = $_POST['prod_demand'];
+                                                            $prod_order     = $_POST['prod_order'] ?? $_GET['prod_order'] ?? '';
+                                                            $prod_demand    = $_POST['prod_demand'] ?? $_GET['prod_demand'] ?? '';
                                                             $no_order       = $_POST['no_order'];
                                                             $tgl1           = $_POST['tgl1'];
                                                             $tgl2           = $_POST['tgl2'];
@@ -255,8 +255,8 @@
                                                             $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,ARTICLE_GROUP,ARTICLE_CODE,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,LOT,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
                                                             
                                                             // --------------------------------------------------------------------------------------------------------------- //
-                                                            $prod_order_2   = $_POST['prod_order'];
-                                                            $prod_demand_2  = $_POST['prod_demand'];
+                                                            $prod_order_2     = $_POST['prod_order'] ?? $_GET['prod_order'] ?? '';
+                                                            $prod_demand_2    = $_POST['prod_demand'] ?? $_GET['prod_demand'] ?? '';
                                                             $no_order_2     = $_POST['no_order'];
                                                             $tgl1_2         = $_POST['tgl1'];
                                                             $tgl2_2         = $_POST['tgl2'];
