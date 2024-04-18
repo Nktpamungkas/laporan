@@ -271,6 +271,11 @@
                                             Report Tracking TAS
                                         </a>
                                     </li>
+                                    <li class="">
+                                        <a href="prd_laporan_mesin3.php" data-i18n="nav.animations.main">
+                                            Macro Plan
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="pcoded-hasmenu">

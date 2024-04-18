@@ -95,8 +95,10 @@ require_once "koneksi.php";
                                                             <thead>
                                                                 <tr>
                                                                     <!-- <th>No</th> -->
-                                                                    <th>No</th>
-                                                                    <th>Row Col</th>
+                                                                    <th></th>
+                                                                    <th>Buyer</th>
+                                                                    <th>Operation</th>
+                                                                    <th>Hanger</th>
                                                                     <th>Bulan 1 Minggu 1</th>
                                                                     <th>Bulan 1 Minggu 2</th>
                                                                     <th>Bulan 1 Minggu 3</th>
@@ -324,7 +326,7 @@ require_once "koneksi.php";
                                                                 -- operationcode
 ";
                                                                 $db_stocktransaction = db2_exec($conn1, $query, array('cursor' => DB2_SCROLLABLE));
-                                                                $no = 1;
+                                                                // $no = 1;
                                                                 while ($row_stocktransaction = db2_fetch_assoc($db_stocktransaction)) {
                                                                     $query2 = "SELECT  
                                                                     -- buyer,
@@ -671,9 +673,12 @@ require_once "koneksi.php";
                                                                         while ($row_stocktransaction3 = db2_fetch_assoc($db_stocktransaction3)) {
 
                                                                             if ($current_buyer != $row_stocktransaction['BUYER']) {
-                                                                                echo "<tr>";
-                                                                                echo "<td>" . $no++ . "</td>";
+                                                                                echo "<tr background-color: coral>";
+                                                                                // echo "<td>" . $no++ . "</td>";
+                                                                                echo "<td></td>";
                                                                                 echo "<td>" . $row_stocktransaction['BUYER'] . "</td>";
+                                                                                echo "<td></td>";
+                                                                                echo "<td></td>";
                                                                                 echo "<td>" . number_format($row_stocktransaction['BLN1_WEEK1']) . "</td>";
                                                                                 echo "<td>" . number_format($row_stocktransaction['BLN1_WEEK2']) . "</td>";
                                                                                 echo "<td>" . number_format($row_stocktransaction['BLN1_WEEK3']) . "</td>";
@@ -734,8 +739,10 @@ require_once "koneksi.php";
                                                                             if ($current_operation != $row_stocktransaction2['OPERATIONCODE']) {
                                                                                 // Tampilkan operasi dan data transaksi
                                                                                 echo "<tr>";
+                                                                                echo "<td></td>";
                                                                                 echo "<td></td>"; // Kolom nomor kosong
                                                                                 echo "<td>" . $row_stocktransaction2['OPERATIONCODE'] . "</td>";
+                                                                                echo "<td></td>";
                                                                                 echo "<td>" . number_format($row_stocktransaction2['BLN1_WEEK1']) . "</td>";
                                                                                 echo "<td>" . number_format($row_stocktransaction2['BLN1_WEEK2']) . "</td>";
                                                                                 echo "<td>" . number_format($row_stocktransaction2['BLN1_WEEK3']) . "</td>";
@@ -794,6 +801,8 @@ require_once "koneksi.php";
                                                                             }
                                                                             echo "<tr>";
                                                                             echo "<td></td>"; // Kolom nomor kosong
+                                                                            echo "<td></td>";
+                                                                            echo "<td></td>";
                                                                             echo "<td>" . $row_stocktransaction3['ITEM'] . "</td>";
                                                                             echo "<td>" . number_format($row_stocktransaction3['BLN1_WEEK2']) . "</td>";
                                                                             echo "<td>" . number_format($row_stocktransaction3['BLN1_WEEK1']) . "</td>";
