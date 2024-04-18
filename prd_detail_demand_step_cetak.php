@@ -160,7 +160,7 @@
                                                         ini_set("error_reporting", 1);
                                                         session_start();
                                                         require_once "koneksi.php"; 
-                                                        $sqlDB2 = "SELECT
+                                                        $sqlDB2 = "SELECT DISTINCT
                                                                         p.WORKCENTERCODE,
                                                                         p.OPERATIONCODE,
                                                                         o.LONGDESCRIPTION,

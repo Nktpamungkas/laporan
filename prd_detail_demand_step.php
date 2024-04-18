@@ -259,7 +259,7 @@
                                                                 $insert_posisikk_cnp1       = mysqli_query($con_nowprd, "INSERT INTO itxview_posisikk_tgl_in_prodorder_cnp1_detaildemandstep(PRODUCTIONORDERCODE,OPERATIONCODE,PROPROGRESSPROGRESSNUMBER,DEMANDSTEPSTEPNUMBER,PROGRESSTEMPLATECODE,MULAI,IPADDRESS,CREATEDATETIME) VALUES $value_posisikk_cnp1");
                                                             }
 
-                                                            $sqlDB2 = "SELECT
+                                                            $sqlDB2 = "SELECT DISTINCT
                                                                             p.WORKCENTERCODE,
                                                                             TRIM(p.OPERATIONCODE) AS OPERATIONCODE,
                                                                             o.LONGDESCRIPTION,
