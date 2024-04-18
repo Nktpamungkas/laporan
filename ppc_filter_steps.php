@@ -428,7 +428,7 @@
                                                                             iptop.LONGDESCRIPTION AS OP2,
                                                                             CASE
                                                                                 WHEN a.VALUEBOOLEAN = 1 THEN 'Tidak Perlu Gerobak'
-                                                                                ELSE LISTAGG(FLOOR(idqd.VALUEQUANTITY), ', ')
+                                                                                ELSE LISTAGG(DISTINCT FLOOR(idqd.VALUEQUANTITY), ', ')
                                                                             END AS GEROBAK 
                                                                         FROM 
                                                                             PRODUCTIONDEMANDSTEP p 
