@@ -675,9 +675,9 @@
                                                                         $nomesin            = $data_schedule_dye['no_mesin'];
                                                                         $nourut             = $data_schedule_dye['no_urut'];
                                                                     }elseif($kode_dept == 'FIN'){
-                                                                        $schedule_fin       = mysqli_query($con_db_finishing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]' AND NOT catatan = 'data diinput dari finishing' ORDER BY id DESC LIMIT 1");
+                                                                        $schedule_fin       = mysqli_query($con_db_finishing, "SELECT * FROM `tbl_schedule_new` WHERE nokk = '$rowdb2[NO_KK]' AND nodemand = '$rowdb2[DEMAND]' ORDER BY id DESC LIMIT 1");
                                                                         $data_schedule_fin  = mysqli_fetch_assoc($schedule_fin);
-                                                                        $nomesin            = $data_schedule_fin['no_mesin'];
+                                                                        $nomesin            = $data_schedule_fin['no_mesin']. '-'.substr(TRIM($data_schedule_fin['no_mesin']), -5, 2).substr(TRIM($data_schedule_fin['no_mesin']), -2);
                                                                         $nourut             = $data_schedule_fin['no_urut'];
                                                                     }else{
                                                                         $nomesin            = '';
