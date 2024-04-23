@@ -455,19 +455,21 @@ header('Cache-Control: max-age=0');
                     <td><?= $status_terakhir; ?> (<?= $jam_status_terakhir; ?>)</td> <!-- STATUS TERAKHIR -->
                     <td>
                         <?php
-                            if($kode_dept == 'DYE'){
-                                $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]'  AND NOT `status` = 'selesai'");
-                                $data_schedule_dye  = mysqli_fetch_assoc($q_schedule_dye);
-                                $nomesin            = $data_schedule_dye['no_mesin'];
-                                $nourut             = $data_schedule_dye['no_urut'];
-                            }elseif($kode_dept == 'FIN'){
-                                $schedule_fin       = mysqli_query($con_db_finishing, "SELECT * FROM `tbl_schedule_new` WHERE nokk = '$rowdb2[NO_KK]' AND nodemand = '$rowdb2[DEMAND]' ORDER BY id DESC LIMIT 1");
-                                $data_schedule_fin  = mysqli_fetch_assoc($schedule_fin);
-                                $nomesin            = $data_schedule_fin['no_mesin']. '-'.substr(TRIM($data_schedule_fin['no_mesin']), -5, 2).substr(TRIM($data_schedule_fin['no_mesin']), -2);
-                                $nourut             = $data_schedule_fin['nourut'];
-                            }else{
-                                $nomesin            = '';
-                                $nourut             = '';
+                            if($status_operation == 'Progress'){ // KALAU PROGRESS STATUSNYA PROGRESS
+                                if($kode_dept == 'DYE'){
+                                    $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]'  AND NOT `status` = 'selesai'");
+                                    $data_schedule_dye  = mysqli_fetch_assoc($q_schedule_dye);
+                                    $nomesin            = $data_schedule_dye['no_mesin'];
+                                    $nourut             = $data_schedule_dye['no_urut'];
+                                }elseif($kode_dept == 'FIN'){
+                                    $schedule_fin       = mysqli_query($con_db_finishing, "SELECT * FROM `tbl_schedule_new` WHERE nokk = '$rowdb2[NO_KK]' AND nodemand = '$rowdb2[DEMAND]' ORDER BY id DESC LIMIT 1");
+                                    $data_schedule_fin  = mysqli_fetch_assoc($schedule_fin);
+                                    $nomesin            = $data_schedule_fin['no_mesin']. '-'.substr(TRIM($data_schedule_fin['no_mesin']), -5, 2).substr(TRIM($data_schedule_fin['no_mesin']), -2);
+                                    $nourut             = $data_schedule_fin['nourut'];
+                                }else{
+                                    $nomesin            = '';
+                                    $nourut             = '';
+                                }
                             }
                         ?>
                         <?= $nomesin; ?>
