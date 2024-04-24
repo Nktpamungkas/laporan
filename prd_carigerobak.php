@@ -131,7 +131,7 @@
                                                             }else{
                                                                 $where_demand    = "";
                                                             }
-                                                            $q_iptip    = db2_exec($conn1, "SELECT 
+                                                            $q_iptip    = db2_exec($conn1, "SELECT DISTINCT
                                                                                                 PRODUCTIONORDERCODE,
                                                                                                 REPLACE(LISTAGG( '`'|| PRODUCTIONDEMANDCODE || '`', ', '), '`', '''')  AS PRODUCTIONDEMANDCODE2,
                                                                                                 LISTAGG(PRODUCTIONDEMANDCODE, ', ')  AS PRODUCTIONDEMANDCODE,
@@ -215,7 +215,7 @@
                                                                     $gerobak    = "LISTAGG(FLOOR(idqd.VALUEQUANTITY), ', ') AS GEROBAK";
                                                                 }
 
-                                                                $q_posisikk     = db2_exec($conn1, "SELECT
+                                                                $q_posisikk     = db2_exec($conn1, "SELECT DISTINCT
                                                                                                         p.STEPNUMBER AS STEPNUMBER,
                                                                                                         CASE
                                                                                                             WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) IS NULL OR TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE)
@@ -287,7 +287,7 @@
                                                                                                     
                                                                 $row_posisikk = db2_fetch_assoc($q_posisikk);
 
-                                                                $count_gerobak  = db2_exec($conn1, "SELECT
+                                                                $count_gerobak  = db2_exec($conn1, "SELECT DISTINCT
                                                                                                         COUNT(*) AS JML_GEROBAK
                                                                                                     FROM 
                                                                                                         PRODUCTIONDEMANDSTEP p 
@@ -361,7 +361,7 @@
                                                                 </td>
                                                                 <?php if($dept == 'DYE') : ?>
                                                                     <?php
-                                                                        $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT
+                                                                        $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT DISTINCT
                                                                                                                                 nokk,
                                                                                                                                 id,
                                                                                                                                 GROUP_CONCAT( lot SEPARATOR '/' ) AS lot,
