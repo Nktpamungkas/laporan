@@ -669,9 +669,9 @@
                                                             </td> <!-- STATUS TERAKHIR -->
                                                             <td>
                                                                 <?php
-                                                                    if($status_operation == 'Progress'){ // KALAU PROGRESS STATUSNYA PROGRESS
+                                                                    // if($status_operation == 'Progress'){ // KALAU PROGRESS STATUSNYA PROGRESS
                                                                         if($kode_dept == 'DYE'){
-                                                                            $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]'  AND NOT `status` = 'selesai'");
+                                                                            $q_schedule_dye     = mysqli_query($con_db_dyeing, "SELECT * FROM `tbl_schedule` WHERE nokk = '$rowdb2[NO_KK]' AND NOT `status` = 'selesai'");
                                                                             $data_schedule_dye  = mysqli_fetch_assoc($q_schedule_dye);
                                                                             $nomesin            = $data_schedule_dye['no_mesin'];
                                                                             $nourut             = $data_schedule_dye['no_urut'];
@@ -684,7 +684,7 @@
                                                                             $nomesin            = '';
                                                                             $nourut             = '';
                                                                         }
-                                                                    }
+                                                                    // }
                                                                 ?>
                                                                 <?= $nomesin; ?>
                                                             </td> <!-- NOMOR MESIN SCHEDULE -->
