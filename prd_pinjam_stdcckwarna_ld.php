@@ -360,7 +360,7 @@
                                                                 }elseif (isset($_POST['lihatdata_arsip'])){
                                                                     $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE kode = 'LD' AND archive = 'Diarsipkan' ORDER BY id DESC LIMIT 10000");
                                                                 }elseif (isset($_POST['lihatdata_ld'])){
-                                                                    $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE kode = 'LD' ORDER BY id DESC LIMIT 1000");
+                                                                    $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE kode = 'LD' ORDER BY id DESC LIMIT 100");
                                                                 }
                                                             ?>
                                                             <?php while ($row_bukupinjam = mysqli_fetch_array($q_bukupinjam)) { ?>
