@@ -209,10 +209,10 @@
                                                                     $gerobak    = "CASE
                                                                                         WHEN TRIM(p.OPERATIONCODE) = 'DYE2' THEN 'Poly'
                                                                                         WHEN TRIM(p.OPERATIONCODE) = 'DYE4' THEN 'Cotton'
-                                                                                        ELSE LISTAGG(FLOOR(idqd.VALUEQUANTITY), ', ')
+                                                                                        ELSE LISTAGG(DISTINCT FLOOR(idqd.VALUEQUANTITY), ', ')
                                                                                     END AS GEROBAK";
                                                                 }else{
-                                                                    $gerobak    = "LISTAGG(FLOOR(idqd.VALUEQUANTITY), ', ') AS GEROBAK";
+                                                                    $gerobak    = "LISTAGG(DISTINCT FLOOR(idqd.VALUEQUANTITY), ', ') AS GEROBAK";
                                                                 }
 
                                                                 $q_posisikk     = db2_exec($conn1, "SELECT DISTINCT
@@ -287,8 +287,8 @@
                                                                                                     
                                                                 $row_posisikk = db2_fetch_assoc($q_posisikk);
 
-                                                                $count_gerobak  = db2_exec($conn1, "SELECT DISTINCT
-                                                                                                        COUNT(*) AS JML_GEROBAK
+                                                                $count_gerobak  = db2_exec($conn1, "SELECT 
+                                                                                                     COUNT(DISTINCT idqd.VALUEQUANTITY) AS JML_GEROBAK
                                                                                                     FROM 
                                                                                                         PRODUCTIONDEMANDSTEP p 
                                                                                                     LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
