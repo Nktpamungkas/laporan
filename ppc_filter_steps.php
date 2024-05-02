@@ -290,6 +290,11 @@
                                                     <td><?= $d_demand['ORIGDLVSALORDLINESALORDERCODE']; ?></td>
                                                 </tr>
                                                 <tr>
+                                                    <td>Original PD Code</td>
+                                                    <td>&nbsp;&nbsp;&nbsp; : &nbsp;</td>
+                                                    <td><a target="_BLANK" href="http://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=<?= substr($d_ITXVIEWKK['ORIGINALPDCODE'], 4); ?>"><b><?= substr($d_ITXVIEWKK['ORIGINALPDCODE'], 4); ?></b></a></td>
+                                                </tr>
+                                                <tr>
                                                     <td>LOT</td>
                                                     <td>&nbsp;&nbsp;&nbsp; : &nbsp;</td>
                                                     <td><?= $d_demand['DESCRIPTION']; ?></td>
