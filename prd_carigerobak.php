@@ -180,17 +180,17 @@
                                                                                                                         AND i.SUBCODE10 = p2.SUBCODE10
                                                                                                 WHERE 
                                                                                                     TRIM(p.PROGRESSSTATUS) IN ('2', '0')
-                                                                                                    AND TRIM(o.OPERATIONGROUPCODE) = '$_POST[dept]'
                                                                                                     $where_demand
                                                                                                     AND p.CREATIONDATETIME >= '2023-11-01'
                                                                                                     AND NOT p.PRODUCTIONORDERCODE IS NULL
                                                                                                     AND (TRIM(p2.DESTINATIONORDER) = '1' OR NOT p2.PROJECTCODE IS NULL)
                                                                                                     )
-                                                                                            LEFT JOIN ADSTORAGE a ON a.UNIQUEID = ABSUNIQUEID_OPERATION AND a.FIELDNAME = 'Gerobak'
+                                                                                            -- LEFT JOIN ADSTORAGE a ON a.UNIQUEID = ABSUNIQUEID_OPERATION AND a.FIELDNAME = 'Gerobak'
                                                                                             WHERE
                                                                                                 RN = 1
                                                                                                 AND NOT OPERATIONCODE = 'BAT1'
-                                                                                                AND (a.VALUEBOOLEAN IS NULL OR a.VALUEBOOLEAN = 0)
+                                                                                                AND TRIM(OPERATIONGROUPCODE) = '$_POST[dept]'
+                                                                                                -- AND (a.VALUEBOOLEAN IS NULL OR a.VALUEBOOLEAN = 0)
                                                                                             GROUP BY 
                                                                                                 PRODUCTIONORDERCODE,
                                                                                                 STEPNUMBER,
@@ -242,7 +242,7 @@
                                                                                                     FROM 
                                                                                                         PRODUCTIONDEMANDSTEP p 
                                                                                                     LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
-                                                                                                    LEFT JOIN ADSTORAGE a ON a.UNIQUEID = o.ABSUNIQUEID AND a.FIELDNAME = 'Gerobak'
+                                                                                                    -- LEFT JOIN ADSTORAGE a ON a.UNIQUEID = o.ABSUNIQUEID AND a.FIELDNAME = 'Gerobak'
                                                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                     LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
@@ -264,7 +264,8 @@
                                                                                                         p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' 
                                                                                                         AND p.PRODUCTIONDEMANDCODE IN ($row_iptip[PRODUCTIONDEMANDCODE2])
                                                                                                         AND p.STEPNUMBER < '$row_iptip[STEPNUMBER]'
-                                                                                                        AND (a.VALUEBOOLEAN IS NULL OR a.VALUEBOOLEAN = 0)
+                                                                                                        AND NOT idqd.VALUEQUANTITY IS NULL
+                                                                                                        -- AND (a.VALUEBOOLEAN IS NULL OR a.VALUEBOOLEAN = 0)
                                                                                                     GROUP BY
                                                                                                         p.PRODUCTIONORDERCODE,
                                                                                                         p.STEPNUMBER,
@@ -292,7 +293,7 @@
                                                                                                     FROM 
                                                                                                         PRODUCTIONDEMANDSTEP p 
                                                                                                     LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
-                                                                                                    LEFT JOIN ADSTORAGE a ON a.UNIQUEID = o.ABSUNIQUEID AND a.FIELDNAME = 'Gerobak'
+                                                                                                    -- LEFT JOIN ADSTORAGE a ON a.UNIQUEID = o.ABSUNIQUEID AND a.FIELDNAME = 'Gerobak'
                                                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                     LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
@@ -314,7 +315,8 @@
                                                                                                         p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' 
                                                                                                         AND p.PRODUCTIONDEMANDCODE IN ($row_iptip[PRODUCTIONDEMANDCODE2])
                                                                                                         AND p.STEPNUMBER < '$row_iptip[STEPNUMBER]'
-                                                                                                        AND (a.VALUEBOOLEAN IS NULL OR a.VALUEBOOLEAN = 0)
+                                                                                                        AND NOT idqd.VALUEQUANTITY IS NULL
+                                                                                                        -- AND (a.VALUEBOOLEAN IS NULL OR a.VALUEBOOLEAN = 0)
                                                                                                     GROUP BY
                                                                                                         p.PRODUCTIONORDERCODE,
                                                                                                         p.STEPNUMBER,
