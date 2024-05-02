@@ -238,7 +238,8 @@
 
                                                 <button type="submit" style="background-color: transparent; background-repeat: no-repeat; border: none; cursor: pointer;overflow: hidden;outline: none;"></button>
                                                 <button type="submit" name="simpan" class="btn btn-primary btn-sm"><i class="icofont icofont-save"></i> Simpan</button>
-                                                <button type="submit" name="lihatdata_ld" class="btn btn-warning btn-sm"><i class="icofont icofont-save"></i> Lihat semua data LD</button>
+                                                <button type="submit" name="lihatdata_ld" class="btn btn-warning btn-sm"><i class="icofont icofont-save"></i> Lihat semua data LD(hanya 100 data) </button>
+                                                <button type="submit" name="lihatdata_ld_all" onclick="return showConfirmation()" class="btn btn-primary btn-sm"><i class="icofont icofont-save"></i> Lihat semua data LD </button>
                                                 <button type="submit" name="lihatdata_bergerak" class="btn btn-danger btn-sm"><i class="icofont icofont-external"></i> Lihat data transaksi LD</button>
                                                 <button type="submit" name="lihatdata_arsip" class="btn btn-inverse btn-sm"><i class="icofont icofont-ui-file"></i>Lihat arsip LD</button>
                                                 <button type="submit" name="tambah" class="btn btn-default btn-sm"><i class="icofont icofont-ui-add"></i> Tambah Baru</button>
@@ -325,7 +326,7 @@
                                         </div>
                                     <?php endif; ?>
                                 </div>
-                                <?php if (isset($_POST['lihatdata_ld']) OR isset($_POST['lihatdata_bergerak']) OR isset($_POST['lihatdata_arsip'])) : ?>
+                                <?php if (isset($_POST['lihatdata_ld']) OR isset($_POST['lihatdata_ld_all'])  OR isset($_POST['lihatdata_bergerak']) OR isset($_POST['lihatdata_arsip'])) : ?>
                                     <div class="card">
                                         <form action="printbarcode_bukupinjam.php" method="POST" target="_blank">
                                             <div class="card-header text-right">
@@ -361,6 +362,8 @@
                                                                     $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE kode = 'LD' AND archive = 'Diarsipkan' ORDER BY id DESC LIMIT 10000");
                                                                 }elseif (isset($_POST['lihatdata_ld'])){
                                                                     $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE kode = 'LD' ORDER BY id DESC LIMIT 100");
+                                                                }elseif (isset($_POST['lihatdata_ld_all'])){
+                                                                    $q_bukupinjam   = mysqli_query($con_nowprd, "SELECT * FROM buku_pinjam WHERE kode = 'LD' ORDER BY id DESC");
                                                                 }
                                                             ?>
                                                             <?php while ($row_bukupinjam = mysqli_fetch_array($q_bukupinjam)) { ?>
@@ -435,4 +438,18 @@
             $('[data-toggle="tooltip"]').tooltip()
         });
     })
+</script>
+
+<script>
+// Fungsi untuk menampilkan dialog konfirmasi sebelum pengiriman form
+function showConfirmation() {
+    // Tampilkan dialog konfirmasi
+    if (confirm("Apakah Anda yakin ingin melanjutkan melihat semua data? harap menunggu")) {
+        // Lanjutkan dengan pengiriman form jika pengguna menekan OK
+        return true; // Izinkan pengiriman form
+    } else {
+        // Batalkan pengiriman form jika pengguna membatalkan
+        return false; // Mencegah pengiriman form
+    }
+}
 </script>
