@@ -112,8 +112,8 @@
                                                             <?= $th; ?>
                                                         </tr>
                                                         <tr>
-                                                            <th style="text-align: center;">PROD. ORDER</th>
-                                                            <th style="text-align: center;">PROD. DEMAND</th>
+                                                            <th style="text-align: center;">PROD. ORDER ORIGINAL</th>
+                                                            <th style="text-align: center;">PROD. DEMAND ORIGINAL</th>
                                                             <th style="text-align: center;">OPERATION</th>
                                                             <th style="text-align: center;">DEPARTEMEN</th>
                                                             <th style="text-align: center;">STATUS</th>
