@@ -121,6 +121,7 @@
                                                             <th>GREIGE SCHEDULE</th>
                                                             <th>ACTUAL DATE GREIGE</th>
                                                             <th>BAGI KAIN TGL</th>
+                                                            <th>TGL CELUP</th>
                                                             <th>ROLL</th>
                                                             <th>BRUTO/BAGI KAIN</th>
                                                             <th>BRUTO/BAGI KAIN YARD</th>
@@ -618,6 +619,80 @@
                                                             $sql_netto_yd = db2_exec($conn1, "SELECT * FROM ITXVIEW_NETTO WHERE CODE = '$rowdb2[DEMAND]'");
                                                             $d_netto_yd = db2_fetch_assoc($sql_netto_yd);
                                                         ?>
+                                                        <!-- TGL CELUP PERMINTAAN PAK DJOHARI -->
+                                                        <?php
+                                                            $q_tglcelup = db2_exec($conn1, "SELECT
+                                                                                                    p.PRODUCTIONORDERCODE,
+                                                                                                    p.STEPNUMBER AS STEPNUMBER,
+                                                                                                    CASE
+                                                                                                        WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) IS NULL OR TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE)
+                                                                                                        ELSE TRIM(p.PRODRESERVATIONLINKGROUPCODE)
+                                                                                                    END AS OPERATIONCODE,
+                                                                                                    TRIM(o.OPERATIONGROUPCODE) AS DEPT,
+                                                                                                    o.LONGDESCRIPTION,
+                                                                                                    CASE
+                                                                                                        WHEN p.PROGRESSSTATUS = 0 THEN 'Entered'
+                                                                                                        WHEN p.PROGRESSSTATUS = 1 THEN 'Planned'
+                                                                                                        WHEN p.PROGRESSSTATUS = 2 THEN 'Progress'
+                                                                                                        WHEN p.PROGRESSSTATUS = 3 THEN 'Closed'
+                                                                                                    END AS STATUS_OPERATION,
+                                                                                                    iptip.MULAI,
+                                                                                                    CASE
+                                                                                                        WHEN p.PROGRESSSTATUS = 3 THEN COALESCE(iptop.SELESAI, SUBSTRING(p.LASTUPDATEDATETIME, 1, 19) || '(Run Manual Closures)')
+                                                                                                        ELSE iptop.SELESAI
+                                                                                                    END AS SELESAI,
+                                                                                                    p.PRODUCTIONORDERCODE,
+                                                                                                    p.PRODUCTIONDEMANDCODE,
+                                                                                                    iptip.LONGDESCRIPTION AS OP1,
+                                                                                                    iptop.LONGDESCRIPTION AS OP2,
+                                                                                                    CASE
+                                                                                                        WHEN a.VALUEBOOLEAN = 1 THEN 'Tidak Perlu Gerobak'
+                                                                                                        ELSE LISTAGG(DISTINCT FLOOR(idqd.VALUEQUANTITY), ', ')
+                                                                                                    END AS GEROBAK 
+                                                                                                FROM 
+                                                                                                    PRODUCTIONDEMANDSTEP p 
+                                                                                                LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
+                                                                                                LEFT JOIN ADSTORAGE a ON a.UNIQUEID = o.ABSUNIQUEID AND a.FIELDNAME = 'Gerobak'
+                                                                                                LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
+                                                                                                LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
+                                                                                                LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
+                                                                                                                                    -- AND idqd.OPERATIONCODE = COALESCE(p.PRODRESERVATIONLINKGROUPCODE, p.OPERATIONCODE)
+                                                                                                                                    AND idqd.OPERATIONCODE = CASE
+                                                                                                                                                                WHEN TRIM(p.PRODRESERVATIONLINKGROUPCODE) IS NULL OR TRIM(p.PRODRESERVATIONLINKGROUPCODE) = '' THEN TRIM(p.OPERATIONCODE)
+                                                                                                                                                                ELSE TRIM(p.PRODRESERVATIONLINKGROUPCODE)
+                                                                                                                                                            END
+                                                                                                                                    AND (idqd.VALUEINT = p.STEPNUMBER OR idqd.VALUEINT = p.GROUPSTEPNUMBER) 
+                                                                                                                                    AND (idqd.CHARACTERISTICCODE = 'GRB1' OR
+                                                                                                                                        idqd.CHARACTERISTICCODE = 'GRB2' OR
+                                                                                                                                        idqd.CHARACTERISTICCODE = 'GRB3' OR
+                                                                                                                                        idqd.CHARACTERISTICCODE = 'GRB4' OR
+                                                                                                                                        idqd.CHARACTERISTICCODE = 'GRB5' OR
+                                                                                                                                        idqd.CHARACTERISTICCODE = 'GRB6' OR
+                                                                                                                                        idqd.CHARACTERISTICCODE = 'GRB7' OR
+                                                                                                                                        idqd.CHARACTERISTICCODE = 'GRB8')
+                                                                                                                                    AND NOT (idqd.VALUEQUANTITY = 9 OR idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 99 OR idqd.VALUEQUANTITY = 91)
+                                                                                                WHERE
+                                                                                                    p.PRODUCTIONORDERCODE  = '$rowdb2[NO_KK]' AND p.PRODUCTIONDEMANDCODE = '$rowdb2[DEMAND]'
+                                                                                                    AND TRIM(o.OPERATIONGROUPCODE) = 'DYE'
+                                                                                                GROUP BY
+                                                                                                    p.PRODUCTIONORDERCODE,
+                                                                                                    p.STEPNUMBER,
+                                                                                                    p.OPERATIONCODE,
+                                                                                                    p.PRODRESERVATIONLINKGROUPCODE,
+                                                                                                    o.OPERATIONGROUPCODE,
+                                                                                                    o.LONGDESCRIPTION,
+                                                                                                    p.PROGRESSSTATUS,
+                                                                                                    iptip.MULAI,
+                                                                                                    iptop.SELESAI,
+                                                                                                    p.LASTUPDATEDATETIME,
+                                                                                                    p.PRODUCTIONORDERCODE,
+                                                                                                    p.PRODUCTIONDEMANDCODE,
+                                                                                                    iptip.LONGDESCRIPTION,
+                                                                                                    iptop.LONGDESCRIPTION,
+                                                                                                    a.VALUEBOOLEAN
+                                                                                                ORDER BY p.STEPNUMBER ASC LIMIT 1");
+                                                            $row_tgl_celup  =  db2_fetch_assoc($q_tglcelup);
+                                                        ?>
                                                         <?php $jeniskain = $rowdb2['JENIS_KAIN']; if($_POST['rec'] == 'rec' AND str_contains($jeniskain, 'RECYCLED')) : ?>
                                                             <tr>
                                                                 <td><?= substr($d_salesorder['CREATIONDATETIME'], 0, 10); ?></td><!-- DATE MARKETING -->
@@ -711,6 +786,7 @@
                                                                     ?>
                                                                     <?= $d_tglbagikain['TRANSACTIONDATE']; ?>
                                                                 </td> <!-- BAGI KAIN TGL -->
+                                                                <td><?= $row_tgl_celup['MULAI']; ?></td> <!-- TGL CELUP -->
                                                                 <td>
                                                                     <?php
                                                                         // KK GABUNG
@@ -964,6 +1040,7 @@
                                                                     ?>
                                                                     <?= $d_tglbagikain['TRANSACTIONDATE']; ?>
                                                                 </td> <!-- BAGI KAIN TGL -->
+                                                                <td><?= $row_tgl_celup['MULAI']; ?></td> <!-- TGL CELUP -->
                                                                 <td>
                                                                     <?php
                                                                         // KK GABUNG
