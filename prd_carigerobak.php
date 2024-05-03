@@ -542,7 +542,7 @@
                                                                         <td></td>
                                                                     </tr>
                                                                 <?php else : ?>
-                                                                    <!-- QTY SALINAN -->
+                                                                    <!-- QTY SALINAN
                                                                     <?php
                                                                         $q_carisalinan1  = db2_exec($conn1, "SELECT
                                                                                                                 PRODUCTIONORDERCODE,
@@ -800,6 +800,7 @@
                                                                             <td><?= $row_count_gerobaksalinan['JML_GEROBAK'] ?></td>
                                                                         </tr>
                                                                     <?php endif; ?> 
+                                                                     -->
                                                                 <?php endif; ?>
                                                             <?php endif; ?>
                                                         <?php endwhile; ?>
