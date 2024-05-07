@@ -137,15 +137,14 @@
                                                                                 (
                                                                                 SELECT
                                                                                     DISTINCT 
-                                                                            r.GROUPLINE,
+                                                                                    r.GROUPLINE,
                                                                                     r.GROUPSTEPNUMBER,
                                                                                     r.PRODRESERVATIONLINKGROUPCODE,
                                                                                     r.ITEMTYPEAFICODE AS IT,
                                                                                     CASE
                                                                                         WHEN r.ITEMTYPEAFICODE IN ('RFD', 'RFF') THEN TRIM(r.SUBCODE01)
                                                                                     END AS RESERVATION,
-                                                                                    --TRIM(r.SUFFIXCODE),
-                                                                            CASE
+                                                                                    CASE
                                                                                         WHEN r.ITEMTYPEAFICODE = 'KGF' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03) || '-' || TRIM(r.SUBCODE04)
                                                                                         WHEN r.ITEMTYPEAFICODE = 'DYC' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03)
                                                                                         WHEN r.ITEMTYPEAFICODE = 'RFD' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUFFIXCODE)
@@ -193,15 +192,14 @@
                                                                             LEFT JOIN (
                                                                                 SELECT
                                                                                     DISTINCT 
-                                                                            r.GROUPLINE,
+                                                                                    r.GROUPLINE,
                                                                                     r.GROUPSTEPNUMBER,
                                                                                     r.PRODRESERVATIONLINKGROUPCODE,
                                                                                     r.ITEMTYPEAFICODE AS IT,
                                                                                     CASE
                                                                                         WHEN r.ITEMTYPEAFICODE IN ('RFD', 'RFF') THEN TRIM(r.SUBCODE01)
                                                                                     END AS RESERVATION,
-                                                                                    --TRIM(r.SUFFIXCODE),
-                                                                            CASE
+                                                                                    CASE
                                                                                         WHEN r.ITEMTYPEAFICODE = 'KGF' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03) || '-' || TRIM(r.SUBCODE04)
                                                                                         WHEN r.ITEMTYPEAFICODE = 'DYC' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03)
                                                                                         WHEN r.ITEMTYPEAFICODE = 'RFD' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUFFIXCODE)
