@@ -117,154 +117,153 @@
                                                                 $where_operation    = "";
                                                             }
                                                             $sql_reservation = "SELECT
-                                                            A.GROUPLINE,
-                                                            L.GROUPSTEPNUMBER,
-                                                            L.PRODRESERVATIONLINKGROUPCODE,
-                                                            L.RESERVATION,
-                                                            A.IT,
-                                                            A.ITEMCODE,
-                                                            A.LONGDESCRIPTION,
-                                                            A.PROGRESSSTATUS,
-                                                            A.ITEMCODE,
-                                                            A.LONGDESCRIPTION,
-                                                            A.USERPRIMARYQUANTITY,
-                                                            A.USERPRIMARYUOMCODE,
-                                                            A.USEDUSERPRIMARYQUANTITY,
-                                                            A.WAREHOUSECODE,
-                                                            A.ISSUEDATE,
-                                                            A.PROJECTCODE
-                                                        FROM
-                                                            (
-                                                            SELECT
-                                                                DISTINCT 
-                                                        r.GROUPLINE,
-                                                                r.GROUPSTEPNUMBER,
-                                                                r.PRODRESERVATIONLINKGROUPCODE,
-                                                                r.ITEMTYPEAFICODE AS IT,
-                                                                CASE
-                                                                    WHEN r.ITEMTYPEAFICODE IN ('RFD', 'RFF') THEN TRIM(r.SUBCODE01)
-                                                                END AS RESERVATION,
-                                                                --TRIM(r.SUFFIXCODE),
-                                                        CASE
-                                                                    WHEN r.ITEMTYPEAFICODE = 'KGF' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03) || '-' || TRIM(r.SUBCODE04)
-                                                                    WHEN r.ITEMTYPEAFICODE = 'DYC' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03)
-                                                                    WHEN r.ITEMTYPEAFICODE = 'RFD' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUFFIXCODE)
-                                                                    WHEN r.ITEMTYPEAFICODE = 'RFF' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUFFIXCODE)
-                                                                    WHEN r.ITEMTYPEAFICODE = 'WTR' THEN TRIM(r.SUBCODE01)
-                                                                END AS ITEMCODE,
-                                                                CASE
-                                                                    WHEN p.LONGDESCRIPTION IS NULL THEN r2.LONGDESCRIPTION
-                                                                    ELSE p.LONGDESCRIPTION
-                                                                END AS LONGDESCRIPTION,
-                                                                r.USERPRIMARYQUANTITY,
-                                                                CASE
-                                                                    WHEN TRIM(r.USERPRIMARYUOMCODE) = 'l' THEN 'Liter'
-                                                                    WHEN TRIM(r.USERPRIMARYUOMCODE) = 'g' THEN 'Gram'
-                                                                END AS USERPRIMARYUOMCODE,
-                                                                r.USEDUSERPRIMARYQUANTITY,
-                                                                CASE
-                                                                    WHEN r.PROGRESSSTATUS = 0 THEN 'Entered'
-                                                                    WHEN r.PROGRESSSTATUS = 1 THEN 'Partially Used'
-                                                                    WHEN r.PROGRESSSTATUS = 2 THEN 'Closed'
-                                                                END AS PROGRESSSTATUS,
-                                                                r.WAREHOUSECODE,
-                                                                r.ISSUEDATE,
-                                                                r.PROJECTCODE
-                                                            FROM
-                                                                PRODUCTIONRESERVATION r
-                                                            LEFT JOIN PRODUCT p ON
-                                                                p.SUBCODE01 = r.SUBCODE01
-                                                                AND p.SUBCODE02 = r.SUBCODE02
-                                                                AND p.SUBCODE03 = r.SUBCODE03
-                                                                AND p.SUBCODE04 = r.SUBCODE04
-                                                                AND p.ITEMTYPECODE = r.ITEMTYPEAFICODE
-                                                            LEFT JOIN RECIPE r2 ON
-                                                                r2.SUBCODE01 = r.SUBCODE01
-                                                                AND r2.SUFFIXCODE = r.SUFFIXCODE
-                                                            WHERE
-                                                                r.PRODUCTIONORDERCODE = '$prod_order'
-                                                                AND ORDERCODE = '$demand'
-                                                                AND (NOT r.ITEMTYPEAFICODE = 'KGF'
-                                                                    OR r.ITEMTYPEAFICODE = 'KFF')
-                                                                    $where_operation
-                                                            ORDER BY
-                                                                r.GROUPLINE ASC
-                                                        ) L
-                                                        LEFT JOIN (
-                                                            SELECT
-                                                                DISTINCT 
-                                                        r.GROUPLINE,
-                                                                r.GROUPSTEPNUMBER,
-                                                                r.PRODRESERVATIONLINKGROUPCODE,
-                                                                r.ITEMTYPEAFICODE AS IT,
-                                                                CASE
-                                                                    WHEN r.ITEMTYPEAFICODE IN ('RFD', 'RFF') THEN TRIM(r.SUBCODE01)
-                                                                END AS RESERVATION,
-                                                                --TRIM(r.SUFFIXCODE),
-                                                        CASE
-                                                                    WHEN r.ITEMTYPEAFICODE = 'KGF' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03) || '-' || TRIM(r.SUBCODE04)
-                                                                    WHEN r.ITEMTYPEAFICODE = 'DYC' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03)
-                                                                    WHEN r.ITEMTYPEAFICODE = 'RFD' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUFFIXCODE)
-                                                                    WHEN r.ITEMTYPEAFICODE = 'RFF' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUFFIXCODE)
-                                                                    WHEN r.ITEMTYPEAFICODE = 'WTR' THEN TRIM(r.SUBCODE01)
-                                                                END AS ITEMCODE,
-                                                                CASE
-                                                                    WHEN p.LONGDESCRIPTION IS NULL THEN r2.LONGDESCRIPTION
-                                                                    ELSE p.LONGDESCRIPTION
-                                                                END AS LONGDESCRIPTION,
-                                                                r.USERPRIMARYQUANTITY,
-                                                                CASE
-                                                                    WHEN TRIM(r.USERPRIMARYUOMCODE) = 'l' THEN 'Liter'
-                                                                    WHEN TRIM(r.USERPRIMARYUOMCODE) = 'g' THEN 'Gram'
-                                                                END AS USERPRIMARYUOMCODE,
-                                                                r.USEDUSERPRIMARYQUANTITY,
-                                                                CASE
-                                                                    WHEN r.PROGRESSSTATUS = 0 THEN 'Entered'
-                                                                    WHEN r.PROGRESSSTATUS = 1 THEN 'Partially Used'
-                                                                    WHEN r.PROGRESSSTATUS = 2 THEN 'Closed'
-                                                                END AS PROGRESSSTATUS,
-                                                                r.WAREHOUSECODE,
-                                                                r.ISSUEDATE,
-                                                                r.PROJECTCODE
-                                                            FROM
-                                                                PRODUCTIONRESERVATION r
-                                                            LEFT JOIN PRODUCT p ON
-                                                                p.SUBCODE01 = r.SUBCODE01
-                                                                AND p.SUBCODE02 = r.SUBCODE02
-                                                                AND p.SUBCODE03 = r.SUBCODE03
-                                                                AND p.SUBCODE04 = r.SUBCODE04
-                                                                AND p.ITEMTYPECODE = r.ITEMTYPEAFICODE
-                                                            LEFT JOIN RECIPE r2 ON
-                                                                r2.SUBCODE01 = r.SUBCODE01
-                                                                AND r2.SUFFIXCODE = r.SUFFIXCODE
-                                                            WHERE
-                                                                r.PRODUCTIONORDERCODE = '$prod_order'
-                                                                AND ORDERCODE = '$demand'
-                                                                AND (NOT r.ITEMTYPEAFICODE = 'KGF'
-                                                                    OR r.ITEMTYPEAFICODE = 'KFF')
-                                                                    $where_operation
-                                                            ORDER BY
-                                                                r.GROUPLINE ASC
-                                                        ) A ON
-                                                            A.GROUPSTEPNUMBER = L.GROUPSTEPNUMBER
-                                                        WHERE 
-                                                            L.RESERVATION IS NOT NULL
-                                                        ORDER BY
-                                                                A.GROUPLINE ASC   
-                                                        ";
+                                                                                A.GROUPLINE,
+                                                                                L.GROUPSTEPNUMBER,
+                                                                                L.PRODRESERVATIONLINKGROUPCODE,
+                                                                                L.RESERVATION,
+                                                                                A.IT,
+                                                                                A.ITEMCODE,
+                                                                                A.LONGDESCRIPTION,
+                                                                                A.PROGRESSSTATUS,
+                                                                                A.ITEMCODE,
+                                                                                A.LONGDESCRIPTION,
+                                                                                A.USERPRIMARYQUANTITY,
+                                                                                A.USERPRIMARYUOMCODE,
+                                                                                A.USEDUSERPRIMARYQUANTITY,
+                                                                                A.WAREHOUSECODE,
+                                                                                A.ISSUEDATE,
+                                                                                A.PROJECTCODE
+                                                                            FROM
+                                                                                (
+                                                                                SELECT
+                                                                                    DISTINCT 
+                                                                            r.GROUPLINE,
+                                                                                    r.GROUPSTEPNUMBER,
+                                                                                    r.PRODRESERVATIONLINKGROUPCODE,
+                                                                                    r.ITEMTYPEAFICODE AS IT,
+                                                                                    CASE
+                                                                                        WHEN r.ITEMTYPEAFICODE IN ('RFD', 'RFF') THEN TRIM(r.SUBCODE01)
+                                                                                    END AS RESERVATION,
+                                                                                    --TRIM(r.SUFFIXCODE),
+                                                                            CASE
+                                                                                        WHEN r.ITEMTYPEAFICODE = 'KGF' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03) || '-' || TRIM(r.SUBCODE04)
+                                                                                        WHEN r.ITEMTYPEAFICODE = 'DYC' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03)
+                                                                                        WHEN r.ITEMTYPEAFICODE = 'RFD' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUFFIXCODE)
+                                                                                        WHEN r.ITEMTYPEAFICODE = 'RFF' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUFFIXCODE)
+                                                                                        WHEN r.ITEMTYPEAFICODE = 'WTR' THEN TRIM(r.SUBCODE01)
+                                                                                    END AS ITEMCODE,
+                                                                                    CASE
+                                                                                        WHEN p.LONGDESCRIPTION IS NULL THEN r2.LONGDESCRIPTION
+                                                                                        ELSE p.LONGDESCRIPTION
+                                                                                    END AS LONGDESCRIPTION,
+                                                                                    r.USERPRIMARYQUANTITY,
+                                                                                    CASE
+                                                                                        WHEN TRIM(r.USERPRIMARYUOMCODE) = 'l' THEN 'Liter'
+                                                                                        WHEN TRIM(r.USERPRIMARYUOMCODE) = 'g' THEN 'Gram'
+                                                                                    END AS USERPRIMARYUOMCODE,
+                                                                                    r.USEDUSERPRIMARYQUANTITY,
+                                                                                    CASE
+                                                                                        WHEN r.PROGRESSSTATUS = 0 THEN 'Entered'
+                                                                                        WHEN r.PROGRESSSTATUS = 1 THEN 'Partially Used'
+                                                                                        WHEN r.PROGRESSSTATUS = 2 THEN 'Closed'
+                                                                                    END AS PROGRESSSTATUS,
+                                                                                    r.WAREHOUSECODE,
+                                                                                    r.ISSUEDATE,
+                                                                                    r.PROJECTCODE
+                                                                                FROM
+                                                                                    PRODUCTIONRESERVATION r
+                                                                                LEFT JOIN PRODUCT p ON
+                                                                                    p.SUBCODE01 = r.SUBCODE01
+                                                                                    AND p.SUBCODE02 = r.SUBCODE02
+                                                                                    AND p.SUBCODE03 = r.SUBCODE03
+                                                                                    AND p.SUBCODE04 = r.SUBCODE04
+                                                                                    AND p.ITEMTYPECODE = r.ITEMTYPEAFICODE
+                                                                                LEFT JOIN RECIPE r2 ON
+                                                                                    r2.SUBCODE01 = r.SUBCODE01
+                                                                                    AND r2.SUFFIXCODE = r.SUFFIXCODE
+                                                                                WHERE
+                                                                                    r.PRODUCTIONORDERCODE = '$prod_order'
+                                                                                    AND ORDERCODE = '$demand'
+                                                                                    AND (NOT r.ITEMTYPEAFICODE = 'KGF'
+                                                                                        OR r.ITEMTYPEAFICODE = 'KFF')
+                                                                                        $where_operation
+                                                                                ORDER BY
+                                                                                    r.GROUPLINE ASC
+                                                                            ) L
+                                                                            LEFT JOIN (
+                                                                                SELECT
+                                                                                    DISTINCT 
+                                                                            r.GROUPLINE,
+                                                                                    r.GROUPSTEPNUMBER,
+                                                                                    r.PRODRESERVATIONLINKGROUPCODE,
+                                                                                    r.ITEMTYPEAFICODE AS IT,
+                                                                                    CASE
+                                                                                        WHEN r.ITEMTYPEAFICODE IN ('RFD', 'RFF') THEN TRIM(r.SUBCODE01)
+                                                                                    END AS RESERVATION,
+                                                                                    --TRIM(r.SUFFIXCODE),
+                                                                            CASE
+                                                                                        WHEN r.ITEMTYPEAFICODE = 'KGF' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03) || '-' || TRIM(r.SUBCODE04)
+                                                                                        WHEN r.ITEMTYPEAFICODE = 'DYC' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03)
+                                                                                        WHEN r.ITEMTYPEAFICODE = 'RFD' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUFFIXCODE)
+                                                                                        WHEN r.ITEMTYPEAFICODE = 'RFF' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUFFIXCODE)
+                                                                                        WHEN r.ITEMTYPEAFICODE = 'WTR' THEN TRIM(r.SUBCODE01)
+                                                                                    END AS ITEMCODE,
+                                                                                    CASE
+                                                                                        WHEN p.LONGDESCRIPTION IS NULL THEN r2.LONGDESCRIPTION
+                                                                                        ELSE p.LONGDESCRIPTION
+                                                                                    END AS LONGDESCRIPTION,
+                                                                                    r.USERPRIMARYQUANTITY,
+                                                                                    CASE
+                                                                                        WHEN TRIM(r.USERPRIMARYUOMCODE) = 'l' THEN 'Liter'
+                                                                                        WHEN TRIM(r.USERPRIMARYUOMCODE) = 'g' THEN 'Gram'
+                                                                                    END AS USERPRIMARYUOMCODE,
+                                                                                    r.USEDUSERPRIMARYQUANTITY,
+                                                                                    CASE
+                                                                                        WHEN r.PROGRESSSTATUS = 0 THEN 'Entered'
+                                                                                        WHEN r.PROGRESSSTATUS = 1 THEN 'Partially Used'
+                                                                                        WHEN r.PROGRESSSTATUS = 2 THEN 'Closed'
+                                                                                    END AS PROGRESSSTATUS,
+                                                                                    r.WAREHOUSECODE,
+                                                                                    r.ISSUEDATE,
+                                                                                    r.PROJECTCODE
+                                                                                FROM
+                                                                                    PRODUCTIONRESERVATION r
+                                                                                LEFT JOIN PRODUCT p ON
+                                                                                    p.SUBCODE01 = r.SUBCODE01
+                                                                                    AND p.SUBCODE02 = r.SUBCODE02
+                                                                                    AND p.SUBCODE03 = r.SUBCODE03
+                                                                                    AND p.SUBCODE04 = r.SUBCODE04
+                                                                                    AND p.ITEMTYPECODE = r.ITEMTYPEAFICODE
+                                                                                LEFT JOIN RECIPE r2 ON
+                                                                                    r2.SUBCODE01 = r.SUBCODE01
+                                                                                    AND r2.SUFFIXCODE = r.SUFFIXCODE
+                                                                                WHERE
+                                                                                    r.PRODUCTIONORDERCODE = '$prod_order'
+                                                                                    AND ORDERCODE = '$demand'
+                                                                                    AND (NOT r.ITEMTYPEAFICODE = 'KGF'
+                                                                                        OR r.ITEMTYPEAFICODE = 'KFF')
+                                                                                        $where_operation
+                                                                                ORDER BY
+                                                                                    r.GROUPLINE ASC
+                                                                            ) A ON
+                                                                                A.GROUPSTEPNUMBER = L.GROUPSTEPNUMBER
+                                                                            WHERE 
+                                                                                L.RESERVATION IS NOT NULL
+                                                                            ORDER BY
+                                                                                    A.GROUPLINE ASC";
                                                             $stmt   = db2_exec($conn1, $sql_reservation);
                                                             while ($row_reservation = db2_fetch_assoc($stmt)) {
-                                                            $qpem = "SELECT *
-                                                                        FROM ITXVIEWRESEP i
-                                                                        WHERE i.PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]' AND 
-                                                                        i.SUBCODE  = '$row_reservation[ITEMCODE]' AND 
-                                                                        --SUBCODE01_RESERVATION ='SUBCO' AND 
-                                                                        SUBCODE01_RESERVATION ='$row_reservation[RESERVATION]' AND 
-                                                                        COMPANYCODE='100'
-                                                                        AND SUFFIXCODE_RESERVATION ='001'
-                                                                        AND PRODRESERVATIONLINKGROUPCODE ='$row_reservation[PRODRESERVATIONLINKGROUPCODE]'
-                                                                        --AND LONGDESCRIPTION ='TRANSOFT TF 4918 NE'
-                                                                        ";
+                                                            $qpem = "SELECT
+                                                                            *
+                                                                        FROM
+                                                                            ITXVIEWRESEP i
+                                                                        WHERE
+                                                                            i.PRODUCTIONORDERCODE = '$d_ITXVIEWKK[PRODUCTIONORDERCODE]'
+                                                                            AND i.SUBCODE = '$row_reservation[ITEMCODE]'
+                                                                            AND SUBCODE01_RESERVATION = '$row_reservation[RESERVATION]'
+                                                                            AND COMPANYCODE = '100'
+                                                                            AND SUFFIXCODE_RESERVATION = '001'
+                                                                            AND PRODRESERVATIONLINKGROUPCODE = '$row_reservation[PRODRESERVATIONLINKGROUPCODE]'";
                                                                 $dpem = db2_exec($conn1, $qpem);
                                                                 $pem = db2_fetch_assoc($dpem)
 
