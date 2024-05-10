@@ -29,7 +29,6 @@ if (isset($_POST['simpan'])) {
                             document.location.href = "prd_pinjam_stdcckwarna_te.php";
                         }';
             echo '</script>';
-
         }
     } else {
         $out = mysqli_query($con_db_dyeing, "UPDATE tbl_montemp
@@ -54,6 +53,7 @@ if (isset($_POST['simpan'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>PRD - PINJAM BUKU STD CCK WARNA TE</title>
     <meta charset="utf-8">
@@ -87,7 +87,8 @@ if (isset($_POST['simpan'])) {
         }
     }
 </style>
-<?php require_once 'header.php';?>
+<?php require_once 'header.php'; ?>
+
 <body>
     <div class="pcoded-content">
         <div class="pcoded-inner-content">
@@ -101,11 +102,11 @@ if (isset($_POST['simpan'])) {
                                         <h5>Form Pinjam Buku</h5>
                                     </div>
                                     <form action="" method="post">
-                                        <div class="card-block" <?php if (isset($_POST['tambah']) or $_GET['tambah'] == '1'): ?> hidden <?php else: ?> show <?php endif;?>>
+                                        <div class="card-block" <?php if (isset($_POST['tambah']) or $_GET['tambah'] == '1') : ?> hidden <?php else : ?> show <?php endif; ?>>
                                             <div class="form-group row">
                                                 <label class="col-sm-2 col-form-label">Scan Barcode</label>
                                                 <div class="col-sm-2">
-                                                    <input type="text" class="form-control input-sm" name="id" id="id" value="<?=$_POST['id'];?>" onchange="barcode()" placeholder="Scan Barcode..." autofocus>
+                                                    <input type="text" class="form-control input-sm" name="id" id="id" value="<?= $_POST['id']; ?>" onchange="barcode()" placeholder="Scan Barcode..." autofocus>
                                                 </div>
                                                 <div class="col-sm-2">
                                                     <input type="text" style="background: rgba(0, 0, 0, 0); border: none; outline: none;" disabled id="muncul_nowarna">
@@ -114,7 +115,7 @@ if (isset($_POST['simpan'])) {
                                             <div class="form-group row">
                                                 <label class="col-sm-2 col-form-label">Penanggung Jawab</label>
                                                 <div class="col-sm-2">
-                                                    <input type="text" class="form-control input-sm" name="no_absen" id="no_absen" value="<?=$_POST['no_absen'];?>" onchange="absen()" placeholder="Scan No Absen...">
+                                                    <input type="text" class="form-control input-sm" name="no_absen" id="no_absen" value="<?= $_POST['no_absen']; ?>" onchange="absen()" placeholder="Scan No Absen...">
                                                 </div>
                                                 <div class="col-sm-8">
                                                     <input type="text" style="background: rgba(0, 0, 0, 0); border: none; outline: none;" disabled id="nama">
@@ -125,15 +126,19 @@ if (isset($_POST['simpan'])) {
                                                 <div class="col-sm-10">
                                                     <select class="form-control input-sm" name='status'>
                                                         <option value="" selected disabled>Pilih Status pinjam/kembalikan</option>
-                                                        <option value="Pinjam" <?php if ($_POST['status'] == 'Pinjam') {echo 'SELECTED';}?>>Pinjam</option>
-                                                        <option value="Kembali" <?php if ($_POST['status'] == 'Kembali') {echo 'SELECTED';}?>>Kembali</option>
+                                                        <option value="Pinjam" <?php if ($_POST['status'] == 'Pinjam') {
+                                                                                    echo 'SELECTED';
+                                                                                } ?>>Pinjam</option>
+                                                        <option value="Kembali" <?php if ($_POST['status'] == 'Kembali') {
+                                                                                    echo 'SELECTED';
+                                                                                } ?>>Kembali</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-sm-2 col-form-label">Keterangan</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control input-sm" name="ket" value="<?=$_POST['ket'];?>" placeholder="Keterangan...">
+                                                    <input type="text" class="form-control input-sm" name="ket" value="<?= $_POST['ket']; ?>" placeholder="Keterangan...">
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-xl-12 m-b-30">
@@ -144,7 +149,7 @@ if (isset($_POST['simpan'])) {
                                         </div>
                                     </form>
                                 </div>
-                                <?php if (isset($_POST['lihatdata_bergerak'])): ?>
+                                <?php if (isset($_POST['lihatdata_bergerak'])) : ?>
                                     <div class="card">
                                         <form action="printbarcode_bukupinjam.php" method="POST" target="_blank">
                                             <div class="card-block">
@@ -165,7 +170,7 @@ if (isset($_POST['simpan'])) {
                                                         </thead>
                                                         <tbody>
                                                             <?php
-$q_bukupinjam = mysqli_query($con_db_dyeing, "SELECT
+                                                            $q_bukupinjam = mysqli_query($con_db_dyeing, "SELECT
                                                                                                                     a.id,
                                                                                                                     a.nokk,
                                                                                                                     a.nodemand,
@@ -184,82 +189,82 @@ $q_bukupinjam = mysqli_query($con_db_dyeing, "SELECT
                                                                                                                     (a.tgl_in IS NOT NULL OR a.tgl_out IS NOT NULL)
                                                                                                                 ORDER BY
                                                                                                                     a.id DESC");
-?>
+                                                            ?>
                                                             <?php while ($row_bukupinjam = mysqli_fetch_array($q_bukupinjam)) {
-    // Mendapatkan nilai nokk dari setiap baris
-    $nokk = $row_bukupinjam['nokk'];
+                                                                // Mendapatkan nilai nokk dari setiap baris
+                                                                $nokk = $row_bukupinjam['nokk'];
 
-// Eksekusi query kedua untuk setiap nokk
-    $db2 = db2_exec($conn1, "SELECT
-                                TRIM(PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
-                                TRIM(DEAMAND) AS DEMAND,
-                                ORIGDLVSALORDERLINEORDERLINE,
-                                PROJECTCODE,
-                                ORDPRNCUSTOMERSUPPLIERCODE,
-                                TRIM(SUBCODE01) AS SUBCODE01, TRIM(SUBCODE02) AS SUBCODE02, TRIM(SUBCODE03) AS SUBCODE03, TRIM(SUBCODE04) AS SUBCODE04,
-                                TRIM(SUBCODE05) AS SUBCODE05, TRIM(SUBCODE06) AS SUBCODE06, TRIM(SUBCODE07) AS SUBCODE07, TRIM(SUBCODE08) AS SUBCODE08,
-                                TRIM(SUBCODE09) AS SUBCODE09, TRIM(SUBCODE10) AS SUBCODE10,
-                                TRIM(ITEMTYPEAFICODE) AS ITEMTYPEAFICODE,
-                                TRIM(DSUBCODE05) AS NO_WARNA,
-                                TRIM(DSUBCODE02) || '-' || TRIM(DSUBCODE03)  AS NO_HANGER,
-                                TRIM(ITEMDESCRIPTION) AS ITEMDESCRIPTION,
-                                DELIVERYDATE,
-                                LOT
-                            FROM
-                                ITXVIEWKK
-                            WHERE
-                                PRODUCTIONORDERCODE = '$nokk'");
+                                                                // Eksekusi query kedua untuk setiap nokk
+                                                                $db2 = db2_exec($conn1, "SELECT
+                                                                                            TRIM(PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
+                                                                                            TRIM(DEAMAND) AS DEMAND,
+                                                                                            ORIGDLVSALORDERLINEORDERLINE,
+                                                                                            PROJECTCODE,
+                                                                                            ORDPRNCUSTOMERSUPPLIERCODE,
+                                                                                            TRIM(SUBCODE01) AS SUBCODE01, TRIM(SUBCODE02) AS SUBCODE02, TRIM(SUBCODE03) AS SUBCODE03, TRIM(SUBCODE04) AS SUBCODE04,
+                                                                                            TRIM(SUBCODE05) AS SUBCODE05, TRIM(SUBCODE06) AS SUBCODE06, TRIM(SUBCODE07) AS SUBCODE07, TRIM(SUBCODE08) AS SUBCODE08,
+                                                                                            TRIM(SUBCODE09) AS SUBCODE09, TRIM(SUBCODE10) AS SUBCODE10,
+                                                                                            TRIM(ITEMTYPEAFICODE) AS ITEMTYPEAFICODE,
+                                                                                            TRIM(DSUBCODE05) AS NO_WARNA,
+                                                                                            TRIM(DSUBCODE02) || '-' || TRIM(DSUBCODE03)  AS NO_HANGER,
+                                                                                            TRIM(ITEMDESCRIPTION) AS ITEMDESCRIPTION,
+                                                                                            DELIVERYDATE,
+                                                                                            LOT
+                                                                                        FROM
+                                                                                            ITXVIEWKK
+                                                                                        WHERE
+                                                                                            PRODUCTIONORDERCODE = '$nokk'");
 
-    // Ambil data dari hasil query kedua
-    $row_db2 = db2_fetch_assoc($db2);
+                                                                // Ambil data dari hasil query kedua
+                                                                $row_db2 = db2_fetch_assoc($db2);
 
-    ?>
+                                                            ?>
 
 
                                                                 <tr>
-                                                                    <td><?=sprintf("%'.06d\n", $row_bukupinjam['id']);?></td>
-                                                                    <td><?=$row_bukupinjam['nokk'];?></td>
-                                                                    <td><?=$row_bukupinjam['nodemand'];?></td>
-                                                                    <td><?=$row_db2['LOT'];?></td>
-                                                                    <td><?=$row_bukupinjam['no_mesin'];?></td>
-                                                                    <td><?=$row_bukupinjam['no_warna'];?></td>
-                                                                    <td><?=$row_bukupinjam['warna'];?></td>
+                                                                    <td><?= sprintf("%'.06d\n", $row_bukupinjam['id']); ?></td>
+                                                                    <td><?= $row_bukupinjam['nokk']; ?></td>
+                                                                    <td><?= $row_bukupinjam['nodemand']; ?></td>
+                                                                    <td><?= $row_db2['LOT']; ?></td>
+                                                                    <td><?= $row_bukupinjam['no_mesin']; ?></td>
+                                                                    <td><?= $row_bukupinjam['no_warna']; ?></td>
+                                                                    <td><?= $row_bukupinjam['warna']; ?></td>
                                                                     <td>
                                                                         <?php
-$no_absen = ltrim($row_bukupinjam['absen_in'], '0');
-    $cari_nama_in = mysqli_query($con_hrd, "SELECT * FROM tbl_makar WHERE no_scan = '$no_absen'");
-    $cari_nama_out = mysqli_query($con_hrd, "SELECT * FROM tbl_makar WHERE no_scan = '$no_absen'");
-    $nama_in = mysqli_fetch_assoc($cari_nama_in);
-    $nama_out = mysqli_fetch_assoc($cari_nama_out);
-    if (!empty($row_bukupinjam['tgl_in'])) {
-        echo "Dipinjam : $nama_in[nama] <br>";
-        echo "Waktu Pinjam :$row_bukupinjam[tgl_in] <br><br>";
-    }
-    if (!empty($row_bukupinjam['tgl_out'])) {
-        echo "Dikembalikan : $nama_out[nama] <br>";
-        echo "Waktu Kembali : $row_bukupinjam[tgl_out]";
-    }
-    ?>
+                                                                        $no_absen = ltrim($row_bukupinjam['absen_in'], '0');
+                                                                        $cari_nama_in = mysqli_query($con_hrd, "SELECT * FROM tbl_makar WHERE no_scan = '$no_absen'");
+                                                                        $cari_nama_out = mysqli_query($con_hrd, "SELECT * FROM tbl_makar WHERE no_scan = '$no_absen'");
+                                                                        $nama_in = mysqli_fetch_assoc($cari_nama_in);
+                                                                        $nama_out = mysqli_fetch_assoc($cari_nama_out);
+                                                                        if (!empty($row_bukupinjam['tgl_in'])) {
+                                                                            echo "Dipinjam : $nama_in[nama] <br>";
+                                                                            echo "Waktu Pinjam :$row_bukupinjam[tgl_in] <br><br>";
+                                                                        }
+                                                                        if (!empty($row_bukupinjam['tgl_out'])) {
+                                                                            echo "Dikembalikan : $nama_out[nama] <br>";
+                                                                            echo "Waktu Kembali : $row_bukupinjam[tgl_out]";
+                                                                        }
+                                                                        ?>
                                                                     </td>
-                                                                    <td><?=$row_bukupinjam['keterangan'];?></td>
+                                                                    <td><?= $row_bukupinjam['keterangan']; ?></td>
                                                                     <td>
-                                                                        <a data-pk="<?=$row_bukupinjam['id']?>" data-value="<?=$row_bukupinjam['archive']?>" class="archive_edit_te" href="javascipt:void(0)">
-                                                                            <?=$row_bukupinjam['archive'];?>
+                                                                        <a data-pk="<?= $row_bukupinjam['id'] ?>" data-value="<?= $row_bukupinjam['archive'] ?>" class="archive_edit_te" href="javascipt:void(0)">
+                                                                            <?= $row_bukupinjam['archive']; ?>
                                                                         </a>
                                                                     </td>
                                                                     <td>
-                                                                        <a href="prd_prd_pinjam_stdcckwarna_history.php?id=<?=$row_bukupinjam['id']?>&kode=te" target="_blank" class="btn btn-primary btn-round btn-sm"><i class="icofont icofont-history"></i>History</a>
+                                                                        <a href="prd_prd_pinjam_stdcckwarna_history.php?id=<?= $row_bukupinjam['id'] ?>&kode=te" target="_blank" class="btn btn-primary btn-round btn-sm"><i class="icofont icofont-history"></i>History</a>
                                                                     </td>
                                                                 </tr>
                                                             <?php
-}?>
+                                                            } ?>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
-                                <?php endif;?>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -268,10 +273,10 @@ $no_absen = ltrim($row_bukupinjam['absen_in'], '0');
         </div>
     </div>
 </body>
-<?php require_once 'footer.php';?>
+<?php require_once 'footer.php'; ?>
 <script>
     $(function() {
-	    $('#example2').DataTable({
+        $('#example2').DataTable({
             'searching': true
         });
         $(function() {
