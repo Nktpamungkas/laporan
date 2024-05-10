@@ -430,7 +430,7 @@ header('Cache-Control: max-age=0');
                         <?php endif; ?>
                     </td> <!-- BRUTO/BAGI KAIN -->
                     <td>
-                        <?php if($d_orig_pd_code['SALINAN_GANTIKAIN'] != '058') : ?>
+                        <?php if(!empty($d_orig_pd_code['ORIGINALPDCODE']) && $d_orig_pd_code['SALINAN_GANTIKAIN'] != '058') : ?>
                             <?= number_format($d_qtysalinan['USERPRIMARYQUANTITY'],3) ?>
                         <?php else : ?>
                             0
