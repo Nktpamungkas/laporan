@@ -618,27 +618,28 @@
                                                                 <?= $roll; ?>
                                                             </td> <!-- ROLL -->
                                                             <td>
+                                                                <?php 
+                                                                    $q_qtysalinan = db2_exec($conn1, "SELECT * FROM PRODUCTIONDEMAND WHERE CODE = '$rowdb2[DEMAND]'");
+                                                                    $d_qtysalinan = db2_fetch_assoc($q_qtysalinan);
+                                                                ?>
                                                                 <?php
                                                                     $q_orig_pd_code     = db2_exec($conn1, "SELECT 
-                                                                                                                *, a.VALUESTRING AS ORIGINALPDCODE
+                                                                                                                *, a2.VALUESTRING AS SALINAN_GANTIKAIN, a.VALUESTRING AS ORIGINALPDCODE
                                                                                                             FROM 
                                                                                                                 PRODUCTIONDEMAND p 
                                                                                                             LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'OriginalPDCode'
+                                                                                                            LEFT JOIN ADSTORAGE a2 ON a2.UNIQUEID = p.ABSUNIQUEID AND a2.FIELDNAME = 'DefectTypeCode'
                                                                                                             WHERE p.CODE = '$rowdb2[DEMAND]'");
                                                                     $d_orig_pd_code     = db2_fetch_assoc($q_orig_pd_code);
                                                                 ?>
-                                                                <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?>
-                                                                    0
+                                                                <?php if($d_orig_pd_code['SALINAN_GANTIKAIN'] == '058') : ?>
+                                                                    <?= number_format($d_qtysalinan['USERPRIMARYQUANTITY'],3) ?>
                                                                 <?php else : ?>
                                                                     <?= number_format($rowdb2['QTY_BAGIKAIN'],2); ?>
                                                                 <?php endif; ?>
                                                             </td> <!-- BRUTO/BAGI KAIN -->
                                                             <td>
-                                                                <?php 
-                                                                    $q_qtysalinan = db2_exec($conn1, "SELECT * FROM PRODUCTIONDEMAND WHERE CODE = '$rowdb2[DEMAND]'");
-                                                                    $d_qtysalinan = db2_fetch_assoc($q_qtysalinan);
-                                                                ?>
-                                                                <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?>
+                                                                <?php if(!empty($d_orig_pd_code['ORIGINALPDCODE']) && $d_orig_pd_code['SALINAN_GANTIKAIN'] != '058') : ?>
                                                                     <?= number_format($d_qtysalinan['USERPRIMARYQUANTITY'],3) ?>
                                                                 <?php else : ?>
                                                                     0

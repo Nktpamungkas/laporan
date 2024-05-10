@@ -91,32 +91,32 @@
                                                         </thead>
                                                         <tbody>
                                                             <?php
-                                                                ini_set("error_reporting", 1);
-                                                                require_once "koneksi.php";
+                                                            ini_set("error_reporting", 1);
+                                                            require_once "koneksi.php";
 
-                                                                if ($_GET['demand']) {
-                                                                    $demand     = $_GET['demand'];
-                                                                } else {
-                                                                    $demand     = $_POST['demand'];
-                                                                }
+                                                            if ($_GET['demand']) {
+                                                                $demand     = $_GET['demand'];
+                                                            } else {
+                                                                $demand     = $_POST['demand'];
+                                                            }
 
-                                                                $q_ITXVIEWKK    = db2_exec($conn1, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$demand'");
-                                                                $d_ITXVIEWKK    = db2_fetch_assoc($q_ITXVIEWKK);
+                                                            $q_ITXVIEWKK    = db2_exec($conn1, "SELECT * FROM ITXVIEWKK WHERE PRODUCTIONDEMANDCODE = '$demand'");
+                                                            $d_ITXVIEWKK    = db2_fetch_assoc($q_ITXVIEWKK);
 
-                                                                if ($_GET['prod_order']) {
-                                                                    $prod_order     = $_GET['prod_order'];
-                                                                } elseif ($_POST['prod_order']) {
-                                                                    $prod_order     = $_POST['prod_order'];
-                                                                } else {
-                                                                    $prod_order     = $d_ITXVIEWKK['PRODUCTIONORDERCODE'];
-                                                                }
+                                                            if ($_GET['prod_order']) {
+                                                                $prod_order     = $_GET['prod_order'];
+                                                            } elseif ($_POST['prod_order']) {
+                                                                $prod_order     = $_POST['prod_order'];
+                                                            } else {
+                                                                $prod_order     = $d_ITXVIEWKK['PRODUCTIONORDERCODE'];
+                                                            }
 
-                                                                if ($_GET['OPERATION']) {
-                                                                    $where_operation    = "AND r.PRODRESERVATIONLINKGROUPCODE = '$_GET[OPERATION]'";
-                                                                } else {
-                                                                    $where_operation    = "";
-                                                                }
-                                                                $sql_reservation = "SELECT 
+                                                            if ($_GET['OPERATION']) {
+                                                                $where_operation    = "AND r.PRODRESERVATIONLINKGROUPCODE = '$_GET[OPERATION]'";
+                                                            } else {
+                                                                $where_operation    = "";
+                                                            }
+                                                            $sql_reservation = "SELECT 
                                                                                         DISTINCT 
                                                                                         r.GROUPLINE,
                                                                                         r.GROUPSTEPNUMBER,
@@ -124,6 +124,19 @@
                                                                                         r.ITEMTYPEAFICODE AS IT,
                                                                                         v.SUBCODE01 AS RCODE,
                                                                                         v.SUFFIXCODE AS SUFFIX,
+                                                                                        r.RCPGROUPNOPATLEVEL AS NOMOR,
+                                                                                        CASE
+                                                                                            WHEN r.ITEMTYPEAFICODE IN ('RFD') THEN TRIM(r.SUBCODE01)
+                                                                                        END AS RFD,
+                                                                                        CASE
+                                                                                            WHEN r.ITEMTYPEAFICODE IN ('RFF') THEN TRIM(r.SUBCODE01)
+                                                                                        END AS RFF,
+                                                                                        CASE
+                                                                                            WHEN r.ITEMTYPEAFICODE IN ('RFD') THEN TRIM(r.SUFFIXCODE)
+                                                                                        END AS SUFFIXCODE_RFD,
+                                                                                        CASE
+                                                                                            WHEN r.ITEMTYPEAFICODE IN ('RFF') THEN TRIM(r.SUFFIXCODE)
+                                                                                        END AS SUFFIXCODE_RFF,
                                                                                         CASE
                                                                                             WHEN r.ITEMTYPEAFICODE = 'KGF' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03) || '-' || TRIM(r.SUBCODE04)
                                                                                             WHEN r.ITEMTYPEAFICODE = 'DYC' THEN TRIM(r.SUBCODE01) || '-' || TRIM(r.SUBCODE02) || '-' || TRIM(r.SUBCODE03)
@@ -167,37 +180,112 @@
                                                                                         $where_operation
                                                                                     ORDER BY 
                                                                                         r.GROUPLINE ASC";
-                                                                $stmt   = db2_exec($conn1, $sql_reservation);
-                                                                $lastRCODE  = null;
-                                                                $lastSUFFIX  = null;
-                                                                while ($row_reservation = db2_fetch_assoc($stmt)) {
-                                                                    $RCODE  = $row_reservation['RCODE'];
-                                                                    $SUFFIX = $row_reservation['SUFFIX'];
+                                                            $stmt   = db2_exec($conn1, $sql_reservation);
+                                                            $lastRFD  = null;
+                                                            $lastRFF  = null;
+                                                            $lastSUF_RFD  = null;
+                                                            $lastSUF_RFF  = null;
+                                                            $rfdupd = null;
+                                                            $lastsuf_rfdupd = null;
+                                                            while ($row_reservation = db2_fetch_assoc($stmt)) {
+                                                                $RFD  = $row_reservation['RFD'];
+                                                                $SUF_RFD = $row_reservation['SUFFIXCODE_RFD'];
+                                                                $RFF  = $row_reservation['RFF'];
+                                                                $SUF_RFF = $row_reservation['SUFFIXCODE_RFF'];
+                                                                // if ($row_reservation['ITEMCODE'] === 'WATER') {
+                                                                //     // Jika sudah bertemu dengan 'WATER', hentikan loop
+                                                                //     break;
+                                                                // }
+                                                                if (empty($RFD) && empty($SUF_RFD)) {
+                                                                    $RFD = $lastRFD;
+                                                                    $SUF_RFD = $lastSUF_RFD;
+                                                                }
+                                                                $lastRFD = $RFD;
+                                                                $lastSUF_RFD = $SUF_RFD;
+                                                                if (empty($lastRFD)) {
+                                                                    $lastRFD = $RFF;
+                                                                }
+                                                                $lastRFD = $RFD;
+                                                                if (empty($RFF) && empty($SUF_RFF)) {
+                                                                    $RFF = $lastRFF;
+                                                                    $SUF_RFF = $lastSUF_RFF;
+                                                                }
+                                                                $lastRFF = $RFF;
+                                                                $lastSUF_RFF = $SUF_RFF;
+                                                                if (empty($RFD) && empty($SUF_RFD)) {
+                                                                    $RFD = $rfdup;
+                                                                    $SUF_RFD = $lastsuf_rfdupd;
+                                                                }
+                                                                $rfdup = $RFF;
+                                                                $lastsuf_rfdupd = $SUF_RFF;
 
-                                                                    if (!empty($RCODE) && !empty($SUFFIX)) {
-                                                                        $lastRCODE = $RCODE;
-                                                                        $lastSUFFIX = $SUFFIX;
-                                                                    }
+                                                                $qry_suffix = "SELECT
+                                                                DISTINCT 
+                                                                    RECIPENUMBERID,
+                                                                    RECIPEITEMTYPECODE,
+                                                                    RECIPESUBCODE01,
+                                                                    RECIPESUFFIXCODE,
+                                                                CASE
+                                                                    WHEN NOT ITEMTYPEAFICODE IN 'DYC' THEN SUBCODE01
+                                                                    ELSE RECIPESUBCODE01
+                                                                END AS RCODE,
+                                                                CASE
+                                                                    WHEN NOT ITEMTYPEAFICODE IN 'DYC' THEN SUFFIXCODE
+                                                                    ELSE RECIPESUFFIXCODE
+                                                                END AS SUFIX,
+                                                                    groupnumber,
+                                                                    grouptypecode,
+                                                                    linetype,
+                                                                    SEQUENCE,
+                                                                    subsequence,
+                                                                    itemtypeaficode,
+                                                                    SUBCODE01,
+                                                                    SUBCODE02,
+                                                                    SUBCODE03,
+                                                                    SUFFIXCODE,
+                                                                    COMMENTLINE,
+                                                                    CONSUMPTIONTYPE,
+                                                                    CONSUMPTION,
+                                                                    WATERMANAGEMENT,
+                                                                    COSTINGPLANTCODE
+                                                                FROM
+                                                                    (
+                                                                    SELECT
+                                                                        *
+                                                                    FROM
+                                                                            RECIPECOMPONENT r
+                                                                    WHERE
+                                                                            RECIPESUBCODE01 = '$RFD'
+                                                                        AND   
+                                                                            RECIPESUFFIXCODE = '$SUF_RFD'
+                                                                        AND GROUPNUMBER = '$row_reservation[NOMOR]'
+                                                                        -- AND ITEMTYPEAFICODE='$row_reservation[IT]'
+                                                                        -- AND SUBCODE01='$row_reservation[SUBCODE01]'
+                                                                        -- AND SUBCODE02='$row_reservation[SUBCODE02]'
+                                                                        -- AND SUBCODE03='$row_reservation[SUBCODE03]'
+                                                            )";
+                                                                $dsuffix = db2_exec($conn1, $qry_suffix);
+                                                                $suffix = db2_fetch_assoc($dsuffix);
+                                                                //Jangan dihapus dulu ya mas, masih cari cari cara buat munculin semua
+                                                                // if (empty($RFD)) {
+                                                                //     $RFD = $lastRFD;
+                                                                // }
+                                                                // if (empty($RFF)) {
+                                                                //     $RFF = $lastRFF;
+                                                                // }
 
-                                                                    if (empty($RCODE)) {
-                                                                        $RCODE = $lastRCODE;
-                                                                    }
-                                                                    if (empty($SUFFIX)) {
-                                                                        $SUFFIX = $lastSUFFIX;
-                                                                    }
-
-                                                                    $qpem = "SELECT
+                                                                $qpem = "SELECT
                                                                                 *
                                                                             FROM
                                                                                 ITXVIEWRESEP i
                                                                             WHERE
                                                                                 PRODUCTIONORDERCODE = '$prod_order'
-                                                                                AND SUBCODE01_RESERVATION = '$RCODE'
-                                                                                AND SUFFIXCODE_RESERVATION = '$SUFFIX'
+                                                                                AND SUBCODE01_RESERVATION = '$suffix[RCODE]'
+                                                                                AND SUFFIXCODE_RESERVATION = '$suffix[SUFIX]'
                                                                                 AND COMPANYCODE = '100'
                                                                                 AND SUBCODE = '$row_reservation[ITEMCODE]'";
-                                                                    $dpem = db2_exec($conn1, $qpem);
-                                                                    $pem = db2_fetch_assoc($dpem)
+                                                                $dpem = db2_exec($conn1, $qpem);
+                                                                $pem = db2_fetch_assoc($dpem)
                                                             ?>
                                                                 <tr>
                                                                     <td style="text-align: center;"><?= $row_reservation['GROUPSTEPNUMBER']; ?></td>
@@ -212,7 +300,10 @@
                                                                     <td style="text-align: left;"><?= $row_reservation['PROGRESSSTATUS']; ?></td>
                                                                     <td style="text-align: left;"><?= $row_reservation['WAREHOUSECODE']; ?></td>
                                                                     <td style="text-align: left;"><?= $row_reservation['ISSUEDATE']; ?></td>
-                                                                    <td style="text-align: left;"><?= $row_reservation['PROJECTCODE']; ?><?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132'){ echo $RCODE.'-'.$SUFFIX; } ?></td>
+                                                                    <td style="text-align: left;"><?= $row_reservation['PROJECTCODE']; ?><?php if ($_SERVER['REMOTE_ADDR'] == '10.0.5.132') {
+                                                                                                                                                echo $RFD . '-' . $RFF;
+                                                                                                                                            } ?></td>
+                                                                    <!-- <td style="text-align: left;"><?= $suffix['SUFIX']; ?></td>                                                                        -->
                                                                 </tr>
                                                             <?php } ?>
                                                         </tbody>
