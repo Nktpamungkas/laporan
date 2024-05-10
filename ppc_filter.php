@@ -73,11 +73,11 @@
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Dari Tanggal</h4>
-                                                    <input type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
+                                                    <input type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>" readonly>
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Sampai Tanggal</h4>
-                                                    <input type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
+                                                    <input type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>" readonly>
                                                 </div>
                                                 <!-- <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 style="font-size: 12px;" class="sub-title">DEPARTEMENT</h4>
@@ -624,23 +624,39 @@
                                                                 ?>
                                                                 <?php
                                                                     $q_orig_pd_code     = db2_exec($conn1, "SELECT 
-                                                                                                                *, a2.VALUESTRING AS SALINAN_GANTIKAIN, a.VALUESTRING AS ORIGINALPDCODE
+                                                                                                                *, a.VALUESTRING AS ORIGINALPDCODE
                                                                                                             FROM 
                                                                                                                 PRODUCTIONDEMAND p 
                                                                                                             LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'OriginalPDCode'
-                                                                                                            LEFT JOIN ADSTORAGE a2 ON a2.UNIQUEID = p.ABSUNIQUEID AND a2.FIELDNAME = 'DefectTypeCode'
                                                                                                             WHERE p.CODE = '$rowdb2[DEMAND]'");
                                                                     $d_orig_pd_code     = db2_fetch_assoc($q_orig_pd_code);
+                                                                    
+                                                                    $q_cek_salinan     = db2_exec($conn1, "SELECT 
+                                                                                                                a2.VALUESTRING AS SALINAN_058
+                                                                                                            FROM 
+                                                                                                                PRODUCTIONDEMAND p 
+                                                                                                            LEFT JOIN ADSTORAGE a2 ON a2.UNIQUEID = p.ABSUNIQUEID AND a2.FIELDNAME = 'DefectTypeCode'
+                                                                                                            LEFT JOIN USERGENERICGROUP u ON u.CODE = a2.VALUESTRING AND u.USERGENERICGROUPTYPECODE = '006'
+                                                                                                            WHERE p.CODE = '$rowdb2[DEMAND]'");
+                                                                    $d_cek_salinan     = db2_fetch_assoc($q_cek_salinan);
                                                                 ?>
-                                                                <?php if($d_orig_pd_code['SALINAN_GANTIKAIN'] == '058') : ?>
-                                                                    <?= number_format($d_qtysalinan['USERPRIMARYQUANTITY'],3) ?>
+                                                                <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?>
+                                                                    <?php if($d_cek_salinan['SALINAN_058'] == '058') : ?>
+                                                                        <?= number_format($d_qtysalinan['USERPRIMARYQUANTITY'],3) ?>
+                                                                    <?php else : ?> 
+                                                                        0
+                                                                    <?php endif; ?> 
                                                                 <?php else : ?>
                                                                     <?= number_format($rowdb2['QTY_BAGIKAIN'],2); ?>
                                                                 <?php endif; ?>
                                                             </td> <!-- BRUTO/BAGI KAIN -->
                                                             <td>
-                                                                <?php if(!empty($d_orig_pd_code['ORIGINALPDCODE']) && $d_orig_pd_code['SALINAN_GANTIKAIN'] != '058') : ?>
-                                                                    <?= number_format($d_qtysalinan['USERPRIMARYQUANTITY'],3) ?>
+                                                                <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?>
+                                                                    <?php if($d_cek_salinan['SALINAN_058'] == '058') : ?>
+                                                                        0
+                                                                    <?php else : ?> 
+                                                                        <?= number_format($d_qtysalinan['USERPRIMARYQUANTITY'],3) ?>
+                                                                    <?php endif; ?> 
                                                                 <?php else : ?>
                                                                     0
                                                                 <?php endif; ?>
