@@ -116,11 +116,13 @@
                                                             } else {
                                                                 $where_operation    = "";
                                                             }
+                                                            //QRY Utama untuk ambil data
                                                             $sql_reservation = "SELECT 
                                                                                         DISTINCT 
+                                                                                        TRIM(SUBSTR(r.HEADERLINELINK,4)) AS HEADERLINELINK,
                                                                                         r.GROUPLINE,
                                                                                         r.GROUPSTEPNUMBER,
-                                                                                        r.PRODRESERVATIONLINKGROUPCODE,
+                                                                                        TRIM(r.PRODRESERVATIONLINKGROUPCODE)AS PRODRESERVATIONLINKGROUPCODE,
                                                                                         r.ITEMTYPEAFICODE AS IT,
                                                                                         v.SUBCODE01 AS RCODE,
                                                                                         v.SUFFIXCODE AS SUFFIX,
@@ -185,95 +187,89 @@
                                                             $lastRFF  = null;
                                                             $lastSUF_RFD  = null;
                                                             $lastSUF_RFF  = null;
-                                                            $rfdupd = null;
-                                                            $lastsuf_rfdupd = null;
                                                             while ($row_reservation = db2_fetch_assoc($stmt)) {
-                                                                $RFD  = $row_reservation['RFD'];
-                                                                $SUF_RFD = $row_reservation['SUFFIXCODE_RFD'];
-                                                                $RFF  = $row_reservation['RFF'];
-                                                                $SUF_RFF = $row_reservation['SUFFIXCODE_RFF'];
-                                                                // if ($row_reservation['ITEMCODE'] === 'WATER') {
-                                                                //     // Jika sudah bertemu dengan 'WATER', hentikan loop
-                                                                //     break;
-                                                                // }
-                                                                if (empty($RFD) && empty($SUF_RFD)) {
-                                                                    $RFD = $lastRFD;
-                                                                    $SUF_RFD = $lastSUF_RFD;
+                                                                //Looping untuk cari Suffix dan Rcode Header
+                                                                $header         =   $row_reservation['HEADERLINELINK'];
+                                                                $charit         =   strlen($row_reservation['PRODRESERVATIONLINKGROUPCODE']);
+                                                                $RFD1           =   substr($header, 0, -$charit);
+                                                                $SUF_RFD1       =   substr($header, 0, -$charit);
+                                                                //Looping untuk RFD dan RFF
+                                                                $RFD            =   $row_reservation['RFD'];
+                                                                $SUF_RFD        =   $row_reservation['SUFFIXCODE_RFD'];
+                                                                $RFF            =   $row_reservation['RFF'];
+                                                                $SUF_RFF        =   $row_reservation['SUFFIXCODE_RFF'];
+                                                                if (empty($SUF_RFD) && empty($RFD)) {
+                                                                    $RFD        =   $lastRFD;
+                                                                    $SUF_RFD    =   $lastSUF_RFD;
                                                                 }
-                                                                $lastRFD = $RFD;
-                                                                $lastSUF_RFD = $SUF_RFD;
-                                                                if (empty($lastRFD)) {
-                                                                    $lastRFD = $RFF;
-                                                                }
-                                                                $lastRFD = $RFD;
+                                                                $lastSUF_RFD    =   $SUF_RFD;
+                                                                $lastRFD        =   $RFD;
+                                                                $gab1           =   $RFD . $SUF_RFD;
                                                                 if (empty($RFF) && empty($SUF_RFF)) {
                                                                     $RFF = $lastRFF;
-                                                                    $SUF_RFF = $lastSUF_RFF;
+                                                                    $SUF_RFF    =   $lastSUF_RFF;
                                                                 }
-                                                                $lastRFF = $RFF;
-                                                                $lastSUF_RFF = $SUF_RFF;
-                                                                if (empty($RFD) && empty($SUF_RFD)) {
-                                                                    $RFD = $rfdup;
-                                                                    $SUF_RFD = $lastsuf_rfdupd;
+                                                                $lastRFF      =   $RFF;
+                                                                $lastSUF_RFF    =   $SUF_RFF;
+                                                                if ($RFD1 == $gab1     &&      $SUF_RFD1 == $gab1) {
+                                                                    $RFD1       =   $RFD;
+                                                                    $SUF_RFD1   =   $SUF_RFD;
+                                                                } else {
+                                                                    $RFD1           =   $RFF;
+                                                                    $SUF_RFD1       =   $SUF_RFF;
                                                                 }
-                                                                $rfdup = $RFF;
-                                                                $lastsuf_rfdupd = $SUF_RFF;
 
+                                                                //Qry buat cari suffix dan code asli pada tiap row
                                                                 $qry_suffix = "SELECT
-                                                                DISTINCT 
-                                                                    RECIPENUMBERID,
-                                                                    RECIPEITEMTYPECODE,
-                                                                    RECIPESUBCODE01,
-                                                                    RECIPESUFFIXCODE,
-                                                                CASE
-                                                                    WHEN NOT ITEMTYPEAFICODE IN 'DYC' THEN SUBCODE01
-                                                                    ELSE RECIPESUBCODE01
-                                                                END AS RCODE,
-                                                                CASE
-                                                                    WHEN NOT ITEMTYPEAFICODE IN 'DYC' THEN SUFFIXCODE
-                                                                    ELSE RECIPESUFFIXCODE
-                                                                END AS SUFIX,
-                                                                    groupnumber,
-                                                                    grouptypecode,
-                                                                    linetype,
-                                                                    SEQUENCE,
-                                                                    subsequence,
-                                                                    itemtypeaficode,
-                                                                    SUBCODE01,
-                                                                    SUBCODE02,
-                                                                    SUBCODE03,
-                                                                    SUFFIXCODE,
-                                                                    COMMENTLINE,
-                                                                    CONSUMPTIONTYPE,
-                                                                    CONSUMPTION,
-                                                                    WATERMANAGEMENT,
-                                                                    COSTINGPLANTCODE
-                                                                FROM
-                                                                    (
-                                                                    SELECT
-                                                                        *
-                                                                    FROM
-                                                                            RECIPECOMPONENT r
-                                                                    WHERE
-                                                                            RECIPESUBCODE01 = '$RFD'
-                                                                        AND   
-                                                                            RECIPESUFFIXCODE = '$SUF_RFD'
-                                                                        AND GROUPNUMBER = '$row_reservation[NOMOR]'
-                                                                        -- AND ITEMTYPEAFICODE='$row_reservation[IT]'
-                                                                        -- AND SUBCODE01='$row_reservation[SUBCODE01]'
-                                                                        -- AND SUBCODE02='$row_reservation[SUBCODE02]'
-                                                                        -- AND SUBCODE03='$row_reservation[SUBCODE03]'
-                                                            )";
+                                                                                        DISTINCT 
+                                                                                            RECIPENUMBERID,
+                                                                                            RECIPEITEMTYPECODE,
+                                                                                            RECIPESUBCODE01,
+                                                                                            RECIPESUFFIXCODE,
+                                                                                        CASE
+                                                                                            WHEN NOT ITEMTYPEAFICODE IN 'DYC' THEN SUBCODE01
+                                                                                            ELSE RECIPESUBCODE01
+                                                                                        END AS RCODE,
+                                                                                        CASE
+                                                                                            WHEN NOT ITEMTYPEAFICODE IN 'DYC' THEN SUFFIXCODE
+                                                                                            ELSE RECIPESUFFIXCODE
+                                                                                        END AS SUFIX,
+                                                                                            groupnumber,
+                                                                                            grouptypecode,
+                                                                                            linetype,
+                                                                                            SEQUENCE,
+                                                                                            subsequence,
+                                                                                            itemtypeaficode,
+                                                                                            SUBCODE01,
+                                                                                            SUBCODE02,
+                                                                                            SUBCODE03,
+                                                                                            SUFFIXCODE,
+                                                                                            COMMENTLINE,
+                                                                                            CONSUMPTIONTYPE,
+                                                                                            CONSUMPTION,
+                                                                                            WATERMANAGEMENT,
+                                                                                            COSTINGPLANTCODE
+                                                                                        FROM
+                                                                                            (
+                                                                                            SELECT
+                                                                                                *
+                                                                                            FROM
+                                                                                                    RECIPECOMPONENT r
+                                                                                            WHERE
+                                                                                                    RECIPESUBCODE01 = '$RFD1'
+                                                                                                AND   
+                                                                                                    RECIPESUFFIXCODE = '$SUF_RFD1'
+                                                                                                AND GROUPNUMBER = '$row_reservation[NOMOR]'
+                                                                                                -- AND ITEMTYPEAFICODE='$row_reservation[IT]'
+                                                                                                -- AND SUBCODE01='$row_reservation[SUBCODE01]'
+                                                                                                -- AND SUBCODE02='$row_reservation[SUBCODE02]'
+                                                                                                -- AND SUBCODE03='$row_reservation[SUBCODE03]'
+                                                                                            )
+                                                            ";
                                                                 $dsuffix = db2_exec($conn1, $qry_suffix);
                                                                 $suffix = db2_fetch_assoc($dsuffix);
-                                                                //Jangan dihapus dulu ya mas, masih cari cari cara buat munculin semua
-                                                                // if (empty($RFD)) {
-                                                                //     $RFD = $lastRFD;
-                                                                // }
-                                                                // if (empty($RFF)) {
-                                                                //     $RFF = $lastRFF;
-                                                                // }
 
+                                                            //QRY Untuk cari total consumntion
                                                                 $qpem = "SELECT
                                                                                 *
                                                                             FROM
@@ -303,7 +299,9 @@
                                                                     <td style="text-align: left;"><?= $row_reservation['PROJECTCODE']; ?><?php if ($_SERVER['REMOTE_ADDR'] == '10.0.5.132') {
                                                                                                                                                 echo $RFD . '-' . $RFF;
                                                                                                                                             } ?></td>
-                                                                    <!-- <td style="text-align: left;"><?= $suffix['SUFIX']; ?></td>                                                                        -->
+                                                                    <!-- <td style="text-align: left;"><?= $RFD1; ?></td>
+                                                                    <td style="text-align: left;"><?= $SUF_RFD1; ?></td> -->
+
                                                                 </tr>
                                                             <?php } ?>
                                                         </tbody>
