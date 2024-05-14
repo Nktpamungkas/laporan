@@ -171,46 +171,33 @@ if (isset($_POST['simpan'])) {
                                                         <tbody>
                                                             <?php
                                                             $q_bukupinjam = mysqli_query($con_db_dyeing, "SELECT
-                                                                                                                    a.id,
-                                                                                                                    a.nokk,
-                                                                                                                    a.nodemand,
-                                                                                                                    b.no_mesin,
-                                                                                                                    b.no_warna,
-                                                                                                                    b.warna,
-                                                                                                                    a.absen_in,
-                                                                                                                    a.tgl_in,
-                                                                                                                    a.tgl_out,
-                                                                                                                    a.archive,
-                                                                                                                    a.keterangan
-                                                                                                                FROM
-                                                                                                                    tbl_montemp a
-                                                                                                                LEFT JOIN tbl_schedule b ON b.id = a.id_schedule
-                                                                                                                WHERE
-                                                                                                                    (a.tgl_in IS NOT NULL OR a.tgl_out IS NOT NULL)
-                                                                                                                ORDER BY
-                                                                                                                    a.id DESC");
+                                                                                                                a.id,
+                                                                                                                a.nokk,
+                                                                                                                a.nodemand,
+                                                                                                                b.no_mesin,
+                                                                                                                b.no_warna,
+                                                                                                                b.warna,
+                                                                                                                a.absen_in,
+                                                                                                                a.tgl_in,
+                                                                                                                a.tgl_out,
+                                                                                                                a.archive,
+                                                                                                                a.keterangan,
+                                                                                                                b.lot
+                                                                                                            FROM
+                                                                                                                tbl_montemp a
+                                                                                                            LEFT JOIN tbl_schedule b ON b.id = a.id_schedule
+                                                                                                            WHERE
+                                                                                                                (a.tgl_in IS NOT NULL OR a.tgl_out IS NOT NULL)
+                                                                                                            ORDER BY
+                                                                                                                a.id DESC");
                                                             ?>
                                                             <?php while ($row_bukupinjam = mysqli_fetch_array($q_bukupinjam)) {
-                                                                // Mendapatkan nilai nokk dari setiap baris
-                                                                $nokk = $row_bukupinjam['nokk'];
-
-                                                                // Eksekusi query kedua untuk setiap nokk
-                                                                $db2 = db2_exec($conn1, "SELECT
-                                                                                            LOT
-                                                                                        FROM
-                                                                                            ITXVIEWKK
-                                                                                        WHERE
-                                                                                            PRODUCTIONORDERCODE = '$nokk'");
-
-                                                                // Ambil data dari hasil query kedua
-                                                                $row_db2 = db2_fetch_assoc($db2);
-
                                                             ?>
                                                                 <tr>
                                                                     <td><?= sprintf("%'.06d\n", $row_bukupinjam['id']); ?></td>
                                                                     <td><?= $row_bukupinjam['nokk']; ?></td>
                                                                     <td><?= $row_bukupinjam['nodemand']; ?></td>
-                                                                    <td><?= $row_db2['LOT']; ?></td>
+                                                                    <td><?= $row_bukupinjam['lot']; ?></td>
                                                                     <td><?= $row_bukupinjam['no_mesin']; ?></td>
                                                                     <td><?= $row_bukupinjam['no_warna']; ?></td>
                                                                     <td><?= $row_bukupinjam['warna']; ?></td>
