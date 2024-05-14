@@ -1,7 +1,7 @@
 <?php
- header("content-type:application/vnd-ms-excel");
-header("content-disposition:attachment;filename=Memo Penting.xls");
-header('Cache-Control: max-age=0');
+    header("content-type:application/vnd-ms-excel");
+    header("content-disposition:attachment;filename=Memo Penting.xls");
+    header('Cache-Control: max-age=0');
 ?>
 <style>
     .str {
@@ -52,24 +52,99 @@ header('Cache-Control: max-age=0');
             ini_set("error_reporting", 1);
             session_start();
             require_once "koneksi.php";
+            if($_GET['akses'] == 'catch'){
+                $no_order = $_GET['no_order'];
+                $tgl1     = $_GET['tgl1'];
+                $tgl2     = $_GET['tgl2'];
+                if($no_order){
+                    $where_order            = "NO_ORDER = '$no_order'";
+                }else{
+                    $where_order            = "";
+                }
+                if($tgl1 & $tgl2){
+                    $where_date             = "DELIVERY BETWEEN '$tgl1' AND '$tgl2'";
+                }else{
+                    $where_date             = "";
+                }
+                // ITXVIEW_MEMOPENTINGPPC
+                $itxviewmemo              = db2_exec($conn1, "SELECT 
+                                                                    * 
+                                                                FROM(SELECT 
+                                                                            * 
+                                                                        FROM 
+                                                                            ITXVIEW_MEMOPENTINGPPC 
+                                                                        WHERE 
+                                                                            $where_prodorder 
+                                                                            $where_proddemand 
+                                                                            $where_order 
+                                                                            $where_date 
+                                                                            $where_no_po 
+                                                                            $where_article 
+                                                                            $where_nama_warna)");
+                while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
+                $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_ORDER']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_PO']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['SUBCODE02']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['SUBCODE03']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN_PRODUCT']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['WARNA']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_WARNA']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['DELIVERY']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['QTY_BAGIKAIN']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['NETTO']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['DELAY']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['NO_KK']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['DEMAND']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['LOT']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['ORDERLINE']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['PROGRESSSTATUS_DEMAND']))."',"
+                                        ."'".TRIM(addslashes($row_itxviewmemo['KETERANGAN']))."',"
+                                        ."'".$_SERVER['REMOTE_ADDR']."',"
+                                        ."'".date('Y-m-d H:i:s')."',"
+                                        ."'".'MEMO'."')";
 
-            $no_order_2 = $_GET['no_order'];
-            $tgl1_2     = $_GET['tgl1'];
-            $tgl2_2     = $_GET['tgl2'];
+                }
+                $value_itxviewmemo        = implode(',', $r_itxviewmemo);
+                $insert_itxviewmemo       = mysqli_query($con_nowprd, "INSERT INTO itxview_memopentingppc(ORDERDATE,PELANGGAN,NO_ORDER,NO_PO,ARTICLE_GROUP,ARTICLE_CODE,KETERANGAN_PRODUCT,WARNA,NO_WARNA,DELIVERY,QTY_BAGIKAIN,NETTO,`DELAY`,NO_KK,DEMAND,LOT,ORDERLINE,PROGRESSSTATUS,PROGRESSSTATUS_DEMAND,KETERANGAN,IPADDRESS,CREATEDATETIME,ACCESS_TO) VALUES $value_itxviewmemo");
 
-            if ($no_order_2) {
-                $where_order2    = "AND NO_ORDER = '$no_order_2'";
-            } else {
-                $where_order2    = "";
+                $no_order_2 = $_GET['no_order'];
+                $tgl1_2     = $_GET['tgl1'];
+                $tgl2_2     = $_GET['tgl2'];
+
+                if ($no_order_2) {
+                    $where_order2    = "AND NO_ORDER = '$no_order_2'";
+                } else {
+                    $where_order2    = "";
+                }
+                if ($tgl1_2 & $tgl2_2) {
+                    $where_date2     = "AND DELIVERY BETWEEN '$tgl1_2' AND '$tgl2_2'";
+                } else {
+                    $where_date2     = "";
+                }
+                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE (PROGRESSSTATUS <> '6' AND PROGRESSSTATUS_DEMAND <> '6') $where_order2 $where_date2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'";
+                $stmt   = mysqli_query($con_nowprd, $sqlDB2);
+            }else{
+                $no_order_2 = $_GET['no_order'];
+                $tgl1_2     = $_GET['tgl1'];
+                $tgl2_2     = $_GET['tgl2'];
+
+                if ($no_order_2) {
+                    $where_order2    = "AND NO_ORDER = '$no_order_2'";
+                } else {
+                    $where_order2    = "";
+                }
+                if ($tgl1_2 & $tgl2_2) {
+                    $where_date2     = "AND DELIVERY BETWEEN '$tgl1_2' AND '$tgl2_2'";
+                } else {
+                    $where_date2     = "";
+                }
+                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE (PROGRESSSTATUS <> '6' AND PROGRESSSTATUS_DEMAND <> '6') $where_order2 $where_date2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'";
+                $stmt   = mysqli_query($con_nowprd, $sqlDB2);
             }
-            if ($tgl1_2 & $tgl2_2) {
-                $where_date2     = "AND DELIVERY BETWEEN '$tgl1_2' AND '$tgl2_2'";
-            } else {
-                $where_date2     = "";
-            }
-            $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE (PROGRESSSTATUS <> '6' AND PROGRESSSTATUS_DEMAND <> '6') $where_order2 $where_date2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'";
-            $stmt   = mysqli_query($con_nowprd, $sqlDB2);
-            while ($rowdb2 = mysqli_fetch_array($stmt)) {
+                while ($rowdb2 = mysqli_fetch_array($stmt)) {
         ?>
             <?php 
                 //Deteksi Production Demand Closed Atau Belum

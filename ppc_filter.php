@@ -73,11 +73,23 @@
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Dari Tanggal</h4>
-                                                    <input type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>">
+                                                    <?php 
+                                                        $now = date('H:i'); // Format waktu dalam format jam:menit (24 jam)
+                                                        $jam_selesai = '02:00';
+                                                        $jam_mulai = '08:30';
+
+                                                        if ($now >= $jam_mulai && $now <= $jam_selesai) {
+                                                            $readonly = "readonly";
+                                                        } else {
+                                                            $readonly = "";
+                                                        }
+                                                        
+                                                    ?>
+                                                    <input type="date" name="tgl1" class="form-control" id="tgl1" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl1']; } ?>" <?= $readonly; ?>>
                                                 </div>
                                                 <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 class="sub-title">Sampai Tanggal</h4>
-                                                    <input type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>">
+                                                    <input type="date" name="tgl2" class="form-control" id="tgl2" value="<?php if (isset($_POST['submit'])){ echo $_POST['tgl2']; } ?>" <?= $readonly; ?>>
                                                 </div>
                                                 <!-- <div class="col-sm-12 col-xl-2 m-b-30">
                                                     <h4 style="font-size: 12px;" class="sub-title">DEPARTEMENT</h4>
@@ -113,10 +125,19 @@
                                                     <h4 class="sub-title">Nama Warna</h4>
                                                     <input type="text" name="nama_warna" class="form-control" value="<?php if (isset($_POST['submit'])){ echo $_POST['nama_warna']; } ?>">
                                                 </div>
+                                                <div class="col-sm-12 col-xl-2 m-b-30">
+                                                    <h4 class="sub-title">KK OKE</h4>
+                                                    <select name="kkoke" class="form-control">
+                                                        <option value="tidak" <?php if($_POST['kkoke'] == 'tidak'){ echo "SELECTED"; }else{ echo ""; } ?>>Jangan sertakan KK OKE</option>
+                                                        <option value="ya" <?php if($_POST['kkoke'] == 'ya'){ echo "SELECTED"; }else{ echo ""; } ?>>Sertakan KK OKE</option>
+                                                    </select>
+                                                </div>
                                                 <div class="col-sm-12 col-xl-12 m-b-30">
                                                     <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
                                                     <a class="btn btn-warning" href="ppc_filter.php"><i class="icofont icofont-refresh"></i> Reset</a>
-                                                    <!-- <button type="submit" name="<i class="icofont icofont-refresh"></i> Reset" class="btn btn-warning"><i class="icofont icofont-refresh"></i> Reset Data</button> -->
+                                                    <button type="submit" name="submit_excel" class="btn btn-danger"><i class="icofont icofont-download"></i> Download data</button>
+                                                    <!-- <a href="ppc_memopenting-excel.php?no_order=<?= $_POST['no_order']; ?>&tgl1=<?= $_POST['tgl1']; ?>&tgl2=<?= $_POST['tgl2']; ?>&operation=<?= $_POST['operation']; ?>&akses=catch" class="btn btn-danger"><i class="icofont icofont-download"></i> Download data (Excel)</a> -->
+                                                    
                                                     <?php if (isset($_POST['submit'])) : ?>
                                                         <a class="btn btn-mat btn-success" href="ppc_memopenting-excel.php?no_order=<?= $_POST['no_order']; ?>&tgl1=<?= $_POST['tgl1']; ?>&tgl2=<?= $_POST['tgl2']; ?>&operation=<?= $_POST['operation']; ?>">CETAK EXCEL</a>
                                                         <a class="btn btn-mat btn-warning" href="ppc_memopenting-libre.php?no_order=<?= $_POST['no_order']; ?>&tgl1=<?= $_POST['tgl1']; ?>&tgl2=<?= $_POST['tgl2']; ?>&operation=<?= $_POST['operation']; ?>">CETAK EXCEL (LIBRE)</a>
@@ -186,6 +207,7 @@
                                                             $article_group  = $_POST['article_group'];
                                                             $article_code   = $_POST['article_code'];
                                                             $nama_warna     = $_POST['nama_warna'];
+                                                            $kkoke          = $_POST['kkoke'];
 
                                                             if($nama_warna){
                                                                 $where_nama_warna   = "AND WARNA LIKE '%$nama_warna%'";
@@ -223,8 +245,28 @@
                                                                 $where_article          = "";
                                                             }
 
+                                                            if($kkoke == 'ya'){
+                                                                $where_kkoke            = "";
+                                                            }elseif($kkoke == 'tidak'){
+                                                                $where_kkoke            = "WHERE NOT PROGRESSSTATUS = '6' AND NOT PROGRESSSTATUS_DEMAND = '6'";
+                                                            }
+
                                                             // ITXVIEW_MEMOPENTINGPPC
-                                                            $itxviewmemo              = db2_exec($conn1, "SELECT * FROM ITXVIEW_MEMOPENTINGPPC WHERE $where_prodorder $where_proddemand $where_order $where_date $where_no_po $where_article $where_nama_warna");
+                                                            $itxviewmemo              = db2_exec($conn1, "SELECT 
+                                                                                                                * 
+                                                                                                            FROM(SELECT 
+                                                                                                                        * 
+                                                                                                                    FROM 
+                                                                                                                        ITXVIEW_MEMOPENTINGPPC 
+                                                                                                                    WHERE 
+                                                                                                                        $where_prodorder 
+                                                                                                                        $where_proddemand 
+                                                                                                                        $where_order 
+                                                                                                                        $where_date 
+                                                                                                                        $where_no_po 
+                                                                                                                        $where_article 
+                                                                                                                        $where_nama_warna)
+                                                                                                            $where_kkoke");
                                                             while ($row_itxviewmemo   = db2_fetch_assoc($itxviewmemo)) {
                                                                 $r_itxviewmemo[]      = "('".TRIM(addslashes($row_itxviewmemo['ORDERDATE']))."',"
                                                                                         ."'".TRIM(addslashes($row_itxviewmemo['PELANGGAN']))."',"
@@ -784,6 +826,17 @@
                                         require_once "koneksi.php";
                                         mysqli_query($con_nowprd, "DELETE FROM itxview_memopentingppc");
                                         header("Location: ppc_filter.php");
+                                    ?>
+                                <?php elseif(isset($_POST['submit_excel'])) : ?>
+                                    <?php
+                                        ini_set("error_reporting", 1);
+                                        session_start();
+                                        require_once "koneksi.php";
+                                        $no_order = $_POST['no_order'];
+                                        $tgl1 = $_POST['tgl1'];
+                                        $tgl2 = $_POST['tgl2'];
+                                        
+                                        echo '<script>window.location.href = "ppc_memopenting-excel.php?no_order='.$no_order.'&tgl1='.$tgl1.'&tgl2='.$tgl2.'&akses=catch";</script>';
                                     ?>
                                 <?php endif; ?>
                             </div>

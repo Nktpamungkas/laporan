@@ -196,19 +196,6 @@ if (isset($_POST['simpan'])) {
 
                                                                 // Eksekusi query kedua untuk setiap nokk
                                                                 $db2 = db2_exec($conn1, "SELECT
-                                                                                            TRIM(PRODUCTIONORDERCODE) AS PRODUCTIONORDERCODE,
-                                                                                            TRIM(DEAMAND) AS DEMAND,
-                                                                                            ORIGDLVSALORDERLINEORDERLINE,
-                                                                                            PROJECTCODE,
-                                                                                            ORDPRNCUSTOMERSUPPLIERCODE,
-                                                                                            TRIM(SUBCODE01) AS SUBCODE01, TRIM(SUBCODE02) AS SUBCODE02, TRIM(SUBCODE03) AS SUBCODE03, TRIM(SUBCODE04) AS SUBCODE04,
-                                                                                            TRIM(SUBCODE05) AS SUBCODE05, TRIM(SUBCODE06) AS SUBCODE06, TRIM(SUBCODE07) AS SUBCODE07, TRIM(SUBCODE08) AS SUBCODE08,
-                                                                                            TRIM(SUBCODE09) AS SUBCODE09, TRIM(SUBCODE10) AS SUBCODE10,
-                                                                                            TRIM(ITEMTYPEAFICODE) AS ITEMTYPEAFICODE,
-                                                                                            TRIM(DSUBCODE05) AS NO_WARNA,
-                                                                                            TRIM(DSUBCODE02) || '-' || TRIM(DSUBCODE03)  AS NO_HANGER,
-                                                                                            TRIM(ITEMDESCRIPTION) AS ITEMDESCRIPTION,
-                                                                                            DELIVERYDATE,
                                                                                             LOT
                                                                                         FROM
                                                                                             ITXVIEWKK
@@ -219,8 +206,6 @@ if (isset($_POST['simpan'])) {
                                                                 $row_db2 = db2_fetch_assoc($db2);
 
                                                             ?>
-
-
                                                                 <tr>
                                                                     <td><?= sprintf("%'.06d\n", $row_bukupinjam['id']); ?></td>
                                                                     <td><?= $row_bukupinjam['nokk']; ?></td>
