@@ -433,7 +433,7 @@ header('Cache-Control: max-age=0');
                         ?>
                         <?php if($d_orig_pd_code['ORIGINALPDCODE']) : ?>
                             <?php if($d_cek_salinan['SALINAN_058'] == '058') : ?>
-                                <?= number_format($d_qtysalinan['USERPRIMARYQUANTITY'],3) ?>
+                                <?= number_format($rowdb2['QTY_BAGIKAIN'],2); ?>
                             <?php else : ?> 
                                 0
                             <?php endif; ?> 
