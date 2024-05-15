@@ -140,9 +140,9 @@
                                                                 $where_all  = "AND TRIM(OPERATIONGROUPCODE) = '$_POST[dept]'";
                                                             }
                                                             if($_POST['dept'] == 'DYE'){
-                                                                $where_progress_dye = "TRIM(p.PROGRESSSTATUS) IN ('0')";
+                                                                $where_entered_dye = "AND STATUS_OPERATION = 'Entered'";
                                                             }else{
-                                                                $where_progress_dye = "TRIM(p.PROGRESSSTATUS) IN ('2', '0')";
+                                                                $where_entered_dye = "";
                                                             }
                                                             $q_iptip    = db2_exec($conn1, "SELECT DISTINCT
                                                                                                 PRODUCTIONORDERCODE,
@@ -194,7 +194,7 @@
                                                                                                                         AND i.SUBCODE09 = p2.SUBCODE09
                                                                                                                         AND i.SUBCODE10 = p2.SUBCODE10
                                                                                                 WHERE 
-                                                                                                    $where_progress_dye
+                                                                                                    TRIM(p.PROGRESSSTATUS) IN ('0', '2')
                                                                                                     $where_demand
                                                                                                     AND p2.CREATIONDATETIME >= '2023-11-01'
                                                                                                     AND NOT p.PRODUCTIONORDERCODE IS NULL
@@ -205,6 +205,7 @@
                                                                                                 RN = 1
                                                                                                 AND NOT OPERATIONCODE = 'BAT1'
                                                                                                 $where_all
+                                                                                                $where_entered_dye
                                                                                                 AND (a.VALUEBOOLEAN IS NULL OR a.VALUEBOOLEAN = 0)
                                                                                             GROUP BY 
                                                                                                 PRODUCTIONORDERCODE,
@@ -846,7 +847,7 @@
                                                                             <td><?= $row_count_gerobaksalinan['JML_GEROBAK'] ?></td>
                                                                         </tr>
                                                                     <?php endif; ?> 
-                                                                     -->
+                                                                    -->
                                                                 <?php endif; ?>
                                                             <?php endif; ?>
                                                         <?php endwhile; ?>
