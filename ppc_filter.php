@@ -174,6 +174,7 @@
                                                             <th>NETTO(kg)</th>
                                                             <th>NETTO(yd)</th>
                                                             <th>DELAY</th>
+                                                            <th>TARGET SELESAI</th>
                                                             <th>KODE DEPT</th>
                                                             <th>STATUS TERAKHIR</th>
                                                             <th>NOMOR MESIN SCHEDULE</th>
@@ -186,7 +187,6 @@
                                                             <th>NO KARTU KERJA</th>
                                                             <th>ORIGINAL PD CODE</th>
                                                             <th>CATATAN PO GREIGE</th>
-                                                            <th>TARGET SELESAI</th>
                                                             <th>KETERANGAN</th>
                                                             <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132') : ?>
                                                             <th>Only Nilo</th>
@@ -719,6 +719,7 @@
                                                                 ?>
                                                             </td> <!-- NETTO YD-->
                                                             <td><?= $rowdb2['DELAY']; ?></td> <!-- DELAY -->
+                                                            <td></td> <!-- TARGET SELESAI -->
                                                             <td><?= $kode_dept; ?></td> <!-- KODE DEPT -->
                                                             <td>
                                                                 <?= $status_terakhir; ?> 
@@ -804,7 +805,6 @@
                                                                 <?php if($d_benang_booking_new){ echo $d_benang_booking_new.'. Greige Ready'; } ?>
                                                                 <?php if($d_benang_rajut){ echo $d_benang_rajut.'. Rajut'; } ?>
                                                             </td> <!-- CATATAN PO GREIGE -->
-                                                            <td></td> <!-- TARGET SELESAI -->
                                                             <td><?= $rowdb2['KETERANGAN']; ?></td> <!-- KETERANGAN -->
                                                             <?php if($_SERVER['REMOTE_ADDR'] == '10.0.5.132') : ?>
                                                             <td>

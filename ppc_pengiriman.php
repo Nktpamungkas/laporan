@@ -437,7 +437,6 @@
                                                                             echo $d_roll['ADDRESSEE'].' - '.$d_roll['BRAND_NM'];
                                                                         }else{
                                                                             echo $r_pelanggan['LANGGANAN'];
-
                                                                         }
                                                                     ?>
                                                                 </td> 

@@ -135,9 +135,14 @@
                                                                 $where_demand    = "";
                                                             }
                                                             if($_POST['dept'] == 'ALL'){
-                                                                $where_all  = "";
+                                                                $where_all  = "AND NOT TRIM(OPERATIONGROUPCODE) IS NULL";
                                                             }else{
                                                                 $where_all  = "AND TRIM(OPERATIONGROUPCODE) = '$_POST[dept]'";
+                                                            }
+                                                            if($_POST['dept'] == 'DYE'){
+                                                                $where_progress_dye = "TRIM(p.PROGRESSSTATUS) IN ('0')";
+                                                            }else{
+                                                                $where_progress_dye = "TRIM(p.PROGRESSSTATUS) IN ('2', '0')";
                                                             }
                                                             $q_iptip    = db2_exec($conn1, "SELECT DISTINCT
                                                                                                 PRODUCTIONORDERCODE,
@@ -189,7 +194,7 @@
                                                                                                                         AND i.SUBCODE09 = p2.SUBCODE09
                                                                                                                         AND i.SUBCODE10 = p2.SUBCODE10
                                                                                                 WHERE 
-                                                                                                    TRIM(p.PROGRESSSTATUS) IN ('2', '0')
+                                                                                                    $where_progress_dye
                                                                                                     $where_demand
                                                                                                     AND p2.CREATIONDATETIME >= '2023-11-01'
                                                                                                     AND NOT p.PRODUCTIONORDERCODE IS NULL
@@ -215,6 +220,16 @@
                                                                                                 CREATIONDATETIME
                                                                                             ORDER BY 
 	                                                                                            OPERATIONGROUPCODE ASC");
+                                                            $totalGerobak_BRS = 0;
+                                                            $totalGerobak_DYE = 0;
+                                                            $totalGerobak_FIN = 0;
+                                                            $totalGerobak_GKG = 0;
+                                                            $totalGerobak_KNT = 0;
+                                                            $totalGerobak_LAB = 0;
+                                                            $totalGerobak_PPC = 0;
+                                                            $totalGerobak_PRT = 0;
+                                                            $totalGerobak_RMP = 0;
+                                                            $totalGerobak_TAS = 0;
                                                         ?>
                                                         <?php while($row_iptip = db2_fetch_assoc($q_iptip)) : ?>
                                                             <?php
@@ -302,11 +317,12 @@
                                                                 $row_posisikk = db2_fetch_assoc($q_posisikk);
 
                                                                 $count_gerobak  = db2_exec($conn1, "SELECT 
-                                                                                                     COUNT(DISTINCT idqd.VALUEQUANTITY) AS JML_GEROBAK
+                                                                                                        TRIM(o.OPERATIONGROUPCODE) AS DEPT,
+                                                                                                        COUNT(DISTINCT idqd.VALUEQUANTITY) AS JML_GEROBAK
                                                                                                     FROM 
                                                                                                         PRODUCTIONDEMANDSTEP p 
                                                                                                     LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
-                                                                                                    -- LEFT JOIN ADSTORAGE a ON a.UNIQUEID = o.ABSUNIQUEID AND a.FIELDNAME = 'Gerobak'
+                                                                                                    LEFT JOIN ADSTORAGE a ON a.UNIQUEID = o.ABSUNIQUEID AND a.FIELDNAME = 'Gerobak'
                                                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_IN_PRODORDER iptip ON iptip.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptip.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                     LEFT JOIN ITXVIEW_POSISIKK_TGL_OUT_PRODORDER iptop ON iptop.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE AND iptop.DEMANDSTEPSTEPNUMBER = p.STEPNUMBER
                                                                                                     LEFT JOIN ITXVIEW_DETAIL_QA_DATA idqd ON idqd.PRODUCTIONDEMANDCODE = p.PRODUCTIONDEMANDCODE AND idqd.PRODUCTIONORDERCODE = p.PRODUCTIONORDERCODE
@@ -329,7 +345,7 @@
                                                                                                         AND p.PRODUCTIONDEMANDCODE IN ($row_iptip[PRODUCTIONDEMANDCODE2])
                                                                                                         AND p.STEPNUMBER < '$row_iptip[STEPNUMBER]'
                                                                                                         AND NOT idqd.VALUEQUANTITY IS NULL
-                                                                                                        -- AND (a.VALUEBOOLEAN IS NULL OR a.VALUEBOOLEAN = 0)
+                                                                                                        AND (a.VALUEBOOLEAN IS NULL OR a.VALUEBOOLEAN = 0)
                                                                                                     GROUP BY
                                                                                                         p.PRODUCTIONORDERCODE,
                                                                                                         p.STEPNUMBER,
@@ -350,6 +366,36 @@
                                                                                                     DESC
                                                                                                     LIMIT 1");
                                                                 $row_count_gerobak = db2_fetch_assoc($count_gerobak);
+                                                                if($row_iptip['OPERATIONGROUPCODE'] == 'BRS'){
+                                                                    $totalGerobak_BRS += $row_count_gerobak['JML_GEROBAK'];
+                                                                }
+                                                                if($row_iptip['OPERATIONGROUPCODE'] == 'DYE'){
+                                                                    $totalGerobak_DYE += $row_count_gerobak['JML_GEROBAK'];
+                                                                }
+                                                                if($row_iptip['OPERATIONGROUPCODE'] == 'FIN'){
+                                                                    $totalGerobak_FIN += $row_count_gerobak['JML_GEROBAK'];
+                                                                }
+                                                                if($row_iptip['OPERATIONGROUPCODE'] == 'GKG'){
+                                                                    $totalGerobak_GKG += $row_count_gerobak['JML_GEROBAK'];
+                                                                }
+                                                                if($row_iptip['OPERATIONGROUPCODE'] == 'KNT'){
+                                                                    $totalGerobak_KNT += $row_count_gerobak['JML_GEROBAK'];
+                                                                }
+                                                                if($row_iptip['OPERATIONGROUPCODE'] == 'LAB'){
+                                                                    $totalGerobak_LAB += $row_count_gerobak['JML_GEROBAK'];
+                                                                }
+                                                                if($row_iptip['OPERATIONGROUPCODE'] == 'PPC'){
+                                                                    $totalGerobak_PPC += $row_count_gerobak['JML_GEROBAK'];
+                                                                }
+                                                                if($row_iptip['OPERATIONGROUPCODE'] == 'PRT'){
+                                                                    $totalGerobak_PRT += $row_count_gerobak['JML_GEROBAK'];
+                                                                }
+                                                                if($row_iptip['OPERATIONGROUPCODE'] == 'RMP'){
+                                                                    $totalGerobak_RMP += $row_count_gerobak['JML_GEROBAK'];
+                                                                }
+                                                                if($row_iptip['OPERATIONGROUPCODE'] == 'TAS'){
+                                                                    $totalGerobak_TAS += $row_count_gerobak['JML_GEROBAK'];
+                                                                }
                                                             ?>
                                                             <?php if(!empty($row_posisikk['GEROBAK'])) :?>
                                                                 <tr>
@@ -804,6 +850,36 @@
                                                                 <?php endif; ?>
                                                             <?php endif; ?>
                                                         <?php endwhile; ?>
+                                                        <table class="table compact table-striped table-bordered nowrap" width="100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>BRS</th>
+                                                                    <th>DYE</th>
+                                                                    <th>FIN</th>
+                                                                    <th>GKG</th>
+                                                                    <th>KNT</th>
+                                                                    <th>LAB</th>
+                                                                    <th>PPC</th>
+                                                                    <th>PRT</th>
+                                                                    <th>RMP</th>
+                                                                    <th>TAS</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><?= $totalGerobak_BRS; ?></td>
+                                                                    <td><?= $totalGerobak_DYE; ?></td>
+                                                                    <td><?= $totalGerobak_FIN; ?></td>
+                                                                    <td><?= $totalGerobak_GKG; ?></td>
+                                                                    <td><?= $totalGerobak_KNT; ?></td>
+                                                                    <td><?= $totalGerobak_LAB; ?></td>
+                                                                    <td><?= $totalGerobak_PPC; ?></td>
+                                                                    <td><?= $totalGerobak_PRT; ?></td>
+                                                                    <td><?= $totalGerobak_RMP; ?></td>
+                                                                    <td><?= $totalGerobak_TAS; ?></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
                                                     </tbody>
                                                 </table>
                                             </div>
