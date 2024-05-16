@@ -140,9 +140,14 @@
                                                                 $where_all  = "AND TRIM(OPERATIONGROUPCODE) = '$_POST[dept]'";
                                                             }
                                                             if($_POST['dept'] == 'DYE'){
-                                                                $where_entered_dye = "AND STATUS_OPERATION = 'Entered'";
+                                                                $where_entered_dye = "AND STATUS_OPERATION IN ('Entered', 'Progress')";
                                                             }else{
                                                                 $where_entered_dye = "";
+                                                            }
+                                                            if($_POST['dept'] == 'DYE'){
+                                                                $where_operation_dye = "AND NOT (TRIM(p.OPERATIONCODE) IN ('DYE1', 'DYE2', 'DYE4', 'SOA1', 'RDC1', 'LVL1', 'NEU1', 'CBL1', 'RLX1', 'FEW1', 'FIX1', 'HEW1', 'HOT1', 'SCO1', 'SCO2', 'SOF1', 'STR1') AND p.PROGRESSSTATUS = 2)";
+                                                            }else{
+                                                                $where_operation_dye = "";
                                                             }
                                                             $q_iptip    = db2_exec($conn1, "SELECT DISTINCT
                                                                                                 PRODUCTIONORDERCODE,
@@ -199,6 +204,7 @@
                                                                                                     AND p2.CREATIONDATETIME >= '2023-11-01'
                                                                                                     AND NOT p.PRODUCTIONORDERCODE IS NULL
                                                                                                     AND (TRIM(p2.DESTINATIONORDER) = '1' OR NOT p2.PROJECTCODE IS NULL)
+                                                                                                    $where_operation_dye
                                                                                                     )
                                                                                             LEFT JOIN ADSTORAGE a ON a.UNIQUEID = ABSUNIQUEID_OPERATION AND a.FIELDNAME = 'Gerobak'
                                                                                             WHERE
