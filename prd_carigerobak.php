@@ -228,6 +228,7 @@
                                                                                             ORDER BY 
 	                                                                                            OPERATIONGROUPCODE ASC)
                                                                                             $where_operation_dye");
+                                                            $totalGerobak_QC = 0;
                                                             $totalGerobak_BRS = 0;
                                                             $totalGerobak_DYE = 0;
                                                             $totalGerobak_FIN = 0;
@@ -403,6 +404,9 @@
                                                                 }
                                                                 if($row_iptip['OPERATIONGROUPCODE'] == 'TAS'){
                                                                     $totalGerobak_TAS += $row_count_gerobak['JML_GEROBAK'];
+                                                                }
+                                                                if($row_iptip['OPERATIONGROUPCODE'] == 'QC'){
+                                                                    $totalGerobak_QC += $row_count_gerobak['JML_GEROBAK'];
                                                                 }
                                                             ?>
                                                             <?php if(!empty($row_posisikk['GEROBAK'])) :?>
@@ -861,6 +865,7 @@
                                                         <table class="table compact table-striped table-bordered nowrap" width="100%">
                                                             <thead>
                                                                 <tr>
+                                                                    <th>QC</th>
                                                                     <th>BRS</th>
                                                                     <th>DYE</th>
                                                                     <th>FIN</th>
@@ -875,6 +880,7 @@
                                                             </thead>
                                                             <tbody>
                                                                 <tr>
+                                                                    <td><?= $totalGerobak_QC; ?></td>
                                                                     <td><?= $totalGerobak_BRS; ?></td>
                                                                     <td><?= $totalGerobak_DYE; ?></td>
                                                                     <td><?= $totalGerobak_FIN; ?></td>
