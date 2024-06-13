@@ -21,7 +21,7 @@
             <th>WARNA</th>
             <th>NO WARNA</th>
             <th>DELIVERY</th>
-            <th>ACTUAL DELIVERY</th>
+            <th>DELIVERY ACTUAL</th>
             <th>BAGI KAIN TGL</th>
             <th>ROLL</th>
             <th>BRUTO/BAGI KAIN</th>
@@ -181,6 +181,7 @@
                                                                                     CASE
                                                                                         WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER
                                                                                         WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                        WHEN TRIM(p.STEPTYPE) = '1' THEN p2.STEPNUMBER
                                                                                         ELSE p.GROUPSTEPNUMBER
                                                                                     END AS GROUPSTEPNUMBER,
                                                                                     iptip.MULAI,
@@ -201,6 +202,7 @@
                                                                                     CASE
                                                                                         WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER
                                                                                         WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                        WHEN TRIM(p.STEPTYPE) = '1' THEN p2.STEPNUMBER
                                                                                         ELSE p.GROUPSTEPNUMBER
                                                                                     END AS GROUPSTEPNUMBER,
                                                                                     COALESCE(iptop.SELESAI, SUBSTRING(p2.LASTUPDATEDATETIME, 1, 19)) AS SELESAI,
@@ -214,6 +216,7 @@
                                                                                                                                         CASE
                                                                                                                                             WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER
                                                                                                                                             WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                                                                            WHEN TRIM(p.STEPTYPE) = '1' THEN p2.STEPNUMBER
                                                                                                                                             ELSE p.GROUPSTEPNUMBER
                                                                                                                                         END
                                                                                 WHERE
@@ -223,6 +226,7 @@
                                                                                     CASE
                                                                                         WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER 
                                                                                         WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                        WHEN TRIM(p.STEPTYPE) = '1' THEN p2.STEPNUMBER
                                                                                         ELSE p.GROUPSTEPNUMBER
                                                                                     END DESC 
                                                                                 LIMIT 1");

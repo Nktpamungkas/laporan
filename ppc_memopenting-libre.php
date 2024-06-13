@@ -21,7 +21,7 @@ header('Cache-Control: max-age=0');
             <th>WARNA</th>
             <th>NO WARNA</th>
             <th>DELIVERY</th>
-            <th>ACTUAL DELIVERY</th>
+            <th>DELIVERY ACTUAL</th>
             <th>BAGI KAIN TGL</th>
             <th>ROLL</th>
             <th>BRUTO/BAGI KAIN</th>
@@ -106,6 +106,7 @@ header('Cache-Control: max-age=0');
                                                                                     CASE
                                                                                         WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER
                                                                                         WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                        WHEN TRIM(p.STEPTYPE) = '1' THEN p2.STEPNUMBER
                                                                                         ELSE p.GROUPSTEPNUMBER
                                                                                     END AS GROUPSTEPNUMBER,
                                                                                     iptip.MULAI,
@@ -126,6 +127,7 @@ header('Cache-Control: max-age=0');
                                                                                     CASE
                                                                                         WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER
                                                                                         WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                        WHEN TRIM(p.STEPTYPE) = '1' THEN p2.STEPNUMBER
                                                                                         ELSE p.GROUPSTEPNUMBER
                                                                                     END AS GROUPSTEPNUMBER,
                                                                                     COALESCE(iptop.SELESAI, SUBSTRING(p2.LASTUPDATEDATETIME, 1, 19)) AS SELESAI,
@@ -139,6 +141,7 @@ header('Cache-Control: max-age=0');
                                                                                                                                         CASE
                                                                                                                                             WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER
                                                                                                                                             WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                                                                            WHEN TRIM(p.STEPTYPE) = '1' THEN p2.STEPNUMBER
                                                                                                                                             ELSE p.GROUPSTEPNUMBER
                                                                                                                                         END
                                                                                 WHERE
@@ -147,7 +150,8 @@ header('Cache-Control: max-age=0');
                                                                                 ORDER BY 
                                                                                     CASE
                                                                                         WHEN TRIM(p.STEPTYPE) = '0' THEN p.GROUPSTEPNUMBER 
-                                                                                        WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER 
+                                                                                        WHEN TRIM(p.STEPTYPE) = '3' THEN p2.STEPNUMBER
+                                                                                        WHEN TRIM(p.STEPTYPE) = '1' THEN p2.STEPNUMBER 
                                                                                         ELSE p.GROUPSTEPNUMBER
                                                                                     END DESC 
                                                                                 LIMIT 1");
