@@ -166,6 +166,7 @@
                                                             <th>WARNA</th>
                                                             <th>NO WARNA</th>
                                                             <th>DELIVERY</th>
+                                                            <th>ACTUAL DELIVERY</th>
                                                             <th>BAGI KAIN TGL</th>
                                                             <th>ROLL</th>
                                                             <th>BRUTO/BAGI KAIN</th>
@@ -337,7 +338,7 @@
                                                                 $where_article2          = "";
                                                             }
                                                             $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE $where_prodorder2 $where_proddemand2 $where_order2 $where_date2 $where_no_po2 $where_article2 AND ACCESS_TO = 'MEMO' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
-                                                            $stmt   = mysqli_query($con_nowprd,$sqlDB2);
+                                                            $stmt   = mysqli_query($con_nowprd, $sqlDB2);
                                                             while ($rowdb2 = mysqli_fetch_array($stmt)) {
                                                         ?>
                                                         <?php 
@@ -625,6 +626,20 @@
                                                             <td><?= $rowdb2['WARNA']; ?></td> <!-- WARNA -->
                                                             <td><?= $rowdb2['NO_WARNA']; ?></td> <!-- NO WARNA -->
                                                             <td><?= $rowdb2['DELIVERY']; ?></td> <!-- DELIVERY -->
+                                                            <td>
+                                                                <?php
+                                                                    $q_actual_delivery      = db2_exec($conn1, "SELECT
+                                                                                                                    COALESCE(s2.CONFIRMEDDELIVERYDATE, s.CONFIRMEDDUEDATE) AS ACTUAL_DELIVERY
+                                                                                                                FROM
+                                                                                                                    SALESORDER s 
+                                                                                                                LEFT JOIN SALESORDERDELIVERY s2 ON s2.SALESORDERLINESALESORDERCODE = s.CODE AND s2.SALORDLINESALORDERCOMPANYCODE = s.COMPANYCODE AND s2.SALORDLINESALORDERCOUNTERCODE = s.COUNTERCODE 
+                                                                                                                WHERE
+                                                                                                                    s2.SALESORDERLINESALESORDERCODE = '$rowdb2[NO_ORDER]'
+                                                                                                                    AND s2.SALESORDERLINEORDERLINE = '$rowdb2[ORDERLINE]'");
+                                                                    $row_actual_delivery    = db2_fetch_assoc($q_actual_delivery);
+                                                                    echo $row_actual_delivery['ACTUAL_DELIVERY'];
+                                                                ?>
+                                                            </td> <!-- ACTUAL DELIVERY -->
                                                             <td>
                                                                 <?php 
                                                                     $q_tglbagikain = db2_exec($conn1, "SELECT * FROM ITXVIEW_TGLBAGIKAIN WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'");

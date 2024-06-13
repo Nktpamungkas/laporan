@@ -21,6 +21,7 @@ header('Cache-Control: max-age=0');
             <th>WARNA</th>
             <th>NO WARNA</th>
             <th>DELIVERY</th>
+            <th>ACTUAL DELIVERY</th>
             <th>BAGI KAIN TGL</th>
             <th>ROLL</th>
             <th>BRUTO/BAGI KAIN</th>
@@ -374,6 +375,20 @@ header('Cache-Control: max-age=0');
                     <td><?= $rowdb2['WARNA']; ?></td> <!-- WARNA -->
                     <td><?= $rowdb2['NO_WARNA']; ?></td> <!-- NO WARNA -->
                     <td><?= $rowdb2['DELIVERY']; ?></td> <!-- DELIVERY -->
+                    <td>
+                        <?php
+                            $q_actual_delivery      = db2_exec($conn1, "SELECT
+                                                                            COALESCE(s2.CONFIRMEDDELIVERYDATE, s.CONFIRMEDDUEDATE) AS ACTUAL_DELIVERY
+                                                                        FROM
+                                                                            SALESORDER s 
+                                                                        LEFT JOIN SALESORDERDELIVERY s2 ON s2.SALESORDERLINESALESORDERCODE = s.CODE AND s2.SALORDLINESALORDERCOMPANYCODE = s.COMPANYCODE AND s2.SALORDLINESALORDERCOUNTERCODE = s.COUNTERCODE 
+                                                                        WHERE
+                                                                            s2.SALESORDERLINESALESORDERCODE = '$rowdb2[NO_ORDER]'
+                                                                            AND s2.SALESORDERLINEORDERLINE = '$rowdb2[ORDERLINE]'");
+                            $row_actual_delivery    = db2_fetch_assoc($q_actual_delivery);
+                            echo $row_actual_delivery['ACTUAL_DELIVERY'];
+                        ?>
+                    </td> <!-- ACTUAL DELIVERY -->
                     <td>
                         <?php
                             $q_tglbagikain = db2_exec($conn1, "SELECT * FROM ITXVIEW_TGLBAGIKAIN WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'");

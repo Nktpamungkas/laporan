@@ -296,7 +296,7 @@
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB6' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB7' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB8')
-                                                                                                                                        AND NOT (idqd.VALUEQUANTITY = 9 OR idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 99 OR idqd.VALUEQUANTITY = 91)
+                                                                                                                                        AND NOT (idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 91)
                                                                                                     WHERE
                                                                                                         p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' 
                                                                                                         AND p.PRODUCTIONDEMANDCODE IN ($row_iptip[PRODUCTIONDEMANDCODE2])
@@ -348,7 +348,7 @@
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB6' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB7' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB8')
-                                                                                                                                        AND NOT (idqd.VALUEQUANTITY = 9 OR idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 99 OR idqd.VALUEQUANTITY = 91)
+                                                                                                                                        AND NOT (idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 91)
                                                                                                     WHERE
                                                                                                         p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' 
                                                                                                         AND p.PRODUCTIONDEMANDCODE IN ($row_iptip[PRODUCTIONDEMANDCODE2])
@@ -677,7 +677,7 @@
                                                                                                                                     idqd.CHARACTERISTICCODE = 'GRB6' OR
                                                                                                                                     idqd.CHARACTERISTICCODE = 'GRB7' OR
                                                                                                                                     idqd.CHARACTERISTICCODE = 'GRB8')
-                                                                                                                                AND NOT (idqd.VALUEQUANTITY = 9 OR idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 99 OR idqd.VALUEQUANTITY = 91)
+                                                                                                                                AND NOT (idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 91)
                                                                                             WHERE
                                                                                                 p.PRODUCTIONORDERCODE  = '$row_carisalinan[PRODUCTIONORDERCODE]' 
                                                                                                 AND p.PRODUCTIONDEMANDCODE = '$row_carisalinan[PRODUCTIONDEMANDCODE]'
@@ -726,7 +726,7 @@
                                                                                                                                                         idqd.CHARACTERISTICCODE = 'GRB6' OR
                                                                                                                                                         idqd.CHARACTERISTICCODE = 'GRB7' OR
                                                                                                                                                         idqd.CHARACTERISTICCODE = 'GRB8')
-                                                                                                                                                    AND NOT (idqd.VALUEQUANTITY = 9 OR idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 99 OR idqd.VALUEQUANTITY = 91)
+                                                                                                                                                    AND NOT (idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 91)
                                                                                                                 WHERE
                                                                                                                     p.PRODUCTIONORDERCODE  = '$row_carisalinan[PRODUCTIONORDERCODE]' 
                                                                                                                     AND p.PRODUCTIONDEMANDCODE IN ($row_carisalinan[PRODUCTIONDEMANDCODE])
