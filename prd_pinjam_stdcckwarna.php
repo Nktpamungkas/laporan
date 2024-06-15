@@ -132,20 +132,23 @@
                                             WHERE
                                                 TRIM(CODE) = '$row_updatewarna[no_warna]'");
             $row_namawarna = db2_fetch_assoc($q_cekwarna);
+            if($row_namawarna['LONGDESCRIPTION']){
+                $namawarna  = addslashes($row_namawarna['LONGDESCRIPTION']);
+            }else{
+                $namawarna  = '';
+            }
             $update_warna = mysqli_query($con_nowprd, "UPDATE buku_pinjam 
-                                                        SET long_description = '$row_namawarna[LONGDESCRIPTION]' 
+                                                        SET long_description = '$namawarna' 
                                                         WHERE no_warna = '$row_updatewarna[no_warna]'");
         }
-        if($update_warna){
-            echo '<script language="javascript">';
-            echo 'let text = "update nama warna data berhasil !";
-                    if (confirm(text) == true) {
-                        document.location.href = "prd_pinjam_stdcckwarna.php";
-                    } else {
-                        document.location.href = "prd_pinjam_stdcckwarna.php";
-                    }';
-            echo '</script>';
-        }
+        echo '<script language="javascript">';
+        echo 'let text = "update nama warna data berhasil !";
+                if (confirm(text) == true) {
+                    document.location.href = "prd_pinjam_stdcckwarna.php";
+                } else {
+                    document.location.href = "prd_pinjam_stdcckwarna.php";
+                }';
+        echo '</script>';
     }
     // if(isset($_POST['batalkan_arsip'])){
         //     require_once "koneksi.php";
