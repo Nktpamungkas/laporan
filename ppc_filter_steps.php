@@ -363,6 +363,7 @@
                                                             <th width="100px" style="text-align: center;">OPERATOR <br>IN</th>
                                                             <th width="100px" style="text-align: center;">OPERATOR <br>OUT</th>
                                                             <th width="100px" style="text-align: center;">NO GEROBAK</th>
+                                                            <th width="100px" style="text-align: center;">NO MESIN</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody> 
@@ -433,8 +434,15 @@
                                                                             iptop.LONGDESCRIPTION AS OP2,
                                                                             CASE
                                                                                 WHEN a.VALUEBOOLEAN = 1 THEN 'Tidak Perlu Gerobak'
-                                                                                ELSE LISTAGG(DISTINCT FLOOR(idqd.VALUEQUANTITY), ', ')
-                                                                            END AS GEROBAK 
+                                                                                ELSE 
+                                                                                    CASE
+                                                                                        WHEN LISTAGG(DISTINCT FLOOR(idqd.VALUEQUANTITY), ', ') = '1' THEN 'PLASTIK'
+                                                                                        WHEN LISTAGG(DISTINCT FLOOR(idqd.VALUEQUANTITY), ', ') = '2' THEN 'TONG'
+                                                                                        WHEN LISTAGG(DISTINCT FLOOR(idqd.VALUEQUANTITY), ', ') = '3' THEN 'DALAM MESIN'
+                                                                                        ELSE LISTAGG(DISTINCT FLOOR(idqd.VALUEQUANTITY), ', ')
+                                                                                    END
+                                                                            END AS GEROBAK,
+                                                                            idqd.WORKCENTERCODE 
                                                                         FROM 
                                                                             PRODUCTIONDEMANDSTEP p 
                                                                         LEFT JOIN OPERATION o ON o.CODE = p.OPERATIONCODE 
@@ -455,8 +463,9 @@
                                                                                                                 idqd.CHARACTERISTICCODE = 'GRB5' OR
                                                                                                                 idqd.CHARACTERISTICCODE = 'GRB6' OR
                                                                                                                 idqd.CHARACTERISTICCODE = 'GRB7' OR
-                                                                                                                idqd.CHARACTERISTICCODE = 'GRB8')
-                                                                                                            AND NOT (idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 99 OR idqd.VALUEQUANTITY = 91)
+                                                                                                                idqd.CHARACTERISTICCODE = 'GRB8' OR
+                                                                                                                idqd.CHARACTERISTICCODE = 'AREA')
+                                                                                                            AND NOT (idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 99 OR idqd.VALUEQUANTITY = 91)
                                                                         WHERE
                                                                             p.PRODUCTIONORDERCODE  = '$prod_order' AND p.PRODUCTIONDEMANDCODE = '$demand'  
                                                                         GROUP BY
@@ -474,7 +483,8 @@
                                                                             p.PRODUCTIONDEMANDCODE,
                                                                             iptip.LONGDESCRIPTION,
                                                                             iptop.LONGDESCRIPTION,
-                                                                            a.VALUEBOOLEAN
+                                                                            a.VALUEBOOLEAN,
+                                                                            idqd.WORKCENTERCODE 
                                                                         ORDER BY p.STEPNUMBER ASC";
                                                             $stmt = db2_exec($conn1, $sqlDB2);
                                                             while ($rowdb2 = db2_fetch_assoc($stmt)) {
@@ -694,6 +704,7 @@
                                                                         }
                                                                     ?>
                                                                 </td>
+                                                                <td align="center"><?= $rowdb2['WORKCENTERCODE']; ?></td>
                                                             </tr>
                                                             <div id="confirm-note<?= $rowdb2['STEPNUMBER']; ?>" class="modal fade" role="dialog">
                                                                 <div class="modal-dialog modal-lg">
