@@ -223,7 +223,7 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_memopentingppc WHERE IPADDRESS = 
                                                             <th>ORIGINAL PD CODE</th>
                                                             <th>CATATAN PO GREIGE</th>
                                                             <th>KETERANGAN</th>
-                                                            <th>RE PROSES</th>
+                                                            <th>RE PROSES ADDITIONAL</th>
                                                             <?php if ($_SERVER['REMOTE_ADDR'] == '10.0.5.132') : ?>
                                                                 <th>Only Nilo</th>
                                                             <?php endif; ?>
@@ -865,14 +865,14 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_memopentingppc WHERE IPADDRESS = 
                                                                 <td><?= $rowdb2['KETERANGAN']; ?></td> <!-- KETERANGAN -->
                                                                 <td>
                                                                     <?php
-                                                                    $pr_order = $rowdb2['NO_KK'];
-                                                                    $dmand = $rowdb2['DEMAND'];
-                                                                    $additional = db2_exec($conn1, "SELECT COUNT(*) AS TOTAL_ADDITIONAL
-                                                                                    FROM PRODUCTIONDEMANDSTEP p 
-                                                                                    WHERE p.PRODUCTIONORDERCODE = $pr_order 
-                                                                                        AND p.PRODUCTIONDEMANDCODE =  $dmand
-                                                                                        AND (p.STEPTYPE = 1 OR p.STEPTYPE = 3)");
-                                                                    $additional_data = db2_fetch_assoc($additional);
+                                                                        $pr_order   = $rowdb2['NO_KK'];
+                                                                        $dmand      = $rowdb2['DEMAND'];
+                                                                        $additional = db2_exec($conn1, "SELECT COUNT(*) AS TOTAL_ADDITIONAL
+                                                                                                            FROM PRODUCTIONDEMANDSTEP p 
+                                                                                                            WHERE p.PRODUCTIONORDERCODE = $pr_order 
+                                                                                                                AND p.PRODUCTIONDEMANDCODE =  $dmand
+                                                                                                                AND (p.STEPTYPE = 1 OR p.STEPTYPE = 3)");
+                                                                        $additional_data = db2_fetch_assoc($additional);
                                                                     ?>
                                                                     <?= $additional_data['TOTAL_ADDITIONAL']; ?>
                                                                 </td>
