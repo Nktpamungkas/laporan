@@ -201,6 +201,8 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_memopentingppc WHERE IPADDRESS = 
                                                             <th>NO WARNA</th>
                                                             <th>DELIVERY</th>
                                                             <th>DELIVERY ACTUAL</th>
+                                                            <th>GREIGE AWAL</th>
+                                                            <th>GREIGE AKHIR</th>
                                                             <th>BAGI KAIN TGL</th>
                                                             <th>ROLL</th>
                                                             <th>BRUTO/BAGI KAIN</th>
@@ -678,6 +680,42 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_memopentingppc WHERE IPADDRESS = 
                                                                     echo $row_actual_delivery['ACTUAL_DELIVERY'];
                                                                     ?>
                                                                 </td> <!-- ACTUAL DELIVERY -->
+                                                                    <?php
+                                                                        $sql_benang_booking_new        = db2_exec($conn1, "SELECT * FROM ITXVIEW_BOOKING_NEW WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]'
+                                                                                                                                                AND ORDERLINE = '$rowdb2[ORDERLINE]'");
+                                                                        $r_benang_booking_new        = db2_fetch_assoc($sql_benang_booking_new);
+                                                                        $d_benang_booking_new        = $r_benang_booking_new['SALESORDERCODE'];
+
+                                                                        ?>
+                                                                        <?php
+                                                                        $sql_benang_rajut        = db2_exec($conn1, "SELECT
+                                                                                                                        *
+                                                                                                                    FROM
+                                                                                                                        ITXVIEW_RAJUT
+                                                                                                                    WHERE
+                                                                                                                        (ITEMTYPEAFICODE ='KGF' OR ITEMTYPEAFICODE ='FKG')
+                                                                                                                        AND TRIM(SUBCODE01) = '$d_qtysalinan[SUBCODE01]'
+                                                                                                                        AND TRIM(SUBCODE02) = '$d_qtysalinan[SUBCODE02]'
+                                                                                                                        AND TRIM(SUBCODE03) = '$d_qtysalinan[SUBCODE03]'
+                                                                                                                        AND TRIM(SUBCODE04) = '$d_qtysalinan[SUBCODE04]'
+                                                                                                                        AND TRIM(ORIGDLVSALORDLINESALORDERCODE) = '$rowdb2[NO_ORDER]'");
+                                                                        $r_benang_rajut        = db2_fetch_assoc($sql_benang_rajut);
+                                                                        $d_benang_rajut        = $r_benang_rajut['CODE'];
+                                                                    ?>
+                                                                    <?php
+                                                                        $q_tgl_greige       = db2_exec($conn1, "SELECT
+                                                                                                                    a2.VALUEDATE AS AWAL,
+                                                                                                                    a.VALUEDATE AS AKHIR	
+                                                                                                                FROM
+                                                                                                                    PRODUCTIONDEMAND p
+                                                                                                                LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'RMPGreigeReqDateTo'
+                                                                                                                LEFT JOIN ADSTORAGE a2 ON a2.UNIQUEID = p.ABSUNIQUEID AND a2.FIELDNAME = 'RMPReqDate'
+                                                                                                                WHERE 
+                                                                                                                    CODE = '$d_benang_rajut'");
+                                                                        $data_tgl_greige    = db2_fetch_assoc($q_tgl_greige);
+                                                                    ?>
+                                                                <td><?= $data_tgl_greige['AWAL']; ?></td><!-- GREIGE AWAL -->
+                                                                <td><?= $data_tgl_greige['AKHIR']; ?></td><!-- GREIGE AKHIR -->
                                                                 <td>
                                                                     <?php
                                                                     $q_tglbagikain = db2_exec($conn1, "SELECT * FROM ITXVIEW_TGLBAGIKAIN WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'");
@@ -832,28 +870,6 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_memopentingppc WHERE IPADDRESS = 
                                                                 <td>`<?= $rowdb2['NO_KK']; ?></td> <!-- NO KARTU KERJA -->
                                                                 <td><?= $d_orig_pd_code['ORIGINALPDCODE']; ?></td> <!-- ORIGINAL PD CODE -->
                                                                 <td>
-                                                                    <?php
-                                                                    $sql_benang_booking_new        = db2_exec($conn1, "SELECT * FROM ITXVIEW_BOOKING_NEW WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]'
-                                                                                                                                            AND ORDERLINE = '$rowdb2[ORDERLINE]'");
-                                                                    $r_benang_booking_new        = db2_fetch_assoc($sql_benang_booking_new);
-                                                                    $d_benang_booking_new        = $r_benang_booking_new['SALESORDERCODE'];
-
-                                                                    ?>
-                                                                    <?php
-                                                                    $sql_benang_rajut        = db2_exec($conn1, "SELECT
-                                                                                                                    *
-                                                                                                                FROM
-                                                                                                                    ITXVIEW_RAJUT
-                                                                                                                WHERE
-                                                                                                                    (ITEMTYPEAFICODE ='KGF' OR ITEMTYPEAFICODE ='FKG')
-                                                                                                                    AND TRIM(SUBCODE01) = '$d_qtysalinan[SUBCODE01]'
-                                                                                                                    AND TRIM(SUBCODE02) = '$d_qtysalinan[SUBCODE02]'
-                                                                                                                    AND TRIM(SUBCODE03) = '$d_qtysalinan[SUBCODE03]'
-                                                                                                                    AND TRIM(SUBCODE04) = '$d_qtysalinan[SUBCODE04]'
-                                                                                                                    AND TRIM(ORIGDLVSALORDLINESALORDERCODE) = '$rowdb2[NO_ORDER]'");
-                                                                    $r_benang_rajut        = db2_fetch_assoc($sql_benang_rajut);
-                                                                    $d_benang_rajut        = $r_benang_rajut['CODE'];
-                                                                    ?>
                                                                     <!-- <a href="http://online.indotaichen.com/laporan/ppc_catatan_po_greige.php?" target="_blank">Detail</a> -->
                                                                     <?php if ($d_benang_booking_new) {
                                                                         echo $d_benang_booking_new . '. Greige Ready';
