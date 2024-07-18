@@ -681,13 +681,16 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_memopentingppc WHERE IPADDRESS = 
                                                                     ?>
                                                                 </td> <!-- ACTUAL DELIVERY -->
                                                                     <?php
+                                                                        $q_qtysalinan = db2_exec($conn1, "SELECT * FROM PRODUCTIONDEMAND WHERE CODE = '$rowdb2[DEMAND]'");
+                                                                        $d_qtysalinan = db2_fetch_assoc($q_qtysalinan);
+                                                                    ?>
+                                                                    <?php
                                                                         $sql_benang_booking_new        = db2_exec($conn1, "SELECT * FROM ITXVIEW_BOOKING_NEW WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]'
                                                                                                                                                 AND ORDERLINE = '$rowdb2[ORDERLINE]'");
                                                                         $r_benang_booking_new        = db2_fetch_assoc($sql_benang_booking_new);
                                                                         $d_benang_booking_new        = $r_benang_booking_new['SALESORDERCODE'];
-
-                                                                        ?>
-                                                                        <?php
+                                                                    ?>
+                                                                    <?php
                                                                         $sql_benang_rajut        = db2_exec($conn1, "SELECT
                                                                                                                         *
                                                                                                                     FROM
@@ -714,8 +717,34 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_memopentingppc WHERE IPADDRESS = 
                                                                                                                     CODE = '$d_benang_rajut'");
                                                                         $data_tgl_greige    = db2_fetch_assoc($q_tgl_greige);
                                                                     ?>
-                                                                <td><?= $data_tgl_greige['AWAL']; ?></td><!-- GREIGE AWAL -->
-                                                                <td><?= $data_tgl_greige['AKHIR']; ?></td><!-- GREIGE AKHIR -->
+                                                                    <?php
+                                                                        $tgl_awal_greige_rmp        = db2_exec($conn1, "SELECT
+                                                                                                                        a.VALUESTRING,
+                                                                                                                        a2.VALUEDATE AS AWAL
+                                                                                                                    FROM
+                                                                                                                        PRODUCTIONDEMAND p
+                                                                                                                    LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID AND a.FIELDNAME = 'ProAllow'
+                                                                                                                    LEFT JOIN ADSTORAGE a2 ON a2.UNIQUEID = p.ABSUNIQUEID AND a2.FIELDNAME = 'ProAllowDate'
+                                                                                                                    WHERE
+                                                                                                                        CODE = '$rowdb2[DEMAND]'");
+                                                                        $data_tgl_awal_greige_rmp   = db2_fetch_assoc($tgl_awal_greige_rmp);
+                                                                    ?>
+                                                                    <?php
+                                                                        if($d_benang_rajut){
+                                                                            if(!empty($data_tgl_greige['AWAL'])){
+                                                                                $awal   = $data_tgl_greige['AWAL'];
+                                                                            }else{
+                                                                                $awal   = $data_tgl_awal_greige_rmp['AWAL'];
+                                                                            }
+
+                                                                            $akhir  = $data_tgl_greige['AKHIR'];
+                                                                        }else{
+                                                                            $awal   = $data_tgl_awal_greige_rmp['AWAL'];
+                                                                            $akhir  = $r_benang_rajut['TGLPOGREIGE'];
+                                                                        }
+                                                                    ?>
+                                                                <td><?= $awal; ?></td><!-- GREIGE AWAL -->
+                                                                <td><?= $akhir; ?></td><!-- GREIGE AKHIR -->
                                                                 <td>
                                                                     <?php
                                                                     $q_tglbagikain = db2_exec($conn1, "SELECT * FROM ITXVIEW_TGLBAGIKAIN WHERE PRODUCTIONORDERCODE = '$rowdb2[NO_KK]'");
@@ -751,10 +780,6 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_memopentingppc WHERE IPADDRESS = 
                                                                     <?= $roll; ?>
                                                                 </td> <!-- ROLL -->
                                                                 <td>
-                                                                    <?php
-                                                                    $q_qtysalinan = db2_exec($conn1, "SELECT * FROM PRODUCTIONDEMAND WHERE CODE = '$rowdb2[DEMAND]'");
-                                                                    $d_qtysalinan = db2_fetch_assoc($q_qtysalinan);
-                                                                    ?>
                                                                     <?php
                                                                     $q_orig_pd_code     = db2_exec($conn1, "SELECT 
                                                                                                                 *, a.VALUESTRING AS ORIGINALPDCODE
