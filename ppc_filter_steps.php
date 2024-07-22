@@ -122,6 +122,7 @@
         $stepnumber         = $_GET['STEPNUMBER'];
         $operationcode      = $_GET['OPERATIONCODE'];
         $keterangan         = str_replace ("'","\'", $_GET['KETERANGAN']);
+        $no_gerobak         = str_replace ("'","\'", $_GET['NO_GEROBAK']);
         $ipaddress          = $_GET['IPADDRESS'];
         $createdatetime     = $_GET['CREATEDATETIME'];
 
@@ -130,6 +131,7 @@
                                                                                         STEPNUMBER,
                                                                                         OPERATIONCODE,
                                                                                         KETERANGAN,
+                                                                                        NO_GEROBAK,
                                                                                         IPADDRESS,
                                                                                         CREATEDATETIME)
                                                             VALUES('$productionorder',
@@ -137,6 +139,7 @@
                                                                     '$stepnumber',
                                                                     '$operationcode',
                                                                     '$keterangan',
+                                                                    '$no_gerobak',
                                                                     '$ipaddress',
                                                                     '$createdatetime')");
         if($simpan_keterangan){
@@ -149,6 +152,7 @@
                                                             STEPNUMBER,
                                                             OPERATIONCODE,
                                                             KETERANGAN,
+                                                            NO_GEROBAK,
                                                             IPADDRESS,
                                                             CREATEDATETIME)
                                                 VALUES('$productionorder',
@@ -156,6 +160,7 @@
                                                 '$stepnumber',
                                                 '$operationcode',
                                                 '$keterangan',
+                                                '$no_gerobak',
                                                 '$ipaddress',
                                                 '$createdatetime')";
             exit();
@@ -165,10 +170,11 @@
         $productiondemand   = $_GET['PRODUCTIONDEMANDCODE'];
         $stepnumber         = $_GET['STEPNUMBER'];
         $keterangan         = str_replace ("'","\'", $_GET['KETERANGAN']);
+        $no_gerobak         = str_replace ("'","\'", $_GET['NO_GEROBAK']);
         $ipaddress          = $_GET['IPADDRESS'];
         $createdatetime     = $_GET['CREATEDATETIME'];
 
-        $ubah_keterangan  = mysqli_query($con_nowprd, "UPDATE keterangan_leader SET KETERANGAN = '$keterangan'
+        $ubah_keterangan  = mysqli_query($con_nowprd, "UPDATE keterangan_leader SET KETERANGAN = '$keterangan', NO_GEROBAK = '$no_gerobak'
                                                             WHERE PRODUCTIONORDERCODE = '$productionorder'
                                                             AND PRODUCTIONDEMANDCODE = '$productiondemand'
                                                             AND STEPNUMBER = '$stepnumber'");
@@ -178,7 +184,7 @@
             exit;
         }else{
             echo("Error description: ".$mysqli -> error);
-            echo "UPDATE keterangan_leader SET KETERANGAN = '$keterangan'
+            echo "UPDATE keterangan_leader SET KETERANGAN = '$keterangan', NO_GEROBAK = '$no_gerobak'
                                         WHERE PRODUCTIONORDERCODE = '$productionorder'
                                         AND PRODUCTIONDEMANDCODE = '$productiondemand'
                                         AND STEPNUMBER = '$stepnumber'";
@@ -499,7 +505,7 @@
                                                                                                                                 AND STEPNUMBER = '$rowdb2[STEPNUMBER]'");
                                                                         $d_ket_leader   = mysqli_fetch_assoc($q_ket_leader);
                                                                     ?>
-                                                                    <?php if($d_ket_leader['KETERANGAN']) : ?>
+                                                                    <?php if($d_ket_leader['KETERANGAN'] OR $d_ket_leader['NO_GEROBAK']) : ?>
                                                                         <abbr title="<?= $d_ket_leader['KETERANGAN']; ?>" data-toggle="modal" data-target="#view-note<?= $rowdb2['STEPNUMBER']; ?>">View Note</abbr>
                                                                     <?php else : ?>
                                                                         <button type="button" style="color: #4778FF;" data-toggle="modal" data-target="#confirm-note<?= $rowdb2['STEPNUMBER']; ?>">
@@ -698,7 +704,11 @@
                                                                 <td align="center">
                                                                     <?php
                                                                         if($rowdb2['GEROBAK'] == 'Tidak Perlu Gerobak'){
-                                                                            echo "<span style='background-color:#CECECE;'>$rowdb2[GEROBAK]</span>";
+                                                                            if($d_ket_leader['NO_GEROBAK']){
+                                                                                echo $d_ket_leader['NO_GEROBAK'];
+                                                                            }else{
+                                                                                echo "<span style='background-color:#CECECE;'>$rowdb2[GEROBAK]</span>";
+                                                                            }
                                                                         }else{
                                                                             echo $rowdb2['GEROBAK'];
                                                                         }
@@ -742,7 +752,12 @@
                                                                                 </div>
                                                                                 <div class="row m-t-15">
                                                                                     <div class="col-md-12">
-                                                                                        <button name="simpan_note" value="simpan_note" class="btn btn-primary btn-md btn-block waves-effect text-center">Confirm</button>
+                                                                                        <input type="text" class="form-control" placeholder="Kolom Nomor Gerobak Manual disini..." name="NO_GEROBAK">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row m-t-15">
+                                                                                    <div class="col-md-12">
+                                                                                        <button name="simpan_note" value="simpan_note" autocomplete="off" class="btn btn-primary btn-md btn-block waves-effect text-center">Confirm</button>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="row">
@@ -789,6 +804,11 @@
                                                                                                 background-color: #f8f8f8; 
                                                                                                 font-size: 16px; 
                                                                                                 resize: none;"><?= $d_ket_leader['KETERANGAN']; ?></textarea>
+                                                                                </div>
+                                                                                <div class="row m-t-15">
+                                                                                    <div class="col-md-12">
+                                                                                        <input type="text" class="form-control" placeholder="Kolom Nomor Gerobak Manual disini..." name="NO_GEROBAK" value="<?= $d_ket_leader['NO_GEROBAK']; ?>">
+                                                                                    </div>
                                                                                 </div>
                                                                                 <div class="row m-t-15">
                                                                                     <div class="col-md-12">
