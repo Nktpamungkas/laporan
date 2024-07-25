@@ -272,6 +272,11 @@
                                         </a>
                                     </li>
                                     <li class="">
+                                        <a href="prd_update.php" data-i18n="nav.animations.main">
+                                            Update Production Order Quantity
+                                        </a>
+                                    </li>
+                                    <li class="">
                                         <a href="prd_laporan_mesin3.php" data-i18n="nav.animations.main">
                                             Macro Plan
                                         </a>
