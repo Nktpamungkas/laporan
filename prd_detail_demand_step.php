@@ -128,6 +128,7 @@
                                                             $r_itxview_detail_qa_data[]        = "('".TRIM(addslashes($row_itxview_detail_qa_data['PRODUCTIONDEMANDCODE']))."',"
                                                                                                 ."'".TRIM(addslashes($row_itxview_detail_qa_data['PRODUCTIONORDERCODE']))."',"
                                                                                                 ."'".TRIM(addslashes($row_itxview_detail_qa_data['WORKCENTERCODE']))."',"
+                                                                                                ."'".TRIM(addslashes($row_itxview_detail_qa_data['VALUEINT']))."',"
                                                                                                 ."'".TRIM(addslashes($row_itxview_detail_qa_data['OPERATIONCODE']))."',"
                                                                                                 ."'".TRIM(addslashes($row_itxview_detail_qa_data['LINE']))."',"
                                                                                                 ."'".TRIM(addslashes($row_itxview_detail_qa_data['QUALITYDOCUMENTHEADERNUMBERID']))."',"
@@ -138,7 +139,7 @@
                                                                                                 ."'".date('Y-m-d H:i:s')."')";
                                                         }
                                                         $value_itxview_detail_qa_data        = implode(',', $r_itxview_detail_qa_data);
-                                                        $insert_itxview_detail_qa_data       = mysqli_query($con_nowprd, "INSERT INTO itxview_detail_qa_data(PRODUCTIONDEMANDCODE,PRODUCTIONORDERCODE,WORKCENTERCODE,OPERATIONCODE,LINE,QUALITYDOCUMENTHEADERNUMBERID,CHARACTERISTICCODE,LONGDESCRIPTION,VALUEQUANTITY,IPADDRESS,CREATEDATETIME) VALUES $value_itxview_detail_qa_data");
+                                                        $insert_itxview_detail_qa_data       = mysqli_query($con_nowprd, "INSERT INTO itxview_detail_qa_data(PRODUCTIONDEMANDCODE,PRODUCTIONORDERCODE,WORKCENTERCODE,STEPNUMBER,OPERATIONCODE,LINE,QUALITYDOCUMENTHEADERNUMBERID,CHARACTERISTICCODE,LONGDESCRIPTION,VALUEQUANTITY,IPADDRESS,CREATEDATETIME) VALUES $value_itxview_detail_qa_data");
                                                     ?>
                                                     <thead>
                                                         <tr>
@@ -355,6 +356,7 @@
                                                                                                             AND PRODUCTIONDEMANDCODE = '$d_ITXVIEWKK[PRODUCTIONDEMANDCODE]' 
                                                                                                             AND WORKCENTERCODE = '$rowdb2[WORKCENTERCODE]' 
                                                                                                             AND OPERATIONCODE = '$rowdb2[OPERATIONCODE]' 
+                                                                                                            AND STEPNUMBER = '$rowdb2[STEPNUMBER]'
                                                                                                             AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'
                                                                                                             ORDER BY LINE ASC");
                                                             ?>
