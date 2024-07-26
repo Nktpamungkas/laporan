@@ -131,16 +131,7 @@ $prod_order = @$_POST['prod_order'];
                                                                             </form>
                                                                         </td>
                                                                         <td align="center">
-                                                                            <form method="post"
-                                                                                action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                                                                                <input type="hidden" name="prod_demand"
-                                                                                    value="<?php echo $rowd['CODE']; ?>">
-                                                                                <input type="number"
-                                                                                    name="editSecondaryQuantity"
-                                                                                    value="<?php echo $rowd['TOTALSECONDARYQUANTITY']; ?>">
-                                                                                <button type="submit"
-                                                                                    name="submitSecondaryEdit">Update</button>
-                                                                            </form>
+                                                                        <?php echo $rowd['TOTALSECONDARYQUANTITY']; ?>
                                                                         </td>
                                                                         <td align="center">
                                                                             <?php echo $rowd['PRODUCTIONORDERCOUNTERCODE']; ?>
