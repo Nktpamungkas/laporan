@@ -124,7 +124,7 @@ $prod_order = @$_POST['prod_order'];
                                                                                 action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                                                                                 <input type="hidden" name="prod_demand"
                                                                                     value="<?php echo $rowd['CODE']; ?>">
-                                                                                <input type="number" name="editPrimaryQuantity"
+                                                                                <input type="text" name="editPrimaryQuantity"
                                                                                     value="<?php echo $rowd['TOTALPRIMARYQUANTITY']; ?>">
                                                                                 <button type="submit"
                                                                                     name="submitPrimaryEdit">Update</button>
