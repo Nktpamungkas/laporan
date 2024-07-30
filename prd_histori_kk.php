@@ -261,7 +261,7 @@ mysqli_query($con_nowprd, "INSERT INTO log_history(KET,PRODUCTIONORDER,IPADDRESS
                                                         /* Opsional: Mengubah ikon kursor menjadi "not allowed" */
                                                     }
                                                 </style>
-                                                <h4>Struktur Mapping No Demand</h4>
+                                                <h4>By Last Production Demand</h4>
                                                 <hr>
                                                 <div id="tree"></div>
                                                 <script type="text/javascript" src="dist\js\treeData2.js"></script>
@@ -462,7 +462,7 @@ mysqli_query($con_nowprd, "INSERT INTO log_history(KET,PRODUCTIONORDER,IPADDRESS
                                                         /* Opsional: Mengubah ikon kursor menjadi "not allowed" */
                                                     }
                                                 </style>
-                                                <h4>Struktur Mapping No Demand</h4>
+                                                <h4>By Original PD Code</h4>
                                                 <hr>
                                                 <div id="tree2"></div>
                                                 <script type="text/javascript" src="dist\js\treeData2.js"></script>
