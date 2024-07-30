@@ -912,7 +912,7 @@ mysqli_query($con_nowprd, "DELETE FROM itxview_memopentingppc WHERE IPADDRESS = 
                                                                                                             FROM PRODUCTIONDEMANDSTEP p 
                                                                                                             WHERE p.PRODUCTIONORDERCODE = $pr_order 
                                                                                                                 AND p.PRODUCTIONDEMANDCODE =  $dmand
-                                                                                                                AND (p.STEPTYPE = 1 OR p.STEPTYPE = 3)");
+                                                                                                                AND (p.STEPTYPE = 1)");
                                                                         $additional_data = db2_fetch_assoc($additional);
                                                                     ?>
                                                                     <?= $additional_data['TOTAL_ADDITIONAL']; ?>

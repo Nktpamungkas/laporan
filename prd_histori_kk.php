@@ -73,6 +73,10 @@ mysqli_query($con_nowprd, "INSERT INTO log_history(KET,PRODUCTIONORDER,IPADDRESS
                                         </form>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
                                 <?php if (isset($_POST['submit']) or isset($_GET['demand'])) : ?>
                                     <div class="card">
                                         <div class="card-header">
@@ -271,15 +275,209 @@ mysqli_query($con_nowprd, "INSERT INTO log_history(KET,PRODUCTIONORDER,IPADDRESS
                                             ?>
                                         </div>
                                     </div>
+                                <?php endif; ?>
                             </div>
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Cara membaca Riwayat Salin No Demand</h4>
-                                    <hr>
-                                    <img src="img/Carabaca.PNG" width="800px" height="500px">
-                                </div>
+                            <div class="col-sm-6">
+                                <?php if (isset($_POST['submit']) or isset($_GET['demand'])) : ?>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <?php
+                                                $hostname = "10.0.0.21"; // koneksi
+                                                $database = "NOWPRD";
+                                                $user = "db2admin";
+                                                $passworddb2 = "Sunkam@24809";
+                                                $port = "25000";
+                                                $conn_string = "DRIVER={IBM ODBC DB2 DRIVER}; HOSTNAME=$hostname; PORT=$port; PROTOCOL=TCPIP; UID=$user; PWD=$passworddb2; DATABASE=$database;";
+                                                $con = db2_connect($conn_string, '', '');
+
+                                                function cekDemand2($noDemand){ // 1. cek data
+                                                    global $con;
+
+                                                    $query = "SELECT
+                                                                TRIM( p.CODE ) AS PRODUCTIONDEMANDCODE,
+                                                                RIGHT ( a.VALUESTRING, 8 ) AS ORIGINALPDCODE 
+                                                            FROM
+                                                                PRODUCTIONDEMAND p
+                                                                LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID 
+                                                                AND a.FIELDNAME = 'LastProductDemandCode' 
+                                                            WHERE
+                                                                p.CODE = '$noDemand'";
+
+                                                    $stmt = db2_exec($con, $query);
+                                                    $row = db2_fetch_assoc($stmt);
+                                                    return $row;
+                                                }
+                                                function cekdisalin2($noDemand){
+                                                    global $con;
+
+                                                    $query = "SELECT
+                                                                    TRIM( p.CODE ) AS PRODUCTIONDEMANDCODE 
+                                                                FROM
+                                                                    PRODUCTIONDEMAND p
+                                                                    LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID 
+                                                                    AND a.FIELDNAME = 'LastProductDemandCode' 
+                                                                WHERE
+                                                                    RIGHT ( a.VALUESTRING, 8 ) = '$noDemand'";
+
+                                                    $stmt = db2_exec($con, $query);
+                                                    $row = db2_fetch_assoc($stmt);
+                                                    return $row;
+                                                }
+                                                function cariRootDemand2($noDemand){ // 2. cari root demand
+                                                    global $con;
+
+                                                    $query = "SELECT RIGHT
+                                                                    ( a.VALUESTRING, 8 ) AS ORIGINALPDCODE 
+                                                                FROM
+                                                                    PRODUCTIONDEMAND p
+                                                                    LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID 
+                                                                    AND a.FIELDNAME = 'LastProductDemandCode' 
+                                                                WHERE
+                                                                    LEFT ( p.CODE, 8 ) = '$noDemand'";
+
+                                                    $stmt = db2_exec($con, $query);
+                                                    if ($stmt) {
+                                                        $row = db2_fetch_assoc($stmt);
+                                                        if ($row['ORIGINALPDCODE']) {
+                                                            $x = cariRootDemand2($row['ORIGINALPDCODE']);
+                                                            return $x;
+                                                        } else {
+                                                            return $noDemand;
+                                                        }
+                                                    }
+                                                }
+
+                                                function mapping2($rootDemand, $parent = null){ // 3. mapping demand
+                                                    global $con;
+
+                                                    $rootDemand = substr($rootDemand, 0, 8);
+
+                                                    $query = "SELECT
+                                                                    TRIM( p.CODE ) AS PRODUCTIONDEMANDCODE 
+                                                                FROM
+                                                                    PRODUCTIONDEMAND p
+                                                                    LEFT JOIN ADSTORAGE a ON a.UNIQUEID = p.ABSUNIQUEID 
+                                                                    AND a.FIELDNAME = 'LastProductDemandCode' 
+                                                                WHERE
+                                                                    RIGHT ( a.VALUESTRING, 8 ) = '$rootDemand'";
+
+                                                    $stmt = db2_exec($con, $query, array('cursor' => DB2_SCROLLABLE));
+
+                                                    $output = [];
+                                                    if (db2_num_rows($stmt) > 0) {
+                                                        while ($row = db2_fetch_assoc($stmt)) {
+
+                                                            $output[] = [$row['PRODUCTIONDEMANDCODE'], $parent];
+                                                            $output = array_merge($output, mapping2($row['PRODUCTIONDEMANDCODE'], $row['PRODUCTIONDEMANDCODE']));
+                                                        }
+                                                    }
+                                                    return $output;
+                                                }
+
+                                                function konversi2($resultArray, $rootDemand, $highlightValue){ // 4. sesuaikan struktur js
+
+                                                    $alphabetArray = [];
+                                                    for ($i = 0; $i <= 26; $i++) {
+                                                        $alphabetArray[$i] = 'a' . $i;
+                                                    }
+
+                                                    $array_konversi = [];
+                                                    $no = 0;
+
+
+                                                    $array_konversi['title']['value'] =  '';
+                                                    $array_konversi['title']['parent'] =  '';
+
+                                                    $array_konversi[$rootDemand]['value'] =  '<a target="blank" href="https://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=' . $rootDemand . '">' . $rootDemand . '</a>';
+                                                    $array_konversi[$rootDemand]['parent'] =  'title';
+                                                    foreach ($resultArray as $v1) {
+                                                        foreach ($v1 as $k2 => $v2) {
+
+                                                            if ($k2 == 0) {
+                                                                if ($no == 0) {
+                                                                    $pengait =   $resultArray[$no][0];
+                                                                } else if (array_key_exists($resultArray[$no][0], $array_konversi)) {
+                                                                    $pengait =  $alphabetArray[$no];
+                                                                } else {
+                                                                    $pengait = $resultArray[$no][0];
+                                                                }
+                                                                if ($highlightValue == $resultArray[$no][0]) {
+                                                                    $value = '<a style="color:red" target="blank" href="https://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=' . $resultArray[$no][0] . '">' . $resultArray[$no][0] . '</a>';
+                                                                } else {
+                                                                    $value = '<a target="blank" href="https://online.indotaichen.com/laporan/ppc_filter_steps.php?demand=' . $resultArray[$no][0] . '">' . $resultArray[$no][0] . '</a>';
+                                                                }
+
+                                                                $array_konversi[$pengait]['value'] = $value;
+                                                            } else {
+                                                                $array_konversi[$pengait]['parent'] =  $resultArray[$no][1];
+                                                            }
+                                                        }
+                                                        $no++;
+                                                    }
+                                                    return $array_konversi;
+                                                }
+
+                                                $noDemand = $_POST['Demand'];
+                                                $noDemand = substr($noDemand, 0, 8);
+                                                $result   = cekDemand2($noDemand);
+                                                $disalin  = cekdisalin2($noDemand);
+
+                                                if ($result) {
+                                                    if (empty($result['ORIGINALPDCODE']) and empty($disalin)) { //jika tidak memiliki no salinan
+                                                        echo 'Kartu Belum Pernah Disalin';
+                                                        exit;
+                                                    }
+                                                    $rootDemand     = cariRootDemand2($noDemand);
+                                                    $resultArray    = mapping2($rootDemand, $rootDemand);
+                                                    $array_konversi = konversi2($resultArray, $rootDemand, $noDemand);
+                                            ?>
+                                                <link rel="stylesheet" href="dist\css\treeData2.css">
+                                                <!--TIMPA-->
+                                                <style>
+                                                    .tree li a {
+                                                        border: 1px solid #000;
+                                                        padding: 5px 10px;
+                                                        text-decoration: none;
+                                                        color: #000;
+                                                        font-family: arial, verdana, tahoma;
+                                                        font-size: 12px;
+                                                        display: inline-block;
+
+                                                        border-radius: 5px;
+                                                        -webkit-border-radius: 5px;
+                                                        -moz-border-radius: 5px;
+
+                                                        transition: all 0.5s;
+                                                        -webkit-transition: all 0.5s;
+                                                        -moz-transition: all 0.5s;
+                                                    }
+
+                                                    li a.disabled-link {
+                                                        pointer-events: none;
+                                                        color: #999;
+                                                        /* Opsional: Mengubah warna tautan menjadi abu-abu untuk menunjukkan bahwa itu dinonaktifkan */
+                                                        text-decoration: none;
+                                                        /* Opsional: Menghilangkan garis bawah */
+                                                        cursor: not-allowed;
+                                                        /* Opsional: Mengubah ikon kursor menjadi "not allowed" */
+                                                    }
+                                                </style>
+                                                <h4>Struktur Mapping No Demand</h4>
+                                                <hr>
+                                                <div id="tree2"></div>
+                                                <script type="text/javascript" src="dist\js\treeData2.js"></script>
+                                                <script>
+                                                    var tree = <?php echo json_encode($array_konversi); ?>;
+                                                    TreeData(tree, "#tree2");
+                                                </script>
+                                            <?php } else {
+                                                echo "PRODUCTIONDEMANDCODE tidak ditemukan.";
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
                             </div>
-                        <?php endif; ?>
                         </div>
                     </div>
                 </div>
