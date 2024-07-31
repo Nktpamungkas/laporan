@@ -554,44 +554,44 @@
                                                             $d_suratjalan   = db2_fetch_assoc($q_suratjalan);
                                                         ?>
                                                         <?php
-                                                            $sql_benang_booking_new		= db2_exec($conn1, "SELECT * FROM ITXVIEW_BOOKING_NEW WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]'
-                                                                                                                                    AND ORDERLINE = '$rowdb2[ORDERLINE]'");
-                                                            $r_benang_booking_new		= db2_fetch_assoc($sql_benang_booking_new);
-                                                            $d_tglkniting_ready         = substr($r_benang_booking_new['TGLRENCANA'], 0, 10).' s/d '.substr($r_benang_booking_new['TGLPOGREIGE'], 0, 10);
+                                                            // $sql_benang_booking_new		= db2_exec($conn1, "SELECT * FROM ITXVIEW_BOOKING_NEW WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]'
+                                                            //                                                                         AND ORDERLINE = '$rowdb2[ORDERLINE]'");
+                                                            // $r_benang_booking_new		= db2_fetch_assoc($sql_benang_booking_new);
+                                                            // $d_tglkniting_ready         = substr($r_benang_booking_new['TGLRENCANA'], 0, 10).' s/d '.substr($r_benang_booking_new['TGLPOGREIGE'], 0, 10);
 
-                                                            $q_salesorderline   = db2_exec($conn1, "SELECT * FROM SALESORDERLINE WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]' AND ORDERLINE = '$rowdb2[ORDERLINE]'");
-                                                            $d_salesorderline   = db2_fetch_assoc($q_salesorderline);
+                                                            // $q_salesorderline   = db2_exec($conn1, "SELECT * FROM SALESORDERLINE WHERE SALESORDERCODE = '$rowdb2[NO_ORDER]' AND ORDERLINE = '$rowdb2[ORDERLINE]'");
+                                                            // $d_salesorderline   = db2_fetch_assoc($q_salesorderline);
 
-                                                            if($itemtype == 'KFF'){
-                                                                IF($s1 == 'T' OR $s1 == 'TX') { 
-                                                                    IF(str_contains($assoc_colorcode['WARNA'], 'BLACK')){
-                                                                        $SUBCODE04_Rajut	= 'D01';
-                                                                    }ELSE{
-                                                                        IF($s4 == 'L02'){
-                                                                            $SUBCODE04_Rajut		= 'L02';
-                                                                        }ELSE{
-                                                                            IF($s6 = 'RP04'){
-                                                                                $SUBCODE04_Rajut	= $s4;
-                                                                            }ELSE{
-                                                                                $SUBCODE04_Rajut	= 'L01';
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }ELSE{ 
-                                                                    $SUBCODE04_Rajut	= $s4;
-                                                                }
-                                                            }else{
-                                                                $SUBCODE04_Rajut	= $s4;
-                                                            }
+                                                            // if($itemtype == 'KFF'){
+                                                            //     IF($s1 == 'T' OR $s1 == 'TX') { 
+                                                            //         IF(str_contains($assoc_colorcode['WARNA'], 'BLACK')){
+                                                            //             $SUBCODE04_Rajut	= 'D01';
+                                                            //         }ELSE{
+                                                            //             IF($s4 == 'L02'){
+                                                            //                 $SUBCODE04_Rajut		= 'L02';
+                                                            //             }ELSE{
+                                                            //                 IF($s6 = 'RP04'){
+                                                            //                     $SUBCODE04_Rajut	= $s4;
+                                                            //                 }ELSE{
+                                                            //                     $SUBCODE04_Rajut	= 'L01';
+                                                            //                 }
+                                                            //             }
+                                                            //         }
+                                                            //     }ELSE{ 
+                                                            //         $SUBCODE04_Rajut	= $s4;
+                                                            //     }
+                                                            // }else{
+                                                            //     $SUBCODE04_Rajut	= $s4;
+                                                            // }
 
-                                                            $sql_benang_rajut	= db2_exec($conn1, "SELECT * FROM ITXVIEW_RAJUT WHERE (ITEMTYPEAFICODE = 'KGF' OR ITEMTYPEAFICODE = 'FKG')
-                                                                                                                                AND ORIGDLVSALORDLINESALORDERCODE = '$rowdb2[NO_ORDER]'
-                                                                                                                                AND SUBCODE01 = '$d_salesorderline[SUBCODE01]'
-                                                                                                                                AND SUBCODE02 = '$d_salesorderline[SUBCODE02]'
-                                                                                                                                AND SUBCODE03 = '$d_salesorderline[SUBCODE03]'
-                                                                                                                                AND SUBCODE04 = '$SUBCODE04_Rajut'");
-                                                            $r_benang_rajut		= db2_fetch_assoc($sql_benang_rajut);
-                                                            $d_benang_rajut     = $r_benang_rajut['TGLRENCANA'].' s/d '.$r_benang_rajut['TGLPOGREIGE'];
+                                                            // $sql_benang_rajut	= db2_exec($conn1, "SELECT * FROM ITXVIEW_RAJUT WHERE (ITEMTYPEAFICODE = 'KGF' OR ITEMTYPEAFICODE = 'FKG')
+                                                            //                                                                     AND ORIGDLVSALORDLINESALORDERCODE = '$rowdb2[NO_ORDER]'
+                                                            //                                                                     AND SUBCODE01 = '$d_salesorderline[SUBCODE01]'
+                                                            //                                                                     AND SUBCODE02 = '$d_salesorderline[SUBCODE02]'
+                                                            //                                                                     AND SUBCODE03 = '$d_salesorderline[SUBCODE03]'
+                                                            //                                                                     AND SUBCODE04 = '$SUBCODE04_Rajut'");
+                                                            // $r_benang_rajut		= db2_fetch_assoc($sql_benang_rajut);
+                                                            // $d_benang_rajut     = $r_benang_rajut['TGLRENCANA'].' s/d '.$r_benang_rajut['TGLPOGREIGE'];
                                                         ?>
                                                         <?php
                                                             $q_element  = db2_exec($conn1, "SELECT 
