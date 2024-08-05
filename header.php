@@ -119,6 +119,20 @@
                             </li>
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
+                                    <span class="pcoded-micon"><i class="ti-infinite"></i></span>
+                                    <span class="pcoded-mtext">TAS</span>
+                                    <span class="pcoded-mcaret"></span>
+                                </a>
+                                <ul class="pcoded-submenu">
+                                    <li class=" ">
+                                        <a href="tas_filter_cetaklabel.php" data-i18n="nav.animations.main">
+                                            Cetak Label
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="pcoded-hasmenu">
+                                <a href="javascript:void(0)">
                                     <span class="pcoded-micon"><i class="ti-paint-bucket"></i></span>
                                     <span class="pcoded-mtext">DYE</span>
                                     <span class="pcoded-mcaret"></span>
