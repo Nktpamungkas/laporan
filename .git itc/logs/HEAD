@@ -1,0 +1,12 @@
+0000000000000000000000000000000000000000 9d9f46dfc8ff32541838b14054e9b7d5c8477bc3 Nilokusumo Tri Pamungkas <44149646+Nktpamungkas@users.noreply.github.com> 1690166100 +0700	clone: from https://github.com/ITCProgrammer/laporan.git
+9d9f46dfc8ff32541838b14054e9b7d5c8477bc3 aa46ee2425bd0ee8074f9f055ea0240dd41af477 Nilokusumo Tri Pamungkas <44149646+Nktpamungkas@users.noreply.github.com> 1690166387 +0700	commit: lanjutan dari akun github nilo
+aa46ee2425bd0ee8074f9f055ea0240dd41af477 9c48711fd6221ab5f650e9b201564f0ca6148ec5 Nilokusumo Tri Pamungkas <44149646+Nktpamungkas@users.noreply.github.com> 1690179270 +0700	commit: fixed internal server error
+9c48711fd6221ab5f650e9b201564f0ca6148ec5 966886ba08f71f3eead08918256a3e2ec3a9605b Nilokusumo Tri Pamungkas <44149646+Nktpamungkas@users.noreply.github.com> 1690180580 +0700	commit: neeto jika salinan tidak muncul & tambah orderline
+966886ba08f71f3eead08918256a3e2ec3a9605b 35bde480cd290924681fc97e7a06ca9ea75c14e8 Nilokusumo Tri Pamungkas <44149646+Nktpamungkas@users.noreply.github.com> 1690183313 +0700	commit: KGF dan KFF tidak usah di munculin
+35bde480cd290924681fc97e7a06ca9ea75c14e8 eeac32547df83bd236fb337c1f2517813ea2e0b6 Nilokusumo Tri Pamungkas <44149646+Nktpamungkas@users.noreply.github.com> 1690183322 +0700	pull --tags origin main: Merge made by the 'ort' strategy.
+eeac32547df83bd236fb337c1f2517813ea2e0b6 5533028ff56ebebeb73821696593a1e82fe1df88 Nilokusumo Tri Pamungkas <44149646+Nktpamungkas@users.noreply.github.com> 1690253201 +0700	commit: fixed po selesai
+5533028ff56ebebeb73821696593a1e82fe1df88 b772a092528bf2e6a2bd4aa9e5f5e5c9bd240c18 Nilokusumo Tri Pamungkas <44149646+Nktpamungkas@users.noreply.github.com> 1690253243 +0700	commit: fixed po selesai
+b772a092528bf2e6a2bd4aa9e5f5e5c9bd240c18 e628c6a3778b100169ecb6f1f64eaed7119f851c Nilokusumo Tri Pamungkas <44149646+Nktpamungkas@users.noreply.github.com> 1690253609 +0700	commit: fixed qty kurang yard
+e628c6a3778b100169ecb6f1f64eaed7119f851c 8fb7d13844f3d55ea87a70dcac7f6458253519d1 Nilokusumo Tri Pamungkas <44149646+Nktpamungkas@users.noreply.github.com> 1690265837 +0700	commit: export to excel
+8fb7d13844f3d55ea87a70dcac7f6458253519d1 c0475f1392155b289299cf20695ff7566e4485e6 Nilokusumo Tri Pamungkas <44149646+Nktpamungkas@users.noreply.github.com> 1690267131 +0700	commit: tambah nomor po
+c0475f1392155b289299cf20695ff7566e4485e6 a2bc27d5c7e0ec37496d082ebc7c7111bc75bcdc Nilokusumo Tri Pamungkas <44149646+Nktpamungkas@users.noreply.github.com> 1690267480 +0700	commit: pemindahan nomor original pd code
