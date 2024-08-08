@@ -82,11 +82,11 @@
                                             Cetak Label
                                         </a>
                                     </li>
-                                    <li class=" ">
+                                    <!-- <li class=" ">
                                         <a href="fin_bpp.php" data-i18n="nav.animations.main">
                                             Laporan Pembelian
                                         </a>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </li>
                             <li class="pcoded-hasmenu">
@@ -175,7 +175,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="pcoded-hasmenu">
+                            <!-- <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
                                     <span class="pcoded-micon"><i class="icofont icofont-basket"></i></span>
                                     <span class="pcoded-mtext">PCS</span>
@@ -188,7 +188,7 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> -->
                             <li class="pcoded-hasmenu">
                                 <a href="javascript:void(0)">
                                     <span class="pcoded-micon"><i class="icofont icofont-chart-histogram"></i></span>
