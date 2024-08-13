@@ -48,6 +48,7 @@
             <th>CATATAN PO GREIGE</th>
             <th>KETERANGAN</th>
             <th>ORIGINAL PD CODE</th>
+            <th>RE PROSES ADDITIONAL</th>
         </tr>
     </thead>
     <tbody>
@@ -731,6 +732,19 @@
                     </td> <!-- CATATAN PO GREIGE -->
                     <td><?= $rowdb2['KETERANGAN']; ?></td> <!-- KETERANGAN -->
                     <td><?= $d_orig_pd_code['ORIGINALPDCODE']; ?></td> <!-- ORIGINAL PD CODE -->
+                    <td>
+                        <?php
+                            $pr_order   = $rowdb2['NO_KK'];
+                            $dmand      = $rowdb2['DEMAND'];
+                            $additional = db2_exec($conn1, "SELECT COUNT(*) AS TOTAL_ADDITIONAL
+                                                                FROM PRODUCTIONDEMANDSTEP p 
+                                                                WHERE p.PRODUCTIONORDERCODE = $pr_order 
+                                                                    AND p.PRODUCTIONDEMANDCODE =  $dmand
+                                                                    AND (p.STEPTYPE = 1)");
+                            $additional_data = db2_fetch_assoc($additional);
+                        ?>
+                        <?= $additional_data['TOTAL_ADDITIONAL']; ?>
+                    </td>
                 </tr>
             <?php endif; ?>
         <?php } ?>
