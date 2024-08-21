@@ -295,7 +295,10 @@
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB5' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB6' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB7' OR
-                                                                                                                                            idqd.CHARACTERISTICCODE = 'GRB8')
+                                                                                                                                            idqd.CHARACTERISTICCODE = 'GRB8' OR
+                                                                                                                                            idqd.CHARACTERISTICCODE = 'GRB9' OR
+                                                                                                                                            idqd.CHARACTERISTICCODE = 'GRB10' OR
+                                                                                                                                            idqd.CHARACTERISTICCODE = 'AREA')
                                                                                                                                         AND NOT (idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 91)
                                                                                                     WHERE
                                                                                                         p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' 
@@ -347,7 +350,10 @@
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB5' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB6' OR
                                                                                                                                             idqd.CHARACTERISTICCODE = 'GRB7' OR
-                                                                                                                                            idqd.CHARACTERISTICCODE = 'GRB8')
+                                                                                                                                            idqd.CHARACTERISTICCODE = 'GRB8' OR
+                                                                                                                                            idqd.CHARACTERISTICCODE = 'GRB9' OR
+                                                                                                                                            idqd.CHARACTERISTICCODE = 'GRB10' OR
+                                                                                                                                            idqd.CHARACTERISTICCODE = 'AREA')
                                                                                                                                         AND NOT (idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 91)
                                                                                                     WHERE
                                                                                                         p.PRODUCTIONORDERCODE  = '$row_iptip[PRODUCTIONORDERCODE]' 
@@ -676,7 +682,10 @@
                                                                                                                                     idqd.CHARACTERISTICCODE = 'GRB5' OR
                                                                                                                                     idqd.CHARACTERISTICCODE = 'GRB6' OR
                                                                                                                                     idqd.CHARACTERISTICCODE = 'GRB7' OR
-                                                                                                                                    idqd.CHARACTERISTICCODE = 'GRB8')
+                                                                                                                                    idqd.CHARACTERISTICCODE = 'GRB8' OR
+                                                                                                                                    idqd.CHARACTERISTICCODE = 'GRB9' OR
+                                                                                                                                    idqd.CHARACTERISTICCODE = 'GRB10' OR
+                                                                                                                                    idqd.CHARACTERISTICCODE = 'AREA')
                                                                                                                                 AND NOT (idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 91)
                                                                                             WHERE
                                                                                                 p.PRODUCTIONORDERCODE  = '$row_carisalinan[PRODUCTIONORDERCODE]' 
@@ -725,7 +734,10 @@
                                                                                                                                                         idqd.CHARACTERISTICCODE = 'GRB5' OR
                                                                                                                                                         idqd.CHARACTERISTICCODE = 'GRB6' OR
                                                                                                                                                         idqd.CHARACTERISTICCODE = 'GRB7' OR
-                                                                                                                                                        idqd.CHARACTERISTICCODE = 'GRB8')
+                                                                                                                                                        idqd.CHARACTERISTICCODE = 'GRB8' OR
+                                                                                                                                                        idqd.CHARACTERISTICCODE = 'GRB9' OR
+                                                                                                                                                        idqd.CHARACTERISTICCODE = 'GRB10' OR
+                                                                                                                                                        idqd.CHARACTERISTICCODE = 'AREA')
                                                                                                                                                     AND NOT (idqd.VALUEQUANTITY = 999 OR idqd.VALUEQUANTITY = 1 OR idqd.VALUEQUANTITY = 9999 OR idqd.VALUEQUANTITY = 99999 OR idqd.VALUEQUANTITY = 91)
                                                                                                                 WHERE
                                                                                                                     p.PRODUCTIONORDERCODE  = '$row_carisalinan[PRODUCTIONORDERCODE]' 
