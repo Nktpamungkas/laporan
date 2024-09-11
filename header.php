@@ -295,6 +295,11 @@
                                             Macro Plan
                                         </a>
                                     </li>
+                                    <li class="">
+                                        <a href="prd_elements_cut.php" data-i18n="nav.animations.main">
+                                            Tracking Elements Cutting
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="pcoded-hasmenu">
