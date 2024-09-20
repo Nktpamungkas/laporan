@@ -65,7 +65,7 @@
             } else {
                 $where_date2     = "";
             }
-            $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE ACCESS_TO = 'MEMO' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' $where_order2 $where_date2";
+            $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE ACCESS_TO = 'MEMO' AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' $where_order2 $where_date2  ORDER BY DELIVERY ASC";
             $stmt   = mysqli_query($con_nowprd, $sqlDB2);
             while ($rowdb2 = mysqli_fetch_array($stmt)) {
         ?>

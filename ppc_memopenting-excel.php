@@ -128,7 +128,7 @@
                 } else {
                     $where_date2     = "";
                 }
-                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE (PROGRESSSTATUS <> '6' AND PROGRESSSTATUS_DEMAND <> '6') $where_order2 $where_date2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'";
+                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE (PROGRESSSTATUS <> '6' AND PROGRESSSTATUS_DEMAND <> '6') $where_order2 $where_date2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
                 $stmt   = mysqli_query($con_nowprd, $sqlDB2);
             }else{
                 $no_order_2 = $_GET['no_order'];
@@ -145,7 +145,7 @@
                 } else {
                     $where_date2     = "";
                 }
-                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE (PROGRESSSTATUS <> '6' AND PROGRESSSTATUS_DEMAND <> '6') $where_order2 $where_date2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]'";
+                $sqlDB2 = "SELECT DISTINCT * FROM itxview_memopentingppc WHERE (PROGRESSSTATUS <> '6' AND PROGRESSSTATUS_DEMAND <> '6') $where_order2 $where_date2 AND IPADDRESS = '$_SERVER[REMOTE_ADDR]' ORDER BY DELIVERY ASC";
                 $stmt   = mysqli_query($con_nowprd, $sqlDB2);
             }
                 while ($rowdb2 = mysqli_fetch_array($stmt)) {
