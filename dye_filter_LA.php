@@ -54,7 +54,7 @@
                                                     <input type="text" class="form-control" name="bon_resep" value="<?php if (isset($_POST['submit'])){ echo $_POST['bon_resep']; } ?>" required>
                                                 </div>
                                                 <div class="col-sm-12 col-xl-4 m-b-30">
-                                                    <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> <i class="icofont icofont-search-alt-1"></i> Cari data</button>
+                                                    <button type="submit" name="submit" class="btn btn-primary"><i class="icofont icofont-search-alt-1"></i> Cari data</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -152,7 +152,7 @@
                                                                                         WHERE 
                                                                                             Ticket_Detail_Addition.ID_NO LIKE '%$_POST[bon_resep]%'
                                                                                     ORDER BY 
-                                                                                        BARIS ASC";
+                                                                                        BARIS, ID_NO ASC";
                                                                         $stmt   = sqlsrv_query($conn_sql, $sql_LA);
                                                                         $no     = 1;
                                                                         while ($row_la = sqlsrv_fetch_array($stmt)) {
