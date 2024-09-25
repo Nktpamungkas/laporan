@@ -316,7 +316,7 @@
                 </td> 
                 <td><?= $rowdb2['ITEMDESCRIPTION']; ?></td> 
                 <td>`<?= $rowdb2['LOTCODE']; ?></td> 
-                <td>
+                <td>`
                     <?php
                         $q_demand   = db2_exec($conn1, "SELECT 
                                                             PRODUCTIONDEMANDCODE
